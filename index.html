@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="../g/style.css" />
+
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+
+    <script src="../node_modules/docx-preview/dist/docx-preview.min.js"></script>
+    <style>
+      #container {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        border: 1px solid #ccc;
+        overflow: hidden;
+      }
+
+      .image {
+        position: absolute;
+        width: 100px;
+        height: auto;
+        cursor: move;
+        user-select: none;
+      }
+      /* .highlight {
+        border: 2px solid red;
+      } */
+
+      .resize-handle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #007bff;
+        cursor: nwse-resize;
+      }
+
+      .top-left {
+        top: -5px;
+        left: -5px;
+      }
+      .top-right {
+        top: -5px;
+        right: -5px;
+      }
+      .bottom-left {
+        bottom: -5px;
+        left: -5px;
+      }
+      .bottom-right {
+        bottom: -5px;
+        right: -5px;
+      }
+      .hidden {
+        display: none;
+      }
+
+      @media print {
+        body {
+          visibility: hidden;
+          margin: 0;
+          padding: 0;
+        }
+        .resize-handle {
+          visibility: hidden;
+        }
+        .docx-wrapper > section.docx {
+          background: white !important;
+          box-shadow: none !important;
+          margin-bottom: 0 !important;
+        }
+        .docx-wrapper {
+          visibility: hidden;
+          position: absolute;
+          padding: 0;
+          background: white;
+          left: 0;
+          display: block;
+          page-break-after: auto;
+          page-break-inside: auto;
+          top: 0;
+        }
+        .docx {
+          visibility: visible;
+          box-shadow: none;
+          margin-bottom: 0;
+        }
+
+        @page {
+          size: "A4";
+          margin: 10pt;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text-editor">
+      <button onclick="window.print()">Generate PDF 1</button>
+      <input
+        id="files"
+        type="file"
+        class="form-control"
+        style="width: 50ch"
+        accept=".docx"
+      />
+      <div class="options">
+        <!-- Text Format -->
+        <button id="bold" class="option-button format">
+          <i class="fa-solid fa-bold"></i>
+        </button>
+        <button id="italic" class="option-button format">
+          <i class="fa-solid fa-italic"></i>
+        </button>
+        <button id="underline" class="option-button format">
+          <i class="fa-solid fa-underline"></i>
+        </button>
+        <button id="strikethrough" class="option-button format">
+          <i class="fa-solid fa-strikethrough"></i>
+        </button>
+        <button id="superscript" class="option-button script">
+          <i class="fa-solid fa-superscript"></i>
+        </button>
+        <button id="subscript" class="option-button script">
+          <i class="fa-solid fa-subscript"></i>
+        </button>
+
+        <!-- List -->
+        <button id="insertOrderedList" class="option-button">
+          <div class="fa-solid fa-list-ol"></div>
+        </button>
+        <button id="insertUnorderedList" class="option-button">
+          <i class="fa-solid fa-list"></i>
+        </button>
+
+        <!-- Undo/Redo -->
+        <button id="undo" class="option-button">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button id="redo" class="option-button">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+
+        <!-- Link -->
+        <button id="createLink" class="adv-option-button">
+          <i class="fa fa-link"></i>
+        </button>
+        <button id="unlink" class="option-button">
+          <i class="fa fa-unlink"></i>
+        </button>
+
+        <!-- Alignment -->
+        <button id="justifyLeft" class="option-button align">
+          <i class="fa-solid fa-align-left"></i>
+        </button>
+        <button id="justifyCenter" class="option-button align">
+          <i class="fa-solid fa-align-center"></i>
+        </button>
+        <button id="justifyRight" class="option-button align">
+          <i class="fa-solid fa-align-right"></i>
+        </button>
+        <button id="justifyFull" class="option-button align">
+          <i class="fa-solid fa-align-justify"></i>
+        </button>
+        <button id="indent" class="option-button spacing">
+          <i class="fa-solid fa-indent"></i>
+        </button>
+        <button id="outdent" class="option-button spacing">
+          <i class="fa-solid fa-outdent"></i>
+        </button>
+
+        <!-- Headings -->
+        <select id="formatBlock" class="adv-option-button">
+          <option value="H1">H1</option>
+          <option value="H2">H2</option>
+          <option value="H3">H3</option>
+          <option value="H4">H4</option>
+          <option value="H5">H5</option>
+          <option value="H6">H6</option>
+        </select>
+
+        <!-- Font -->
+        <select id="fontName" class="adv-option-button"></select>
+        <select id="fontSize" class="adv-option-button"></select>
+
+        <!-- Color -->
+        <div class="input-wrapper">
+          <input type="color" id="foreColor" class="adv-option-button" />
+          <label for="foreColor">Font Color</label>
+        </div>
+        <div class="input-wrapper">
+          <input type="color" id="backColor" class="adv-option-button" />
+          <label for="backColor">Highlight Color</label>
+        </div>
+      </div>
+      <div id="container-content" contenteditable="true"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const fileInput = document.querySelector("#files");
+        async function convertBlobToDataURL(blob, callback) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            callback(e.target.result);
+          };
+          reader.readAsDataURL(blob);
+        }
+
+        async function convertDocxToBlob() {
+          const docxFilePath = "../g/sow2.docx";
+
+          try {
+            const response = await fetch(docxFilePath);
+            const arrayBuffer = await response.arrayBuffer();
+
+            const blob = new Blob([arrayBuffer], {
+              type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            });
+
+            return blob;
+          } catch (error) {
+            console.error("Error converting DOCX to Blob:", error);
+          }
+        }
+
+        async function renderDocx(file) {
+          try {
+            currentDocument = file;
+            if (!currentDocument) return;
+
+            const docxOptions = Object.assign(docx.defaultOptions, {
+              debug: true,
+              experimental: true,
+
+              ignoreLastRenderedPageBreak: false,
+            });
+            var docData = await convertDocxToBlob();
+            await docx.renderAsync(
+              currentDocument,
+              document.getElementById("container-content"),
+              null,
+              docxOptions
+            );
+            const dynamicImages = document.querySelectorAll("img");
+            console.log(dynamicImages);
+
+            dynamicImages.forEach(function (image) {
+              const container = document.createElement("div");
+              container.classList.add("container");
+              image.parentNode.insertBefore(container, image);
+              container.appendChild(image);
+
+              const resizeHandles = [
+                "top-left",
+                "top-right",
+                "bottom-left",
+                "bottom-right",
+              ].map(function (handleClass) {
+                const handle = document.createElement("div");
+                handle.classList.add("resize-handle", handleClass);
+                container.appendChild(handle);
+                return handle;
+              });
+
+              var tags = document.querySelectorAll("*");
+              var idCounter = 1;
+              tags.forEach(function (tag) {
+                if (!tag.id) {
+                  tag.id = "id_" + idCounter;
+                  idCounter++;
+                }
+              });
+
+              let initialX,
+                initialY,
+                offsetX = 0,
+                offsetY = 0;
+              let initialWidth, initialHeight;
+
+              // Event listener for mousedown event on the image and resize handles
+              image.addEventListener("mousedown", startDrag);
+              resizeHandles.forEach((handle) =>
+                handle.addEventListener("mousedown", startResize)
+              );
+
+              // Function to handle dragging
+              function startDrag(e) {
+                e.preventDefault();
+                initialX = e.clientX - offsetX;
+                initialY = e.clientY - offsetY;
+                document.addEventListener("mousemove", drag);
+                document.addEventListener("mouseup", stopDrag);
+              }
+
+              // Function to handle resizing
+              function startResize(e) {
+                e.preventDefault();
+                initialWidth = image.offsetWidth;
+                initialHeight = image.offsetHeight;
+                initialX = e.clientX;
+                initialY = e.clientY;
+                document.addEventListener("mousemove", resize);
+                document.addEventListener("mouseup", stopResize);
+              }
+
+              // Function to drag the image
+              function drag(e) {
+                e.preventDefault();
+                offsetX = e.clientX - initialX;
+                offsetY = e.clientY - initialY;
+                initialX = e.clientX;
+                initialY = e.clientY;
+                image.style.left = `${image.offsetLeft + offsetX}px`;
+                image.style.top = `${image.offsetTop + offsetY}px`;
+              }
+
+              // Function to resize the image
+              function resize(e) {
+                e.preventDefault();
+                const newWidth = initialWidth + (e.clientX - initialX);
+                const newHeight = initialHeight + (e.clientY - initialY);
+                image.style.width = `${newWidth}px`;
+                image.style.height = `${newHeight}px`;
+              }
+
+              // Functions to stop dragging and resizing
+              function stopDrag() {
+                document.removeEventListener("mousemove", drag);
+                document.removeEventListener("mouseup", stopDrag);
+              }
+
+              function stopResize() {
+                document.removeEventListener("mousemove", resize);
+                document.removeEventListener("mouseup", stopResize);
+              }
+            });
+
+            var sections = document.querySelectorAll(".docx");
+            console.log(sections);
+
+            sections.forEach(function (section) {
+              section.style.height = "910pt";
+              // section.style.minHeight = "";
+              // section.style.padding = "130.05pt 72pt 72pt";
+
+              // Reset min-height if necessary
+              // section.style.maxHeight = "5855pt"; // Reset min-height if necessary
+            });
+          } catch (error) {
+            console.error("Error rendering DOCX:", error);
+          }
+        }
+
+        fileInput.addEventListener("change", (ev) => {
+          renderDocx(fileInput.files[0]);
+          testDocuments.selectedIndex = 0;
+        });
+      });
+    </script>
+
+    <script>
+      function getNearestElementToCursor(cursorX, cursorY) {
+        const nearestElement = document.elementFromPoint(cursorX, cursorY);
+        if (nearestElement) {
+          // Remove highlight from previously highlighted element
+          const highlightedElement = document.querySelector(".highlight");
+          if (highlightedElement) {
+            highlightedElement.classList.remove("highlight");
+          }
+          // Highlight the nearest element
+          nearestElement.classList.add("highlight");
+        }
+      }
+
+      function getPosition(e) {
+        var rect = e.target.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        return {
+          x,
+          y,
+        };
+      }
+
+      function getCursorLocation(event) {
+        const position = getPosition(event);
+        console.log("position", position);
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          const rect = range.getBoundingClientRect();
+          console.log(
+            "Cursor X position:",
+            rect.left,
+            "Cursor Y position:",
+            rect.top
+          );
+          getNearestElementToCursor(rect.left, rect.top);
+        }
+      }
+
+      document
+        .getElementById("container-content")
+        .addEventListener("mouseup", getCursorLocation);
+      document
+        .getElementById("container-content")
+        .addEventListener("keyup", getCursorLocation);
+      const editableDiv = document.getElementById("container-content");
+      let textData = [];
+
+      editableDiv.addEventListener("input", function (event) {
+        const insertedText = event.data;
+        const selection = window.getSelection();
+        console.log("xx", selection);
+        const range = selection.getRangeAt(0);
+        const startOffset = range.startOffset;
+        const endOffset = range.endOffset;
+
+        const position = {
+          insertedText: insertedText,
+          startOffset: startOffset,
+          endOffset: endOffset,
+        };
+
+        textData.push(position);
+        console.log("Text inserted:", position);
+
+        // Store textData in JSON format
+        const jsonData = JSON.stringify(textData);
+        console.log("JSON Data:", jsonData);
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("container-content");
+        let previousContent = container.innerHTML;
+
+        container.addEventListener("input", function (event) {
+          const deletedContent = getDeletedContent(
+            previousContent,
+            container.innerHTML
+          );
+          if (deletedContent) {
+            // console.log("Deleted content:", deletedContent);
+            console.log("Location:", container.tagName);
+          }
+          previousContent = container.innerHTML;
+        });
+
+        function getDeletedContent(previousContent, currentContent) {
+          if (previousContent.length > currentContent.length) {
+            return previousContent.replace(currentContent, "");
+          }
+          return null;
+        }
+      });
+    </script>
+
+    <script src="../g/ccc.js"></script>
+    <!-- <script src="../g/convert.js" type="module"></script> -->
+  </body>
+</html>

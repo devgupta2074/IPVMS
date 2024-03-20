@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function convertDocxToBlob() {
-    const docxFilePath = "../g/sow2.docx";
+    const docxFilePath = "../sow2.docx";
 
     try {
       const response = await fetch(docxFilePath);

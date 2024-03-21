@@ -20,7 +20,7 @@ export const passwordValidation = (password) => {
       error: "Password should contain at least one digit",
       success: false,
     };
-  } else if (/[^A-Za-z0-9]/.test(password)) {
+  } else if (!/[^A-Za-z0-9]/.test(password)) {
     return {
       error: "Password should contain at least one special symbol",
       success: false,

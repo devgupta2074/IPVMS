@@ -2,8 +2,8 @@
 //register ->Email valid,password valid,first Name,last Name,
 //updated By ->id or null  later->imp in rbac who is updating
 
-import { emailValidation } from "../../utils/emailValidation";
-import { passwordValidation } from "../../utils/passwordValidation";
+import { emailValidation } from "../../utils/emailValidation.js";
+import { passwordValidation } from "../../utils/passwordValidation.js";
 
 export const loginMiddleware = async (req, res, next) => {
   const { email, password } = req.body;
@@ -26,8 +26,9 @@ export const loginMiddleware = async (req, res, next) => {
 //401->unauthorized wrong pass
 //400->Bad request
 
-export const registerMiddleware = async (req, res) => {
+export const registerMiddleware = async (req, res, next) => {
   const { firstName, lastName, email, password, updatedBy } = req.body;
+
   if (!firstName) {
     return res
       .status(400)

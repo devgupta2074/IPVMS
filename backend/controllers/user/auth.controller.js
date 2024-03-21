@@ -13,6 +13,17 @@ export const registerUser = async (req, res) => {
     console.log(firstName, lastName, email, password);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const user = await pool.query("SELECT * FROM puser WHERE email=$1", [
+      email,
+    ]);
+    if (user.rows.length > 0) {
+      //409->conflict
+      //400->Bad request
+      return res
+        .status(409)
+        .json({ success: false, message: "user email already exist" });
+    }
+
     const query = {
       text: "INSERT INTO puser(first_name,last_name,email,password,is_active) VALUES($1,$2,$3,$4,$5) RETURNING *",
       values: [firstName, lastName, email, hashedPassword, true],
@@ -65,14 +76,12 @@ export const loginUser = async (req, res) => {
     const users = user.rows[0];
     delete users["password"];
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Login Success",
-        token: token,
-        user: users,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Login Success",
+      token: token,
+      user: users,
+    });
   } catch (error) {
     return res
       .status(500)

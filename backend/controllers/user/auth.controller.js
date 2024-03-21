@@ -100,6 +100,6 @@ export const getAllUsers = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: err, success: false, message: "Internal Server Error" });
+      .json({ error: error, success: false, message: "Internal Server Error" });
   }
 };

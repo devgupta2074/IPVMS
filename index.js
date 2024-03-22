@@ -1,15 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+  localStorage.setItem("jsonchanges", null);
   const fileInput = document.querySelector("#files");
-  async function convertBlobToDataURL(blob, callback) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      callback(e.target.result);
-    };
-    reader.readAsDataURL(blob);
-  }
 
   async function convertDocxToBlob() {
-    const docxFilePath = "../sow2.docx";
+    const docxFilePath = "sow2.docx";
 
     try {
       const response = await fetch(docxFilePath);
@@ -186,48 +180,99 @@ function getNearestElementToCursor(cursorX, cursorY) {
     }
     // Highlight the nearest element
     nearestElement.classList.add("highlight");
+    handleDocumentClickWithID(nearestElement);
     currentNearestElement = nearestElement;
     console.log("changed");
   }
   return nearestElement;
 }
 
-function getNearestElementToCursorFromInput(cursorX, cursorY) {
-  const nearestElement = document.elementFromPoint(cursorX, cursorY);
+// function getNearestElementToCursorFromInput(cursorX, cursorY) {
+//   const nearestElement = document.elementFromPoint(cursorX, cursorY);
 
-  if (nearestElement) {
-    // Remove highlight from previously highlighted element
-    const highlightedElement = document.querySelector(".highlight");
-    if (highlightedElement) {
-      highlightedElement.classList.remove("highlight");
-    }
-    // Highlight the nearest element
-    nearestElement.classList.add("highlight");
-    var editable = document.getElementById(nearestElement.id);
-    var lastText = editable.textContent;
-    console.log("inside", editable);
+//   if (nearestElement) {
+//     // Remove highlight from previously highlighted element
+//     const highlightedElement = document.querySelector(".highlight");
+//     if (highlightedElement) {
+//       highlightedElement.classList.remove("highlight");
+//     }
+//     // Highlight the nearest element
+//     nearestElement.classList.add("highlight");
+//     var editable = document.getElementById(nearestElement.id);
+//     var lastText = editable.textContent;
+//     console.log("inside", editable);
 
-    editable.addEventListener("input", function (event) {
-      var newText = this.textContent;
-      console.log("inside new", newText);
+//     editable.addEventListener("input", function (event) {
+//       var newText = this.textContent;
+//       console.log("inside new", newText);
 
-      if (
-        event.inputType === "deleteContentBackward" ||
-        event.inputType === "deleteContentForward"
-      ) {
-        for (var i = 0; i < lastText.length - 1; i++) {
-          if (lastText[i] !== newText[i]) {
-            console.log("char '" + lastText[i] + "' was removed at index " + i);
-            lastText = newText;
-            return;
-          }
-        }
-      }
-    });
-  }
-  return nearestElement;
+//       if (
+//         event.inputType === "deleteContentBackward" ||
+//         event.inputType === "deleteContentForward"
+//       ) {
+//         for (var i = 0; i < lastText.length - 1; i++) {
+//           if (lastText[i] !== newText[i]) {
+//             console.log("char '" + lastText[i] + "' was removed at index " + i);
+//             lastText = newText;
+//             return;
+//           }
+//         }
+//       }
+//     });
+//   }
+//   return nearestElement;
+// }
+
+let previousContent = "";
+
+let clickedelement = "";
+function handleDocumentClick(event) {
+  // Check if the click event happened inside the editable div
+  console.log(event);
+  clickedelement = event.target.innerText;
+
+  // trackChanges(event.target.id);
+}
+function handleDocumentClickWithID(nearestElement) {
+  // Check if the click event happened inside the editable div
+  console.log(nearestElement);
+
+  clickedelement = nearestElement.innerText;
+
+  // trackChanges(event.target.id);
 }
 
+document.addEventListener("click", handleDocumentClick);
+
+function trackChanges(id) {
+  console.log(id);
+  const editableDiv = document.getElementById(id);
+  const currentContent = editableDiv.innerText;
+
+  let deletedText = "";
+
+  let i = 0,
+    j = 0;
+  while (i < clickedelement.length && j < currentContent.length) {
+    if (clickedelement[i] !== currentContent[j]) {
+      deletedText += clickedelement[i];
+      i++;
+    } else {
+      i++;
+      j++;
+    }
+  }
+
+  while (i < clickedelement.length) {
+    deletedText += clickedelement[i];
+    i++;
+  }
+
+  clickedelement = currentContent;
+
+  console.log("deleted", deletedText);
+  return deletedText;
+}
 function getPosition(e) {
   var rect = e.target.getBoundingClientRect();
   var x = e.clientX - rect.left;
@@ -240,47 +285,54 @@ function getPosition(e) {
 
 function getCursorLocation(event) {
   console.log(event);
-  if (event.key === "Backspace" || event.key === "Delete") {
+
+  if (
+    event.key === "Backspace" ||
+    event.key === "Delete" ||
+    event.inputType === "deleteContentBackward" ||
+    event.inputType === "deleteContentForward"
+  ) {
     // If it is, return without doing anything
     console.log("here");
     return;
+  } else {
+    const position = getPosition(event);
+    console.log("position", position);
+    var rect;
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      rect = range.getBoundingClientRect();
+      // console.log(
+      //   "Cursor X position:",
+      //   rect.left,
+      //   "Cursor Y position:",
+      //   rect.top
+      // );
+      getNearestElementToCursor(rect.left, rect.top);
+    }
+    return rect;
   }
-  const position = getPosition(event);
-  //   console.log("position", position);
-  var rect;
-  const selection = window.getSelection();
-  if (selection.rangeCount > 0) {
-    const range = selection.getRangeAt(0);
-    rect = range.getBoundingClientRect();
-    // console.log(
-    //   "Cursor X position:",
-    //   rect.left,
-    //   "Cursor Y position:",
-    //   rect.top
-    // );
-    getNearestElementToCursor(rect.left, rect.top);
-  }
-  return rect;
 }
 
-function getCursorLocationFromInput(event) {
-  const position = getPosition(event);
-  //   console.log("position", position);
-  var rect;
-  const selection = window.getSelection();
-  if (selection.rangeCount > 0) {
-    const range = selection.getRangeAt(0);
-    rect = range.getBoundingClientRect();
-    // console.log(
-    //   "Cursor X position:",
-    //   rect.left,
-    //   "Cursor Y position:",
-    //   rect.top
-    // );
-    getNearestElementToCursorFromInput(rect.left, rect.top);
-  }
-  return rect;
-}
+// function getCursorLocationFromInput(event) {
+//   const position = getPosition(event);
+//   //   console.log("position", position);
+//   var rect;
+//   const selection = window.getSelection();
+//   if (selection.rangeCount > 0) {
+//     const range = selection.getRangeAt(0);
+//     rect = range.getBoundingClientRect();
+//     // console.log(
+//     //   "Cursor X position:",
+//     //   rect.left,
+//     //   "Cursor Y position:",
+//     //   rect.top
+//     // );
+//     getNearestElementToCursorFromInput(rect.left, rect.top);
+//   }
+//   return rect;
+// }
 
 document
   .getElementById("container-content")
@@ -292,12 +344,14 @@ const editableDiv = document.getElementById("container-content");
 let textData = [];
 
 editableDiv.addEventListener("input", function (event) {
-  const rect = getCursorLocationFromInput(event);
-  const nearestElement = getNearestElementToCursorFromInput(
-    rect.left,
-    rect.top
-  );
-  console.log(nearestElement.textContent, "vvvvv");
+  const rect = getCursorLocation(event);
+  console.log("rect", rect);
+  let nearestElement;
+  if (rect !== undefined) {
+    nearestElement = getNearestElementToCursor(rect.left, rect.top);
+    console.log(nearestElement.textContent, "vvvvv");
+  }
+
   //   console.log("xxxx", event);
   if (event.inputType == "insertText") {
     const insertedText = event.data;
@@ -317,17 +371,23 @@ editableDiv.addEventListener("input", function (event) {
     };
 
     textData.push(position);
+
     console.log("Text inserted:", position);
 
     // Store textData in JSON format
     const jsonData = JSON.stringify(textData);
+    localStorage.setItem("jsonchanges", jsonData);
     console.log("JSON Data:", jsonData);
   } else if (event.inputType === "deleteContentBackward") {
+    console.log("clickedelement", clickedelement);
+    console.log("current", currentNearestElement);
+    // trackChanges(currentNearestElement.id);
+
     const selection = window.getSelection();
     const range = selection.getRangeAt(0);
     const startOffset = range.startOffset;
     const endOffset = range.endOffset;
-    const deletedText = range.toString();
+    const deletedText = trackChanges(currentNearestElement.id);
     console.log(range);
     console.log(selection);
 
@@ -340,8 +400,8 @@ editableDiv.addEventListener("input", function (event) {
 
     const position = {
       deletedText: deletedText,
-      nearestElement: nearestElement.id,
-      contentlength: nearestElement.textContent.length,
+      nearestElement: currentNearestElement.id,
+      contentlength: currentNearestElement.textContent.length,
       startOffset: startOffset,
       endOffset: endOffset,
     };
@@ -351,6 +411,7 @@ editableDiv.addEventListener("input", function (event) {
 
     // Store textData in JSON format
     const jsonData = JSON.stringify(textData);
+    localStorage.setItem("jsonchanges", jsonData);
     console.log("JSON Data:", jsonData);
   }
 });

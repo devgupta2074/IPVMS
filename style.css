@@ -18,8 +18,8 @@ body {
   gap: 15px;
 }
 button {
-  height: 28px;
-  width: 28px;
+  /* height: 28px;
+  width: 28px; */
   display: grid;
   place-items: center;
   border-radius: 3px;

@@ -168,7 +168,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+var changes = 1;
+var version = 1;
 var currentNearestElement = null;
+
+function assignIDsToElements() {
+  const elementsWithoutID = document.querySelectorAll("*:not([id])");
+  elementsWithoutID.forEach((element, index) => {
+    element.id = `generatedID_${version}_changes_${changes}`;
+    changes++;
+  });
+}
+
 function getNearestElementToCursor(cursorX, cursorY) {
   const nearestElement = document.elementFromPoint(cursorX, cursorY);
 
@@ -337,6 +348,9 @@ function getCursorLocation(event) {
 document
   .getElementById("container-content")
   .addEventListener("mouseup", getCursorLocation);
+document
+  .getElementById("container-content")
+  .addEventListener("mouseup", assignIDsToElements);
 document
   .getElementById("container-content")
   .addEventListener("keyup", getCursorLocation);

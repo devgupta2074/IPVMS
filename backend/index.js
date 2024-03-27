@@ -30,13 +30,15 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
-  cors({
-    origin: ["*"],
-    methods: ["*"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["*"],
+//     methods: ["*"],n  
+//     credentials: true,
+//   })
+// );
+
+app.use(cors());  //above cors is not working 
 
 app.use("/api/user", userRouter);
 

@@ -177,6 +177,21 @@ function assignIDsToElements() {
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changes}`;
     changes++;
+    const position = {
+      insertedText: null,
+      nearestElement: element.id,
+      element: element.outerHTML,
+      parentelement: element.parentElement.id,
+    };
+
+    textData.push(position);
+
+    console.log("New Element Added", position);
+
+    // Store textData in JSON format
+    const jsonData = JSON.stringify(textData);
+    localStorage.setItem("jsonchanges", jsonData);
+    console.log("JSON Data:", jsonData);
   });
 }
 
@@ -353,6 +368,9 @@ document
   .addEventListener("mouseup", assignIDsToElements);
 document
   .getElementById("container-content")
+  .addEventListener("keyup", assignIDsToElements);
+document
+  .getElementById("container-content")
   .addEventListener("keyup", getCursorLocation);
 const editableDiv = document.getElementById("container-content");
 let textData = [];
@@ -377,11 +395,14 @@ editableDiv.addEventListener("input", function (event) {
     const endOffset = range.endOffset;
 
     const position = {
+      isNewElement: false,
       insertedText: insertedText,
       nearestElement: nearestElement.id,
       contentlength: nearestElement.textContent.length,
       startOffset: startOffset,
       endOffset: endOffset,
+      element: nearestElement.outerHTML,
+      parentelement: nearestElement.parentElement.id,
     };
 
     textData.push(position);
@@ -413,11 +434,14 @@ editableDiv.addEventListener("input", function (event) {
     // console.log("Deleted Text:", textNodes);
 
     const position = {
+      isNewElement: false,
       deletedText: deletedText,
       nearestElement: currentNearestElement.id,
       contentlength: currentNearestElement.textContent.length,
       startOffset: startOffset,
       endOffset: endOffset,
+      element: currentNearestElement.outerHTML,
+      parentelement: currentNearestElement.parentElement.id,
     };
 
     textData.push(position);

@@ -46,24 +46,27 @@ function modificationText() {
   // Process JSON data in reverse order
   for (var i = jsonData.length - 1; i >= 0; i--) {
     var item = jsonData[i];
-    var nearestElementId = item.nearestElement;
-    var nearestElement = document.getElementById(nearestElementId);
-    if (nearestElement !== undefined) {
-      if (item.deletedText !== undefined) {
-        var deletedText = item.deletedText;
-        var startOffset = item.startOffset;
-        var endOffset = item.endOffset;
-        var originalText = nearestElement.textContent;
-        console.log(originalText.substring(0, startOffset));
-        console.log(originalText.substring(endOffset));
-        var newText =
-          originalText.substring(0, startOffset) +
-          deletedText +
-          originalText.substring(endOffset);
-        nearestElement.textContent = newText;
-        console.log(newText);
-      } else if (item.insertedText !== undefined) {
-        removeCharacterAtPosition(item.nearestElement, item.startOffset - 1);
+    if (item.isNewElement) {
+    } else {
+      var nearestElementId = item.nearestElement;
+      var nearestElement = document.getElementById(nearestElementId);
+      if (nearestElement !== undefined) {
+        if (item.deletedText !== undefined) {
+          var deletedText = item.deletedText;
+          var startOffset = item.startOffset;
+          var endOffset = item.endOffset;
+          var originalText = nearestElement.textContent;
+          console.log(originalText.substring(0, startOffset));
+          console.log(originalText.substring(endOffset));
+          var newText =
+            originalText.substring(0, startOffset) +
+            deletedText +
+            originalText.substring(endOffset);
+          nearestElement.textContent = newText;
+          console.log(newText);
+        } else if (item.insertedText !== undefined) {
+          removeCharacterAtPosition(item.nearestElement, item.startOffset - 1);
+        }
       }
     }
   }
@@ -79,24 +82,27 @@ function revertText() {
   // Process JSON data in reverse order
   for (var i = 0; i < jsonData.length; i++) {
     var item = jsonData[i];
-    var nearestElementId = item.nearestElement;
-    var nearestElement = document.getElementById(nearestElementId);
+    if (item.isNewElement) {
+    } else {
+      var nearestElementId = item.nearestElement;
+      var nearestElement = document.getElementById(nearestElementId);
 
-    if (item.insertedText !== undefined) {
-      var deletedText = item.insertedText;
-      var startOffset = item.startOffset;
-      var endOffset = item.endOffset;
-      var originalText = nearestElement.textContent;
-      console.log(originalText.substring(0, startOffset));
-      console.log(originalText.substring(endOffset));
-      var newText =
-        originalText.substring(0, startOffset) +
-        deletedText +
-        originalText.substring(endOffset);
-      nearestElement.textContent = newText;
-      console.log(newText);
-    } else if (item.deletedText !== undefined) {
-      removeCharacterAtPosition(item.nearestElement, item.startOffset);
+      if (item.insertedText !== undefined) {
+        var deletedText = item.insertedText;
+        var startOffset = item.startOffset;
+        var endOffset = item.endOffset;
+        var originalText = nearestElement.textContent;
+        console.log(originalText.substring(0, startOffset));
+        console.log(originalText.substring(endOffset));
+        var newText =
+          originalText.substring(0, startOffset) +
+          deletedText +
+          originalText.substring(endOffset);
+        nearestElement.textContent = newText;
+        console.log(newText);
+      } else if (item.deletedText !== undefined) {
+        removeCharacterAtPosition(item.nearestElement, item.startOffset);
+      }
     }
   }
 }

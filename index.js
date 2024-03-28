@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   localStorage.setItem("jsonchanges", null);
+  // localStorage.setItem("imageStyleOnload", null);
+  localStorage.removeItem("imageStyleOnload");
   const fileInput = document.querySelector("#files");
 
   async function convertDocxToBlob() {
@@ -54,10 +56,87 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const dynamicImages = document.querySelectorAll("img");
       console.log(dynamicImages);
+      const images = document.querySelectorAll("img");
+      var latestStyleChanges;
+      const styleChangeHandler = function (mutationsList, observer) {
+        var mutationimageid;
+        for (const mutation of mutationsList) {
+          if (mutation.type === "attributes") {
+            latestStyleChanges = mutation.target.style.cssText;
+            mutationimageid = mutation.target.id;
+          }
+        }
+        // const styleonload = JSON.parse(
+        //   localStorage.getItem("imageStyleOnload")
+        // );
+        // console.log(styleonload);
+        // var oldStyle = "";
+        // styleonload.forEach(function (element) {
+        //   if (element.id === mutationimageid) {
+        //     oldStyle = element.style;
+        //   }
+        // });
+
+        // const position = {
+        //   isNewElement: false,
+        //   isImage: true,
+        //   newStyle: latestStyleChanges,
+        //   oldStyle: oldStyle,
+        //   id: mutationimageid,
+        // };
+
+        // textData.push(position);
+        // console.log("Text deleted:", position);
+
+        // // Store textData in JSON format
+        // const jsonData = JSON.stringify(textData);
+        // localStorage.setItem("jsonchanges", jsonData);
+        // console.log("JSON Data:", jsonData);
+        // // Your logic for handling style changes here
+
+        // Log the latest style changes after all mutations are processed
+        console.log("Latest style changes:", latestStyleChanges);
+      };
+
+      // Function to handle style changes
+      // const styleChangeHandler = function (mutationsList, observer) {
+      //   for (const mutation of mutationsList) {
+      //     if (mutation.type === "attributes") {
+      //       console.log(
+      //         "Style changed for:",
+      //         mutation.target.id,
+      //         mutation.target.style.cssText
+      //       );
+      //     }
+      //   }
+      // };
+
+      // Iterate through each image and add event listener
+      images.forEach((image) => {
+        const observer = new MutationObserver(styleChangeHandler);
+        observer.observe(image, {
+          attributes: true,
+          attributeFilter: ["style"],
+        });
+      });
 
       dynamicImages.forEach(function (image) {
         const container = document.createElement("div");
         container.classList.add("container");
+        var imagestyleonload = localStorage.getItem("imageStyleOnload");
+        if (imagestyleonload === null) {
+          const data = [];
+
+          data.push({ style: image.style.cssText, id: image.id });
+          imagestyleonload = JSON.stringify(data);
+          localStorage.setItem("imageStyleOnload", imagestyleonload);
+        } else {
+          const data = JSON.parse(imagestyleonload);
+          data.push({ style: image.style.cssText, id: image.id });
+          imagestyleonload = JSON.stringify(data);
+          localStorage.setItem("imageStyleOnload", imagestyleonload);
+        }
+
         image.parentNode.insertBefore(container, image);
         container.appendChild(image);
 
@@ -176,12 +255,30 @@ function assignIDsToElements() {
   const elementsWithoutID = document.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changes}`;
+    console.log("tag", element.tagName);
     changes++;
+    parentelement = document.getElementById(element.parentElement.id).innerHTML;
+    parentelementlength = document.getElementById(element.parentElement.id)
+      .innerHTML.length;
+    console.log("parentelement", parentelement);
+    console.log(`<${element.tagName.toLowerCase()}>`, "btag");
+    var indexOfBoldTag = parentelement.indexOf(
+      `<${element.tagName.toLowerCase()}`
+    );
+    console.log(element.innerHTML);
+
     const position = {
+      elementcc: element,
+      isNewElement: true,
       insertedText: null,
       nearestElement: element.id,
       element: element.outerHTML,
       parentelement: element.parentElement.id,
+      parentelementlength: parentelementlength,
+      startOffset: indexOfBoldTag,
+      tagname: element.tagName.toLowerCase(),
+      datalength: element.innerHTML.length,
+      data: element.innerHTML,
     };
 
     textData.push(position);
@@ -381,7 +478,6 @@ editableDiv.addEventListener("input", function (event) {
   let nearestElement;
   if (rect !== undefined) {
     nearestElement = getNearestElementToCursor(rect.left, rect.top);
-    console.log(nearestElement.textContent, "vvvvv");
   }
 
   //   console.log("xxxx", event);
@@ -438,6 +534,7 @@ editableDiv.addEventListener("input", function (event) {
       deletedText: deletedText,
       nearestElement: currentNearestElement.id,
       contentlength: currentNearestElement.textContent.length,
+      content: currentNearestElement.textContent,
       startOffset: startOffset,
       endOffset: endOffset,
       element: currentNearestElement.outerHTML,

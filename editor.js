@@ -63,6 +63,7 @@ optionsButtons.forEach((button) => {
 });
 
 //options that require value parameter (e.g colors, fonts)
+
 advancedOptionButton.forEach((button) => {
   button.addEventListener("change", () => {
     modifyText(button.id, false, button.value);

@@ -46,7 +46,39 @@ function modificationText() {
   // Process JSON data in reverse order
   for (var i = jsonData.length - 1; i >= 0; i--) {
     var item = jsonData[i];
+    console.log(item);
+
     if (item.isNewElement) {
+      console.log("found new element");
+      var parentElement = document.getElementById(item.parentelement);
+      console.log(parentElement);
+      if (parentElement) {
+        console.log("parent elemet is peresent");
+        var boldTag = parentElement.getElementsByTagName(item.tagname)[0];
+
+        if (boldTag) {
+          parentElement.removeChild(boldTag);
+        }
+        // Insert HTML content
+        for (var j = 0; j < item.parentelementlength; j++) {
+          console.log(j);
+          if (j == item.startOffset) {
+            console.log(
+              "dddddddev",
+              parentElement.innerHTML.substring(0, j),
+              item.data + parentElement.innerHTML.substring(j + 1)
+            );
+            parentElement.innerHTML =
+              parentElement.innerHTML.substring(0, j) +
+              item.data +
+              parentElement.innerHTML.substring(j);
+            console.log(parentElement.innerHTML);
+            break;
+          }
+        }
+      } else {
+        console.error("Parent element not found.");
+      }
     } else {
       var nearestElementId = item.nearestElement;
       var nearestElement = document.getElementById(nearestElementId);
@@ -83,15 +115,33 @@ function revertText() {
   for (var i = 0; i < jsonData.length; i++) {
     var item = jsonData[i];
     if (item.isNewElement) {
+      var parentElement = document.getElementById(item.parentelement);
+      if (parentElement) {
+        // Insert HTML content
+        for (var j = 0; j < parentElement.innerHTML.length; j++) {
+          if (j == item.startOffset) {
+            parentElement.innerHTML =
+              parentElement.innerHTML.substring(0, j) +
+              item.element +
+              parentElement.innerHTML.substring(j + item.datalength);
+            console.log(parentElement.innerHTML);
+            break;
+          }
+        }
+      } else {
+        console.error("Parent element not found.");
+      }
     } else {
       var nearestElementId = item.nearestElement;
       var nearestElement = document.getElementById(nearestElementId);
+      console.log("deeeeeeee");
 
       if (item.insertedText !== undefined) {
         var deletedText = item.insertedText;
         var startOffset = item.startOffset;
         var endOffset = item.endOffset;
         var originalText = nearestElement.textContent;
+        console.log("sss", originalText);
         console.log(originalText.substring(0, startOffset));
         console.log(originalText.substring(endOffset));
         var newText =
@@ -101,7 +151,10 @@ function revertText() {
         nearestElement.textContent = newText;
         console.log(newText);
       } else if (item.deletedText !== undefined) {
-        removeCharacterAtPosition(item.nearestElement, item.startOffset);
+        console.log(item.startOffset, item.endOffset);
+        for (let index = 0; index < item.deletedText.length; index++) {
+          removeCharacterAtPosition(item.nearestElement, item.startOffset);
+        }
       }
     }
   }

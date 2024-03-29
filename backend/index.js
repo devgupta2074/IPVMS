@@ -42,6 +42,6 @@ app.use(cors());  //above cors is not working
 
 app.use("/api/user", userRouter);
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("server statrted at 3000");
 });

@@ -1,23 +1,41 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config({ path: "../.env" });
+export const sendEmail = async (options) => {
 
-const sendEmail = async options => {
-    const transport = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
+    let transporter = nodemailer.createTransport({
+
+        service: 'Gmail',
         auth: {
-            user: process.env.EMAIL_USERNAME,
+            user: process.env.EMAIL_ADDRESS,
             pass: process.env.EMAIL_PASSWORD
         }
     });
 
+
     const mailOptions = {
         from: 'ADMIN admin@gmail.com',
-        to: options.email,
+        to: options.to,
         subject: options.subject,
         text: options.message
     };
 
-    await transport.sendMail(mailOptions);
+    console.log(mailOptions);
+    await transporter.sendMail(mailOptions);
+
 };
 
-module.exports = sendEmail;
+
+// HOW TO USE
+
+
+// import { sendEmail } from "./sendEmail.js";
+
+
+// const mailoptions = {
+//     from: 'ADMIN',
+//     to: 'sandadi.rithvik@gmail.com',
+//     subject: "Test Mail totoototot98765432t",
+//     message: 'Test Mail'
+// };
+// await sendEmail(mailoptions);

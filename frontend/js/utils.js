@@ -1,3 +1,5 @@
+import { TOAST_COLORS } from "./constants.js";
+
 export const emailValidation = (email) => {
   const check = new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
   if (!check.test(email)) {
@@ -10,6 +12,21 @@ export const emailValidation = (email) => {
   }
   return { success: true };
 };
+
+export function launch_toast(message, color, icon) {
+  var x = document.getElementById("toast");
+  var y = document.getElementById("desc");
+  var z = document.getElementById("toast_img"); // Assuming "icon" is the ID of the element where you want to display the icon.
+  console.log(y);
+  x.className = TOAST_COLORS.SHOW;
+  x.style.backgroundColor = color;
+  y.innerText = message;
+  z.style.fontSize = TOAST_COLORS.ICON_SIZE;
+  z.className = icon; // Assuming you're using Font Awesome for icons. Adjust this line based on your icon library or implementation.
+  setTimeout(function () {
+    x.className = x.className.replace(TOAST_COLORS.SHOW, "");
+  }, 5000);
+}
 
 // At least one uppercase letter
 // At least one lowercase letter
@@ -47,3 +64,7 @@ export const passwordValidation = (password) => {
     return { success: true };
   }
 };
+
+export function redirect(url) {
+  window.location.href = url;
+}

@@ -19,12 +19,15 @@ export function launch_toast(message, color, icon) {
   var z = document.getElementById("toast_img"); // Assuming "icon" is the ID of the element where you want to display the icon.
   console.log(y);
   x.className = TOAST_COLORS.SHOW;
+
   x.style.backgroundColor = color;
   y.innerText = message;
   z.style.fontSize = TOAST_COLORS.ICON_SIZE;
   z.className = icon; // Assuming you're using Font Awesome for icons. Adjust this line based on your icon library or implementation.
+  y.className = TOAST_COLORS.SHOW;
   setTimeout(function () {
     x.className = x.className.replace(TOAST_COLORS.SHOW, "");
+    y.className = y.className.replace(TOAST_COLORS.SHOW, "");
   }, 5000);
 }
 
@@ -66,5 +69,9 @@ export const passwordValidation = (password) => {
 };
 
 export function redirect(url) {
-  window.location.href = url;
+  if (localStorage.getItem("token") === null && url === "#dashboard") {
+    url = "#login"; // Redirect to login page if token is not present
+  }
+  console.log(window.location.href);
+  window.location.href = "http://127.0.0.1:5501/frontend/index.html" + url;
 }

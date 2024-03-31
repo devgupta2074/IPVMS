@@ -41,9 +41,9 @@ async function SignIn() {
         if (data.error === LOGIN_CONSTANTS.INVALID_DOMAIN) {
           launch_toast(data.error, TOAST_COLORS.ERROR, TOAST_ICONS.ERROR);
         } else if (data.error == LOGIN_CONSTANTS.INVALID_EMAIL_FORMAT) {
-          launch_toast(data.error, TOAST_COLORS.ERROR, TOAST_ICONS.SUCCESS);
+          launch_toast(data.error, TOAST_COLORS.ERROR, TOAST_ICONS.ERROR);
         } else {
-          launch_toast(data.error, TOAST_COLORS.ERROR, TOAST_ICONS.SUCCESS);
+          launch_toast(data.error, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
         }
       }
     })
@@ -65,5 +65,5 @@ const tosignup = document.getElementById("tosignup");
 // Add event listener to the button
 tosignup.addEventListener("click", function () {
   // Call the SignIn function when the button is clicked
-  redirect("#signup");
+  redirect("#forgetpassword");
 });

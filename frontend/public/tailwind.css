@@ -4,8 +4,9 @@
 
 #toast {
   visibility: hidden;
-  max-width: 30px;
+  max-width: 200px;
   height: 50px;
+  padding: 2px;
   /*margin-left: -125px;*/
   margin: auto;
   background-color: black;
@@ -23,6 +24,7 @@
   bottom: 30px;
   font-size: 17px;
   white-space: nowrap;
+  text-wrap: wrap;
 }
 #toast #img {
   width: 30px;
@@ -37,13 +39,14 @@
   background-color: #111;
   color: #fff;
 }
-#toast #desc {
+#desc {
+  visibility: hidden;
   color: #fff;
   font-weight: 600;
   padding: 16px;
+  text-wrap: balance;
 
   overflow: hidden;
-  white-space: nowrap;
 }
 
 #toast.show {
@@ -52,6 +55,9 @@
     fadeout 0.5s 2.5s;
   animation: fadein 0.5s, expand 0.5s 0.5s, stay 3s 1s, shrink 0.5s 4s,
     fadeout 0.5s 4.5s;
+}
+#desc.show {
+  visibility: visible;
 }
 
 @-webkit-keyframes fadein {

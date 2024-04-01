@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./routes/user.routes.js";
+import fileRouter from "./routes/fileUpload.routes.js";
 
 const __dirname = path.resolve();
 
@@ -33,14 +34,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(
 //   cors({
 //     origin: ["*"],
-//     methods: ["*"],n  
+//     methods: ["*"],n
 //     credentials: true,
 //   })
 // );
 
-app.use(cors());  //above cors is not working 
+app.use(cors()); //above cors is not working
 
 app.use("/api/user", userRouter);
+app.use("/api/file", fileRouter);
 
 app.listen(3000, () => {
   console.log("server statrted at 3000");

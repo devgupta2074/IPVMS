@@ -60,7 +60,6 @@ export const registerMiddleware = async (req, res, next) => {
 
 export const authorizationMiddeleware = async (req, res, next) => {
   const authorizationHeader = req.header("Authorization");
-
   if (!authorizationHeader || !authorizationHeader.startsWith("Bearer")) {
     return res
       .status(401)

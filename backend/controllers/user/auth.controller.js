@@ -273,3 +273,28 @@ export const resetPasswordAuth = async (req, res) => {
     });
   }
 };
+export const getUserInfo = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await pool.query("SELECT * FROM puser WHERE id=$1", [userId]);
+    const users = user.rows[0];
+    delete users["password"];
+
+    if (user.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      status: "success",
+      data: users,
+      message: "User Info",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};

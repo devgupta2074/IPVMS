@@ -6,15 +6,34 @@ import {
   TOAST_ICONS,
   VIEWS_CONSTANTS,
   HEADERS_CONSTANTS,
+  TOAST_ERRORS,
 } from "../js/constants.js";
 import { launch_toast, redirect } from "../js/utils.js";
+var url = window.location.href;
 
+// Parse the URL to extract the email parameter
+var params = new URLSearchParams(url.split("?")[1]);
+var token = params.get("token");
+console.log(token);
+if (!token) {
+  launch_toast(
+    TOAST_ERRORS.LINK_IS_NOT_VALID,
+    TOAST_COLORS.ERROR,
+    TOAST_ICONS.ERROR
+  );
+  launch_toast(TOAST_ERRORS.REDIRECTING, TOAST_COLORS.ERROR, TOAST_ICONS.ERROR);
+  setTimeout(() => {
+    launch_toast(
+      TOAST_ERRORS.REDIRECTING,
+      TOAST_COLORS.ERROR,
+      TOAST_ICONS.ERROR
+    );
+  }, 2000);
+  setTimeout(() => {
+    redirect(VIEWS_CONSTANTS.LOGIN);
+  }, 3000);
+}
 async function ResetPassword() {
-  var url = window.location.href;
-
-  // Parse the URL to extract the email parameter
-  var params = new URLSearchParams(url.split("?")[1]);
-  var token = params.get("token");
   token = token.split("#")[0];
 
   // Log the token value to the console
@@ -53,7 +72,15 @@ async function ResetPassword() {
 
       if (data.success) {
         console.log(data);
-
+        launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
+        // window.location.href =
+        //   "http://127.0.0.1:5501/frontend/index.html" +
+        //   VIEWS_CONSTANTS.RESET_SUCCESS;
+        // window.location.replace(
+        //   "http://127.0.0.1:5501/frontend/index.html" +
+        //     VIEWS_CONSTANTS.RESET_SUCCESS
+        // );
+        // window.location.reload();
         redirect(VIEWS_CONSTANTS.RESET_SUCCESS);
       } else {
         if (data.message !== undefined) {

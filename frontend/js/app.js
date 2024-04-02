@@ -6,7 +6,7 @@
       new Route("login", "login.html", true),
       new Route("dashboard", "dashboard.html"),
       new Route("signup", "signup.html"),
-      new Route("forgetpassword", "forgetpassword.html"),
+      new Route("forget-password", "forget-password.html"),
       new Route("emailsent", "emailsent.html"),
       new Route("resetpassword", "resetpassword.html"),
       new Route("resetsuccess", "resetsuccess.html"),

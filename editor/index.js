@@ -53,6 +53,15 @@ document.addEventListener("DOMContentLoaded", function () {
           docxOptions
         );
       }
+      const contentdocument = document.getElementById("container-content");
+      localStorage.setItem(
+        "contentdocument",
+        JSON.stringify(contentdocument.innerHTML)
+      );
+      localStorage.setItem(
+        "contentdocumentparsed",
+        JSON.parse(localStorage.getItem("contentdocument"))
+      );
 
       const dynamicImages = document.querySelectorAll("img");
       console.log(dynamicImages);

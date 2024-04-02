@@ -69,6 +69,7 @@ export const passwordValidation = (password) => {
 };
 
 export function redirect(url) {
+  console.log("ddd");
   if (localStorage.getItem("token") === null && url === "#dashboard") {
     url = "#login"; // Redirect to login page if token is not present
   }

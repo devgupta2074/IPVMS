@@ -108,6 +108,11 @@ export const getAllUsers = async (req, res) => {
 export const forgotPassword = async (req, res) => {
   //email validation above
   const { email } = req.body;
+  if (!email) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Email is required" });
+  }
   try {
     const user = await pool.query("SELECT * FROM puser WHERE email=$1", [
       email,

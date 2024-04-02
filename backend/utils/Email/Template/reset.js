@@ -1,4 +1,4 @@
-export const template = (url, at, where, device) => {
+export const template = (url, at) => {
   return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" style="min-height:100%;background:#f3f3f3">
@@ -503,7 +503,7 @@ We noticed the password for your account was recently changed. If this was you, 
               Where
             </span>
                 <span class="body body-lg light" style="font-weight:300;color:#484848;hyphens:none;-moz-hyphens:none;-webkit-hyphens:none;-ms-hyphens:none;font-size:18px;line-height:1.4;margin-bottom:0px !important">
-              ${where}
+             Faridabad
             </span>
           </p>
           <p style='color:#0a0a0a;font-weight:normal;padding:0;margin:0;text-align:left;font-size:16px;line-height:19px;margin-bottom:10px;font-family:"Cereal", "Helvetica", Helvetica, Arial, sans-serif'>
@@ -511,7 +511,7 @@ We noticed the password for your account was recently changed. If this was you, 
               Device Type
             </span>
                 <span class="body body-lg light" style="font-weight:300;color:#484848;hyphens:none;-moz-hyphens:none;-webkit-hyphens:none;-ms-hyphens:none;font-size:18px;line-height:1.4;margin-bottom:0px !important">
-              Chrome using ${device}
+              Chrome
             </span>
           </p>
         </div>

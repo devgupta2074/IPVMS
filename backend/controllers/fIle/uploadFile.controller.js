@@ -6,7 +6,7 @@ export const UploadFile = async (req, res) => {
   docId = parseInt(docId);
   const textBytesSize = Buffer.byteLength(htmlText, "utf8");
 
-  if (textBytesSize > 1 * 1024 * 1024) {
+  if (textBytesSize > 10 * 1024 * 1024) {
     return res.status(400).json({
       success: false,
       message: "File size should be less than 10MB",
@@ -17,6 +17,7 @@ export const UploadFile = async (req, res) => {
       .status(400)
       .json({ success: false, message: "File not uploaded,Invalid input" });
   }
+  console.log(htmlText);
   try {
     const document = await pool.query(
       "UPDATE document SET htmldata=$1 WHERE id=$2 RETURNING *",

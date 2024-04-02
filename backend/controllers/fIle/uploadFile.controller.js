@@ -17,7 +17,7 @@ export const UploadFile = async (req, res) => {
       .status(400)
       .json({ success: false, message: "File not uploaded,Invalid input" });
   }
-  console.log(htmlText);
+
   try {
     const document = await pool.query(
       "UPDATE document SET htmldata=$1 WHERE id=$2 RETURNING *",
@@ -43,7 +43,8 @@ export const UploadFile = async (req, res) => {
   }
 };
 export const getFile = async (req, res) => {
-  let { docId } = req.body;
+  let { docId } = req.params;
+  console.log(docId);
   docId = parseInt(docId);
   //400->bad request
   if (!docId) {

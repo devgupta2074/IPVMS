@@ -12,6 +12,6 @@ import {
 const fileRouter = express.Router();
 
 fileRouter.post("/uploadFile", UploadFile);
-fileRouter.get("/getFile", getFile);
+fileRouter.get("/getFile/:docId", getFile);
 
 export default fileRouter;

@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./routes/user.routes.js";
+import categoryRouter from "./routes/catogery.routes.js";
 
 const __dirname = path.resolve();
 
@@ -41,7 +42,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());  //above cors is not working 
 
 app.use("/api/user", userRouter);
+app.use("/api/categories", categoryRouter);
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("server statrted at 3000");
 });

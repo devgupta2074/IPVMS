@@ -30,7 +30,7 @@ app.use(cors()); //above cors is not working
 
 app.use("/api/user", userRouter);
 app.use("/api/file", fileRouter);
-
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   console.log("server statrted at 3000");
 });

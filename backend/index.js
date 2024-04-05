@@ -1,30 +1,17 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { pool } from "./database/db.js";
+import { pool } from "./src/core/database/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
-import userRouter from "./routes/user.routes.js";
-import fileRouter from "./routes/fileUpload.routes.js";
+import userRouter from "./src/routes/user.routes.js";
+import fileRouter from "./src/routes/file.routes.js";
 
 const __dirname = path.resolve();
 
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
-
-pool.connect((err, client, release) => {
-  if (err) {
-    return console.error("Error acquiring client", err.stack);
-  }
-  client.query("SELECT NOW()", (err, result) => {
-    release();
-    if (err) {
-      return console.error("Error executing query", err.stack);
-    }
-    console.log("Connected to Database !");
-  });
-});
 
 const app = express();
 

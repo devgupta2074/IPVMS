@@ -1,3 +1,6 @@
+import { VIEWS_CONSTANTS } from "../js/constants.js";
+import { redirect } from "../js/utils.js";
+
 var url = window.location.href;
 
 // Parse the URL to extract the email parameter
@@ -9,3 +12,9 @@ emailText.innerText = email;
 emailText.className = "font-medium "; // Example style, you can add more styles as needed
 emailText.style.display = "inline";
 emailText.style.color = "IndianRed";
+
+const tologin = document.getElementById("tologin");
+tologin.addEventListener("click", function (e) {
+  e.preventDefault();
+  redirect(VIEWS_CONSTANTS.LOGIN);
+});

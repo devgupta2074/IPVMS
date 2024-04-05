@@ -5,6 +5,12 @@
 // should be more than 4 character
 
 export const passwordValidation = (password) => {
+  if (/\s/g.test(password)) {
+    return {
+      error: "Password should not contain space",
+      success: false,
+    };
+  }
   if (!/[A-Z]/.test(password)) {
     return {
       error: "Password should contain at least one uppercase letter",

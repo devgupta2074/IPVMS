@@ -15,10 +15,8 @@ export const sendEmail = async (email, token, location, device) => {
       },
     });
     const htmlTemp = template(
-      "http://localhost:3000/resetpassword/" + token,
-      new Date().toLocaleDateString(),
-      location,
-      device
+      `http://127.0.0.1:5501/frontend/index.html?token=${token}#resetpassword`,
+      new Date().toLocaleDateString()
     );
     await transporter.sendMail({
       from: process.env.SMTP_USER,

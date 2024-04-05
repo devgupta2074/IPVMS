@@ -6,7 +6,9 @@ import {
   forgotPassword,
   resetPassword,
   resetPasswordAuth,
+  getUserInfo,
 } from "../controllers/user/auth.controller.js";
+
 import {
   authorizationMiddeleware,
   loginMiddleware,
@@ -20,5 +22,5 @@ userRouter.get("/getAllUsers", getAllUsers);
 userRouter.post("/forgotPassword", forgotPassword);
 userRouter.post("/resetPassword/:token", resetPassword);
 userRouter.post("/resetPassword", authorizationMiddeleware, resetPasswordAuth);
-
+userRouter.get("/getUserInfo", authorizationMiddeleware, getUserInfo);
 export default userRouter;

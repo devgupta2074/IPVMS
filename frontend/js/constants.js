@@ -44,16 +44,26 @@ const VIEWS_CONSTANTS = {
   LOGIN: "#login",
   SIGNUP: "#signup",
   HOME: "#home",
-  FORGET_PASSWORD: "#forgetpassword",
+  FORGET_PASSWORD: "#forget-password",
   EMAIL_SENT: "#emailsent",
   RESET_PASSWORD: "#resetpassword",
   RESET_SUCCESS: "#resetsuccess",
 };
-
+const TOAST_ERRORS = {
+  INVALID_DOMAIN: "Invalid Domain",
+  USER_NOT_FOUND: "user not found",
+  EMAIL_NOT_PRESENT: "Please enter your email",
+  PASSWORD_NOT_PRESENT: "Please enter your password",
+  INVALID_EMAIL_FORMAT: "Invalid Email format",
+  INVALID_CREDENTIALS: "Invalid credentials",
+  LINK_IS_NOT_VALID: "Link is not valid",
+  REDIRECTING: "Redirecting you to home page",
+};
 const ROUTES_CONSTANTS = {
   LOGIN: "/api/user/loginUser",
   FORGET_PASSWORD: "/api/user/forgotPassword",
   RESET_PASSWORD: "/api/user/resetPassword",
+  GET_USER_INFO: "/api/user/getUserInfo",
 };
 export {
   API_CONSTANTS,
@@ -62,5 +72,6 @@ export {
   TOAST_COLORS,
   TOAST_ICONS,
   ROUTES_CONSTANTS,
+  TOAST_ERRORS,
   HEADERS_CONSTANTS,
 };

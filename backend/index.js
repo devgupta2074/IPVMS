@@ -7,7 +7,11 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./routes/user.routes.js";
+
 import categoryRouter from "./routes/catogery.routes.js";
+
+import fileRouter from "./routes/fileUpload.routes.js";
+
 
 const __dirname = path.resolve();
 
@@ -28,21 +32,24 @@ pool.connect((err, client, release) => {
 
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 // app.use(
 //   cors({
 //     origin: ["*"],
-//     methods: ["*"],n  
+//     methods: ["*"],n
 //     credentials: true,
 //   })
 // );
 
-app.use(cors());  //above cors is not working 
+app.use(cors()); //above cors is not working
 
 app.use("/api/user", userRouter);
+
 app.use("/api/categories", categoryRouter);
+
+app.use("/api/file", fileRouter);
 
 app.listen(3000, () => {
   console.log("server statrted at 3000");

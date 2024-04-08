@@ -1,10 +1,11 @@
 import express from "express";
 import {
-  uploadFile,
-  getFile,
-  uploadTemplate,
   getTemplateById,
-} from "../controllers/file/File.controller.js";
+  getFile,
+  uploadFile,
+  uploadTemplate,
+} from "../controllers/fIle/File.controller.js";
+
 import {
   fileuploadMiddleware,
   uploadTemplateMiddleware,

@@ -80,7 +80,7 @@ export const getAllUserService = async (res) => {
     .json({ success: true, message: "all user are", data: data.rows });
 };
 
-export const forgotPasswordService = async (email) => {
+export const forgotPasswordService = async (email, res) => {
   const user = await pool.query("SELECT * FROM puser WHERE email=$1", [email]);
   if (user.rows.length === 0) {
     return res.status(404).json({ success: false, message: "user not found" });

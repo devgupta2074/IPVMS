@@ -6,12 +6,10 @@ export const fileuploadService = async (htmlText, docId, res) => {
   );
 
   if (document.rowCount === 0) {
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "File not uploaded doc id may not exist",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "File not uploaded doc id may not exist",
+    });
   }
 
   return res.status(201).json({

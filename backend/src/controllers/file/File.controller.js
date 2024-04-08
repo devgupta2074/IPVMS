@@ -80,6 +80,40 @@ export const getFile = async (req, res) => {
     });
   }
 };
+//pagination and sorting
+
+export const getdocument = async (req, res) => {
+  const query = req.query;
+
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = fileService.getPagination(page, size);
+  console.log(limit, offset);
+  //order by
+  const orderByColumn = query?.orderByColumn || "created_at";
+  const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
+  try {
+    const data = await pool.query(
+      `SELECT id,htmljson , convert_from(htmldata,'utf8') as data,category_id,created_at,created_by,title from document  ORDER BY ${orderByColumn} ${orderByDirection}  LIMIT $1 OFFSET $2  `,
+      [limit, offset]
+    );
+    if (data.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "no document dound" });
+    }
+    console.log(data.rows.length);
+    return res
+      .status(200)
+      .json({ message: "documents are", success: true, data: data.rows });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error, success: false });
+  }
+};
+
 export const uploadTemplate = async (req, res) => {
   let { name, description, categoryId, htmlText } = req.body;
 

@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="flex flex-col items-center justify-center w-full border-2 border-red-300">
+        <h1 class="text-3xl text-gray-700">
+            Documents
+        </h1>
+    <div id="containerdoc" class="flex justify-start gap-10 p-5 items-center m-auto flex-row flex-wrap "></div>
+    <div class="flex items-center justify-between  w-full border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+        <div class="flex flex-1 justify-center sm:hidden">
+          <a href="#" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+          <a href="#" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+        </div>
+        <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+          <div id="doc-status">
+            <p class="text-sm text-gray-700">
+              Showing
+              <span class="font-medium">1</span>
+              to
+              <span class="font-medium">2</span>
+              of
+              <span class="font-medium">10</span>
+              results
+            </p>
+          </div>
+          <div>
+            <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span class="sr-only">Previous</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                </svg>
+              </a>
+              <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+              <div class="flex" id="pagination-controller">
+            
+            </div>
+              <a href="#"  class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <span class="sr-only">Next</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+</body>
+
+
+
+
+
+
+
+
+
+<script>
+const fetchDoc=async(page,size)=>{
+
+
+const response = await fetch(
+  `http://localhost:3000/api/file/document?page=${page}&size=${size}`,
+  {
+    method:"GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    
+  }
+)
+  .then((response) => response.json())
+  .then((data) => {
+    // Handle the response from the backend
+    console.log(data);
+    const parentElement=document.getElementById("containerdoc");
+    parentElement.innerHTML="";
+ 
+  
+    
+    
+    
+
+
+    
+    data.data.map((item)=>{
+  
+    parentElement.innerHTML+=docCard(item.title||"demo",item.created_by,item.created_At,item.description||"this is a demo fikle",item.id);
+    parentElement.innerHTML+=docxModal(item.id);
+    document.getElementById(item.id).querySelector("#render-docs").innerHTML=item.data;
+ 
+  
+
+    // const docElement=document.createElement('div');
+    // docElement.innerHTML=item.data;
+    // document.getElementById("render-docs").append(docElement)
+    })
+  })
+
+
+
+}
+var currentPage=1;
+var pageSize=1;
+var maxPages=5;
+const makePagination=(page,size)=>{
+    const arr=paginate(4,currentPage,pageSize,maxPages);
+    const elem=document.createElement('div');
+    arr.forEach((item)=>{
+        elem.innerHTML+=`<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">${item}</a>`
+    })
+    console.log(arr);
+    return elem.innerHTML;
+    
+}
+const handlePagination=(item)=>{
+console.log("item",item);
+currentPage=item;
+
+document.getElementById("pagination-controller").innerHTML=makePagination(currentPage,0);
+document.getElementById(item+"pagination").className="bg-indigo-800 text-white relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+fetchDoc(currentPage-1,pageSize);
+
+
+
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+var page=0;
+var size=1;
+fetchDoc(page,pageSize);
+document.getElementById("pagination-controller").innerHTML=makePagination(page,size);
+document.getElementById(1+"pagination").className="bg-indigo-800 text-white relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+
+}
+
+
+
+)
+
+const docxModal=(id)=>{
+return(`
+
+<div id=${id} class="fixed hidden z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full  w-4/5 m-auto px-2 mt-2 rounded-md  flex justify-center ">
+    <div class="relative top-10 mx-auto  rounded-md bg-white">
+        <div class="flex justify-end p-2">
+            <button onclick="closeModal(${id})" type="button"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-6 pt-0 text-center">
+          <div id="render-docs" class=" flex justify-center items-center">
+            
+            </div>
+            <a href="#"  onclick="closeModal(${id})"
+                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                Yes, I'm sure
+            </a>
+            <a href="#" onclick="closeModal(${id})"
+                class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
+                data-modal-toggle="delete-user-modal">
+                No, cancel
+            </a>
+        </div>
+
+    </div>
+</div>
+`)
+}
+
+
+
+
+
+const docCard=(title,created_by,created_At,description,id)=>{
+  return `<div class="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md bg-clip-border rounded-xl w-96">
+  <div class="p-6">
+    <h5 class="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+      ${title}
+    </h5>
+    <p class="block font-sans text-base antialiased font-light leading-relaxed text-inherit">
+      ${description}
+    </p>
+  </div>
+  <div class="p-6 pt-0">
+    <button
+    onclick="openModal(${id})"
+      class="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+      type="button">
+     View
+    </button>
+  </div>
+</div>`
+}
+
+
+
+
+
+
+    window.openModal = function(modalId) {
+        console.log(modalId,"modal id");
+        document.getElementById(modalId).style.display = 'block'
+        document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')
+        
+    }
+
+    window.closeModal = function(modalId) {
+        document.getElementById(modalId).style.display = 'none'
+        document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+    }
+
+    // Close all modals when press ESC
+    document.onkeydown = function(event) {
+        event = event || window.event;
+        if (event.keyCode === 27) {
+            document.getElementsByTagName('body')[0].classList.remove('overflow-y-hidden')
+            let modals = document.getElementsByClassName('modal');
+            Array.prototype.slice.call(modals).forEach(i => {
+                i.style.display = 'none'
+            })
+        }
+    };
+
+
+const paginate=(totalItems,
+currentPage=1,
+pageSize=1,
+maxPages=3)=>{
+    let totalPages = Math.ceil(totalItems / pageSize);
+
+// Ensure currentPage is within valid bounds
+currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
+let startPage, endPage;
+
+if (totalPages <= maxPages) {
+  startPage = 1;
+  endPage = totalPages;
+} else {
+  let maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
+  let maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
+
+  if (currentPage <= maxPagesBeforeCurrentPage) {
+    startPage = 1;
+    endPage = maxPages;
+  } else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
+    startPage = totalPages - maxPages + 1;
+    endPage = totalPages;
+  } else {
+    startPage = currentPage - maxPagesBeforeCurrentPage;
+    endPage = currentPage + maxPagesAfterCurrentPage;
+  }
+}
+
+// Generate an array of pages from startPage to endPage
+let pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+return pages;
+
+
+
+
+
+
+}
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</html>
+

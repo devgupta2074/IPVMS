@@ -50,22 +50,42 @@ document.addEventListener("DOMContentLoaded", function () {
     var tag = document.getElementById(tagId);
     console.log(tag.id);
     var parent = tag.parentNode;
-    var children = [];
+    if (parent.tagName.toLowerCase() == "article") {
+      tag.remove();
+    } else {
+      var children = [];
+      // const childrens = tag.parentNode.children;
+      // let position = -1; // Default position if tag is not found in its parent's children list
 
-    // Move children to a temporary container
-    while (tag.firstChild) {
-      children.push(tag.removeChild(tag.firstChild));
+      // // Find the position of the tag within its parent's children
+      // if (childrens) {
+      //   for (let j = 0; j < childrens.length; j++) {
+      //     if (childrens[j] === tag) {
+      //       position = j;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // Move children to a temporary container
+      while (tag.firstChild) {
+        children.push(tag.removeChild(tag.firstChild));
+      }
+
+      // Remove the tag
+      parent.removeChild(tag);
+
+      // Append children back to the parent
+      // for (var i = children.length - 1; i >= 0; i--) {
+      //   console.log(children[i]);
+      //   parent.insertBefore(children[i], childrens[position]);
+      // }
+      for (var i = 0; i < children.length; i++) {
+        console.log(children[i]);
+        parent.appendChild(children[i]);
+      }
+      console.log("rithvik", parent);
     }
-
-    // Remove the tag
-    parent.removeChild(tag);
-
-    // Append children back to the parent
-    for (var i = 0; i < children.length; i++) {
-      console.log(children[i]);
-      parent.appendChild(children[i]);
-    }
-    console.log("rithvik", parent);
   }
 
   // Usage example
@@ -317,6 +337,16 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             }
           }
+          console.log(tag.children, "hello hello");
+          const childElements = tag.children;
+          const childIds = [];
+
+          for (let i = 0; i < childElements.length; i++) {
+            const childId = childElements[i].id;
+            if (childId) {
+              childIds.push(childId);
+            }
+          }
 
           const newTag = {
             id: tagId,
@@ -330,6 +360,7 @@ document.addEventListener("DOMContentLoaded", function () {
             className: tag.className || "",
             isTagLink: isLinkTag,
             src: isImgTag ? tag.getAttribute("src") : "",
+            children: childIds,
           };
           changes.newTags.push(newTag);
           console.log(jsonResult[parenttag.id], "parent");
@@ -389,79 +420,106 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   // Function to apply changes from v1 to v2
   function applyChangesFromV1toV2(divElement, v1, v2) {
-    // for (const tagid in v2.newTags) {
-    //   console.log(tagid, "newtags");
-    //   console.log(v2.newTags[tagid], "tapasvai");
+    for (const tagid in v2.newTags) {
+      console.log(tagid, "newtags");
+      console.log(v2.newTags[tagid], "tapasvai");
 
-    //   if (v2.newTags[tagid]) {
-    //     console.log(`#${v2.newTags[tagid].parentId}`);
-    //     const tag = document.getElementById(v2.newTags[tagid].parentId);
-    //     var childElement = document.createElement(v2.newTags[tagid].tagName);
-    //     childElement.textContent = v2.newTags[tagid].textContent;
-    //     console.log(childElement.textContent);
-    //     childElement.style = v2.newTags[tagid].style;
-    //     childElement.className = v2.newTags[tagid].class;
-    //     childElement.id = v2.newTags[tagid].id;
-    //     const children = tag.children;
-    //     const position = v2.newTags[tagid].position;
-    //     console.log(tag);
-    //     console.log(
-    //       position,
-    //       children.length,
-    //       position >= 0 && position <= children.length
-    //     );
+      if (v2.newTags[tagid]) {
+        console.log(`#${v2.newTags[tagid].parentId}`);
+        const tag = document.getElementById(v2.newTags[tagid].parentId);
+        var childElement = document.createElement(v2.newTags[tagid].tagName);
+        childElement.textContent = v2.newTags[tagid].textContent;
+        console.log(childElement.textContent);
+        childElement.style = v2.newTags[tagid].style;
+        childElement.className = v2.newTags[tagid].class;
+        childElement.id = v2.newTags[tagid].id;
+        // childElement.children = v2.newTags[tagid].children;
+        console.log("eye", v2.newTags[tagid].children);
+        if (v2.newTags[tagid].children.length > 0) {
+          for (var i = 0; i < v2.newTags[tagid].children.length; i++) {
+            const child = document.getElementById(
+              v2.newTags[tagid].children[i]
+            );
+            if (child) {
+              const x = child;
+              child.remove();
+              childElement.appendChild(x);
+              console.log("eye", child);
+            }
+          }
+        }
 
-    //     if (position >= 0 && position <= children.length) {
-    //       if (position === children.length) {
-    //         // If position is at the end, simply append the child
-    //         tag.appendChild(childElement);
-    //       } else {
-    //         // Otherwise, insert the child before the element at the specified position
-    //         let sp2 = document.getElementById(children[position].id);
-    //         console.log("Inserting");
-    //         tag.insertBefore(childElement, sp2);
-    //       }
-    //     } else {
-    //       tag.appendChild(childElement);
-    //     }
+        const children = tag.children;
+        const position = v2.newTags[tagid].position;
+        console.log(tag);
+        console.log(childElement);
+        console.log(
+          position,
+          children.length,
+          position >= 0 && position <= children.length,
+          childElement,
+          "ipvms"
+        );
 
-    //     // Step 3: Append the child element to the div
+        if (position >= 0 && position <= children.length) {
+          if (position === children.length) {
+            // If position is at the end, simply append the child
+            tag.appendChild(childElement);
+          } else {
+            // Otherwise, insert the child before the element at the specified position
+            let sp2 = document.getElementById(children[position].id);
+            console.log("Inserting");
+            tag.insertBefore(childElement, sp2);
+          }
+        } else {
+          tag.appendChild(childElement);
+        }
 
-    //     // if (!tag) continue;
-    //     // if (tag) {
-    //     //   tag.style = v1[tag.id].style;
-    //     //   tag.textContent = v1[tag.id].textContent;
-    //     // }
-    //   }
-    // }
-    // for (const tagId in v2.changedTags) {
-    //   console.log(tagId, "d");
-    //   if (v2.changedTags[tagId].id) {
-    //     const tagInfo = v2.changedTags[tagId];
-    //     const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
-    //     console.log("tag: " + tag);
-    //     if (!tag) continue;
+        // Step 3: Append the child element to the div
 
-    //     // Apply cges to text content and style
-    //     if (tag) {
-    //       tag.textContent = v2.changedTags[tagId].textContent;
-    //       if (tag.textContent !== "") {
-    //         tag.style =
-    //           v2.changedTags[tagId].style + "border : 1px  red solid;";
-    //       } else {
-    //         tag.style = v2.changedTags[tagId].style;
-    //       }
+        // if (!tag) continue;
+        // if (tag) {
+        //   tag.style = v1[tag.id].style;
+        //   tag.textContent = v1[tag.id].textContent;
+        // }
+      }
+    }
+    for (const tagId in v2.changedTags) {
+      console.log(tagId, "d");
+      if (v2.changedTags[tagId].id) {
+        const tagInfo = v2.changedTags[tagId];
+        const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
+        console.log("tag: " + tag);
+        if (!tag) continue;
 
-    //       tag.class = "highlight";
-    //       console.log(tag);
-    //     }
+        // Apply cges to text content and style
+        if (tag) {
+          if (v2.changedTags[tagId].style) {
+            tag.style = v2.changedTags[tagId].style;
+          }
+          if (v2.changedTags[tagId].textContent) {
+            tag.textContent = v2.changedTags[tagId].textContent;
+            // tag.style = tag.style + "border : 1px  red solid;";
+          }
+          // //
+          //           tag.textContent = v2.changedTags[tagId].textContent;
+          // if (tag.textContent !== "") {
+          //   tag.style =
+          //     v2.changedTags[tagId].style + "border : 1px  red solid;";
+          // } else {
+          //   tag.style = v2.changedTags[tagId].style;
+          // }
 
-    //     // Apply changes to image source
-    //     if (tagInfo.isTagImg && v2[tagId]) {
-    //       tag.src = v2[tagId].src;
-    //     }
-    //   }
-    // }
+          tag.className = tag.className + "highlight";
+          console.log(tag);
+        }
+
+        // Apply changes to image source
+        if (tagInfo.isTagImg && v2[tagId]) {
+          tag.src = v2[tagId].src;
+        }
+      }
+    }
 
     for (const tagid in v2.removedTags) {
       console.log(tagid, "removedtags");

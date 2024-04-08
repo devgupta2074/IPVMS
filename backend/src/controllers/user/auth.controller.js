@@ -59,7 +59,7 @@ export const forgotPassword = async (req, res) => {
       .json({ success: false, message: "Email is required" });
   }
   try {
-    const secretToken = await userService.forgotPasswordService(email);
+    const secretToken = await userService.forgotPasswordService(email, res);
     try {
       await userService.sendEmailService(email, secretToken, res);
     } catch (error) {

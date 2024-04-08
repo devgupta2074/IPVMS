@@ -25,35 +25,96 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function extractParentText(parentId) {
+    const parentElement = document.getElementById(parentId);
+    // console.log(parentId);
+    let textContent = "";
+
+    // Iterate over child nodes
+    if (parentElement !== null && parentElement.childNodes.length > 0) {
+      for (let i = 0; i < parentElement.childNodes.length; i++) {
+        const childNode = parentElement.childNodes[i];
+        // Check if the node is a text node
+        if (childNode.nodeType === Node.TEXT_NODE) {
+          textContent += childNode.textContent;
+        }
+      }
+    } else {
+      textContent = parentElement.textContent;
+    }
+
+    return textContent;
+  }
+
+  function removeTagButKeepChildren(tagId) {
+    var tag = document.getElementById(tagId);
+    console.log(tag.id);
+    var parent = tag.parentNode;
+    var children = [];
+
+    // Move children to a temporary container
+    while (tag.firstChild) {
+      children.push(tag.removeChild(tag.firstChild));
+    }
+
+    // Remove the tag
+    parent.removeChild(tag);
+
+    // Append children back to the parent
+    for (var i = 0; i < children.length; i++) {
+      console.log(children[i]);
+      parent.appendChild(children[i]);
+    }
+    console.log("rithvik", parent);
+  }
+
+  // Usage example
+
   function extractHtmlToJson(divElement) {
     const jsonOutput = {};
     const htmlTags = divElement.getElementsByTagName("*");
+    console.log(htmlTags, "html");
 
     for (let i = 0; i < htmlTags.length; i++) {
       const tag = htmlTags[i];
       const children = tag.children;
+      const childrens = tag.parentElement.children;
+      let position = -1; // Default position if tag is not found in its parent's children list
 
-      if (children.length === 0) {
-        // Check if the tag has no children
-        const tagId = tag.id || `tag_${i}`;
-        const isImgTag = tag.tagName.toLowerCase() === "img";
-        const isLinkTag = tag.tagName.toLowerCase() === "a";
-
-        jsonOutput[tagId] = {
-          textContent: tag.textContent,
-          id: tagId,
-          parentId: tag.parentElement.id || "root",
-          style: tag.getAttribute("style") || "",
-          isTagImg: isImgTag,
-          isTagLink: isLinkTag,
-          src: isImgTag ? tag.getAttribute("src") : "",
-          tagName: tag.tagName.toLowerCase(),
-        };
+      // Find the position of the tag within its parent's children
+      if (childrens) {
+        for (let j = 0; j < childrens.length; j++) {
+          if (childrens[j] === tag) {
+            position = j;
+            break;
+          }
+        }
       }
+
+      // if (children.length === 0) {
+      // Check if the tag has no children
+      const tagId = tag.id;
+      const isImgTag = tag.tagName.toLowerCase() === "img";
+      const isLinkTag = tag.tagName.toLowerCase() === "a";
+
+      jsonOutput[tagId] = {
+        textContent: extractParentText(tag.id),
+        textcontentcombined: tag.textContent,
+        id: tagId,
+        parentId: tag.parentElement.id || "root",
+        style: tag.getAttribute("style") || "",
+        isTagImg: isImgTag,
+        isTagLink: isLinkTag,
+        class: tag.className,
+        src: isImgTag ? tag.getAttribute("src") : "",
+        tagName: tag.tagName.toLowerCase(),
+        position: position,
+      };
     }
 
     return jsonOutput;
   }
+  let contentdocument;
   async function renderDocx(file) {
     try {
       currentDocument = file;
@@ -88,86 +149,118 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       var tbodyElements = document.querySelectorAll("tbody");
-      console.log("tbody elements: " + tbodyElements.length);
+      // console.log("tbody elements: " + tbodyElements.length);
+      const blobToBase64 = (blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        return new Promise((resolve) => {
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+        });
+      };
 
-      // Loop through the selected tbody elements
-      tbodyElements.forEach(function (tbody) {
-        console.log(tbody); // Output each tbody element
-      });
-      // Loop through each tbody element
-      for (var i = 0; i < tbodyElements.length; i++) {
-        // Generate a unique ID for each tbody element
-        var id = "tbody_" + i;
+      async function convertImagesToBase64(divId) {
+        // Find the div element
+        var div = document.getElementById(divId);
 
-        // Set the id attribute for the tbody element
-        tbodyElements[i].setAttribute("id", id);
+        // Find all images within the div
+        var images = div.getElementsByTagName("img");
+
+        // Iterate over each image
+        for (var i = 0; i < images.length; i++) {
+          var img = images[i];
+
+          // Create a blob URL for the image
+          var blob = await fetch(img.src).then((response) => response.blob());
+
+          // Convert blob to base64
+          var base64 = await blobToBase64(blob);
+          // console.log(base64);
+
+          // Replace the src of the image with base64 data
+          img.src = base64;
+          // Loop through the selected tbody elements
+
+          // Loop through each tbody element
+          // for (var i = 0; i < tbodyElements.length; i++) {
+          //   // Generate a unique ID for each tbody element
+          //   var id = "tbody_" + i;
+
+          //   // Set the id attribute for the tbody element
+          //   tbodyElements[i].setAttribute("id", id);
+          // }
+
+          var tags = document.querySelectorAll(".docx-wrapper *");
+          // console.log(tags);
+          var idCounter = 1;
+          tags.forEach(function (tag) {
+            if (!tag.id) {
+              tag.id = "id_" + idCounter;
+              idCounter++;
+            }
+          });
+          var tbodyElements = document.getElementsByTagName("tbody");
+          // console.log("tbody elements: " + tbodyElements.length);
+
+          // Loop through each tbody element
+          for (var i = 0; i < tbodyElements.length; i++) {
+            // Generate a unique ID for each tbody element
+            var id = "tbody_" + i;
+
+            // Set the id attribute for the tbody element
+            tbodyElements[i].setAttribute("id", id);
+          }
+          contentdocument =
+            document.getElementsByClassName("docx-wrapper")[0].innerHTML;
+
+          // console.log(contentdocument);
+
+          const response = await fetch(
+            "http://localhost:3000/api/file/uploadFile",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                // Authorization: "Bearer " + token,
+              },
+              body: JSON.stringify({
+                htmlText: contentdocument,
+                docId: "4",
+                htmljson: extractHtmlToJson(
+                  document.getElementsByClassName("docx-wrapper")[0]
+                ),
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the response from the backend
+              console.log(data);
+            });
+
+          const response2 = await fetch(
+            "http://localhost:3000/api/file/getFile/4",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                // Authorization: "Bearer " + token,
+              },
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the response from the backend
+              console.log(data.data);
+              document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+                data.data.data;
+              htmljson = data.data.htmljson;
+            });
+        }
       }
 
-      var tags = document.querySelectorAll("*");
-      console.log(tags);
-      var idCounter = 1;
-      tags.forEach(function (tag) {
-        if (!tag.id) {
-          tag.id = "id_" + idCounter;
-          idCounter++;
-        }
-      });
-      var tbodyElements = document.getElementsByTagName("tbody");
-      console.log("tbody elements: " + tbodyElements.length);
-
-      // Loop through each tbody element
-      for (var i = 0; i < tbodyElements.length; i++) {
-        // Generate a unique ID for each tbody element
-        var id = "tbody_" + i;
-
-        // Set the id attribute for the tbody element
-        tbodyElements[i].setAttribute("id", id);
-      }
-      let contentdocument =
-        document.getElementsByClassName("docx-wrapper")[0].innerHTML;
-      let containercontent = document.getElementById("container-content");
-
-      console.log("f", contentdocument);
-
-      const response = await fetch(
-        "http://localhost:3000/api/file/uploadFile",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            htmlText: contentdocument,
-            docId: "4",
-            htmljson: extractHtmlToJson(containercontent),
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend
-          console.log(data);
-        });
-
-      const response2 = await fetch(
-        "http://localhost:3000/api/file/getFile/4",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: "Bearer " + token,
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend
-          console.log(data.data);
-          document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-            data.data.data;
-          htmljson = data.data.htmljson;
-        });
+      convertImagesToBase64("container-content");
 
       // Example usage:
     } catch (error) {
@@ -183,6 +276,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const buttondd = document.getElementById("json");
   buttondd.addEventListener("click", function () {
     function detectChanges(divElement, jsonResult) {
+      handleChanges();
+      assignIDsToElements();
       const changes = {
         changedTags: [],
         newTags: [],
@@ -194,53 +289,87 @@ document.addEventListener("DOMContentLoaded", function () {
 
       for (let i = 0; i < htmlTags.length; i++) {
         const tag = htmlTags[i];
-        const tagId = tag.id || `tag_${i}`;
+        const tagId = tag.id;
         const isImgTag = tag.tagName.toLowerCase() === "img";
         const isLinkTag = tag.tagName.toLowerCase() === "a";
         const tagInfo = jsonResult[tagId];
 
         if (!tagInfo) {
-          if (tag.children.length === 0) {
-            console.log("here");
-            // New tag found
-            const parentId = tag.parentElement.id || "root";
-            const parenttag = document.getElementById(tag.parentElement.id);
-            const newTag = {
-              id: tagId,
-              parentId: parentId,
-              textContent: tag.textContent,
-              style: tag.getAttribute("style") || "",
-              isTagImg: isImgTag,
-              isTagLink: isLinkTag,
-              src: isImgTag ? tag.getAttribute("src") : "",
-            };
-            changes.newTags.push(newTag);
-            console.log(jsonResult[parenttag.id], "parent");
-            if (jsonResult[parenttag.id] !== undefined) {
-              changes.changedTags.push({
-                id: parenttag.id,
-                textContent: jsonResult[parenttag.id].textContent,
-                style: jsonResult[parenttag.id].style,
-                src: jsonResult[parenttag.id].isImgTag
-                  ? jsonResult[parenttag.id].isImgTag
-                  : "",
-                isParentToNewTag: true,
-              });
+          // if (tag.children.length === 0) {
+          console.log("here");
+          console.log(tag);
+          // New tag found
+          const parentId = tag.parentElement.id || "root";
+          const parenttag = document.getElementById(tag.parentElement.id);
+          console.log(tag.parentElement);
+          let position = -1;
+          if (tag.parentElement != null) {
+            const childrens = tag.parentElement.children;
+            // Default position if tag is not found in its parent's children list
+
+            // Find the position of the tag within its parent's children
+            if (childrens) {
+              for (let j = 0; j < childrens.length; j++) {
+                if (childrens[j] === tag) {
+                  position = j;
+                  break;
+                }
+              }
             }
           }
+
+          const newTag = {
+            id: tagId,
+            parentId: parentId,
+            tagName: tag.tagName.toLowerCase(),
+            textContent: extractParentText(tagId),
+            class: tag.getAttribute("class") || "",
+            style: tag.getAttribute("style") || "",
+            isTagImg: isImgTag,
+            position: position,
+            className: tag.className || "",
+            isTagLink: isLinkTag,
+            src: isImgTag ? tag.getAttribute("src") : "",
+          };
+          changes.newTags.push(newTag);
+          console.log(jsonResult[parenttag.id], "parent");
+          // if (jsonResult[parenttag.id] !== undefined) {
+          //   // changes.changedTags.push({
+          //   //   id: parenttag.id,
+          //   //   textContent: newTag.textContent,
+          //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
+          //   //   style: jsonResult[parenttag.id].style,
+          //   //   src: jsonResult[parenttag.id].isImgTag
+          //   //     ? jsonResult[parenttag.id].isImgTag
+          //   //     : "",
+          //   //   isParentToNewTag: true,
+          //   // });
+          //   // }
+          // }
         } else {
           // Check for changes in text style or image source
           if (
-            tagInfo.textContent !== tag.textContent ||
-            tagInfo.style !== tag.getAttribute("style") ||
-            (tagInfo.isTagImg && tagInfo.src !== tag.getAttribute("src"))
+            tag.children.length === 0 &&
+            tag.tagName.toLowerCase() !== "style"
           ) {
-            changes.changedTags.push({
-              id: tagId,
-              textContent: tag.textContent,
-              style: tag.getAttribute("style") || "",
-              src: isImgTag ? tag.getAttribute("src") : "",
-            });
+            if (tagInfo.textContent !== extractParentText(tag.id)) {
+              changes.changedTags.push({
+                id: tagId,
+                textContent: extractParentText(tag.id),
+              });
+            }
+            if (tagInfo.style !== tag.getAttribute("style")) {
+              changes.changedTags.push({
+                id: tagId,
+                style: tag.getAttribute("style") || "",
+              });
+            }
+            if (tagInfo.isTagImg && tagInfo.src !== tag.getAttribute("src")) {
+              changes.changedTags.push({
+                id: tagId,
+                src: isImgTag ? tag.getAttribute("src") : "",
+              });
+            }
           }
         }
       }
@@ -253,50 +382,96 @@ document.addEventListener("DOMContentLoaded", function () {
       return changes;
     }
 
-    const divElement = document.getElementById("container-content");
+    const divElement = document.getElementsByClassName("docx-wrapper")[0];
     const changes = detectChanges(divElement, htmljson);
     console.log(changes);
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
   });
   // Function to apply changes from v1 to v2
   function applyChangesFromV1toV2(divElement, v1, v2) {
-    for (const tagId in v2.changedTags) {
-      console.log(tagId, "d");
-      if (v2.changedTags[tagId].id) {
-        const tagInfo = v2.changedTags[tagId];
-        const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
-        console.log("tag: " + tag);
-        if (!tag) continue;
+    // for (const tagid in v2.newTags) {
+    //   console.log(tagid, "newtags");
+    //   console.log(v2.newTags[tagid], "tapasvai");
 
-        // Apply cges to text content and style
-        if (tag) {
-          tag.textContent = v2.changedTags[tagId].textContent;
-          if (tag.textContent !== "") {
-            tag.style =
-              v2.changedTags[tagId].style + "border : 1px  red solid;";
-          } else {
-            tag.style = v2.changedTags[tagId].style;
-          }
+    //   if (v2.newTags[tagid]) {
+    //     console.log(`#${v2.newTags[tagid].parentId}`);
+    //     const tag = document.getElementById(v2.newTags[tagid].parentId);
+    //     var childElement = document.createElement(v2.newTags[tagid].tagName);
+    //     childElement.textContent = v2.newTags[tagid].textContent;
+    //     console.log(childElement.textContent);
+    //     childElement.style = v2.newTags[tagid].style;
+    //     childElement.className = v2.newTags[tagid].class;
+    //     childElement.id = v2.newTags[tagid].id;
+    //     const children = tag.children;
+    //     const position = v2.newTags[tagid].position;
+    //     console.log(tag);
+    //     console.log(
+    //       position,
+    //       children.length,
+    //       position >= 0 && position <= children.length
+    //     );
 
-          tag.class = "highlight";
-          console.log(tag);
-        }
+    //     if (position >= 0 && position <= children.length) {
+    //       if (position === children.length) {
+    //         // If position is at the end, simply append the child
+    //         tag.appendChild(childElement);
+    //       } else {
+    //         // Otherwise, insert the child before the element at the specified position
+    //         let sp2 = document.getElementById(children[position].id);
+    //         console.log("Inserting");
+    //         tag.insertBefore(childElement, sp2);
+    //       }
+    //     } else {
+    //       tag.appendChild(childElement);
+    //     }
 
-        // Apply changes to image source
-        if (tagInfo.isTagImg && v2[tagId]) {
-          tag.src = v2[tagId].src;
-        }
-      }
-    }
+    //     // Step 3: Append the child element to the div
+
+    //     // if (!tag) continue;
+    //     // if (tag) {
+    //     //   tag.style = v1[tag.id].style;
+    //     //   tag.textContent = v1[tag.id].textContent;
+    //     // }
+    //   }
+    // }
+    // for (const tagId in v2.changedTags) {
+    //   console.log(tagId, "d");
+    //   if (v2.changedTags[tagId].id) {
+    //     const tagInfo = v2.changedTags[tagId];
+    //     const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
+    //     console.log("tag: " + tag);
+    //     if (!tag) continue;
+
+    //     // Apply cges to text content and style
+    //     if (tag) {
+    //       tag.textContent = v2.changedTags[tagId].textContent;
+    //       if (tag.textContent !== "") {
+    //         tag.style =
+    //           v2.changedTags[tagId].style + "border : 1px  red solid;";
+    //       } else {
+    //         tag.style = v2.changedTags[tagId].style;
+    //       }
+
+    //       tag.class = "highlight";
+    //       console.log(tag);
+    //     }
+
+    //     // Apply changes to image source
+    //     if (tagInfo.isTagImg && v2[tagId]) {
+    //       tag.src = v2[tagId].src;
+    //     }
+    //   }
+    // }
+
     for (const tagid in v2.removedTags) {
       console.log(tagid, "removedtags");
       console.log();
-      console.log(document.getElementById("id_63"), "id_63");
+
       if (v2.removedTags[tagid]) {
         const tag = document.getElementById(v1[v2.removedTags[tagid]].id);
         console.log("tag: " + tag);
         if (tag) {
-          if (tag != null && tag.tagName.toLowerCase() !== "tbody") {
+          if (tag != null) {
             tag.remove();
           }
         } else {
@@ -317,11 +492,34 @@ document.addEventListener("DOMContentLoaded", function () {
           v1[v2.removedTags[tagid]].tagName
         );
         childElement.textContent = v1[v2.removedTags[tagid]].textContent;
+        console.log(childElement.textContent);
         childElement.style = v1[v2.removedTags[tagid]].style;
+        childElement.className = v1[v2.removedTags[tagid]].class;
         childElement.id = v1[v2.removedTags[tagid]].id;
+        const children = tag.children;
+        const position = v1[v2.removedTags[tagid]].position;
+        console.log(tag);
+        console.log(
+          position,
+          children.length,
+          position >= 0 && position <= children.length
+        );
+
+        if (position >= 0 && position <= children.length) {
+          if (position === children.length) {
+            // If position is at the end, simply append the child
+            tag.appendChild(childElement);
+          } else {
+            // Otherwise, insert the child before the element at the specified position
+            let sp2 = document.getElementById(children[position].id);
+            console.log("Inserting");
+            tag.insertBefore(childElement, sp2);
+          }
+        } else {
+          tag.appendChild(childElement);
+        }
 
         // Step 3: Append the child element to the div
-        tag.appendChild(childElement);
 
         // if (!tag) continue;
         // if (tag) {
@@ -336,24 +534,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const tagInfo = v2.newTags[tagId];
         console.log(tagInfo);
         const tag = document.getElementById(tagInfo.id);
-        if (tag != null && tag.tagName.toLowerCase() !== "tbody") {
-          tag.remove();
+        if (tag != null) {
+          removeTagButKeepChildren(tag.id);
         }
       }
     }
     for (const tagId in v2.changedTags) {
       console.log(tagId);
       if (v2.changedTags[tagId].isParentToNewTag) {
-      }
-      if (v2.changedTags[tagId].id) {
-        console.log("here");
         const tagInfo = v2.changedTags[tagId];
         const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
-        console.log("tag: " + tag);
+        console.log(tag);
+        console.log(v1[tag.id]);
         if (!tag) continue;
-
-        // Apply changes to text content and style
-
         if (tag) {
           tag.textContent = v1[tag.id].textContent;
           tag.style = v1[tag.id].style;
@@ -363,6 +556,31 @@ document.addEventListener("DOMContentLoaded", function () {
         // Apply changes to image source
         if (tagInfo.isTagImg && v1[tagId]) {
           tag.src = v1[tagId].src;
+        }
+      } else {
+        if (v2.changedTags[tagId].id) {
+          const tagInfo = v2.changedTags[tagId];
+          const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
+          console.log("here");
+
+          console.log("tag: " + tag);
+          if (!tag) continue;
+
+          // Apply changes to text content and style
+
+          if (tag) {
+            if (tagInfo.textContent) {
+              tag.textContent = v1[tag.id].textContent;
+            }
+            if (tagInfo.style) {
+              tag.style = v1[tag.id].style;
+            }
+          }
+
+          // Apply changes to image source
+          if (tagInfo.isTagImg && v1[tagId]) {
+            tag.src = v1[tagId].src;
+          }
         }
       }
     }
@@ -434,6 +652,39 @@ function assignIDsToElements() {
     // console.log("JSON Data:", jsonData);
   });
 }
+function handleChanges() {
+  console.log("tapas");
+  const editableDiv = document.getElementById("container-content");
+  const elementsWithIds = editableDiv.querySelectorAll("[id]");
+  const idSet = new Set();
+
+  elementsWithIds.forEach((element) => {
+    const id = element.id;
+
+    if (idSet.has(id)) {
+      // If duplicate found, change the ID
+      // console.log(id);
+      let newId;
+      do {
+        newId = `generatedID_${version}_changes_${changes}`; // Appending random number to ensure uniqueness
+        changes++;
+      } while (idSet.has(newId)); // Check if new ID is unique
+      element.id = newId;
+    }
+    idSet.add(element.id);
+  });
+}
+
+document
+  .getElementById("container-content")
+  .addEventListener("mouseup", handleChanges);
+document
+  .getElementById("container-content")
+  .addEventListener("keyup", handleChanges);
+
+document
+  .getElementById("container-content")
+  .addEventListener("input", handleChanges);
 
 // function getNearestElementToCursor(cursorX, cursorY) {
 //   const nearestElement = document.elementFromPoint(cursorX, cursorY);

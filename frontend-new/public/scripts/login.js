@@ -135,6 +135,7 @@ function showNextPolicy() {
     const currentPolicyId = policyIds[currentIndex - 1];
     const currentPolicyDiv = document.getElementById(currentPolicyId);
     currentPolicyDiv.classList.add("hidden");
+    currentPolicyDiv.classList.remove("flex");
     currentPolicyDiv.style.opacity = "0";
   }
 
@@ -142,6 +143,7 @@ function showNextPolicy() {
   const currentPolicyIdx = policyIds[currentIndex];
   const currentPolicyDivx = document.getElementById(currentPolicyIdx);
   currentPolicyDivx.classList.remove("hidden");
+  currentPolicyDivx.classList.add("flex");
   currentPolicyDivx.style.opacity = "1";
 
   // Increment the index or reset it if reached the end

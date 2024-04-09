@@ -29,6 +29,9 @@ app.get("/resetsuccess", (req, res) => {
 app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "dashboard.html"));
 });
+app.get("/document", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "document.html"));
+});
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });

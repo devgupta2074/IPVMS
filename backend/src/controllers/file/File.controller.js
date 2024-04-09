@@ -84,6 +84,8 @@ export const getFile = async (req, res) => {
 
 export const getdocument = async (req, res) => {
   const query = req.query;
+  const title = req.query.title;
+  console.log(title);
 
   //  /document?page=1&size=2
   const page = parseInt(query.page);
@@ -94,10 +96,34 @@ export const getdocument = async (req, res) => {
   const orderByColumn = query?.orderByColumn || "created_at";
   const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
   try {
-    const data = await pool.query(
-      `SELECT id,htmljson , convert_from(htmldata,'utf8') as data,category_id,created_at,created_by,title from document  ORDER BY ${orderByColumn} ${orderByDirection}  LIMIT $1 OFFSET $2  `,
-      [limit, offset]
-    );
+    const query = `
+WITH paginated_data AS (
+  SELECT 
+    id, 
+    htmljson, 
+    convert_from(htmldata, 'utf8') as data, 
+    category_id, 
+    created_at, 
+    created_by, 
+    title
+  FROM document
+  WHERE 
+  title ILIKE '%'||$3||'%'
+  ORDER BY ${orderByColumn} ${orderByDirection}
+  LIMIT $1 OFFSET $2
+),
+total_count AS (
+  SELECT COUNT(*) as total_count FROM document
+)
+SELECT 
+  pd.*
+  , 
+  (SELECT total_count FROM total_count) as total_count
+FROM 
+  paginated_data pd;
+`;
+
+    const data = await pool.query(query, [limit, offset, title]);
     if (data.rows.length === 0) {
       return res
         .status(404)
@@ -153,5 +179,32 @@ export const getTemplateById = async (req, res) => {
       message: "Internal Server Error",
       error: error.message,
     });
+  }
+};
+
+export const editDocument = async (req, res) => {
+  const { title } = req.body;
+  let id = req.params.id;
+
+  const docId = parseInt(id);
+  console.log(docId, title);
+  try {
+    const query = `
+UPDATE document
+SET title=$1
+WHERE id=$2
+RETURNING *
+`;
+    const result = await pool.query(query, [title, docId]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "no document found" });
+    }
+    return res
+      .status(200)
+      .json({ message: "updated title success", success: true });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", success: false, error });
   }
 };

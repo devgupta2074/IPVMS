@@ -11,6 +11,9 @@ import userRouter from "./routes/user.routes.js";
 import categoryRouter from "./routes/catogery.routes.js";
 
 import fileRouter from "./routes/fileUpload.routes.js";
+import { globalSearch } from "./controllers/search/globalSearch.js";
+import searchRouter from "./routes/globalsearch.routes.js";
+
 
 
 const __dirname = path.resolve();
@@ -50,6 +53,8 @@ app.use("/api/user", userRouter);
 app.use("/api/categories", categoryRouter);
 
 app.use("/api/file", fileRouter);
+
+app.use("/api/globalsearch", searchRouter);
 
 app.listen(3000, () => {
   console.log("server statrted at 3000");

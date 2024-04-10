@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tailwind:css": "postcss ./public/tailwind.css -o ./public/styles.css",
-    "dev": "nodemon -e css --exec \"npm run tailwind:css\""
+    "dev": "nodemon --exec \"npm run tailwind:css\""
   },
   "keywords": [],
   "author": "",

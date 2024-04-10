@@ -1,11 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { pool } from "./database/db.js";
+import { pool } from "./src/core/database/db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
+
 import userRouter from "./routes/user.routes.js";
 
 import categoryRouter from "./routes/catogery.routes.js";
@@ -19,19 +20,6 @@ import searchRouter from "./routes/globalsearch.routes.js";
 const __dirname = path.resolve();
 
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
-
-pool.connect((err, client, release) => {
-  if (err) {
-    return console.error("Error acquiring client", err.stack);
-  }
-  client.query("SELECT NOW()", (err, result) => {
-    release();
-    if (err) {
-      return console.error("Error executing query", err.stack);
-    }
-    console.log("Connected to Database !");
-  });
-});
 
 const app = express();
 
@@ -49,13 +37,11 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors()); //above cors is not working
 
 app.use("/api/user", userRouter);
-
 app.use("/api/categories", categoryRouter);
-
 app.use("/api/file", fileRouter);
-
 app.use("/api/globalsearch", searchRouter);
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   console.log("server statrted at 3000");
 });

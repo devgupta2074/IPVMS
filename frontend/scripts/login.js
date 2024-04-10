@@ -73,28 +73,56 @@ async function SignIn() {
   }
 }
 
-const signInButton = document.getElementById("loginbutton");
+// const signInButton = document.getElementById("loginbutton");
 
-// Add event listener to the button
-signInButton.addEventListener("click", function () {
-  // Call the SignIn function when the button is clicked
-  SignIn();
+// // Add event listener to the button
+// signInButton.addEventListener("click", function () {
+//   // Call the SignIn function when the button is clicked
+//   SignIn();
+// });
+
+const eyeButton = document.getElementById("eye");
+const tooltiptext = document.getElementById("password-tooltip");
+let password = document.getElementById("password");
+eyeButton.addEventListener("click", function () {
+  const type =
+    password.getAttribute("type") === "password" ? "text" : "password";
+  password.setAttribute("type", type);
+
+  if (type === "text") {
+    tooltiptext.textContent = "Hide Password";
+    document
+      .getElementById("eyesvg")
+      .setAttribute("xlink:href", "./assets/icons/icon.svg#hideeye");
+  } else {
+    tooltiptext.textContent = "Show Password";
+    document
+      .getElementById("eyesvg")
+      .setAttribute("xlink:href", "./assets/icons/icon.svg#eye");
+  }
 });
+
+const trigger = document.getElementById("eye");
+const tooltip = document.getElementById("tooltip");
+
+// Show tooltip on mouseover
+trigger.addEventListener("mouseover", () => {
+  tooltip.classList.remove("hidden");
+});
+
+// Hide tooltip on mouseout
+trigger.addEventListener("mouseout", () => {
+  tooltip.classList.add("hidden");
+});
+
+// Position the tooltip relative to the trigger
 
 const tosignup = document.getElementById("tosignup");
 
 // Add event listener to the button
-tosignup.addEventListener("click", function () {
-  redirect(VIEWS_CONSTANTS.FORGET_PASSWORD);
-});
-
-const btn = document.getElementById("togglePassword");
-let password = document.getElementById("password");
-btn.addEventListener("click", function () {
-  const type =
-    password.getAttribute("type") === "password" ? "text" : "password";
-  password.setAttribute("type", type);
-});
+// tosignup.addEventListener("click", function () {
+//   redirect(VIEWS_CONSTANTS.FORGET_PASSWORD);
+// });
 
 document.addEventListener("DOMContentLoaded", function (event) {
   // This function will run when the content of the page has loaded

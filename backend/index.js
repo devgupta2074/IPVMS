@@ -6,8 +6,16 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
-import userRouter from "./src/routes/user.routes.js";
-import fileRouter from "./src/routes/file.routes.js";
+
+import userRouter from "./routes/user.routes.js";
+
+import categoryRouter from "./routes/catogery.routes.js";
+
+import fileRouter from "./routes/fileUpload.routes.js";
+import { globalSearch } from "./controllers/search/globalSearch.js";
+import searchRouter from "./routes/globalsearch.routes.js";
+
+
 
 const __dirname = path.resolve();
 
@@ -29,7 +37,10 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors()); //above cors is not working
 
 app.use("/api/user", userRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/api/file", fileRouter);
+app.use("/api/globalsearch", searchRouter);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("server statrted at 3000");

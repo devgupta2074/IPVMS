@@ -42,5 +42,5 @@ app.use("/api/globalsearch", searchRouter);
 app.use("/api/versioncontrol", versionControlRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("server statrted at 3000");
+  console.log("server statrted at " + PORT);
 });

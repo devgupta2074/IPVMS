@@ -27,9 +27,9 @@ async function SignIn() {
       TOAST_ICONS.ERROR
     );
   } else {
-    console.log(API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.LOGIN);
+    console.log(API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.LOGIN);
     const response = await fetch(
-      API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.LOGIN,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.LOGIN,
       {
         method: API_CONSTANTS.POST,
         headers: {

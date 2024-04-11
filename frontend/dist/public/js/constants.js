@@ -5,6 +5,7 @@ const API_CONSTANTS = {
   PATCH: "PATCH",
   DELETE: "DELETE",
   BACKEND_BASE_URL: "http://127.0.0.1:3000",
+  BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
   TOKEN: "token",
 };
 
@@ -43,10 +44,16 @@ const VIEWS_CONSTANTS = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
 
-  FORGET_PASSWORD: "/forgetpassword",
+  FORGET_PASSWORD: "/forgotpassword",
   EMAIL_SENT: "/emailsent",
   RESET_PASSWORD: "/resetpassword",
   RESET_SUCCESS: "/resetsuccess",
+  LINK_NOT_VALID: "/linkexpired",
+};
+const PASSWORD_CONSTANTS = {
+  DIGIT: "Password should contain at least one digit",
+  UPPER_CASE: "Password should contain at least one uppercase letter",
+  SYMBOL: "Password should contain at least one special symbol",
 };
 const TOAST_ERRORS = {
   INVALID_DOMAIN: "Invalid Domain",
@@ -73,4 +80,5 @@ export {
   ROUTES_CONSTANTS,
   TOAST_ERRORS,
   HEADERS_CONSTANTS,
+  PASSWORD_CONSTANTS,
 };

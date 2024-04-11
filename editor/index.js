@@ -54,18 +54,19 @@ document.addEventListener("DOMContentLoaded", function () {
       tag.remove();
     } else {
       var children = [];
-      // const childrens = tag.parentNode.children;
-      // let position = -1; // Default position if tag is not found in its parent's children list
+      const childrens = tag.parentNode.childNodes;
+      console.log("dheeraj", childrens);
+      let position = -1; // Default position if tag is not found in its parent's children list
 
-      // // Find the position of the tag within its parent's children
-      // if (childrens) {
-      //   for (let j = 0; j < childrens.length; j++) {
-      //     if (childrens[j] === tag) {
-      //       position = j;
-      //       break;
-      //     }
-      //   }
-      // }
+      // Find the position of the tag within its parent's children
+      if (childrens) {
+        for (let j = 0; j < childrens.length; j++) {
+          if (childrens[j] === tag) {
+            position = j;
+            break;
+          }
+        }
+      }
 
       // Move children to a temporary container
       while (tag.firstChild) {
@@ -76,19 +77,56 @@ document.addEventListener("DOMContentLoaded", function () {
       parent.removeChild(tag);
 
       // Append children back to the parent
-      // for (var i = children.length - 1; i >= 0; i--) {
-      //   console.log(children[i]);
-      //   parent.insertBefore(children[i], childrens[position]);
-      // }
-      for (var i = 0; i < children.length; i++) {
+      for (var i = children.length - 1; i >= 0; i--) {
         console.log(children[i]);
-        parent.appendChild(children[i]);
+        parent.insertBefore(children[i], childrens[position]);
       }
+      // for (var i = 0; i < children.length; i++) {
+      //   console.log(children[i]);
+      //   parent.appendChild(children[i]);
+      // }
       console.log("rithvik", parent);
     }
   }
 
   // Usage example
+  function storeParentAndChildNodesToJson(parentElement) {
+    var jsonStructure = {
+      parentElement: {
+        tagName: parentElement.tagName,
+        attributes: Array.from(parentElement.attributes).reduce(
+          (acc, attribute) => {
+            acc[attribute.name] = attribute.value;
+            return acc;
+          },
+          {}
+        ),
+        childNodes: [],
+      },
+    };
+
+    // Function to extract relevant information from child nodes
+    function extractNodeInfo(node) {
+      return {
+        tagName: node.tagName,
+        textContent: node.textContent,
+        attributes: Array.from(node.attributes).reduce((acc, attribute) => {
+          acc[attribute.name] = attribute.value;
+          return acc;
+        }, {}),
+      };
+    }
+
+    // Traverse child nodes and store in parent's childNodes array
+    parentElement.childNodes.forEach(function (node) {
+      var nodeInfo = extractNodeInfo(node);
+      jsonStructure.parentElement.childNodes.push(nodeInfo);
+    });
+
+    return JSON.stringify(jsonStructure);
+  }
+
+  // Assuming you have a parent element
 
   function extractHtmlToJson(divElement) {
     const jsonOutput = {};
@@ -323,8 +361,10 @@ document.addEventListener("DOMContentLoaded", function () {
           const parenttag = document.getElementById(tag.parentElement.id);
           console.log(tag.parentElement);
           let position = -1;
+          let childnodeposition = -1;
           if (tag.parentElement != null) {
             const childrens = tag.parentElement.children;
+            const childnodes = tag.parentElement.childNodes;
             // Default position if tag is not found in its parent's children list
 
             // Find the position of the tag within its parent's children
@@ -332,6 +372,14 @@ document.addEventListener("DOMContentLoaded", function () {
               for (let j = 0; j < childrens.length; j++) {
                 if (childrens[j] === tag) {
                   position = j;
+                  break;
+                }
+              }
+            }
+            if (childnodes) {
+              for (let j = 0; j < childnodes.length; j++) {
+                if (childnodes[j] === tag) {
+                  childnodeposition = j;
                   break;
                 }
               }
@@ -361,6 +409,11 @@ document.addEventListener("DOMContentLoaded", function () {
             isTagLink: isLinkTag,
             src: isImgTag ? tag.getAttribute("src") : "",
             children: childIds,
+            color: tag.getAttribute("color") || "",
+            size: tag.getAttribute("size") || "",
+            // childArray: childNodesMap,
+            // parentchildNodes: tag.parentNode.childNodes,
+            childnodeposition: childnodeposition,
           };
           changes.newTags.push(newTag);
           console.log(jsonResult[parenttag.id], "parent");
@@ -415,8 +468,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const divElement = document.getElementsByClassName("docx-wrapper")[0];
     const changes = detectChanges(divElement, htmljson);
+    let version = localStorage.getItem("version");
+    if (version == undefined) {
+      version = 1;
+    }
+    version = version + 0.1;
+    const response = fetch(
+      "http://localhost:3000/api/versioncontrol/createDocumentVersion",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          version_number: version,
+          doc_id: 1,
+          delta: changes,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        console.log(data);
+        localStorage.setItem("version", version);
+      });
     console.log(changes);
-    localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
   });
   // Function to apply changes from v1 to v2
   function applyChangesFromV1toV2(divElement, v1, v2) {
@@ -425,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(v2.newTags[tagid], "tapasvai");
 
       if (v2.newTags[tagid]) {
-        console.log(`#${v2.newTags[tagid].parentId}`);
+        // console.log(`#${v2.newTags[tagid].parentId}`);
         const tag = document.getElementById(v2.newTags[tagid].parentId);
         var childElement = document.createElement(v2.newTags[tagid].tagName);
         childElement.textContent = v2.newTags[tagid].textContent;
@@ -433,6 +510,8 @@ document.addEventListener("DOMContentLoaded", function () {
         childElement.style = v2.newTags[tagid].style;
         childElement.className = v2.newTags[tagid].class;
         childElement.id = v2.newTags[tagid].id;
+        childElement.color = v2.newTags[tagid].color;
+        childElement.size = v2.newTags[tagid].siAze;
         // childElement.children = v2.newTags[tagid].children;
         console.log("eye", v2.newTags[tagid].children);
         if (v2.newTags[tagid].children.length > 0) {
@@ -449,8 +528,8 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }
 
-        const children = tag.children;
-        const position = v2.newTags[tagid].position;
+        const children = tag.childNodes;
+        const position = v2.newTags[tagid].childnodeposition;
         console.log(tag);
         console.log(childElement);
         console.log(
@@ -460,6 +539,29 @@ document.addEventListener("DOMContentLoaded", function () {
           childElement,
           "ipvms"
         );
+        if (position - 1 > 0 && position + 1 <= children.length) {
+          if (
+            tag.childNodes[position - 1].nodeName === "#text" &&
+            tag.childNodes[position + 1].nodeName === "#text"
+          ) {
+            tag.removeChild(tag.childNodes[position]);
+            console.log("yeeeeeee");
+          }
+        } else if (position + 1 <= children.length - 1) {
+          if (tag.childNodes[position + 1].nodeName === "#text") {
+            tag.removeChild(tag.childNodes[position]);
+            console.log("yeeeeeee");
+          }
+        } else if (position - 1 > 0) {
+          console.log("vishal");
+          if (tag.childNodes[position - 1].nodeName === "#text") {
+            tag.removeChild(tag.childNodes[position + 1]);
+            console.log("ye3");
+          }
+        } else if (position === children.length - 1) {
+          tag.removeChild(tag.childNodes[position]);
+          console.log("ye3");
+        }
 
         if (position >= 0 && position <= children.length) {
           if (position === children.length) {
@@ -467,14 +569,20 @@ document.addEventListener("DOMContentLoaded", function () {
             tag.appendChild(childElement);
           } else {
             // Otherwise, insert the child before the element at the specified position
-            let sp2 = document.getElementById(children[position].id);
+            // let sp2 = document.getElementById(children[childnodeposition].id);
             console.log("Inserting");
-            tag.insertBefore(childElement, sp2);
+            tag.insertBefore(childElement, tag.childNodes[position]);
           }
         } else {
           tag.appendChild(childElement);
         }
 
+        // for (let index = 0; index < array.length; index++) {
+        //   const element = array[index];
+        // }
+        // tag.childNodes = v2.newTags[tagid].childArray;
+        // console.log("yash", tag.childNodes);
+        // console.log("yash", v2.newTags[tagid]);
         // Step 3: Append the child element to the div
 
         // if (!tag) continue;
@@ -510,7 +618,7 @@ document.addEventListener("DOMContentLoaded", function () {
           //   tag.style = v2.changedTags[tagId].style;
           // }
 
-          tag.className = tag.className + "highlight";
+          tag.className = tag.className;
           console.log(tag);
         }
 
@@ -599,46 +707,45 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     for (const tagId in v2.changedTags) {
       console.log(tagId);
-      if (v2.changedTags[tagId].isParentToNewTag) {
+      // if (v2.changedTags[tagId].isParentToNewTag) {
+      //   const tagInfo = v2.changedTags[tagId];
+      //   const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
+      //   console.log(tag);
+      //   console.log(v1[tag.id]);
+      //   if (!tag) continue;
+      //   if (tag) {
+      //     tag.textContent = v1[tag.id].textContent;
+      //     tag.style = v1[tag.id].style;
+      //     console.log(tag);
+      //   }
+
+      //   // Apply changes to image source
+      //   if (tagInfo.isTagImg && v1[tagId]) {
+      //     tag.src = v1[tagId].src;
+      //   }
+      // } else {
+      if (v2.changedTags[tagId].id) {
         const tagInfo = v2.changedTags[tagId];
         const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
-        console.log(tag);
-        console.log(v1[tag.id]);
+        console.log("here");
+
+        console.log("tag: " + tag);
         if (!tag) continue;
+
+        // Apply changes to text content and style
+
         if (tag) {
-          tag.textContent = v1[tag.id].textContent;
-          tag.style = v1[tag.id].style;
-          console.log(tag);
+          if (tagInfo.textContent) {
+            tag.textContent = v1[tag.id].textContent;
+          }
+          if (tagInfo.style) {
+            tag.style = v1[tag.id].style;
+          }
         }
 
         // Apply changes to image source
         if (tagInfo.isTagImg && v1[tagId]) {
           tag.src = v1[tagId].src;
-        }
-      } else {
-        if (v2.changedTags[tagId].id) {
-          const tagInfo = v2.changedTags[tagId];
-          const tag = divElement.querySelector(`#${v2.changedTags[tagId].id}`);
-          console.log("here");
-
-          console.log("tag: " + tag);
-          if (!tag) continue;
-
-          // Apply changes to text content and style
-
-          if (tag) {
-            if (tagInfo.textContent) {
-              tag.textContent = v1[tag.id].textContent;
-            }
-            if (tagInfo.style) {
-              tag.style = v1[tag.id].style;
-            }
-          }
-
-          // Apply changes to image source
-          if (tagInfo.isTagImg && v1[tagId]) {
-            tag.src = v1[tagId].src;
-          }
         }
       }
     }
@@ -649,9 +756,26 @@ document.addEventListener("DOMContentLoaded", function () {
   // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
-    const jsonResult = JSON.parse(
-      localStorage.getItem("container-content-json")
-    );
+    const response = fetch(
+      "http://localhost:3000/api/versioncontrol/getVersions?docId=4",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          version_number: version,
+          doc_id: 1,
+          delta: changes,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        console.log(data);
+        localStorage.setItem("version", version);
+      });
     const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
     const divElement = document.getElementById("container-content");
     applyChangesFromV2toV1(divElement, htmljson, changes);

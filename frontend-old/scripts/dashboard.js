@@ -6,7 +6,7 @@ if (localStorage.getItem("token") === null) {
 } else {
   const token = localStorage.getItem("token");
   const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.GET_USER_INFO,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_USER_INFO,
     {
       method: API_CONSTANTS.GET,
       headers: {

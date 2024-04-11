@@ -43,14 +43,14 @@ async function ResetPassword() {
   let confirmPassword = document.getElementById("confirm-password").value;
   const contenttype = HEADERS_CONSTANTS.CONTENT_TYPE;
   console.log(
-    API_CONSTANTS.BACKEND_BASE_URL +
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
       ROUTES_CONSTANTS.RESET_PASSWORD +
       "/" +
       token
   );
 
   const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL +
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
       ROUTES_CONSTANTS.RESET_PASSWORD +
       "/" +
       token,

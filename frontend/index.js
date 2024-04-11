@@ -13,7 +13,7 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
-app.get("/forgetpassword", (req, res) => {
+app.get("/forgotpassword", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "forget-password.html"));
 });
 
@@ -22,6 +22,9 @@ app.get("/emailsent", (req, res) => {
 });
 app.get("/resetpassword", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "resetpassword.html"));
+});
+app.get("/linkexpired", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "linkexpired.html"));
 });
 app.get("/resetsuccess", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "resetsuccess.html"));

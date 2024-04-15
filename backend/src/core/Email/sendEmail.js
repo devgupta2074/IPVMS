@@ -32,3 +32,32 @@ export const sendEmail = async (email, token) => {
     console.log(error, "email not sent");
   }
 };
+
+export const sendLetterEmail = async (pdfFile) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+    const htmlTemp = letterTemplate();
+    await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: email,
+      subject: "Password Reset",
+      html: letterTemplate,
+      attachments: [
+        {
+          filename: "letter.pdf",
+          content: new ArrayBuffer(pdfFile, "utf-8"),
+        },
+      ],
+    });
+  } catch (error) {
+    console.log(error, "email not sent");
+  }
+};

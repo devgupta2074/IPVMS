@@ -1,5 +1,9 @@
 import { pool } from "../../core/database/db.js";
 import * as fileService from "../../services/file.services.js";
+import puppeteer from "puppeteer";
+import path from "path";
+
+const __dirname = path.resolve();
 export const uploadFile = async (req, res) => {
   let { htmlText, docId, htmljson } = req.body;
 
@@ -86,7 +90,6 @@ export const getdocument = async (req, res) => {
   const query = req.query;
   const title = req.query.title;
   console.log(title);
-
   //  /document?page=1&size=2
   const page = parseInt(query.page);
   const size = parseInt(query.size);
@@ -185,6 +188,11 @@ export const getTemplateById = async (req, res) => {
 export const editDocument = async (req, res) => {
   const { title } = req.body;
   let id = req.params.id;
+  if (!title) {
+    return res
+      .status(400)
+      .json({ success: false, message: "title is missing" });
+  }
 
   const docId = parseInt(id);
   console.log(docId, title);
@@ -207,4 +215,33 @@ RETURNING *
       .status(500)
       .json({ message: "Internal server error", success: false, error });
   }
+};
+
+export const saveAsPdf = async (req, res) => {
+  const { htmlData } = req.body;
+
+  if (!htmlData) {
+    return res
+      .status(400)
+      .json({ message: "Invalid syntax error", success: false });
+  }
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+
+  await page.setContent(htmlData, {
+    waitUntil: "domcontentloaded",
+  });
+  const pdfBuffer = await page.pdf({
+    format: "tabloid",
+  });
+  console.log("pdf buffer", pdfBuffer);
+  await page.pdf({
+    margin: { top: "10px", bottom: "10px" },
+
+    path: `${__dirname}/my-fance-invoice.pdf`,
+  });
+  await browser.close();
+  return res
+    .status(200)
+    .json({ message: "pdf file saved success", success: true });
 };

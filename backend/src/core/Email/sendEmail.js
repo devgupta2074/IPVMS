@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { template } from "./Template/template.js";
 import path from "path";
 import dotenv from "dotenv";
+import { letterTemplate } from "./Template/letterTemplate.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
 export const sendEmail = async (email, token) => {
@@ -33,7 +34,7 @@ export const sendEmail = async (email, token) => {
   }
 };
 
-export const sendLetterEmail = async (pdfFile) => {
+export const sendLetterEmail = async (pdfFile, email) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -48,12 +49,12 @@ export const sendLetterEmail = async (pdfFile) => {
     await transporter.sendMail({
       from: process.env.SMTP_USER,
       to: email,
-      subject: "Password Reset",
+      subject: "Letter Sent",
       html: letterTemplate,
       attachments: [
         {
           filename: "letter.pdf",
-          content: new ArrayBuffer(pdfFile, "utf-8"),
+          content: new Buffer(pdfFile, "utf-8"),
         },
       ],
     });

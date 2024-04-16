@@ -1,7 +1,9 @@
 import { pool } from "../../core/database/db.js";
-import * as fileService from "../../services/file.services.js";
+import * as fileService from "../../services/file.Services.js";
 import puppeteer from "puppeteer";
 import path from "path";
+import { sendLetterEmail } from "../../core/Email/sendEmail.js";
+import { getPagination } from "../../utils/getPagination.js";
 
 const __dirname = path.resolve();
 export const uploadFile = async (req, res) => {
@@ -93,7 +95,7 @@ export const getdocument = async (req, res) => {
   //  /document?page=1&size=2
   const page = parseInt(query.page);
   const size = parseInt(query.size);
-  const { limit, offset } = fileService.getPagination(page, size);
+  const { limit, offset } = getPagination(page, size);
   console.log(limit, offset);
   //order by
   const orderByColumn = query?.orderByColumn || "created_at";
@@ -231,17 +233,30 @@ export const saveAsPdf = async (req, res) => {
   await page.setContent(htmlData, {
     waitUntil: "domcontentloaded",
   });
-  const pdfBuffer = await page.pdf({
-    format: "tabloid",
-  });
-  console.log("pdf buffer", pdfBuffer);
-  await page.pdf({
-    margin: { top: "10px", bottom: "10px" },
 
+  const pdfBuffer = await page.pdf({
+    margin: {
+      top: 20.15 * 1.33,
+      right: 59.15 * 1.33,
+      bottom: 72 * 1.33,
+      left: 72 * 1.33,
+    },
+    format: "A4",
+    height: 2500,
+  });
+
+  await page.pdf({
     path: `${__dirname}/my-fance-invoice.pdf`,
+    displayHeaderFooter: true,
+    format: "A4",
+    footerTemplate:
+      "<div><div class='pageNumber'></div>1 of 2<div>/</div><div class='totalPages'></div></div>",
   });
   await browser.close();
-  return res
-    .status(200)
-    .json({ message: "pdf file saved success", success: true });
+  sendLetterEmail(pdfBuffer, "tapasviarora2002@gmail.com");
+
+  return res.status(200).json({
+    message: "pdf file saved success email sent success",
+    success: true,
+  });
 };

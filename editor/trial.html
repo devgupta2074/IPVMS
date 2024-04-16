@@ -3,38 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body></body>
-  <script>
-    const response = fetch("http://localhost:3000/api/file/getFile/1", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from the backend
-        console.log(data);
-
-        if (data.success) {
-          console.log(data.secretToken);
-          const blob = new Blob([data.data.data], { type: "text/html" });
-
-          // Create a temporary link element
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = "output.html";
-
-          // Trigger the download
-          link.click();
-
-          // redirect(`?email=${email}` + VIEWS_CONSTANTS.EMAIL_SENT);
+    <title>Your Title</title>
+    <style>
+      @media print {
+        /* Set each section to start on a new page */
+        section {
+          page-break-before: always;
         }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  </script>
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2>Section 1</h2>
+      <p>This is the content of section 1.</p>
+    </section>
+
+    <section>
+      <h2>Section 2</h2>
+      <p>This is the content of section 2.</p>
+    </section>
+
+    <section>
+      <h2>Section 3</h2>
+      <p>This is the content of section 3.</p>
+    </section>
+
+    <section>
+      <h2>Section 4</h2>
+      <p>This is the content of section 4.</p>
+    </section>
+
+    <button onclick="window.print()">Print</button>
+  </body>
 </html>

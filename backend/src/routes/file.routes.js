@@ -7,7 +7,7 @@ import {
   getdocument,
   editDocument,
   saveAsPdf,
-} from "../controllers/file/File.controller.js";
+} from "../controllers/file/file.Controller.js";
 
 import {
   fileuploadMiddleware,

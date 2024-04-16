@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
 import { sendEmail } from "../../core/Email/sendEmail.js";
-import { passwordValidation } from "../../utils/InputValidation.js";
-import * as userService from "../../services/user.services.js";
+import { passwordValidation } from "../../utils/inputValidation.js";
+import * as userService from "../../services/user.Services.js";
 
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });

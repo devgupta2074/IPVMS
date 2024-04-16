@@ -6,7 +6,7 @@ export default {
   target: "node",
   entry: "./index.js",
   output: {
-    filename: "bundle.js",
+    filename: "bundle.cjs",
     path: path.resolve(__dirname, "dist"),
   },
   mode: "development",

@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import { pool } from "./src/core/database/db.js";
+
+
 
 import dotenv from "dotenv";
 import path from "path";
@@ -11,6 +12,12 @@ import fileRouter from "./src/routes/file.Routes.js";
 import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
 import { apiDocumentation } from "./docs/apidoc.js";
+
+import categoryRouter from "./src/routes/catogery.routes.js";
+
+
+import searchRouter from "./src/routes/globalsearch.routes.js";
+import versionControlRouter from "./src/routes/versioncontrol.routes.js";
 
 const __dirname = path.resolve();
 
@@ -38,10 +45,11 @@ app.use(limiter);
 app.use("/documentation", swaggerUi.serve, swaggerUi.setup(apiDocumentation));
 
 app.use("/api/user", userRouter);
-
+app.use("/api/categories", categoryRouter);
 app.use("/api/file", fileRouter);
-
+app.use("/api/globalsearch", searchRouter);
+app.use("/api/versioncontrol", versionControlRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log("server statrted at 3000");
+  console.log("server statrted at " + PORT);
 });

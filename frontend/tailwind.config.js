@@ -3,7 +3,11 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   content: ["./public/**/*.{html,js}", "./", "./views/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        design: "url('/assets/images/gradient.png')",
+      },
+    },
     colors: {
       ...colors,
       "sunset-orange": {

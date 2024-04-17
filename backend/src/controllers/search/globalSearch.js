@@ -2,13 +2,25 @@ import { pool } from "../../core/database/db.js";
 
 export const globalSearch = async (req, res) => {
   try {
-    const { searchString } = req.body;
 
-    const query = {
-      text: "SELECT * FROM global_search($1)",
-      values: [searchString],
-    };
+    const { searchString, category } = req.body;
 
+    console.log(searchString, category);
+
+    let query;
+    if (category != undefined || null) {
+      query = {
+        text: "SELECT * FROM global_search($1) WHERE category=$2",
+        values: [searchString, category],
+      };
+    } else {
+      query = {
+        text: "SELECT * FROM global_search($1)",
+        values: [searchString],
+      };
+    }
+
+    console.log(query);
     const data = await pool.query(query);
 
     if ((data.rowCount != 0) | null) {

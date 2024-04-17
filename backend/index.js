@@ -2,8 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-
-
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./src/routes/user.Routes.js";
@@ -14,7 +12,6 @@ import swaggerUi from "swagger-ui-express";
 import { apiDocumentation } from "./docs/apidoc.js";
 
 import categoryRouter from "./src/routes/catogery.routes.js";
-
 
 import searchRouter from "./src/routes/globalsearch.routes.js";
 import versionControlRouter from "./src/routes/versioncontrol.routes.js";
@@ -34,11 +31,12 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(
-  cors({
-    origin: ["*"],
-    methods: ["*"],
-    credentials: true,
-  })
+  cors()
+  //   {
+  //   origin: ["*"],
+  //   methods: ["*"],
+  //   credentials: true,
+  // }
 );
 app.use(compression());
 app.use(limiter);

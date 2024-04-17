@@ -1,4 +1,4 @@
-import { API_CONSTANTS, ROUTES_CONSTANTS } from "../js/constants.js";
+import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 let userdata;
 if (localStorage.getItem("token") === null) {
   window.location.hash = "#login"; // Redirect to login page if token is not present

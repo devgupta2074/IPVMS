@@ -7,8 +7,8 @@ import {
   VIEWS_CONSTANTS,
   HEADERS_CONSTANTS,
   TOAST_ERRORS,
-} from "../js/constants.js";
-import { launch_toast, redirect } from "../js/utils.js";
+} from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 
 async function ForgetPassword() {
   let email = document.getElementById("email").value;

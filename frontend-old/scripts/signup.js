@@ -1,9 +1,5 @@
-import { redirect } from "../js/utils.js";
-import {
-  emailValidation,
-  launch_toast,
-  passwordValidation,
-} from "../js/utils.js";
+import { redirect } from "../utils/utils.js";
+import { emailValidation, passwordValidation } from "../utils/utils.js";
 
 // async function SignIn() {
 //   console.log("Signing in...");

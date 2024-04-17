@@ -1,4 +1,4 @@
-import { TOAST_COLORS, URL_CONSTANTS } from "./constants.js";
+import { TOAST_COLORS, URL_CONSTANTS } from "../utils/constants.js";
 
 export const emailValidation = (email) => {
   const check = new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
@@ -51,12 +51,34 @@ export const passwordValidation = (password) => {
 };
 
 export function redirect(url) {
-  // console.log("ddd");
-  // if (localStorage.getItem("token") === null && url === "#dashboard") {
-  //   url = "/"; // Redirect to login page if token is not present
-  // }
-  console.log(window.location.href);
+  console.log(window.history);
+  const currentUrl = window.location.pathname;
+  console.log("currentUrl: " + currentUrl, url);
+  // var historyLength = window.history.length;
+  // // console.log(historyLength);
+  // console.log(window.history);
+  // if (window.history.length > 1 && window.history.state !== null) {
+  //   var previousUrl = window.history.state.url;
+  //   if (previousUrl == url) {
+  //     console.log("Previous URL:", previousUrl);
+  //     // window.history.back();
+  //   } else {
+  //     console.log("he");
+  //     window.history.pushState({ url: currentUrl }, "", currentUrl);
+
+  //     console.log("f", URL_CONSTANTS.FRONTEND_BASE_URL + url);
+  //     console.log(window.history);
+  //     window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + url;
+  //   }
+  // } else {
+  //   console.log("he");
+  //   window.history.pushState({ url: currentUrl }, "", currentUrl);
+
+  //   console.log("f", URL_CONSTANTS.FRONTEND_BASE_URL + url);
+  //   console.log(window.history);
   window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + url;
+
+  // Start from the current page and move backwards in history
 }
 
 const policyIds = ["policy1", "policy2", "policy3"];

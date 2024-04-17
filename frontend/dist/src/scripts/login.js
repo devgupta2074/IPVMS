@@ -1,3 +1,4 @@
+import { LoginApiRequest } from "../api/login.js";
 import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
@@ -13,6 +14,8 @@ const emailerror = document.getElementById("emailerror");
 const passworderror = document.getElementById("passworderror");
 
 async function SignIn() {
+  const siginbutton = document.getElementById("signin");
+
   let email = document.getElementById("email").value;
   let password = document.getElementById("password").value;
 
@@ -30,24 +33,21 @@ async function SignIn() {
       passworderror.classList.add("opacity-0");
     }, 3000);
   } else {
+    siginbutton.removeAttribute("enabled", "");
+    siginbutton.setAttribute("disabled", "");
+    siginbutton.innerHTML = `  <svg  class="h-4 w-5  ">
+  <use  xlink:href="/assets/icons/icon.svg#loader-white"></use>
+</svg>`;
+
     console.log(API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.LOGIN);
-    const response = await fetch(
-      API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.LOGIN,
-      {
-        method: API_CONSTANTS.POST,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      }
-    )
-      .then((response) => response.json())
+    // const response = await LoginApiRequest(email, password);
+    // console.log(response, "he");
+    await LoginApiRequest(email, password)
       .then((data) => {
-        // Handle the response from the backend
-        // console.log(data);
+        console.log(data);
+        siginbutton.removeAttribute("disabled", "");
+        siginbutton.setAttribute("enabled", "");
+        siginbutton.innerHTML = `Sign In  `;
         if (data.success) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);

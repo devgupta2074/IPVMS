@@ -20,6 +20,7 @@ fileRouter.get("/getFile/:docId", getFile);
 fileRouter.post("/uploadTemplate", uploadTemplateMiddleware, uploadTemplate);
 fileRouter.get("/getTemplateById/:id", getTemplateById);
 fileRouter.get("/document", getdocument);
+
 fileRouter.post("/updateDocument/:id", editDocument);
 fileRouter.post("/saveAsPdf", saveAsPdf);
 

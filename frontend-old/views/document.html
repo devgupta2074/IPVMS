@@ -198,8 +198,7 @@ else{
      parentElement.innerHTML="";
     data.data.map((item)=>{
     parentElement.innerHTML+=docCard(item.title||"demo",item.created_by,item.created_At,item.description||"this is a demo fikle",item.id);
-    parentElement.innerHTML+=docxModal(item.id);
-    document.getElementById(item.id).querySelector("#render-docs").innerHTML=item.data;    
+    parentElement.innerHTML+=docxModal(item.id);    
 })
     
 }

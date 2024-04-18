@@ -262,3 +262,40 @@ export const saveAsPdf = async (req, res) => {
     success: true,
   });
 };
+export const getFileById = async (req, res) => {
+  let { docId } = req.params;
+  console.log(docId);
+  docId = parseInt(docId);
+  //400->bad request
+  if (!docId) {
+    return res.status(400).json({
+      success: false,
+      message: "Document Id is required",
+    });
+  }
+
+  try {
+    const document = await pool.query(
+      "SELECT  htmljson , convert_from(htmldata,'utf8') as data  FROM document WHERE id=$1",
+      [docId]
+    );
+    if (document.rows.length === 0) {
+      //400->bad request invalid doc id
+      return res.status(400).json({
+        success: false,
+        message: "File not found ,invalid document id",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "File fetched",
+      data: document.rows[0],
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};

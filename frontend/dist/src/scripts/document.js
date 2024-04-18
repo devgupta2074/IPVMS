@@ -252,3 +252,51 @@ document.onkeydown = function (event) {
     });
   }
 };
+
+
+const search = async () => {
+  const searchText = document.getElementById('search').value;
+
+  console.log('search func');
+  const response = await fetch(
+    "http://ipvms-api.exitest.com/api/globalsearch/search",
+    {
+      method: "POST",
+      // mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        searchString: searchText,
+
+      })
+    }
+  ).then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the backend
+      console.log(data);
+      if (data.success == false) {
+        const parentElement = document.getElementById("containerdoc");
+        parentElement.innerHTML = "No data found";
+      } else {
+        totalItems = data?.data[0]?.total_count;
+        const parentElement = document.getElementById("containerdoc");
+        parentElement.innerHTML = "";
+        data.data.map((item) => {
+          console.log(item);
+          parentElement.innerHTML += docCard(
+            item.title || "demo",
+            item.created_by,
+            item.created_At,
+            item.description || "this is a demo fikle",
+            item.id
+          );
+          parentElement.innerHTML += docxModal(item.id);
+          document
+            .getElementById(item.id)
+            .querySelector("#render-docs").innerHTML = item.data;
+        });
+      }
+    });
+
+};

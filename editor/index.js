@@ -1,5 +1,7 @@
+let imagesposition = [];
 document.addEventListener("DOMContentLoaded", async function () {
   localStorage.setItem("container-content-json", null);
+
   let document_version = [];
   const response = await fetch(
     "http://localhost:3000/api/versioncontrol/getVersions?docId=4",
@@ -30,6 +32,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const changes = item.delta;
             const divElement = document.getElementById("docx-wrapper");
             applyChangesFromV2toV1(divElement, htmljson, changes);
+            // Replace 'yourDivElementId' with the actual ID of your div element
+            hideTextNodes(divElement);
           });
 
           const button2 = document.createElement("button");
@@ -138,43 +142,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       // }
       console.log("rithvik", parent);
     }
-  }
-
-  // Usage example
-  function storeParentAndChildNodesToJson(parentElement) {
-    var jsonStructure = {
-      parentElement: {
-        tagName: parentElement.tagName,
-        attributes: Array.from(parentElement.attributes).reduce(
-          (acc, attribute) => {
-            acc[attribute.name] = attribute.value;
-            return acc;
-          },
-          {}
-        ),
-        childNodes: [],
-      },
-    };
-
-    // Function to extract relevant information from child nodes
-    function extractNodeInfo(node) {
-      return {
-        tagName: node.tagName,
-        textContent: node.textContent,
-        attributes: Array.from(node.attributes).reduce((acc, attribute) => {
-          acc[attribute.name] = attribute.value;
-          return acc;
-        }, {}),
-      };
-    }
-
-    // Traverse child nodes and store in parent's childNodes array
-    parentElement.childNodes.forEach(function (node) {
-      var nodeInfo = extractNodeInfo(node);
-      jsonStructure.parentElement.childNodes.push(nodeInfo);
-    });
-
-    return JSON.stringify(jsonStructure);
   }
 
   // Assuming you have a parent element
@@ -380,14 +347,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then((response) => response.json())
         .then((data) => {
           // Handle the response from the backend
-          console.log(data.data);
+          // console.log(data.data.data);
           document.getElementsByClassName("docx-wrapper")[0].innerHTML =
             data.data.data;
           htmljson = data.data.htmljson;
         });
-      checkDivSize();
-      // checkDivSizeBack();
-      // Example usage:
+      const container = document.getElementsByClassName("docx-wrapper")[0];
+      container.id = "docx-wrapper";
+      imageLoaded();
     } catch (error) {
       console.error("Error rendering DOCX:", error);
     }
@@ -402,14 +369,44 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   const buttondd = document.getElementById("json");
   buttondd.addEventListener("click", function () {
-    function detectChanges(divElement, jsonResult) {
+    async function detectChanges(divElement, jsonResult) {
       handleChanges();
       assignIDsToElements();
       const changes = {
         changedTags: [],
         newTags: [],
         removedTags: [],
+        imageTags: [],
       };
+
+      const dynamicImages = document.getElementsByTagName("img");
+      const blobToBase64 = (blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        return new Promise((resolve) => {
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+        });
+      };
+      for (let h = 0; h < dynamicImages.length; h++) {
+        const image = dynamicImages[h];
+        var blob = await fetch(image.src).then((response) => response.blob());
+
+        // Convert blob to base64
+        var base64 = await blobToBase64(blob);
+
+        imagesposition[h].x2 = image.offsetLeft;
+        imagesposition[h].y2 = image.offsetTop;
+        imagesposition[h].width = image.offsetWidth;
+        imagesposition[h].height = image.offsetHeight;
+        imagesposition[h].style = image.style.cssText;
+        imagesposition[h].src = base64;
+        imagesposition[h].id = image.id;
+        imagesposition[h].parent = image.parentElement.parentElement.id;
+      }
+
+      changes.imageTags = imagesposition;
 
       const htmlTags = divElement.getElementsByTagName("*");
       console.log(htmlTags);
@@ -426,7 +423,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           console.log("here");
           console.log(tag);
           // New tag found
-          const parentId = tag.parentElement.id || "root";
+          const parentId = tag.parentElement.id || "di";
           const parenttag = document.getElementById(tag.parentElement.id);
           console.log(tag.parentElement);
           let position = -1;
@@ -625,6 +622,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log(tag);
         console.log(childElement);
         console.log(
+          "position",
           position,
           children,
           children.length,
@@ -648,7 +646,38 @@ document.addEventListener("DOMContentLoaded", async function () {
           children[0].nodeValue = newtext;
           console.log(children, "exsq");
         } else {
-          if (position - 1 > 0 && position + 1 < children.length) {
+          if (position > children.length) {
+            console.log("archit");
+            if (
+              tag.childNodes.length > 0 &&
+              tag.childNodes[children.length - 2] &&
+              tag.childNodes[children.length - 2].nodeName === "#text"
+            ) {
+              console.log(v2.newTags[tagid]);
+              let newtext = children[children.length - 2].nodeValue.replace(
+                childElement.textContent,
+                ""
+              );
+
+              newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
+              console.log(newtext, "vvv");
+              const newchildbefore = document.createTextNode(
+                v2.newTags[tagid].textbefore
+              );
+              const newchildafter = document.createTextNode(
+                v2.newTags[tagid].textafter
+              );
+              console.log(newchildafter, newchildbefore);
+              tag.insertBefore(newchildbefore, children[children.length - 1]);
+              tag.insertBefore(newchildafter, children[children.length - 1]);
+
+              // children[0].nodeValue = newtext;
+              tag.removeChild(children[position - 1]);
+              console.log(children, "exsq");
+            } else {
+              tag.appendChild(childElement);
+            }
+          } else if (position - 1 > 0 && position + 1 < children.length) {
             if (
               tag.childNodes[position - 1].nodeName === "#text" &&
               tag.childNodes[position + 1].nodeName === "#text"
@@ -662,7 +691,7 @@ document.addEventListener("DOMContentLoaded", async function () {
               console.log("yeeeeeee");
             }
           } else if (position - 1 > 0 || position == children.length) {
-            console.log("vishal", tag.childNodes);
+            console.log("vishal", tag.childNodes, "position", position);
             if (
               tag.childNodes.length > 0 &&
               tag.childNodes[position - 1].nodeName === "#text"
@@ -714,57 +743,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     }
     console.log(v1);
-    // for (const tagid in v2.newTags) {
-    //   console.log(tagid, "removedtags");
-    //   if (v2.newTags[tagid]) {
-    //     console.log(v2.newTags[tagid].parentId);
-    //     const tag = document.getElementById(v2.newTags[tagid].parentId);
-    //     var childElement = document.createElement(v2.newTags[tagid].tagName);
-    //     childElement.textContent = v2.newTags[tagid].textContent;
-    //     console.log(childElement.textContent);
-    //     childElement.style = v2.newTags[tagid].style;
-    //     childElement.className = v2.newTags[tagid].class;
-    //     childElement.id = v2.newTags[tagid].id.id;
-    //     const children = tag.children;
-    //     const position = v2.newTags[tagid].position;
-    //     console.log(tag);
-    //     console.log(
-    //       position,
-    //       children.length,
-    //       position >= 0 && position <= children.length,
-    //       "tap dev"
-    //     );
 
-    //     if (position >= 0 && position <= children.length) {
-    //       if (position === children.length) {
-    //         // If position is at the end, simply append the child
-    //         tag.appendChild(childElement);
-    //       } else {
-    //         // Otherwise, insert the child before the element at the specified position
-    //         let sp2 = document.getElementById(children[position].id);
-    //         if (children[position].id !== "_Hlk47453870") {
-    //           if (tag.contains(sp2)) {
-    //             tag.insertBefore(childElement, sp2);
-    //           } else {
-    //             console.error(
-    //               "The node before which the new node is to be inserted is not a child of this node."
-    //             );
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       tag.appendChild(childElement);
-    //     }
-
-    //     // Step 3: Append the child element to the div
-
-    //     // if (!tag) continue;
-    //     // if (tag) {
-    //     //   tag.style = v1[tag.id].style;
-    //     //   tag.textContent = v1[tag.id].textContent;
-    //     // }
-    //   }
-    // }
     for (const tagId in v2.changedTags) {
       console.log(tagId, "d");
       if (v2.changedTags[tagId].id) {
@@ -820,10 +799,46 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       }
     }
+    for (const image in v2.imageTags) {
+      console.log(v2.imageTags[image]);
+      const tag = document.getElementById(v2.imageTags[image].id);
+      if (!tag) {
+        const parent = document.getElementById(v2.imageTags[image].parent);
+        const img = document.createElement("img");
+        img.src = v2.imageTags[image].src;
+        img.style = v2.imageTags[image].style;
+        img.id = v2.imageTags[image].id;
+        img.width = v2.imageTags[image].width;
+        img.height = v2.imageTags[image].height;
+        img.x = v2.imageTags[image].x;
+        img.y = v2.imageTags[image].y;
+        parent.appendChild(img);
+      } else {
+        tag.src = v2.imageTags[image].src;
+        tag.style = v2.imageTags[image].style;
+        tag.id = v2.imageTags[image].id;
+        tag.width = v2.imageTags[image].width;
+        tag.height = v2.imageTags[image].height;
+        tag.x = v2.imageTags[image].x;
+        tag.y = v2.imageTags[image].y;
+      }
+    }
+    imageLoaded();
   }
 
   // Function to apply changes from v2 to v1
   function applyChangesFromV2toV1(divElement, v1, v2) {
+    for (const image in v2.imageTags) {
+      const tag = document.getElementById(v2.imageTags[image].id);
+      // tag.src = v2.imageTags[image].src;
+      tag.style = v2.imageTags[image].style;
+      tag.id = v2.imageTags[image].id;
+      tag.width = v2.imageTags[image].width;
+      tag.height = v2.imageTags[image].height;
+      tag.x = v2.imageTags[image].x;
+      tag.y = v2.imageTags[image].y;
+    }
+    imageLoaded();
     for (const tagid in v2.removedTags) {
       console.log(tagid, "removedtags");
       if (v2.removedTags[tagid]) {
@@ -935,6 +950,7 @@ var currentNearestElement = null;
 
 function assignIDsToElements() {
   const container = document.getElementsByClassName("docx-wrapper")[0];
+  container.id = "docx-wrapper";
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changesx}`;
@@ -1013,6 +1029,16 @@ document
   .addEventListener("input", checkDivSize);
 document
   .getElementById("container-content")
+  .addEventListener("input", imageLoaded, assignIDsToElements, handleChanges);
+// document.addEventListener("keydown", function (event) {
+//   // Check if the Control key and the "v" key are pressed simultaneously
+//   if (event.ctrlKey && event.key === "v") {
+//     // Run your function here
+//     removeEmptyPages();
+//   }
+// // });
+document
+  .getElementById("container-content")
   .addEventListener("input", function (event) {
     // Check if the input event was triggered by pressing the backspace or delete key
     if (
@@ -1022,11 +1048,40 @@ document
       checkDivSizeBack();
     }
   });
+function setIdToNull(node) {
+  // Set the id attribute of the current node to null
+  node.id = null;
+
+  // Recursively call setIdToNull for each child node
+  for (var i = 0; i < node.childNodes.length; i++) {
+    setIdToNull(node.childNodes[i]);
+  }
+}
+function hideTextNodes(node) {
+  console.log("Hiding text nodes", node.childNodes);
+  // Iterate over each child node of the given node
+  for (var i = node.childNodes.length - 1; i >= 0; i--) {
+    var child = node.childNodes[i];
+
+    // Check if the child node is not a section element
+    if (child.nodeName !== "SECTION") {
+      // Remove the child node
+      node.removeChild(child);
+    }
+  }
+}
+
 function removearticlewhileloop(articleHeight, article, i) {
+  let index = 0;
   const totalarticles = document.getElementsByTagName("article");
-  while (842 < articleHeight && totalarticles.length > i + 1) {
+  while (842 < articleHeight && totalarticles.length > i + 1 && index < 100) {
+    index += 1;
     pages = document.getElementsByClassName("docx");
     const nextarticle = document.getElementsByTagName("article")[i + 1];
+    article.lastChild.id = null;
+    setIdToNull(article.lastChild);
+
+    assignIDsToElements();
     nextarticle.insertBefore(article.lastChild, nextarticle.firstChild);
     article = document.getElementById(article.id);
     articleHeight = article.scrollHeight;
@@ -1036,13 +1091,18 @@ function removearticlewhileloop(articleHeight, article, i) {
 function addarticlewhileloop(articleHeight, article, i) {
   const totalarticles = document.getElementsByTagName("article");
   console.log(article, "kid");
-
-  while (842 > articleHeight && totalarticles.length > i + 1) {
+  let index = 0;
+  while (842 > articleHeight && totalarticles.length > i + 1 && index < 100) {
     // console.log(document.getElementsByTagName("article")[i]);
     // console.log(document.getElementsByTagName("article")[i + 1]);
+    index += 1;
     if (totalarticles.length > i + 1) {
       const beforearticle = document.getElementsByTagName("article")[i + 1];
       if (beforearticle.firstChild) {
+        beforearticle.firstChild.id = null;
+        setIdToNull(beforearticle.firstChild);
+        assignIDsToElements();
+
         article.appendChild(beforearticle.firstChild);
         article = document.getElementsByTagName("article")[i];
         articleHeight = article.scrollHeight;
@@ -1109,6 +1169,159 @@ function checkDivSize() {
     // editableDiv.appendChild(newpage);
   }
   // checkclientheightofarticles();
+  // removeEmptyPages();
+}
+
+function imageLoaded() {
+  imagesposition = [];
+  const dynamicImages = document.querySelectorAll("img");
+  console.log(dynamicImages);
+  console.log("images");
+  const existingHandles = document.querySelectorAll(".resize-handle");
+
+  console.log(existingHandles, "rahul");
+
+  if (existingHandles.length > 0) {
+    console.log("hell dev");
+    existingHandles.forEach((handle) => {
+      handle.remove();
+    });
+  }
+  // const existingcontainer = document.querySelectorAll(".image-container");
+  // if (existingcontainer.length > 0) {
+  //   existingcontainer.forEach((handle) => {
+  //     handle.remove();
+  //   });
+  // }
+  dynamicImages.forEach(function (image, index) {
+    image.style.zIndex = 100;
+    const container = document.createElement("div");
+    container.classList.add("image-container");
+    container.classList.add("container");
+    container.style = "display: inline-block; position:relative;";
+
+    image.parentNode.insertBefore(container, image);
+    container.appendChild(image);
+
+    const resizeHandles = [
+      "top-left",
+      "top-right",
+      "bottom-left",
+      "bottom-right",
+    ].map(function (handleClass) {
+      const handle = document.createElement("div");
+      handle.classList.add("resize-handle", handleClass);
+      container.appendChild(handle);
+      return handle;
+    });
+    console.log(image.parentElement, "exsq image");
+    imagesposition.push({
+      x: image.offsetLeft,
+      y: image.offsetTop,
+      width: image.offsetWidth,
+      height: image.offsetHeight,
+      style: image.style.cssText,
+      src: image.src,
+      id: image.id,
+      x2: image.offsetLeft,
+      y2: image.offsetTop,
+      width2: image.offsetWidth,
+      height2: image.offsetHeight,
+      style2: image.style.cssText,
+      parent: image.parentElement.parentElement.id,
+    });
+
+    let initialX,
+      initialY,
+      offsetX = 0,
+      offsetY = 0;
+    let initialWidth, initialHeight;
+
+    // Event listener for mousedown event on the image and resize handles
+    image.addEventListener("mousedown", startDrag);
+    resizeHandles.forEach((handle) =>
+      handle.addEventListener("mousedown", startResize)
+    );
+
+    // Function to handle dragging
+    function startDrag(e) {
+      e.preventDefault();
+      initialX = e.clientX - offsetX;
+      initialY = e.clientY - offsetY;
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("mouseup", stopDrag);
+    }
+
+    // Function to handle resizing
+    function startResize(e) {
+      console.log("startResize");
+      e.preventDefault();
+      initialWidth = image.offsetWidth;
+      initialHeight = image.offsetHeight;
+      initialX = e.clientX;
+      initialY = e.clientY;
+      document.addEventListener("mousemove", resize);
+      document.addEventListener("mouseup", stopResize);
+    }
+
+    // Function to drag the image
+    function drag(e) {
+      console.log("drag");
+      e.preventDefault();
+      offsetX = e.clientX - initialX;
+      offsetY = e.clientY - initialY;
+      initialX = e.clientX;
+      initialY = e.clientY;
+
+      // Update the position of the image
+      image.style.left = `${image.offsetLeft + offsetX}px`;
+      image.style.top = `${image.offsetTop + offsetY}px`;
+
+      // Update the position of the container
+      container.style.left = `${container.offsetLeft + offsetX}px`;
+      container.style.top = `${container.offsetTop + offsetY}px`;
+
+      // Update the position of resize handles
+      resizeHandles.forEach((handle) => {
+        handle.style.left = `${handle.offsetLeft + offsetX}px`;
+        handle.style.top = `${handle.offsetTop + offsetY}px`;
+      });
+    }
+
+    // Function to resize the image
+    function resize(e) {
+      console.log(e);
+      e.preventDefault();
+
+      const newWidth = initialWidth + (e.clientX - initialX);
+      const newHeight = initialHeight + (e.clientY - initialY);
+      image.style.width = `${newWidth}px`;
+      image.style.height = `${newHeight}px`;
+      container.style.width = `${newWidth}px`;
+      container.style.height = `${newHeight}px`;
+      // resizeHandles.forEach((handle) => {
+      //   handle.style.left = `${handle.offsetLeft + offsetX}px`;
+      //   handle.style.top = `${handle.offsetTop + offsetY}px`;
+      // });
+
+      // Update the position of resize handles
+      // resizeHandles.forEach((handle) => {
+      //   handle.style.width = `${newWidth}px`;
+      //   handle.style.height = `${newHeight}px`;
+      // });
+    }
+
+    // Functions to stop dragging and resizing
+    function stopDrag() {
+      document.removeEventListener("mousemove", drag);
+      document.removeEventListener("mouseup", stopDrag);
+    }
+
+    function stopResize() {
+      document.removeEventListener("mousemove", resize);
+      document.removeEventListener("mouseup", stopResize);
+    }
+  });
 }
 
 function checkDivSizeBack() {
@@ -1139,5 +1352,24 @@ function checkDivSizeBack() {
 
     // editableDiv.appendChild(newpage);
   }
+  removeEmptyPages();
   // checkclientheightofarticles();
+}
+
+function removeEmptyPages() {
+  const articles = document.querySelectorAll("article");
+
+  // Iterate through each article
+  articles.forEach((article) => {
+    // Check if the article has no child nodes or just a single p tag
+    if (
+      article.childNodes.length === 0 ||
+      (article.childNodes.length === 1 &&
+        article.firstChild.tagName.toLowerCase() === "p")
+    ) {
+      // Remove the parent section tag
+      const section = article.parentNode;
+      section.parentNode.removeChild(section);
+    }
+  });
 }

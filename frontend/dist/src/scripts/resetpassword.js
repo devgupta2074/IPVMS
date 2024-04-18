@@ -65,6 +65,12 @@ async function ResetPassword() {
     confirmPassword.length !== 0 &&
     password === confirmPassword
   ) {
+    console.log(
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+        ROUTES_CONSTANTS.RESET_PASSWORD +
+        "/" +
+        token
+    );
     const response = await fetch(
       API_CONSTANTS.BACKEND_BASE_URL_PROD +
         ROUTES_CONSTANTS.RESET_PASSWORD +
@@ -75,13 +81,20 @@ async function ResetPassword() {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           password: password,
           confirmPassword: confirmPassword,
         }),
       }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          // If response is not okay (status code other than 2xx), handle the error
+          // redirect(VIEWS_CONSTANTS.LINK_NOT_VALID);
+        }
+        return response.json();
+      })
       .then((data) => {
         // Handle the response from the backend
         console.log(data);

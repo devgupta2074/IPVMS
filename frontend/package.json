@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "IPVMS Frontend",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "nodemon -e js,html,css --exec \"node index.js\"",
     "css": "nodemon -e html,css,js --exec \"npm run tailwind:css \" ",

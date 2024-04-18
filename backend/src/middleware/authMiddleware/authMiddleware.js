@@ -92,7 +92,6 @@ export const resetPasswordMiddleware = async (req, res, next) => {
   next();
 };
 export const tokenMiddleware = async (req, res, next) => {
-  console.log("hit");
   const { token } = req.params;
   console.log(token, "in token middleware");
 

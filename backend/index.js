@@ -31,13 +31,7 @@ const app = express();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-app.use(
-  cors({
-    origin: ["*"],
-    methods: ["*"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(compression());
 app.use(limiter);
 app.use("/documentation", swaggerUi.serve, swaggerUi.setup(apiDocumentation));

@@ -3,6 +3,7 @@ import { template } from "./Template/template.js";
 import path from "path";
 import dotenv from "dotenv";
 import { letterTemplate } from "./Template/letterTemplate.js";
+import { BadGatewayError } from "../../Error/customError.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
 export const sendEmail = async (email, token) => {
@@ -30,7 +31,7 @@ export const sendEmail = async (email, token) => {
       html: htmlTemp,
     });
   } catch (error) {
-    console.log(error, "email not sent");
+    throw new BadGatewayError("Something Wrong with email services");
   }
 };
 

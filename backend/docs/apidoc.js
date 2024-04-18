@@ -3,6 +3,13 @@ import {
   registerUserBody,
   loginUser,
   loginUserBody,
+  forgotPassword,
+  forgotUserBody,
+  getAllUsers,
+  resetPassword,
+  resetUserBody,
+  resetAuthUserBody,
+  resetPasswordAuth,
 } from "./user.js";
 const apiDocumentation = {
   openapi: "3.0.1",
@@ -46,6 +53,18 @@ const apiDocumentation = {
     "/api/user/loginUser": {
       post: loginUser,
     },
+    "/api/user/getAllUsers": {
+      get: getAllUsers,
+    },
+    "/api/user/forgotPassword": {
+      post: forgotPassword,
+    },
+    "/api/user/resetPassword/{token}": {
+      post: resetPassword,
+    },
+    "/api/user/resetPassword": {
+      post: resetPasswordAuth,
+    },
   },
   components: {
     securitySchemes: {
@@ -58,6 +77,9 @@ const apiDocumentation = {
     schemas: {
       registerUserBody,
       loginUserBody,
+      forgotUserBody,
+      resetUserBody,
+      resetAuthUserBody,
     },
   },
 };

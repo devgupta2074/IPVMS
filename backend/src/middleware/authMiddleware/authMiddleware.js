@@ -34,6 +34,7 @@ export const loginMiddleware = async (req, res, next) => {
 //400->Bad request
 
 export const registerMiddleware = async (req, res, next) => {
+  console.log("in middleware");
   const { firstName, lastName, email, password, updatedBy } = req.body;
   if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({ message: "Fields required", success: false });
@@ -92,6 +93,7 @@ export const resetPasswordMiddleware = async (req, res, next) => {
 };
 export const tokenMiddleware = async (req, res, next) => {
   const { token } = req.params;
+  console.log(token, "in token middleware");
 
   if (!token) {
     return res.status(499).json({ success: false, message: "Invalid Token" });

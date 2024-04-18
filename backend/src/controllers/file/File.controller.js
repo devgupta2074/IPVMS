@@ -1,5 +1,5 @@
 import { pool } from "../../core/database/db.js";
-import * as fileService from "../../services/file.Services.js";
+import * as fileService from "../../services/file.services.js";
 import puppeteer from "puppeteer";
 import path from "path";
 import { sendLetterEmail } from "../../core/Email/sendEmail.js";
@@ -105,13 +105,13 @@ export const getdocument = async (req, res) => {
 WITH paginated_data AS (
   SELECT 
     id, 
+    category_id as cid,
     htmljson, 
-    convert_from(htmldata, 'utf8') as data, 
-    category_id, 
+    convert_from(htmldata, 'utf8') as data,  
     created_at, 
     created_by, 
     title
-  FROM document
+  FROM document d
   WHERE 
   title ILIKE '%'||$3||'%'
   ORDER BY ${orderByColumn} ${orderByDirection}
@@ -121,11 +121,13 @@ total_count AS (
   SELECT COUNT(*) as total_count FROM document
 )
 SELECT 
-  pd.*
-  , 
-  (SELECT total_count FROM total_count) as total_count
+  pd.*, 
+  (SELECT total_count FROM total_count) as total_count,
+  c.category as category_name
 FROM 
-  paginated_data pd;
+paginated_data pd
+JOIN  category c 
+ON c.id=pd.cid
 `;
 
     const data = await pool.query(query, [limit, offset, title]);

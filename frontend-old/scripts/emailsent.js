@@ -1,5 +1,5 @@
-import { VIEWS_CONSTANTS } from "../js/constants.js";
-import { redirect } from "../js/utils.js";
+import { VIEWS_CONSTANTS } from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 
 var url = window.location.href;
 

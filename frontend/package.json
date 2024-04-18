@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "IPVMS Frontend",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "start": "nodemon node 'index.js'",
+    "start": "nodemon -e js,html,css --exec \"node index.js\"",
+    "css": "nodemon -e html,css,js --exec \"npm run tailwind:css \" ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "prod": "node dist/bundle.cjs"
+    "prod": "node dist/bundle.cjs",
+    "tailwind:css": "postcss ./public/tailwind.css -o ./public/styles.css",
+    "dev": "nodemon -e js,html --exec \"npm run build && npm run prod\""
   },
   "author": "Dev Gupta",
   "license": "ISC",

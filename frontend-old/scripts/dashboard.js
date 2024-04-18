@@ -1,4 +1,4 @@
-import { API_CONSTANTS, ROUTES_CONSTANTS } from "../js/constants.js";
+import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 let userdata;
 if (localStorage.getItem("token") === null) {
   window.location.hash = "#login"; // Redirect to login page if token is not present
@@ -6,7 +6,7 @@ if (localStorage.getItem("token") === null) {
 } else {
   const token = localStorage.getItem("token");
   const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.GET_USER_INFO,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_USER_INFO,
     {
       method: API_CONSTANTS.GET,
       headers: {

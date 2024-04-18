@@ -8,7 +8,7 @@ import path from "path";
 import {
   emailValidation,
   passwordValidation,
-} from "../../utils/InputValidation.js";
+} from "../../utils/inputValidation.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -35,23 +35,8 @@ export const loginMiddleware = async (req, res, next) => {
 
 export const registerMiddleware = async (req, res, next) => {
   const { firstName, lastName, email, password, updatedBy } = req.body;
-
-  if (!firstName) {
-    return res
-      .status(400)
-      .json({ message: "First Name is required", success: false });
-  } else if (!lastName) {
-    return res
-      .status(400)
-      .json({ message: "Last Name is required", success: false });
-  } else if (!email) {
-    return res
-      .status(400)
-      .json({ message: "Email is required", success: false });
-  } else if (!password) {
-    return res
-      .status(400)
-      .json({ message: "Password is required", success: false });
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ message: "Fields required", success: false });
   } else if (!emailValidation(email).success) {
     return res.status(400).json(emailValidation(email));
   } else if (!passwordValidation(password).success) {
@@ -85,10 +70,11 @@ export const authorizationMiddeleware = async (req, res, next) => {
 export const resetPasswordMiddleware = async (req, res, next) => {
   const { password, confirmPassword } = req.body;
 
-  if (!password) {
-    return res
-      .status(400)
-      .json({ message: "Password is required", success: false });
+  if (!password || !confirmPassword) {
+    return res.status(400).json({
+      message: "Password and confirm pasword are required",
+      success: false,
+    });
   }
 
   if (!passwordValidation(password).success) {

@@ -7,8 +7,8 @@ import {
   VIEWS_CONSTANTS,
   HEADERS_CONSTANTS,
   TOAST_ERRORS,
-} from "../js/constants.js";
-import { launch_toast, redirect } from "../js/utils.js";
+} from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 
 async function ForgetPassword() {
   let email = document.getElementById("email").value;
@@ -21,11 +21,11 @@ async function ForgetPassword() {
   } else {
     const contenttype = HEADERS_CONSTANTS.CONTENT_TYPE;
     console.log(
-      API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.FORGET_PASSWORD
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.FORGET_PASSWORD
     );
 
     const response = await fetch(
-      API_CONSTANTS.BACKEND_BASE_URL + ROUTES_CONSTANTS.FORGET_PASSWORD,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.FORGET_PASSWORD,
       {
         method: API_CONSTANTS.POST,
         headers: {

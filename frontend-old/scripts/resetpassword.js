@@ -7,8 +7,8 @@ import {
   VIEWS_CONSTANTS,
   HEADERS_CONSTANTS,
   TOAST_ERRORS,
-} from "../js/constants.js";
-import { launch_toast, redirect } from "../js/utils.js";
+} from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 var url = window.location.href;
 
 // Parse the URL to extract the email parameter
@@ -43,14 +43,14 @@ async function ResetPassword() {
   let confirmPassword = document.getElementById("confirm-password").value;
   const contenttype = HEADERS_CONSTANTS.CONTENT_TYPE;
   console.log(
-    API_CONSTANTS.BACKEND_BASE_URL +
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
       ROUTES_CONSTANTS.RESET_PASSWORD +
       "/" +
       token
   );
 
   const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL +
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
       ROUTES_CONSTANTS.RESET_PASSWORD +
       "/" +
       token,

@@ -7,6 +7,9 @@ export const pool = new Pool({
   port: 5432,
   database: "ipvms",
   ssl: true,
+  log_directory: "pg_log",
+  log_filename: "postgresql-dateformat.log",
+  log_statement: "all",
 });
 
 pool.connect((err, client, release) => {
@@ -16,8 +19,16 @@ pool.connect((err, client, release) => {
   client.query("SELECT NOW()", (err, result) => {
     release();
     if (err) {
-      return console.error("Error executing query", err.stack);
+      console.error("Error executing query", err.stack);
+      throw err;
     }
     console.log("Connected to Database !");
   });
+});
+
+pool.on("error", function (err, client) {
+  if (err) {
+    console.log("error from client", err);
+    process.exit(-1);
+  }
 });

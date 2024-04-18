@@ -1,56 +1,51 @@
 import { pool } from "../../core/database/db.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
-import { sendEmail } from "../../core/Email/sendEmail.js";
-import { passwordValidation } from "../../utils/inputValidation.js";
 import * as userService from "../../services/user.Services.js";
+import { NotFoundError } from "../../Error/customError.js";
 
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
   try {
-    // middleware apply user
-    const { firstName, lastName, email, password, updatedBy } = req.body;
-    await userService.registerUserService(
-      firstName,
-      lastName,
-      email,
-      password,
-      updatedBy,
-      res
-    );
+    const createdUser = await userService.registerUserService(req.body);
+    return res.status(201).json({
+      success: true,
+      message: "User Registered",
+      data: createdUser,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: error, success: false, message: "Internal Server Error" });
+    next(error);
   }
 };
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    await userService.loginUserService(email, password, res);
+    const { users, token } = await userService.loginUserService(req.body);
+    return res.status(200).json({
+      success: true,
+      message: "Login Success",
+      token: token,
+      user: users,
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: error, success: false, message: "Internal Server Error" });
+    next(error);
   }
 };
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => {
   try {
-    await userService.getAllUserService(res);
-  } catch (error) {
+    const users = await userService.getAllUserService();
     return res
-      .status(500)
-      .json({ error: error, success: false, message: "Internal Server Error" });
+      .status(200)
+      .json({ success: true, message: "all user are", data: users });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res, next) => {
   //email validation above
   const { email } = req.body;
   if (!email) {
@@ -59,62 +54,65 @@ export const forgotPassword = async (req, res) => {
       .json({ success: false, message: "Email is required" });
   }
   try {
-    const secretToken = await userService.forgotPasswordService(email, res);
-    try {
-      await userService.sendEmailService(email, secretToken, res);
-    } catch (error) {
-      return res.status(502).json({
-        success: false,
-        message: "Bad Gateway error in sending email",
+    const secretToken = await userService.forgotPasswordService(email);
+    if (secretToken) {
+      await userService.sendEmailService(email, secretToken);
+      return res.status(200).json({
+        success: true,
+        message: "Email sent",
+        secretToken: secretToken,
       });
     }
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    next(error);
   }
 };
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res, next) => {
   // const { token }=req.params;
   const { password, confirmPassword } = req.body;
   const userId = req.user.id;
-
-  const user = await pool.query("SELECT * FROM puser WHERE id=$1", [userId]);
-  if (user.rows.length === 0) {
-    return res.status(404).json({ success: false, message: "User not found" });
+  if (userId === undefined) {
+    throw new NotFoundError("user not found");
   }
-
   try {
-    await userService.resetPasswordService(password, userId, res);
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
+    const { users, token2 } = await userService.resetPasswordService(
+      password,
+      userId
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Password reset Success",
+      user: users,
+      token: token2,
     });
+  } catch (error) {
+    next(error);
   }
 };
-export const resetPasswordAuth = async (req, res) => {
+
+export const resetPasswordAuth = async (req, res, next) => {
   const userId = req.user.id;
   const { password, confirmPassword } = req.body;
   try {
-    const user = await pool.query("SELECT * FROM puser WHERE id=$1", [userId]);
-    if (user.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+    if (userId === undefined) {
+      throw new NotFoundError("user not found");
     }
-    userService.resetPasswordAuth(password, res, userId);
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-
-      message: "Internal Server Error",
+    const { user, token } = await userService.resetPasswordAuth(
+      password,
+      userId
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Password reset Success",
+      user: user,
+      token: token,
     });
+  } catch (error) {
+    next(error);
   }
 };
+
 export const getUserInfo = async (req, res) => {
   try {
     const userId = req.user.id;

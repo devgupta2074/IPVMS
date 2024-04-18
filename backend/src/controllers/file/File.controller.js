@@ -1,5 +1,5 @@
 import { pool } from "../../core/database/db.js";
-import * as fileService from "../../services/file.Services.js";
+import * as fileService from "../../services/file.services.js";
 import puppeteer from "puppeteer";
 import path from "path";
 import { sendLetterEmail } from "../../core/Email/sendEmail.js";

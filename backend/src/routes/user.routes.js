@@ -7,7 +7,7 @@ import {
   resetPassword,
   resetPasswordAuth,
   getUserInfo,
-} from "../controllers/user/auth.Controller.js";
+} from "../controllers/user/auth.controller.js";
 
 import {
   authorizationMiddeleware,

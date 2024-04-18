@@ -5,9 +5,6 @@ export const emailValidation = (email) => {
   }
   const index = email.indexOf("@");
   const domain = email.slice(index + 1).toLowerCase();
-  if (domain !== "ex2india.com") {
-    return { error: "Invalid Domain", success: false };
-  }
   return { success: true };
 };
 

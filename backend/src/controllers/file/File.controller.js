@@ -105,13 +105,13 @@ export const getdocument = async (req, res) => {
 WITH paginated_data AS (
   SELECT 
     id, 
+    category_id as cid,
     htmljson, 
-    convert_from(htmldata, 'utf8') as data, 
-    category_id, 
+    convert_from(htmldata, 'utf8') as data,  
     created_at, 
     created_by, 
     title
-  FROM document
+  FROM document d
   WHERE 
   title ILIKE '%'||$3||'%'
   ORDER BY ${orderByColumn} ${orderByDirection}
@@ -121,11 +121,13 @@ total_count AS (
   SELECT COUNT(*) as total_count FROM document
 )
 SELECT 
-  pd.*
-  , 
-  (SELECT total_count FROM total_count) as total_count
+  pd.*, 
+  (SELECT total_count FROM total_count) as total_count,
+  c.category as category_name
 FROM 
-  paginated_data pd;
+paginated_data pd
+JOIN  category c 
+ON c.id=pd.cid
 `;
 
     const data = await pool.query(query, [limit, offset, title]);
@@ -259,4 +261,41 @@ export const saveAsPdf = async (req, res) => {
     message: "pdf file saved success email sent success",
     success: true,
   });
+};
+export const getFileById = async (req, res) => {
+  let { docId } = req.params;
+  console.log(docId);
+  docId = parseInt(docId);
+  //400->bad request
+  if (!docId) {
+    return res.status(400).json({
+      success: false,
+      message: "Document Id is required",
+    });
+  }
+
+  try {
+    const document = await pool.query(
+      "SELECT  htmljson , convert_from(htmldata,'utf8') as data  FROM document WHERE id=$1",
+      [docId]
+    );
+    if (document.rows.length === 0) {
+      //400->bad request invalid doc id
+      return res.status(400).json({
+        success: false,
+        message: "File not found ,invalid document id",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "File fetched",
+      data: document.rows[0],
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
 };

@@ -1,10 +1,10 @@
-var maxPages = 4;
-var pageSize = 1;
-var currentPage = 1;
-var totalItems;
-var title = "";
-var category = "";
-var siblingCount = 1;
+let maxPages = 4;
+let pageSize = 1;
+let currentPage = 1;
+let totalItems;
+let title = "";
+let category = "";
+let siblingCount = 1;
 
 const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
   const totalPageCount = Math.ceil(totalItems / pageSize);

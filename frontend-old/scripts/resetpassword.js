@@ -7,8 +7,8 @@ import {
   VIEWS_CONSTANTS,
   HEADERS_CONSTANTS,
   TOAST_ERRORS,
-} from "../js/constants.js";
-import { launch_toast, redirect } from "../js/utils.js";
+} from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 var url = window.location.href;
 
 // Parse the URL to extract the email parameter

@@ -1,3 +1,4 @@
+import { ForgetPasswordApiRequest } from "../api/forgetpassword.js";
 import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
@@ -24,19 +25,7 @@ async function ForgetPassword() {
       API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.FORGET_PASSWORD
     );
 
-    const response = await fetch(
-      API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.FORGET_PASSWORD,
-      {
-        method: API_CONSTANTS.POST,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-        }),
-      }
-    )
-      .then((response) => response.json())
+    await ForgetPasswordApiRequest(email)
       .then((data) => {
         // Handle the response from the backend
         console.log(data);

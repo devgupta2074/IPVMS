@@ -1,3 +1,4 @@
+import { UserInfoApiRequest } from "../api/dashboard.js";
 import {
   API_CONSTANTS,
   ROUTES_CONSTANTS,
@@ -10,22 +11,11 @@ if (localStorage.getItem("token") === null) {
   redirect(VIEWS_CONSTANTS.LOGIN);
 } else {
   const token = localStorage.getItem("token");
-  const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_USER_INFO,
-    {
-      method: API_CONSTANTS.GET,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the backend
-      console.log(data);
-      userdata = data;
-    });
+  await UserInfoApiRequest(token).then((data) => {
+    // Handle the response from the backend
+    console.log(data);
+    userdata = data;
+  });
 }
 
 let btn = document.querySelector(".logo");

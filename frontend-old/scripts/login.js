@@ -6,8 +6,8 @@ import {
   TOAST_ERRORS,
   TOAST_ICONS,
   VIEWS_CONSTANTS,
-} from "../js/constants.js";
-import { launch_toast, redirect } from "../js/utils.js";
+} from "../utils/constants.js";
+import { redirect } from "../utils/utils.js";
 
 async function SignIn() {
   let email = document.getElementById("email").value;

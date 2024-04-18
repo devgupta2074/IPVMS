@@ -419,3 +419,11 @@ function sort(col, order) {
     tbody.appendChild(row);
   });
 }
+const handleFilter = async () => {
+  const inpTitle = document.getElementById("doctitle");
+  title = inpTitle.value;
+  const inpcategory = document.getElementById("doccategory");
+  category = inpcategory.value;
+  console.log(category, title);
+  fetchDoc(currentPage - 1, pageSize);
+};

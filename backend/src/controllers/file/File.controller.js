@@ -97,7 +97,7 @@ export const getdocument = async (req, res) => {
   const page = parseInt(query.page);
   const size = parseInt(query.size);
   const { limit, offset } = getPagination(page, size);
-  console.log(limit, offset);
+  console.log(category);
   //order by
   const orderByColumn = query?.orderByColumn || "created_at";
   const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
@@ -129,7 +129,8 @@ FROM
 paginated_data pd
 JOIN  category c 
 ON c.id=pd.cid
-WHERE c.category ILIKE '%'||$4||'%' 
+WHERE 
+  c.category ILIKE '%'||$4||'%';
 `;
 
     const data = await pool.query(query, [limit, offset, title, category]);
@@ -263,4 +264,99 @@ export const saveAsPdf = async (req, res) => {
     message: "pdf file saved success email sent success",
     success: true,
   });
+};
+export const getFileById = async (req, res) => {
+  let { docId } = req.params;
+  console.log(docId);
+  docId = parseInt(docId);
+  //400->bad request
+  if (!docId) {
+    return res.status(400).json({
+      success: false,
+      message: "Document Id is required",
+    });
+  }
+
+  try {
+    const document = await pool.query(
+      "SELECT  htmljson , convert_from(htmldata,'utf8') as data  FROM document WHERE id=$1",
+      [docId]
+    );
+    if (document.rows.length === 0) {
+      //400->bad request invalid doc id
+      return res.status(400).json({
+        success: false,
+        message: "File not found ,invalid document id",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "File fetched",
+      data: document.rows[0],
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export const gettemplates = async (req, res) => {
+  const query = req.query;
+  const title = req.query.title;
+  console.log(query);
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = getPagination(page, size);
+  // console.log(limit, offset);
+  //order by
+  const orderByColumn = query?.orderByColumn || "created_at";
+  const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
+  try {
+    const query = `
+WITH paginated_data AS (
+  SELECT 
+    id, 
+    convert_from(htmldata, 'utf8') as data, 
+    category_id, 
+    created_at, 
+    created_by, 
+    title
+  FROM template
+  WHERE 
+  title ILIKE '%'||$3||'%'
+  ORDER BY ${orderByColumn} ${orderByDirection}
+  LIMIT $1 OFFSET $2
+),
+total_count AS (
+  SELECT COUNT(*) as total_count FROM document
+)
+SELECT 
+  pd.*
+  , 
+  (SELECT total_count FROM total_count) as total_count
+FROM 
+  paginated_data pd;
+`;
+
+    const data = await pool.query(query, [limit, offset, title]);
+
+    // console.log(data);
+    if (data.rowCount === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "no templates found" });
+    }
+    console.log(data.rowCount);
+    return res
+      .status(200)
+      .json({ message: "documents are", success: true, data: data.rows });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error, success: false });
+  }
 };

@@ -91,6 +91,7 @@ export const getFile = async (req, res) => {
 export const getdocument = async (req, res) => {
   const query = req.query;
   const title = req.query.title;
+  const category = req.query.category;
   console.log(title);
   //  /document?page=1&size=2
   const page = parseInt(query.page);
@@ -128,9 +129,10 @@ FROM
 paginated_data pd
 JOIN  category c 
 ON c.id=pd.cid
+WHERE c.category ILIKE '%'||$4||'%' 
 `;
 
-    const data = await pool.query(query, [limit, offset, title]);
+    const data = await pool.query(query, [limit, offset, title, category]);
     if (data.rows.length === 0) {
       return res
         .status(404)

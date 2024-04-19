@@ -14,6 +14,10 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "login.html"));
 });
 
+app.get("/editor", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "modify.html"));
+});
+
 app.get("/forgotpassword", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "forget-password.html"));
 });

@@ -1,288 +1,128 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <style type="text/css">
-      #edt {
-        padding: 2px;
-        width: 100%;
-        height: 500px;
-        border: 1px solid black;
-        overflow: scroll;
-      }</style
-    >How to enable image resizing inside contenteditable DIV (aka WYSIWYG
-    editor) in Chrome?<br />
-    <hr />
-    <div id="edt" contenteditable="true">
-      <p>
-        <b>Green</b
-        ><img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIQAAABeCAYAAADi4bzuAAABh0lEQVR4Ae3SMRXAIBAFQYKV6InYKISGgvUwV91v983z/t8aToFTYCqhwF0AiLuGfwABQQoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykABDJYQDBQAoAkRwGEAykwAbutgLcDSwO9gAAAABJRU5ErkJggg=="
-        />Red
-        <img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIQAAABeCAYAAADi4bzuAAAEQElEQVR4Ae2cPXLcMAyFn0TJXk8mXVKlzY1S5ghpcy3fKCdIxl1+7JVIZsAV1oJ3xg3cEPuYWfNHQsZ47xNIbeHh4dPnCjYqsCkwUgkqsFeAQOzV4BgEghAYBQiEkYMTAkEGjAIEwsjBCYEgA0YBAmHk4IRAkAGjAIEwcnBCIMiAUYBAGDk4IRBkwChAIIwcnBAIMmAUIBBGDk4IBBkwChAIIwcnBIIMGAUIhJGDEwJBBowCBMLIwQmBIANGAQJh5OCEQJABowCBMHJwQiDIgFGAQBg5OCEQZMAoQCCMHJyEB6IMgHy07Ya6xH6nwLQbdzncmz2++EsXcq0qARWQodwj63lbfxnTpQhv+Et3XSHUcDFdjBWP1X+99oZaXcV/1X2FEJeGCiQBop4qgjz9AkkDpTzDIveyMrzOddcVQmFo1UErxNbrtdZvW4VWEVmTCiIfNqtA1xVC93/dKnSOAshxQg3Xo4VUEHkC9ttJ2WCxslzvrGsg1DY1X4zWbUMgEUBkra3LXAO2beZ84NytX/uwayDEaGllBJ62sZ4nkjz6WxPj1w0WOWtIk75q6djuY2cfmi71ELPVewFE5m1tA0SSEki07YbnNxK9xr5zINohsY44jDdIjwW3T8D78YC6nGwfptS2DakGUjF0C9E3DQJwqUDXW0ZLJxfUsuLdfIthGPD49x8O84xjXZBzRtpy3hWMtrKvFJeyXO9K90BM04S8rMgVrU9TAkrBKP+GERXZbA1aJa7X8tcz7x6IY14x3844lgJMM9ZaMaWEYc3nzLUayBlDgJCPNKkaeu1885UP9m9i3UnRXidvZ/xGwUNa8OH7N3z8+gV/UsFSC+r2GpFH4JiAJQEyljaV07ni5VbSnQhv/At3DYRosSwZa8443N0Bv37ix/096jBgupnPQMh98uax72VMGE6a7H8OPf81fKkQaTpgQcG6HjHK+UFaqcCSkcYRadsU9JVULut3FXqe4LZxkk1+dn2GEEPX5elkfBmQ8tDeLOoopKT21oFyOlS2c8P2zaUkLhA0SJ614Kh3IMTBVgFKbvW/lBVD+0Zye+Zt1wzXA6VMWBkun4HuzxCXKXHFowCB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVkxKB8KgXMJZABDTVk9J/bM/jwqGSC8IAAAAASUVORK5CYII="
-        />
-      </p>
-    </div>
-    <script type="text/javascript">
-      function enableImageResizeInDiv(id) {
-        if (
-          !(
-            /chrome/i.test(navigator.userAgent) &&
-            /google/i.test(window.navigator.vendor)
-          )
-        ) {
-          return;
-        }
-        var editor = document.getElementById(id);
-        var resizing = false;
-        var currentImage;
-        var createDOM = function (elementType, className, styles) {
-          let ele = document.createElement(elementType);
-          ele.className = className;
-          setStyle(ele, styles);
-          return ele;
-        };
-        var setStyle = function (ele, styles) {
-          for (key in styles) {
-            ele.style[key] = styles[key];
-          }
-          return ele;
-        };
-        var removeResizeFrame = function () {
-          document
-            .querySelectorAll(".resize-frame,.resizer")
-            .forEach((item) => item.parentNode.removeChild(item));
-        };
-        var offset = function offset(el) {
-          const rect = el.getBoundingClientRect(),
-            scrollLeft =
-              window.pageXOffset || document.documentElement.scrollLeft,
-            scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-          return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
-        };
-        var clickImage = function (img) {
-          removeResizeFrame();
-          currentImage = img;
-          const imgHeight = img.offsetHeight;
-          const imgWidth = img.offsetWidth;
-          const imgPosition = { top: img.offsetTop, left: img.offsetLeft };
-          const editorScrollTop = editor.scrollTop;
-          const editorScrollLeft = editor.scrollLeft;
-          const top = imgPosition.top - editorScrollTop - 1;
-          const left = imgPosition.left - editorScrollLeft - 1;
-
-          editor.append(
-            createDOM("span", "resize-frame", {
-              margin: "10px",
-              position: "absolute",
-              top: top + imgHeight - 10 + "px",
-              left: left + imgWidth - 10 + "px",
-              border: "solid 3px blue",
-              width: "6px",
-              height: "6px",
-              cursor: "se-resize",
-              zIndex: 1,
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer top-border", {
-              position: "absolute",
-              top: top + "px",
-              left: left + "px",
-              border: "dashed 1px grey",
-              width: imgWidth + "px",
-              height: "0px",
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer left-border", {
-              position: "absolute",
-              top: top + "px",
-              left: left + "px",
-              border: "dashed 1px grey",
-              width: "0px",
-              height: imgHeight + "px",
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer right-border", {
-              position: "absolute",
-              top: top + "px",
-              left: left + imgWidth + "px",
-              border: "dashed 1px grey",
-              width: "0px",
-              height: imgHeight + "px",
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer bottom-border", {
-              position: "absolute",
-              top: top + imgHeight + "px",
-              left: left + "px",
-              border: "dashed 1px grey",
-              width: imgWidth + "px",
-              height: "0px",
-            })
-          );
-
-          document.querySelector(".resize-frame").onmousedown = () => {
-            resizing = true;
-            return false;
-          };
-
-          editor.onmouseup = () => {
-            if (resizing) {
-              currentImage.style.width =
-                document.querySelector(".top-border").offsetWidth + "px";
-              currentImage.style.height =
-                document.querySelector(".left-border").offsetHeight + "px";
-              refresh();
-              currentImage.click();
-              resizing = false;
-            }
-          };
-
-          editor.onmousemove = (e) => {
-            if (currentImage && resizing) {
-              let height = e.pageY - offset(currentImage).top;
-              let width = e.pageX - offset(currentImage).left;
-              height = height < 1 ? 1 : height;
-              width = width < 1 ? 1 : width;
-              const top = imgPosition.top - editorScrollTop - 1;
-              const left = imgPosition.left - editorScrollLeft - 1;
-              setStyle(document.querySelector(".resize-frame"), {
-                top: top + height - 10 + "px",
-                left: left + width - 10 + "px",
-              });
-
-              setStyle(document.querySelector(".top-border"), {
-                width: width + "px",
-              });
-              setStyle(document.querySelector(".left-border"), {
-                height: height + "px",
-              });
-              setStyle(document.querySelector(".right-border"), {
-                left: left + width + "px",
-                height: height + "px",
-              });
-              setStyle(document.querySelector(".bottom-border"), {
-                top: top + height + "px",
-                width: width + "px",
-              });
-            }
-            return false;
-          };
-        };
-        var bindClickListener = function () {
-          editor.querySelectorAll("img").forEach((img, i) => {
-            img.onclick = (e) => {
-              if (e.target === img) {
-                clickImage(img);
-              }
-            };
-          });
-        };
-        var refresh = function () {
-          bindClickListener();
-          removeResizeFrame();
-          if (!currentImage) {
-            return;
-          }
-          var img = currentImage;
-          var imgHeight = img.offsetHeight;
-          var imgWidth = img.offsetWidth;
-          var imgPosition = { top: img.offsetTop, left: img.offsetLeft };
-          var editorScrollTop = editor.scrollTop;
-          var editorScrollLeft = editor.scrollLeft;
-          const top = imgPosition.top - editorScrollTop - 1;
-          const left = imgPosition.left - editorScrollLeft - 1;
-
-          editor.append(
-            createDOM("span", "resize-frame", {
-              position: "absolute",
-              top: top + imgHeight + "px",
-              left: left + imgWidth + "px",
-              border: "solid 2px red",
-              width: "6px",
-              height: "6px",
-              cursor: "se-resize",
-              zIndex: 1,
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer", {
-              position: "absolute",
-              top: top + "px",
-              left: left + "px",
-              border: "dashed 1px grey",
-              width: imgWidth + "px",
-              height: "0px",
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer", {
-              position: "absolute",
-              top: top + "px",
-              left: left + imgWidth + "px",
-              border: "dashed 1px grey",
-              width: "0px",
-              height: imgHeight + "px",
-            })
-          );
-
-          editor.append(
-            createDOM("span", "resizer", {
-              position: "absolute",
-              top: top + imgHeight + "px",
-              left: left + "px",
-              border: "dashed 1px grey",
-              width: imgWidth + "px",
-              height: "0px",
-            })
-          );
-        };
-        var reset = function () {
-          if (currentImage != null) {
-            currentImage = null;
-            resizing = false;
-            removeResizeFrame();
-          }
-          bindClickListener();
-        };
-        editor.addEventListener(
-          "scroll",
-          function () {
-            reset();
-          },
-          false
-        );
-        editor.addEventListener("mouseup", function (e) {
-          if (!resizing) {
-            const x = e.x ? e.x : e.clientX;
-            const y = e.y ? e.y : e.clientY;
-            let mouseUpElement = document.elementFromPoint(x, y);
-            if (mouseUpElement) {
-              let matchingElement = null;
-              if (mouseUpElement.tagName === "IMG") {
-                matchingElement = mouseUpElement;
-              }
-              if (!matchingElement) {
-                reset();
-              } else {
-                clickImage(matchingElement);
-              }
-            }
-          }
-        });
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table Detection</title>
+    <style>
+      table {
+        border-collapse: collapse;
       }
-      enableImageResizeInDiv("edt");
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+
+      table:hover {
+        border: 2px solid red;
+        cursor: pointer;
+      }
+      .popover {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid black;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tableContainer"></div>
+    <div class="popover" id="popover">Popover Content</div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        function addRowBelow(rowIdx) {
+          var table = document.querySelector("table");
+          var newRow = table.insertRow(rowIdx + 1); // Inserts a row below the specified row index
+          var numCols = table.rows[0].cells.length; // Get the number of columns
+          for (var i = 0; i < numCols; i++) {
+            var cell = newRow.insertCell();
+            cell.textContent = "New Row, Col " + (i + 1);
+          }
+        }
+
+        function addRowAbove(rowIdx) {
+          var table = document.querySelector("table");
+          var newRow = table.insertRow(rowIdx); // Inserts a row above the specified row index
+          var numCols = table.rows[0].cells.length; // Get the number of columns
+          for (var i = 0; i < numCols; i++) {
+            var cell = newRow.insertCell();
+            cell.textContent = "New Row, Col " + (i + 1);
+          }
+        }
+
+        function addColumnRight(colIdx) {
+          var table = document.querySelector("table");
+          var numRows = table.rows.length;
+          for (var i = 0; i < numRows; i++) {
+            var cell = table.rows[i].insertCell(colIdx + 1); // Inserts a cell to the right of the specified column index in each row
+            cell.textContent = "New Row " + (i + 1) + ", New Col";
+          }
+        }
+
+        function addColumnLeft(colIdx) {
+          var table = document.querySelector("table");
+          var numRows = table.rows.length;
+          for (var i = 0; i < numRows; i++) {
+            var cell = table.rows[i].insertCell(colIdx); // Inserts a cell to the left of the specified column index in each row
+            cell.textContent = "New Row " + (i + 1) + ", New Col";
+          }
+        }
+        function createTable(m, n) {
+          // Create a new table element
+          var table = document.createElement("table");
+
+          // Create rows and cells
+          for (var i = 0; i < m; i++) {
+            var row = table.insertRow();
+            for (var j = 0; j < n; j++) {
+              var cell = row.insertCell();
+              // Add some content to the cells (optional)
+              cell.textContent = "Row " + (i + 1) + ", Col " + (j + 1);
+            }
+          }
+
+          // Append the table to the container
+          document.getElementById("tableContainer").appendChild(table);
+        }
+
+        // Call the function with desired number of rows and columns
+        createTable(5, 3);
+        const tables = document.querySelectorAll("table");
+        const popover = document.getElementById("popover");
+        tables.forEach((table) => {
+          table.addEventListener("mouseenter", function () {
+            // Show popover on hover
+            popover.style.display = "block";
+            popover.style.left = `${table.getBoundingClientRect().left}px`;
+            popover.style.top = `${table.getBoundingClientRect().bottom}px`;
+          });
+          table.addEventListener("click", function (event) {
+            // Prevent the click event from propagating to document
+            event.stopPropagation();
+            // Toggle popover on click
+
+            popover.style.display = "block";
+            popover.style.left = `${table.getBoundingClientRect().left}px`;
+            popover.style.top = `${table.getBoundingClientRect().bottom}px`;
+          });
+        });
+
+        // Add event listener to close popover on click
+        popover.addEventListener("click", function (event) {
+          console.log("s");
+          event.stopPropagation(); // Prevent the event from propagating to document
+        });
+
+        // Hide popover when clicking outside the popover or table
+        document.addEventListener("click", function () {
+          popover.style.display = "none";
+        });
+      });
     </script>
   </body>
 </html>

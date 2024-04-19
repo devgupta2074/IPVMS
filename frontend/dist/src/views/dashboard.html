@@ -15,10 +15,89 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!--css file-->
-    <div class="bg-gulf-blue-950 w-full min-h-screen">
+    <div class="">
       <div
-        class="w-full h-[3.5rem] fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
-      ></div>
+        class="w-full h-[3.5rem] fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950 flex items-end justify-end"
+      >
+        <div class="flex items-center justify-center gap-5">
+          <svg class="h-6 w-6 z-50">
+            <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
+          </svg>
+          <figure class="">
+            <img
+              class=""
+              width="39"
+              height="39"
+              src="/assets/images/profile.jpg"
+              alt="Profile"
+            />
+          </figure>
+
+          <button
+            id="dropdownDefaultButton"
+            data-dropdown-toggle="dropdown"
+            class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center"
+            type="button"
+          >
+            Emmy Smith
+            <svg
+              class="w-2.5 h-2.5 ms-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 4 4 4-4"
+              />
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            id="dropdown"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+          >
+            <ul
+              class="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownDefaultButton"
+            >
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Settings</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Earnings</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Sign out</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div
         class="w-[4.5rem] h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
       >
@@ -29,7 +108,7 @@
               width="39"
               height="39"
               src="/assets/images/exsquared.png"
-              alt="Designer Life"
+              alt="Exsquared Logo"
             />
           </figure>
         </div>

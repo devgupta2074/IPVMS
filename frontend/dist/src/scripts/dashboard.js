@@ -17,7 +17,27 @@ if (localStorage.getItem("token") === null) {
     userdata = data;
   });
 }
-
+const signoutbutton = document.getElementById("signout");
+const todashboard = document.getElementById("dashboard");
+todashboard.addEventListener("click", () => {
+  window.location.href = "/dashboard";
+});
+const toeditor = document.getElementById("editor");
+toeditor.addEventListener("click", () => {
+  window.location.href = "/editor";
+});
+const todocument = document.getElementById("documents");
+todocument.addEventListener("click", () => {
+  window.location.href = "/document";
+});
+const toletters = document.getElementById("letters");
+toletters.addEventListener("click", () => {
+  window.location.href = "/letters";
+});
+signoutbutton.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  window.location.href = VIEWS_CONSTANTS.LOGIN;
+});
 let btn = document.querySelector(".logo");
 let sidebar = document.querySelector(".sidebar");
 let name = document.getElementById("name");

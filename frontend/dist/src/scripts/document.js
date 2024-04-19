@@ -45,6 +45,8 @@
 //             "updatedAt": "2013-04-10T00:29:54.119Z"
 //         }
 
+import { VIEWS_CONSTANTS } from "../utils/constants.js";
+
 //     ]
 // };
 
@@ -60,7 +62,7 @@ const fetchCategory = async () => {
   console.log("fetching catehory");
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://localhost:3000/api/categories/getAllCategories`,
+    `http://ipvms-api.exitest.com/api/categories/getAllCategories`,
     {
       method: "GET",
       headers: {
@@ -817,7 +819,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     category = "";
   }
   const response = await fetch(
-    `http://localhost:3000/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
     {
       method: "GET",
       headers: {
@@ -857,7 +859,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:3000/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -875,22 +877,9 @@ const fetchAndRenderDoc = async (modalId) => {
         docData;
     });
 };
-document.addEventListener("DOMContentLoaded", async () => {
-  console.log("f");
-  await fetchDoc(currentPage - 1, pageSize);
-  console.log("f");
-  await fetchCategory();
-  const paginationElement = document.getElementById("pagination-controller");
-  const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
-  console.log(arr);
-  addPaginationElement(arr);
-  document.getElementById(1 + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
-});
 
 const search = async () => {
   const searchText = document.getElementById("search").value;
-
   console.log("search func");
   const response = await fetch(
     "http://ipvms-api.exitest.com/api/globalsearch/search",
@@ -915,7 +904,16 @@ const search = async () => {
       } else {
         totalItems = data?.count;
         console.log(totalItems);
+        removepagination();
         const parentElement = document.getElementById("tbody");
+        const paginationElement = document.getElementById(
+          "pagination-controller"
+        );
+        const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
+        console.log(arr);
+        addPaginationElement(arr);
+        document.getElementById(1 + "pagination").className =
+          "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
         parentElement.innerHTML = "";
         data.data.map((item) => {
           console.log(item);
@@ -934,6 +932,28 @@ const search = async () => {
       }
     });
 };
+const removepagination = () => {
+  const paginationElement = document.getElementById("pagination-controller");
+  paginationElement.innerHTML = "";
+};
+document.getElementById("search").addEventListener("keydown", function (event) {
+  if (event.keyCode === 13) {
+    search();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("f");
+  await fetchDoc(currentPage - 1, pageSize);
+  console.log("f");
+  await fetchCategory();
+  const paginationElement = document.getElementById("pagination-controller");
+  const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
+  console.log(arr);
+  addPaginationElement(arr);
+  document.getElementById(1 + "pagination").className =
+    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+});
 
 const handleNextPage = async () => {
   currentPage++;
@@ -1025,3 +1045,29 @@ const handleFilter = async () => {
   console.log(category, title);
   fetchDoc(currentPage - 1, pageSize);
 };
+
+const signoutbutton = document.getElementById("signout");
+signoutbutton.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  window.location.href = VIEWS_CONSTANTS.LOGIN;
+});
+const todashboard = document.getElementById("dashboard");
+todashboard.addEventListener("click", () => {
+  window.location.href = "/dashboard";
+});
+const toeditor = document.getElementById("editor");
+toeditor.addEventListener("click", () => {
+  window.location.href = "/editor";
+});
+const todocument = document.getElementById("documents");
+todocument.addEventListener("click", () => {
+  window.location.href = "/document";
+});
+const toletters = document.getElementById("letters");
+toletters.addEventListener("click", () => {
+  window.location.href = "/letters";
+});
+signoutbutton.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  window.location.href = VIEWS_CONSTANTS.LOGIN;
+});

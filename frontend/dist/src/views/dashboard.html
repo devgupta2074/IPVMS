@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Dashboard | IPVMS</title>
   </head>
   <body>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
+    <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="tailwind.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!--css file-->
     <div class="">
       <div
@@ -28,74 +28,54 @@
               class=""
               width="39"
               height="39"
-              src="/assets/images/profile.jpg"
+              src="/assets/images/profile2.jpg"
               alt="Profile"
             />
           </figure>
-
           <button
-            id="dropdownDefaultButton"
-            data-dropdown-toggle="dropdown"
             class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center"
             type="button"
+            data-dropdown-toggle="dropdown"
           >
-            Emmy Smith
+            John Doe
             <svg
-              class="w-2.5 h-2.5 ms-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 ml-2"
               fill="none"
-              viewBox="0 0 10 6"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="m1 1 4 4 4-4"
-              />
+                d="M19 9l-7 7-7-7"
+              ></path>
             </svg>
           </button>
-
           <!-- Dropdown menu -->
           <div
+            class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
             id="dropdown"
-            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
           >
-            <ul
-              class="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdownDefaultButton"
-            >
+            <div class="px-4 py-3">
+              <span class="block text-sm">John Doe</span>
+              <span class="block text-sm font-medium text-gray-900 truncate"
+                >johnd@ex2india.com</span
+              >
+            </div>
+            <ul class="py-1" aria-labelledby="dropdown">
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Dashboard</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Settings</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Earnings</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  id="signout"
+                  class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
                   >Sign out</a
                 >
               </li>
             </ul>
           </div>
+          <!-- Dropdown menu -->
         </div>
       </div>
       <div
@@ -115,21 +95,20 @@
         <div
           class="flex items-center flex-col justify-center z-10 mt-20 gap-10"
         >
-          <svg class="h-6 w-6">
+          <svg id="dashboard" class="h-6 w-6">
             <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
           </svg>
-          <svg class="h-6 w-6">
+          <svg id="documents" class="h-6 w-6">
             <use xlink:href="/assets/icons/icon.svg#shield"></use>
           </svg>
-          <svg class="h-6 w-6">
+          <svg id="letters" class="h-6 w-6">
             <use xlink:href="/assets/icons/icon.svg#policy"></use>
           </svg>
-          <svg class="h-6 w-6">
+          <svg id="editor" class="h-6 w-6">
             <use xlink:href="/assets/icons/icon.svg#document"></use>
           </svg>
         </div>
       </div>
-
       <div
         class="bg-zircon-50 m-2 h-full flex items-center justify-center pt-20"
       >
@@ -141,17 +120,6 @@
             <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
             <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
           </div>
-
-        </li>
-      </ul>
-    </div>
-
-    <div class="home-section">
-      <div class="home-content">
-
-
-
-
           <table class="w-full p-10 mx-20 text-left text-sm text-gray-500">
             <thead class="bg-[#D5DBEB] text-xs uppercase text-gray-700">
               <tr>
@@ -213,20 +181,8 @@
             <tbody id="tbody"></tbody>
           </table>
         </div>
-
       </div>
     </div>
   </body>
-  <script  src="/scripts/dashboard.js"></script>
-  <script>
-    const handleFilter = async () => {
-  const inpTitle = document.getElementById("doctitle");
-  title = inpTitle.value;
-  const inpcategory = document.getElementById("doccategory");
-  category = inpcategory.value;
-  console.log(category, title);
-  fetchDoc(currentPage - 1, pageSize);
-};
-
-  </script>
+  <script type="module" src="/scripts/dashboard.js"></script>
 </html>

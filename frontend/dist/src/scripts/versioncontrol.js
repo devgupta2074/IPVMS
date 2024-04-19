@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   const response = await fetch(
-    "http://localhost:3000/api/versioncontrol/getVersions?docId=4",
+    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       // console.log(contentdocument);
 
       const response = await fetch(
-        "http://localhost:3000/api/file/uploadFile",
+        "http://ipvms-api.exitest.com/api/file/uploadFile",
         {
           method: "POST",
           headers: {
@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
       const response2 = await fetch(
-        "http://localhost:3000/api/file/getFile/4",
+        "http://ipvms-api.exitest.com/api/file/getFile/4",
         {
           method: "GET",
           headers: {
@@ -563,7 +563,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
-        "http://localhost:3000/api/versioncontrol/createDocumentVersion",
+        "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
         {
           method: "POST",
           headers: {
@@ -954,13 +954,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     //   tag.y = v2.imageTags[image].y;
     // }
     // imageLoaded();
-    const response2 = await fetch("http://localhost:3000/api/file/getFile/4", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: "Bearer " + token,
-      },
-    })
+    const response2 = await fetch(
+      "http://ipvms-api.exitest.com/api/file/getFile/4",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: "Bearer " + token,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
@@ -980,6 +983,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
     const divElement = document.getElementsByClassName("docx-wrapper")[0];
     applyChangesFromV2toV1(divElement, htmljson, changes);
+    removeemptyimage();
   });
   // const v1tov2 = document.getElementById("v1tov2");
   // // v1tov2.addEventListener("click", function () {

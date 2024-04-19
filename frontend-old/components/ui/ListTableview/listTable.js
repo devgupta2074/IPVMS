@@ -222,7 +222,7 @@ const fetchDoc = async (currentPage, pageSize) => {
   document.getElementById("loading").style = "display:block";
 
   const response = await fetch(
-    `http://localhost:3000/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
+    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
     {
       method: "GET",
       headers: {
@@ -262,7 +262,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:3000/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

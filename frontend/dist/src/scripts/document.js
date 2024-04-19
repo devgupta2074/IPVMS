@@ -45,8 +45,6 @@
 //             "updatedAt": "2013-04-10T00:29:54.119Z"
 //         }
 
-import { VIEWS_CONSTANTS } from "../utils/constants.js";
-
 //     ]
 // };
 
@@ -1049,7 +1047,7 @@ const handleFilter = async () => {
 const signoutbutton = document.getElementById("signout");
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = VIEWS_CONSTANTS.LOGIN;
+  window.location.href = "http://ipvms.exitest.com/login";
 });
 const todashboard = document.getElementById("dashboard");
 todashboard.addEventListener("click", () => {

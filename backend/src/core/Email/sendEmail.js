@@ -21,7 +21,7 @@ export const sendEmail = async (email, token) => {
       },
     });
     const htmlTemp = template(
-      `http://127.0.0.1:5501/frontend/index.html?token=${token}#resetpassword`,
+      `http://ipvms.exitest.com/resetpassword?token=${token}`,
       new Date().toLocaleDateString()
     );
     await transporter.sendMail({

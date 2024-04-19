@@ -38,12 +38,12 @@ export const getFileMiddleware = async (req, res, next) => {
 
 export const uploadTemplateMiddleware = async (req, res, next) => {
   const { name, description, categoryId, htmlText } = req.body;
-  if (!name || !description || !categoryId || !htmlText) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid input",
-    });
-  }
+  // if (!name || !description || !categoryId || !htmlText) {
+  //   return res.status(400).json({
+  //     success: false,
+  //     message: "Invalid input",
+  //   });
+  // }
   //check htmlText size->
   const textBytesSize = Buffer.byteLength(htmlText, "utf8");
   if (textBytesSize > 10 * 1024 * 1024) {

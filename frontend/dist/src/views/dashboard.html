@@ -141,6 +141,17 @@
             <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
             <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
           </div>
+
+        </li>
+      </ul>
+    </div>
+
+    <div class="home-section">
+      <div class="home-content">
+
+
+
+
           <table class="w-full p-10 mx-20 text-left text-sm text-gray-500">
             <thead class="bg-[#D5DBEB] text-xs uppercase text-gray-700">
               <tr>
@@ -202,8 +213,20 @@
             <tbody id="tbody"></tbody>
           </table>
         </div>
+
       </div>
     </div>
   </body>
-  <script type="module" src="/scripts/dashboard.js"></script>
+  <script  src="/scripts/dashboard.js"></script>
+  <script>
+    const handleFilter = async () => {
+  const inpTitle = document.getElementById("doctitle");
+  title = inpTitle.value;
+  const inpcategory = document.getElementById("doccategory");
+  category = inpcategory.value;
+  console.log(category, title);
+  fetchDoc(currentPage - 1, pageSize);
+};
+
+  </script>
 </html>

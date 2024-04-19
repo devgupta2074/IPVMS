@@ -1,5 +1,6 @@
 let imagesposition = [];
 document.addEventListener("DOMContentLoaded", async function () {
+  document.getElementById("loading").style = "display:block";
   localStorage.setItem("container-content-json", null);
 
   let document_version = [];
@@ -22,34 +23,40 @@ document.addEventListener("DOMContentLoaded", async function () {
         document_version.forEach((item) => {
           console.log(item);
           // Create a button element
-          const button = document.createElement("button");
+          // const button = document.createElement("button");
 
-          // Set button text to array item
-          button.innerText = "revert " + item.id;
+          // // Set button text to array item
+          // button.innerText = "revert " + item.id;
+          // button.className =
+          //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
-          // Add click event listener to the button
-          button.addEventListener("click", () => {
-            const changes = item.delta;
-            const divElement = document.getElementById("docx-wrapper");
-            applyChangesFromV2toV1(divElement, htmljson, changes);
-            // Replace 'yourDivElementId' with the actual ID of your div element
-            hideTextNodes(divElement);
-          });
+          // // Add click event listener to the button
+          // button.addEventListener("click", () => {
+          //   const changes = item.delta;
+          //   const divElement = document.getElementById("docx-wrapper");
+          //   applyChangesFromV2toV1(divElement, htmljson, changes);
+          //   // Replace 'yourDivElementId' with the actual ID of your div element
+          //   hideTextNodes(divElement);
+          // });
 
           const button2 = document.createElement("button");
 
           // Set button text to array item
-          button2.innerText = "modify " + item.id;
+          button2.innerText = item.id;
+          button2.className =
+            "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
           // Add click event listener to the button
           button2.addEventListener("click", () => {
             const changes = item.delta;
             const divElement = document.getElementById("docx-wrapper");
-            applyChangesFromV1toV2(divElement, htmljson, changes);
+            const firstv = document_version[0].delta;
+            applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
+            removeemptyimage();
           });
 
           // Append the button to the container
-          buttonContainer.appendChild(button);
+          // buttonContainer.appendChild(button);
           buttonContainer.appendChild(button2);
         });
       }
@@ -64,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const fileInput = document.querySelector("#files");
 
   async function convertDocxToBlob() {
-    const docxFilePath = "sow2.docx";
+    const docxFilePath = "/utils/sow2.docx";
 
     try {
       const response = await fetch(docxFilePath);
@@ -293,19 +300,19 @@ document.addEventListener("DOMContentLoaded", async function () {
       const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
       const headers = containerdocx.getElementsByTagName("header");
       console.log(headers);
-      for (var i = 0; i < headers.length; i++) {
-        console.log("section height chages");
-        headers[i].setAttribute(
-          "style",
-          "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-        );
-      }
+      // for (var i = 0; i < headers.length; i++) {
+      //   console.log("section height chages");
+      //   headers[i].setAttribute(
+      //     "style",
+      //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+      //   );
+      // }
       const articles = containerdocx.getElementsByTagName("article");
       console.log(articles);
-      for (var i = 0; i < articles.length; i++) {
-        console.log("section height chages");
-        articles[i].setAttribute("style", "margin-top: 48px; ");
-      }
+      // for (var i = 0; i < articles.length; i++) {
+      //   console.log("section height chages");
+      //   articles[i].setAttribute("style", "margin-top: 48px; ");
+      // }
       contentdocument =
         document.getElementsByClassName("docx-wrapper")[0].innerHTML;
 
@@ -361,6 +368,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   console.log("render_docx");
   renderDocx();
+  document.getElementById("loading").style = "display:none";
 
   console.log("render_docx");
   fileInput.addEventListener("change", (ev) => {
@@ -369,7 +377,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   const buttondd = document.getElementById("json");
   buttondd.addEventListener("click", function () {
+    document.getElementById("loading").style = "display:block";
     async function detectChanges(divElement, jsonResult) {
+      const articles = document.querySelectorAll("article");
+      console.log(articles.length, "articcle length");
+      if (articles.length > 1) {
+        checkDivSizeBack();
+        removeEmptyPages();
+      }
       handleChanges();
       assignIDsToElements();
       const changes = {
@@ -493,6 +508,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             children: childIds,
             color: tag.getAttribute("color") || "",
             size: tag.getAttribute("size") || "",
+            face: tag.getAttribute("face") || "",
             // childArray: childNodesMap,
             // parentchildNodes: tag.parentNode.childNodes,
             childnodeposition: childnodeposition,
@@ -565,6 +581,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           // Handle the response from the backend
           console.log(data);
           localStorage.setItem("version", version);
+          document.getElementById("loading").style = "display:none";
+          window.location.reload();
         });
 
       return changes;
@@ -583,11 +601,35 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     console.log(changes);
   });
+
+  function isIdInJson(id, json, tagName) {
+    for (let i = 0; i < json.length; i++) {
+      if (tagName == "tbody") {
+        return true;
+      }
+      if (tagName == "b") {
+        return false;
+      }
+      if (json[i]["id"] === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Function to apply changes from v1 to v2
-  function applyChangesFromV1toV2(divElement, v1, v2) {
+  function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
     for (const tagid in v2.newTags) {
       console.log(tagid, "newtags");
       console.log(v2.newTags[tagid], "tapasvai");
+      console.log(
+        !isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ),
+        "isid"
+      );
 
       if (v2.newTags[tagid]) {
         // console.log(`#${v2.newTags[tagid].parentId}`);
@@ -597,9 +639,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log(childElement.textContent);
         childElement.style = v2.newTags[tagid].style;
         childElement.className = v2.newTags[tagid].class;
+        console.log(v2.newTags[tagid].textContent, "textContent");
+
         childElement.id = v2.newTags[tagid].id;
         childElement.color = v2.newTags[tagid].color;
-        childElement.size = v2.newTags[tagid].siAze;
+        childElement.size = v2.newTags[tagid].size;
+        childElement.face = v2.newTags[tagid].face;
         // childElement.children = v2.newTags[tagid].children;
         console.log("eye", v2.newTags[tagid].children);
         if (v2.newTags[tagid].children.length > 0) {
@@ -741,6 +786,28 @@ document.addEventListener("DOMContentLoaded", async function () {
           tag.appendChild(childElement);
         }
       }
+      console.log(
+        childElement.childNodes,
+        "childelement",
+        isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ),
+        childElement.childNodes,
+        childElement.childNodes.length
+      );
+      if (
+        isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ) == false &&
+        childElement.childNodes &&
+        childElement.childNodes.length > 0
+      ) {
+        childElement.classList.add("greenhighlight");
+      }
     }
     console.log(v1);
 
@@ -751,11 +818,19 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log(v2.changedTags[tagId].id);
 
         const tag = document.getElementById(v2.changedTags[tagId].id);
+
         console.log("tag: " + tag);
         if (!tag) continue;
 
         // Apply cges to text content and style
         if (tag) {
+          if (
+            isIdInJson(v2.changedTags[tagId].id, firstv.changedTags, "a") ==
+            false
+          ) {
+            console.log(v2.changedTags[tagId].textContent, "text text text");
+            tag.classList.add("bluehighlight");
+          }
           if (v2.changedTags[tagId].style) {
             tag.style = v2.changedTags[tagId].style;
           }
@@ -789,8 +864,25 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (v2.removedTags[tagid]) {
         const tag = document.getElementById(v1[v2.removedTags[tagid]].id);
+
+        //  tag.parentElement.classList.add("redhighlight");
         console.log("tag: " + tag);
         if (tag) {
+          if (
+            isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
+              false &&
+            tag.textContent !== ""
+          ) {
+            const removedelement = document.createElement("p");
+            removedelement.classList.add("redhighlight");
+            tag.parentElement.insertBefore(removedelement, tag);
+            console.log(tag.id, "removed");
+            console.log(tag.parentElement, "remove remove remove");
+            console.log(v2.removedTags[tagid].textContent, "text text text");
+            if (tag.parentElement.tagName.toLowerCase() !== "article") {
+              tag.parentElement.classList.add("redhighlight");
+            }
+          }
           if (tag != null) {
             tag.remove();
           }
@@ -827,102 +919,57 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Function to apply changes from v2 to v1
-  function applyChangesFromV2toV1(divElement, v1, v2) {
-    for (const image in v2.imageTags) {
-      const tag = document.getElementById(v2.imageTags[image].id);
-      // tag.src = v2.imageTags[image].src;
-      tag.style = v2.imageTags[image].style;
-      tag.id = v2.imageTags[image].id;
-      tag.width = v2.imageTags[image].width;
-      tag.height = v2.imageTags[image].height;
-      tag.x = v2.imageTags[image].x;
-      tag.y = v2.imageTags[image].y;
-    }
+  async function applyChangesFromV2toV1(divElement, v1, v2, firstv) {
+    // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
+    // console.log(allredhighlightedtags, "allredhighlighted");
+    // if (allredhighlightedtags) {
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("redhighlight");
+    //   }
+    // }
+    // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
+
+    // if (allredhighlightedtags) {
+    //   console.log(allredhighlightedtags, "bluehighlight");
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("bluehighlight");
+    //   }
+    // }
+    // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
+    // console.log(allredhighlightedtags, "allredhighlighted");
+    // if (allredhighlightedtags) {
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("redhighlight");
+    //   }
+    // }
+
+    // for (const image in v2.imageTags) {
+    //   const tag = document.getElementById(v2.imageTags[image].id);
+    //   // tag.src = v2.imageTags[image].src;
+    //   tag.style = v2.imageTags[image].style;
+    //   tag.id = v2.imageTags[image].id;
+    //   tag.width = v2.imageTags[image].width;
+    //   tag.height = v2.imageTags[image].height;
+    //   tag.x = v2.imageTags[image].x;
+    //   tag.y = v2.imageTags[image].y;
+    // }
+    // imageLoaded();
+    const response2 = await fetch("http://localhost:3000/api/file/getFile/4", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        // console.log(data.data.data);
+        document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+          data.data.data;
+        htmljson = data.data.htmljson;
+      });
     imageLoaded();
-    for (const tagid in v2.removedTags) {
-      console.log(tagid, "removedtags");
-      if (v2.removedTags[tagid]) {
-        console.log(`#${v1[v2.removedTags[tagid]].parentId}`);
-        const tag = document.getElementById(v1[v2.removedTags[tagid]].parentId);
-        var childElement = document.createElement(
-          v1[v2.removedTags[tagid]].tagName
-        );
-        childElement.textContent = v1[v2.removedTags[tagid]].textContent;
-        console.log(childElement.textContent);
-        childElement.style = v1[v2.removedTags[tagid]].style;
-        childElement.className = v1[v2.removedTags[tagid]].class;
-        childElement.id = v1[v2.removedTags[tagid]].id;
-        const children = tag.children;
-        const position = v1[v2.removedTags[tagid]].position;
-        console.log(tag);
-        console.log(
-          position,
-          children.length,
-          position >= 0 && position <= children.length
-        );
-
-        if (position >= 0 && position <= children.length) {
-          if (position === children.length) {
-            // If position is at the end, simply append the child
-            tag.appendChild(childElement);
-          } else {
-            // Otherwise, insert the child before the element at the specified position
-            let sp2 = document.getElementById(children[position].id);
-            console.log("Inserting");
-            tag.insertBefore(childElement, sp2);
-          }
-        } else {
-          tag.appendChild(childElement);
-        }
-
-        // Step 3: Append the child element to the div
-
-        // if (!tag) continue;
-        // if (tag) {
-        //   tag.style = v1[tag.id].style;
-        //   tag.textContent = v1[tag.id].textContent;
-        // }
-      }
-    }
-    for (const tagId in v2.newTags) {
-      console.log(tagId);
-      if (v2.newTags[tagId].id) {
-        const tagInfo = v2.newTags[tagId];
-        console.log(tagInfo);
-        const tag = document.getElementById(tagInfo.id);
-        if (tag != null) {
-          removeTagButKeepChildren(tag.id);
-        }
-      }
-    }
-    for (const tagId in v2.changedTags) {
-      console.log(tagId);
-
-      if (v2.changedTags[tagId].id) {
-        const tagInfo = v2.changedTags[tagId];
-        const tag = document.getElementById(v2.changedTags[tagId].id);
-        console.log("here");
-
-        console.log("tag: " + tag);
-        if (!tag) continue;
-
-        // Apply changes to text content and style
-
-        if (tag) {
-          if (tagInfo.textContent) {
-            tag.textContent = v1[tag.id].textContent;
-          }
-          if (tagInfo.style) {
-            tag.style = v1[tag.id].style;
-          }
-        }
-
-        // Apply changes to image source
-        if (tagInfo.isTagImg && v1[tagId]) {
-          tag.src = v1[tagId].src;
-        }
-      }
-    }
   }
 
   // Example usage:
@@ -934,12 +981,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     const divElement = document.getElementsByClassName("docx-wrapper")[0];
     applyChangesFromV2toV1(divElement, htmljson, changes);
   });
-  const v1tov2 = document.getElementById("v1tov2");
-  v1tov2.addEventListener("click", function () {
-    const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-    const divElement = document.getElementsByClassName("docx-wrapper")[0];
-    applyChangesFromV1toV2(divElement, htmljson.htmljson, changes);
-  });
+  // const v1tov2 = document.getElementById("v1tov2");
+  // // v1tov2.addEventListener("click", function () {
+  // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
+  // //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
+  // //   applyChangesFromV1toV2(divElement, htmljson.htmljson, changes);
+  // // });
 
   // Applying changes from v2 to v1
 });
@@ -1020,9 +1067,9 @@ document
   .getElementById("container-content")
   .addEventListener("keyup", handleChanges);
 
-document
-  .getElementById("container-content")
-  .addEventListener("input", handleChanges);
+// document
+//   .getElementById("container-content")
+//   .addEventListener("input", handleChanges);
 
 document
   .getElementById("container-content")
@@ -1075,6 +1122,7 @@ function removearticlewhileloop(articleHeight, article, i) {
   let index = 0;
   const totalarticles = document.getElementsByTagName("article");
   while (842 < articleHeight && totalarticles.length > i + 1 && index < 100) {
+    console.log("removearticlewhileloop");
     index += 1;
     pages = document.getElementsByClassName("docx");
     const nextarticle = document.getElementsByTagName("article")[i + 1];
@@ -1126,6 +1174,7 @@ function checkDivSize() {
     if (i + 1 < pages.length) {
       let article = document.getElementsByTagName("article")[i];
       let articleHeight = article.scrollHeight;
+      console.log("removearticlewhileloop first");
       removearticlewhileloop(articleHeight, article, i);
       article.clientHeight = 842;
       article.scrollHeight = 842;
@@ -1133,6 +1182,7 @@ function checkDivSize() {
       let article = document.getElementsByTagName("article")[i];
       let articleHeight = article.scrollHeight;
       while (842 < articleHeight) {
+        console.log("removearticlewhileloop add page");
         const newpage = document.createElement("section");
 
         newpage.classList.add("docx");
@@ -1169,7 +1219,7 @@ function checkDivSize() {
     // editableDiv.appendChild(newpage);
   }
   // checkclientheightofarticles();
-  // removeEmptyPages();
+  removeEmptyPages();
 }
 
 function imageLoaded() {
@@ -1352,14 +1402,19 @@ function checkDivSizeBack() {
 
     // editableDiv.appendChild(newpage);
   }
+  // const articles = document.querySelectorAll("article");
+  // console.log(articles.length, "articcle length");
+  // if (articles.length > 1) {
   removeEmptyPages();
+
   // checkclientheightofarticles();
 }
 
 function removeEmptyPages() {
   const articles = document.querySelectorAll("article");
-
-  // Iterate through each article
+  // console.log(articles.length, "articcle length");
+  // if (articles.length > 1) {
+  //   console.log(articles.length, "articcle length");
   articles.forEach((article) => {
     // Check if the article has no child nodes or just a single p tag
     if (
@@ -1370,6 +1425,17 @@ function removeEmptyPages() {
       // Remove the parent section tag
       const section = article.parentNode;
       section.parentNode.removeChild(section);
+    }
+  });
+
+  // Iterate through each article
+}
+
+function removeemptyimage() {
+  const images = document.querySelectorAll(".image-container");
+  images.forEach((image) => {
+    if (image.childNodes.length === 0) {
+      image.remove();
     }
   });
 }

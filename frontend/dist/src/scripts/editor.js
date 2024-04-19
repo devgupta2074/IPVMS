@@ -2,7 +2,7 @@ let optionsButtons = document.querySelectorAll(".option-button");
 let advancedOptionButton = document.querySelectorAll(".adv-option-button");
 let fontName = document.getElementById("fontName");
 let fontSizeRef = document.getElementById("fontSize");
-let writingArea = document.getElementById("container-content");
+let writingArea = document.getElementById("text-input");
 let linkButton = document.getElementById("createLink");
 let alignButtons = document.querySelectorAll(".align");
 let spacingButtons = document.querySelectorAll(".spacing");
@@ -63,7 +63,6 @@ optionsButtons.forEach((button) => {
 });
 
 //options that require value parameter (e.g colors, fonts)
-
 advancedOptionButton.forEach((button) => {
   button.addEventListener("change", () => {
     modifyText(button.id, false, button.value);
@@ -114,52 +113,5 @@ const highlighterRemover = (className) => {
     button.classList.remove("active");
   });
 };
-// function Export2Word(element, filename = "") {
-//   var preHtml =
-//     "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
-//   var postHtml = "</body></html>";
-//   var html = preHtml + document.getElementById(element).innerHTML + postHtml;
 
-//   var blob = new Blob(["\ufeff", html], {
-//     type: "application/msword",
-//   });
-
-//   // Specify link url
-//   var url =
-//     "data:application/vnd.ms-word;charset=utf-8," + encodeURIComponent(html);
-
-//   // Specify file name
-//   filename = filename ? filename + ".docx" : "document.docx";
-
-//   // Create download link element
-//   var downloadLink = document.createElement("a");
-
-//   document.body.appendChild(downloadLink);
-
-//   if (navigator.msSaveOrOpenBlob) {
-//     navigator.msSaveOrOpenBlob(blob, filename);
-//   } else {
-//     // Create a link to the file
-//     downloadLink.href = url;
-
-//     // Setting the file name
-//     downloadLink.download = filename;
-
-//     //triggering the function
-//     downloadLink.click();
-//   }
-
-//   document.body.removeChild(downloadLink);
-// }
 window.onload = initializer();
-
-// function convertToDocx() {
-//   var FileSaver = require("file-saver");
-//   // Get HTML content from the div
-//   const htmlContent = document.getElementById("container-content").innerHTML;
-//   console.log(htmlContent);
-
-//   // Convert HTML to DOCX
-//   var converted = htmlDocx.asBlob(htmlContent);
-//   FileSaver.saveAs(converted, "test.docx");
-// }

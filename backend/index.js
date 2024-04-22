@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./src/routes/user.Routes.js";

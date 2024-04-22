@@ -4,8 +4,8 @@ const API_CONSTANTS = {
   PUT: "PUT",
   PATCH: "PATCH",
   DELETE: "DELETE",
-  BACKEND_BASE_URL: "http://ipvms-api.exitest.com",
-  BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
+  BACKEND_BASE_URL: "http://localhost:3000",
+  BACKEND_BASE_URL_PROD: "http://localhost:3000",
   TOKEN: "token",
 };
 const URL_CONSTANTS = {
@@ -73,6 +73,7 @@ const ROUTES_CONSTANTS = {
   FORGET_PASSWORD: "/api/user/forgotPassword",
   RESET_PASSWORD: "/api/user/resetPassword",
   GET_USER_INFO: "/api/user/getUserInfo",
+  INVITE_USER: "/api/user/sendInvite",
 };
 export const style = `<style>
 .docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

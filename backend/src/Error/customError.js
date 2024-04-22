@@ -3,13 +3,16 @@ export class DatabaseError extends Error {
     super(message || "Internal Server error happened");
     this.name = "Database Error";
     this.statusCode = 500;
+    this.success = false;
   }
 }
 export class ValidationError extends Error {
   constructor(message) {
-    super(message || "Invalid Credentials");
+    super(message || "Invalid Credentials here");
     this.name = "Validation Error";
+    this.error = message;
     this.statusCode = 400;
+    this.success = false;
   }
 }
 export class NotFoundError extends Error {
@@ -17,6 +20,8 @@ export class NotFoundError extends Error {
     super(message || "Data was not found");
     this.name = "Not Found Error";
     this.statusCode = 404;
+    this.error = message;
+    this.success = false;
   }
 }
 
@@ -25,6 +30,8 @@ export class AuthorizationError extends Error {
     super(message || "User is not Authorized to access the resource");
     this.name = "Authorization Error";
     this.statusCode = 401;
+    this.error = message;
+    this.success = false;
   }
 }
 
@@ -33,6 +40,8 @@ export class ConflictError extends Error {
     super(message || "Resource Already Exists");
     this.name = "Conflict Error";
     this.statusCode = 409;
+    this.error = message;
+    this.success = false;
   }
 }
 export class InvalidTokenError extends Error {
@@ -40,6 +49,8 @@ export class InvalidTokenError extends Error {
     super(message || "");
     this.name = "Invalid";
     this.statusCode = 498;
+    this.error = message;
+    this.success = false;
   }
 }
 export class ForbiddenAccessError extends Error {
@@ -47,6 +58,8 @@ export class ForbiddenAccessError extends Error {
     super(message);
     this.name = "Forbidden Access";
     this.statusCode = 403;
+    this.error = message;
+    this.success = false;
   }
 }
 export class BadGatewayError extends Error {
@@ -54,5 +67,7 @@ export class BadGatewayError extends Error {
     super(message);
     this.name = "Bad Gateway";
     this.statusCode = 403;
+    this.error = message;
+    this.success = false;
   }
 }

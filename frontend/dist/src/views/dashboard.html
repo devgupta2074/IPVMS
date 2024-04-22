@@ -10,7 +10,12 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="tailwind.css" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -69,7 +74,7 @@
                 <a
                   href="#"
                   id="signout"
-                  class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                  class="text-sm hover:bg-gray-100 text-gray-700 block px-4 "
                   >Sign out</a
                 >
               </li>
@@ -110,15 +115,303 @@
         </div>
       </div>
       <div
-        class="bg-zircon-50 m-2 h-full flex items-center justify-center pt-20"
+        class="bg-zircon-50 m-2 h-full flex items-center justify-center w-full"
       >
         <div
-          class="p-10 mx-20 flex flex-col justify-center items-center gap-14"
+          class="p-10 mt-10 mx-20 flex flex-col justify-center items-center gap-14 w-full h-full"
         >
-          <div class="grid grid-cols-3 gap-32">
-            <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
-            <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
-            <div class="w-[20.208125rem] h-[16.875rem] bg-white"></div>
+          <div class="flex w-full gap-6 h-full pl-10">
+            <div
+              class="w-[35.125rem] h-80 flex justify-center items-center pt-4"
+            >
+              <div
+                class=" h-80  w-full p-4 bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <h5
+                    class="text-lg font-semibold leading-none text-gray-900 dark:text-white"
+                  >
+                    Employee Queue Letter
+                  </h5>
+                  <div class="w-16 flex items-center justify-between">
+                    <a
+                      href="#"
+                      class="text-sm font-medium text-blue-500 hover:underline"
+                    >
+                      View all
+                    </a>
+                    <!-- icon right arrow -->
+                    <!-- <svg class="h-6 w-6 z-50">
+                      <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
+                    </svg> -->
+                  </div>
+                </div>
+                <hr class="h-[1px] border-t-0 bg-[#ECEEF3]" />
+                <div class="flow-root">
+                  <ul role >
+                  <ul role="list">
+                    <li class="pt-2">
+                      <div
+                        role="button"
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      >
+                        <div
+                          class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600"
+                        >
+                          <span
+                            class="text-base font-medium text-[#333333] truncate"
+                            >JL</span
+                          >
+                        </div>
+                        <div class="flex-1 min-w-0 ms-4 w-44">
+                          <p
+                            class="text-base font-medium text-[#333333] truncate"
+                          >
+                            Neil Sims
+                          </p>
+                          <p class="text-sm text-[#7C7C7C ] truncate">
+                            Joining letter
+                          </p>
+                        </div>
+                        <div class="w-20 flex justify-center items-center">
+                          <div
+                            class="w-20 flex justify-center items-center box-border bg-[#E0E0E0] border-1 border-[#B2B0B0] text-[#575757] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#B2B0B0] hover:border-[#575757] hover:text-white"
+                          >
+                            Draft
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2"
+                        role="button"
+                      >
+                        <div
+                          class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600"
+                        >
+                          <span
+                            class="text-base font-medium text-[#333333] truncate"
+                            >JL</span
+                          >
+                        </div>
+                        <div class="flex-1 min-w-0 ms-4 w-44">
+                          <p
+                            class="text-base font-medium text-[#333333] truncate"
+                          >
+                            twinder
+                          </p>
+                          <p class=" ">Increment letter</p>
+                        </div>
+                        <div class="w-20 flex justify-center items-center">
+                          <div
+                            class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          >
+                            Pending
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg  pt-2"
+                        role="button"
+                      >
+                        <div
+                          class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600"
+                        >
+                          <span
+                            class="text-base font-medium text-[#333333] truncate"
+                            >TW</span
+                          >
+                        </div>
+                        <div class="flex-1 min-w-0 ms-4 w-44">
+                          <p
+                            class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                          >
+                            twinder
+                          </p>
+                          <p class="text-sm text-[#7C7C7C ] truncate">
+                            Increment letter
+                          </p>
+                        </div>
+                        <div class="w-20 flex justify-center items-center">
+                          <div
+                            class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          >
+                            Pending
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                        role="button"
+                      >
+                        <div
+                          class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600"
+                        >
+                          <span
+                            class="text-base font-medium text-[#333333] truncate"
+                            >KA</span
+                          >
+                        </div>
+                        <div class="flex-1 min-w-0 ms-4 w-44">
+                          <p
+                            class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                          >
+                            Kale
+                          </p>
+                          <p class="text-sm text-[#7C7C7C ] truncate">
+                            Increment letter
+                          </p>
+                        </div>
+                        <div class="w-20 flex justify-center items-center">
+                          <div
+                            class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          >
+                            Pending
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div
+              class="w-[35.125rem] h-80 flex justify-center items-center pt-4"
+            >
+              <div
+                class="w-full  h-80 p-4 bg-white rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <h5 class="text-lg font-semibold leading-none tex-[#333333]">
+                    Policy Approval
+                  </h5>
+                  <div class="w-16 flex items-center justify-between">
+                    <a
+                      href="#"
+                      class="text-sm font-medium text-blue-500 hover:underline hover:cursor-pointer"
+                    >
+                      View all
+                    </a>
+                    <!-- icon right arrow -->
+                    <!-- <svg class="h-6 w-6 z-50">
+                      <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
+                    </svg> -->
+                  </div>
+                </div>
+                <hr class="h-[1px] border-t-0 bg-[#ECEEF3]" />
+                <div class="flow-root max-h-56">
+                  <ul role="list ">
+                    <li class="pt-2">
+                      <div
+                        role="button"
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg  pt-2  "
+                      >
+                        <div class="flex-1 min-w-0  w-44">
+                          <p
+                            class="text-base font-medium text-[#333333] truncate"
+                          >
+                            Sabatical Leave Policy
+                          </p>
+                          <p
+                            class="text-sm text-gray-500 truncate dark:text-gray-400"
+                          >
+                            Sent by Alena Gouse
+                          </p>
+                        </div>
+                        <div class="w-12 flex justify-center items-center">
+                          <button
+                            class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          >
+                            View
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                        role="button"
+                      >
+                        <div class="flex-1 min-w-0  w-44">
+                          <p
+                            class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                          >
+                            Emergency Leave Policy
+                          </p>
+                          <p
+                            class="text-sm text-gray-500 truncate dark:text-gray-400"
+                          >
+                            Sent by Alena Gouse
+                          </p>
+                        </div>
+                        <div class="w-12 flex justify-center items-center">
+                          <button
+                            class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          >
+                            View
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                        role="button"
+                      >
+                        <div class="flex-1 min-w-0  w-44">
+                          <p
+                            class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                          >
+                            Emergency Leave Policy
+                          </p>
+                          <p
+                            class="text-sm text-gray-500 truncate dark:text-gray-400"
+                          >
+                            Sent by Alena Gouse
+                          </p>
+                        </div>
+                        <div class="w-12 flex justify-center items-center">
+                          <button
+                            class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          >
+                            View
+                          </button>
+                        </div>
+                    </li>
+                    <li class="pt-2">
+                      <div
+                        class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                        role="button"
+                      >
+                        <div class="flex-1 min-w-0  w-44">
+                          <p
+                            class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                          >
+                            Emergency Leave Policy
+                          </p>
+                          <p
+                            class="text-sm text-gray-500 truncate dark:text-gray-400"
+                          >
+                            Sent by Alena Gouse
+                          </p>
+                        </div>
+                        <div class="w-12 flex justify-center items-center">
+                          <button
+                            class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          >
+                            View
+                          </button>
+                        </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
           <table class="w-full p-10 mx-20 text-left text-sm text-gray-500">
             <thead class="bg-[#D5DBEB] text-xs uppercase text-gray-700">

@@ -67,13 +67,18 @@
         Template
       </div>
       <div class="flex flex-row gap-1 overflow-y-scroll">
-        <div id="container" class="container w-4/5"></div>
+        <div
+          id="container"
+          class="container w-4/5 border-2 border-gray-100 p-10 pt-5 h-full rounded-md"
+        ></div>
 
         <div
-          class="relative flex h-[calc(100vh-2rem)] w-full max-w-[20rem] flex-col rounded-xl bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5"
+          class="relative flex h-[calc(85vh-2rem)] ml-5 mr-5 w-full max-w-[25rem] flex-col rounded-xl bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5"
         >
           <h1 class="text-gray-800 text-2xl">Form</h1>
-          <div class="container2 flex flex-col gap-0 items-center h-full"></div>
+          <div
+            class="container2 flex flex-col gap-0 w-full h-1/2 items-center justify-center"
+          ></div>
           <button
             type="submit"
             onclick="handleSubmit()"
@@ -81,13 +86,13 @@
           >
             Submit
           </button>
-          <button
+          <!-- <button
             type="submit"
             id="print_to_pdf"
             class="mt-20 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             get Pdf
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -195,7 +200,7 @@
     </script>
     <script></script>
 
-    <script>
+    <!-- <script>
       // window.jsPDF = window.jspdf.jsPDF;
       document.getElementById("print_to_pdf").onclick = function () {
         const saveAsPdf = async () => {
@@ -219,6 +224,6 @@
         };
         saveAsPdf();
       };
-    </script>
+    </script> -->
   </body>
 </html>

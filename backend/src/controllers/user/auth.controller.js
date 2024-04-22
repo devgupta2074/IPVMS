@@ -138,3 +138,17 @@ export const getUserInfo = async (req, res) => {
     });
   }
 };
+
+export const sendInvite = async (req, res, next) => {
+  //send invite to user who are not on platform yet
+
+  try {
+    const email = await userService.sendInvite(req.body);
+    return res.status(200).json({
+      success: true,
+      message: "Invitation send successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

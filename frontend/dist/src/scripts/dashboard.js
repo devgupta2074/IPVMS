@@ -114,6 +114,18 @@ const fetchData = async () => {
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
   await fetchData();
+
+  const sortButtons = document.querySelectorAll('.sort');
+
+  sortButtons.forEach((e, index) => {
+
+    e.addEventListener('click', () => {
+      console.log(index);
+      window.event.preventDefault();
+      sortTable(index, 0);
+    });
+  });
+
 });
 
 
@@ -184,7 +196,7 @@ function addTable() {
       <th scope="col" class="w-52">
         <div class="flex items-center">
           Policy name
-          <a href="#" class="sort" name="sortTable(1,0)">
+          <a href="#" class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -196,7 +208,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Created by
-          <a href="#" class="sort" name="sortTable(2,0)">
+          <a href="#" class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -208,7 +220,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Created at
-          <a href="#" class="sort" name="sortTable(3,0)">
+          <a href="#" class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -220,7 +232,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Approved
-          <a href="#" class="sort" name="sortTable(4,0)">
+          <a href="#" class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -232,7 +244,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Published on
-          <a href="#" class="sort" name="sortTable(5,0)">
+          <a href="#" class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -244,7 +256,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Published by
-          <a href="#" class="sort" name="sortTable(6,0)">
+          <a href="#" class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -300,8 +312,6 @@ function addTable() {
     `;
 }
 
-
-
 function getdate(dateString) {
   const parts = dateString.split("/");
   const day = parseInt(parts[0], 10);
@@ -311,48 +321,53 @@ function getdate(dateString) {
   return date;
 }
 
-function sortTable(col, order) {
+function sortTable(col) {
   // const table = document.getElementById('myTable');
   const tbody = document.getElementById("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
 
-  const th = document.getElementsByTagName("th");
+  const sort_th = document.querySelectorAll('.sort');
+  const order = sort_th[col].getAttribute('name') === 'true' ? true : false;
+  // console.log(order, col);
+
+
   if (order) {
-    const a = th[col + 1].getElementsByTagName("a");
-    a[0].setAttribute("onclick", `sort(${col}, ${!order})`);
-    // .setAttribute('onclick', !order);
-    console.log(order);
-    if (col === 2) {
+
+    sort_th[col].setAttribute("name", `${!order}`);
+
+    if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
-        let cellA = rowA.querySelectorAll("td")[col].textContent.trim();
-        let cellB = rowB.querySelectorAll("td")[col].textContent.trim();
+        let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
+        let cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
         cellA = getdate(cellA);
         cellB = getdate(cellB);
+        // console.log(cellA);
         return cellA - cellB;
       });
     } else {
       rows.sort((rowA, rowB) => {
-        const cellA = rowA.querySelectorAll("td")[col].textContent.trim();
-        const cellB = rowB.querySelectorAll("td")[col].textContent.trim();
+        const cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
+        const cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
         return cellA.localeCompare(cellB, "en", { numeric: true });
       });
     }
   } else {
-    const a = th[col + 1].getElementsByTagName("a");
-    a[0].setAttribute("onclick", `sort(${col}, ${!order})`);
 
-    if (col === 2) {
+    sort_th[col].setAttribute("name", `${!order}`);
+
+    if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
-        let cellA = rowA.querySelectorAll("td")[col].textContent.trim();
-        let cellB = rowB.querySelectorAll("td")[col].textContent.trim();
+        let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
+        let cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
         cellA = getdate(cellA);
         cellB = getdate(cellB);
+        // console.log(cellA);
         return cellB - cellA;
       });
     } else {
       rows.sort((rowA, rowB) => {
-        const cellA = rowA.querySelectorAll("td")[col].textContent.trim();
-        const cellB = rowB.querySelectorAll("td")[col].textContent.trim();
+        const cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
+        const cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
         return cellB.localeCompare(cellA, "en", { numeric: true });
       });
     }
@@ -367,11 +382,3 @@ function sortTable(col, order) {
   });
 }
 
-const sortButtons = document.querySelectorAll('.sort');
-
-sortButtons.forEach(e => {
-
-  e.addEventListener('click', () => {
-
-  });
-});

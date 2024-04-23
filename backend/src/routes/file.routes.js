@@ -8,6 +8,7 @@ import {
   editDocument,
   saveAsPdf,
   gettemplates,
+  getpaginateddocuments,
 } from "../controllers/file/file.Controller.js";
 
 import {
@@ -24,5 +25,7 @@ fileRouter.get("/document", getdocument);
 fileRouter.post("/updateDocument/:id", editDocument);
 fileRouter.post("/saveAsPdf", saveAsPdf);
 fileRouter.get("/getTemplate", gettemplates);
+
+fileRouter.get('/getpaginateddocuments', getpaginateddocuments);
 
 export default fileRouter;

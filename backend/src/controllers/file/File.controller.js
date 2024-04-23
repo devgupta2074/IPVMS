@@ -134,6 +134,8 @@ WHERE
 `;
 
     const data = await pool.query(query, [limit, offset, title, category]);
+
+    console.log(data);
     if (data.rows.length === 0) {
       return res
         .status(404)
@@ -359,4 +361,65 @@ FROM
       .status(500)
       .json({ message: "Internal server error", error: error, success: false });
   }
+};
+
+export const getpaginateddocuments = async (req, res) => {
+
+  const query = req.query;
+  // const title = req.query.title;
+  // const category = req.query.category;
+  // console.log(title);
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = getPagination(page, size);
+  console.log(limit, offset);
+  //order by
+  const orderByColumn = query?.orderByColumn || "created_at";
+  const orderByDirection = query?.orderByDirection?.toUpperCase() || "DESC";
+
+  try {
+    const query = `
+WITH paginated_data AS (
+  SELECT 
+    id, 
+    category_id as cid,
+    htmljson, 
+    convert_from(htmldata, 'utf8') as data,  
+    created_at, 
+    created_by, 
+    title
+  FROM document d
+  ORDER BY ${orderByColumn} ${orderByDirection}
+  LIMIT $1 OFFSET $2
+),
+total_count AS (
+  SELECT COUNT(*) as total_count FROM document
+)
+SELECT 
+  pd.*, 
+  (SELECT total_count FROM total_count) as total_count
+FROM 
+paginated_data pd;
+`;
+
+    // console.log(query);
+    const data = await pool.query(query, [limit, offset]);
+
+    // console.log(data);
+    if (data.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "no document dound" });
+    }
+    console.log(data.rows.length);
+    return res
+      .status(200)
+      .json({ message: "documents are", success: true, data: data.rows });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error, success: false });
+  }
+
 };

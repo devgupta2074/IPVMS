@@ -1,4 +1,4 @@
-import { ValidationError } from "../../Error/customError";
+import { ValidationError } from "../../Error/customError.js";
 
 export const fileuploadMiddleware = async (req, res, next) => {
   let { htmlText, docId } = req.body;

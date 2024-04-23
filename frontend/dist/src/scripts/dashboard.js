@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   addTable();
 });
 import { InviteApiRequest } from "../api/invitation.js";
+import { fetchCategory } from "../components/CategoryChart.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
@@ -23,6 +24,7 @@ if (localStorage.getItem("token") === null) {
     userdata = data;
   });
 }
+fetchCategory();
 const signoutbutton = document.getElementById("signout");
 const todashboard = document.getElementById("dashboard");
 

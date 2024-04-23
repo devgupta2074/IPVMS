@@ -47,8 +47,8 @@ async function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
-        // console.log(data);
-        if (data.success) {
+        console.log(data);
+        if (data?.statusCode == 200) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);

@@ -4,8 +4,8 @@ const API_CONSTANTS = {
   PUT: "PUT",
   PATCH: "PATCH",
   DELETE: "DELETE",
-  BACKEND_BASE_URL: "http://localhost:3000",
-  BACKEND_BASE_URL_PROD: "http://localhost:3000",
+  BACKEND_BASE_URL: "http://localhost:5001",
+  BACKEND_BASE_URL_PROD: "http://localhost:5001",
   TOKEN: "token",
 };
 const URL_CONSTANTS = {

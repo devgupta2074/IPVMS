@@ -39,9 +39,9 @@ async function ForgetPassword() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
-        console.log(data);
+        console.log(data, "Dede");
 
-        if (data.success) {
+        if (data?.success) {
           console.log(data);
           console.log(data.secretToken);
 

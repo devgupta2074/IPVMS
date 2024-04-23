@@ -21,7 +21,7 @@ export async function ForgetPasswordApiRequest(email) {
     const response = await makeRequest(apiUrl, requestOptions);
     console.log(response, "makerequest");
 
-    return response;
+    return response.json();
   } catch (error) {
     console.log(error, "error");
   }

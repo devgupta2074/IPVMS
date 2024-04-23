@@ -10,111 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-[#F4F7FD] w-full overflow-y-scroll">
-    <div class="">
-      <div
-        class="w-full h-[3.5rem] fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-end justify-end"
-      >
-      <div class="flex-1 mx-48 my-2 flex items-center justify-center">
-        <input type="name" name="search" type="text"
-        id="search"
-        class="w-1/2 p-2 pl-10 rounded-full shadow-md border-coolGray-500 bg-zircon-50
-        "
-        placeholder="Search by Name,category or text"
-         />
-      
-      </div>
-      <div class="flex items-center justify-center gap-5">
-        <svg class="h-6 w-6 z-50">
-          <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
-        </svg>
-        <figure class=" ">
-          <img
-            class="rounded-full m-1"
-            width="39"
-            height="39"
-            src="/assets/images/profile2.jpg"
-            alt="Profile"
-          />
-        </figure>
-
-        <button
-        class="text-white font-medium rounded-lg text-sm text-center inline-flex items-center"
-        type="button"
-        data-dropdown-toggle="dropdown"
-      >
-        John Doe
-        <svg
-          class="w-4 h-4 ml-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          ></path>
-        </svg>
-      </button>
-      <!-- Dropdown menu -->
-      <div
-        class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
-        id="dropdown"
-      >
-        <div class="px-4 py-3">
-          <span class="block text-sm">John Doe</span>
-          <span class="block text-sm font-medium text-gray-900 truncate"
-            >johnd@ex2india.com</span
-          >
-        </div>
-        <ul class="py-1" aria-labelledby="dropdown">
-          <li>
-            <a
-              href="#"
-              id="signout"
-              class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-              >Sign out</a
-            >
-          </li>
-        </ul>
-      </div>
-        <!-- Dropdown menu -->
-      </div>
-      </div>
-      <div
-        class="w-[4.5rem] h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
-      >
-        <div class="fixed z-100 top-4 left-4 flex text-white gap-3">
-          <figure class="">
-            <img
-              class=""
-              width="39"
-              height="39"
-              src="/assets/images/exsquared.png"
-              alt="Exsquared Logo"
-            />
-          </figure>
-        </div>
-        <div
-          class="flex items-center flex-col justify-center z-10 mt-20 gap-10"
-        >
-        <svg id="dashboard" class="h-6 w-6">
-          <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
-        </svg>
-        <svg id="documents" class="h-6 w-6">
-          <use xlink:href="/assets/icons/icon.svg#shield"></use>
-        </svg>
-        <svg id="letters" class="h-6 w-6">
-          <use xlink:href="/assets/icons/icon.svg#policy"></use>
-        </svg>
-        <svg id="editor" class="h-6 w-6">
-          <use xlink:href="/assets/icons/icon.svg#document"></use>
-        </svg>
-        </div>
-      </div>
-
+  
+     
       <div
         class="bg-zircon-50 m-2 h-full flex items-center justify-center pt-20"
       >
@@ -289,7 +186,7 @@
     
   </nav>
 </section>
-<script  src="/scripts/templatedoc.js"></script>
+<script type="module"  src="/scripts/templatedoc.js"></script>
 <script >
   // let response = {
 //     "success": true,
@@ -521,7 +418,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 document.getElementById("loading").style = "display:block";
 
 const response = await fetch(
-`http://localhost:3000/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+`http://localhost:5001/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
 {
   method: "GET",
   headers: {

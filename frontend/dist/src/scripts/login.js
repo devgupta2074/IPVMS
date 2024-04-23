@@ -48,7 +48,7 @@ async function SignIn() {
         siginbutton.removeAttribute("disabled", "");
         siginbutton.setAttribute("enabled", "");
         siginbutton.innerHTML = `Sign In  `;
-        if (data.success) {
+        if (data?.success) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);

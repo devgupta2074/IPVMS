@@ -45,9 +45,11 @@
 //             "updatedAt": "2013-04-10T00:29:54.119Z"
 //         }
 
+import { InsertNavbar } from "../components/Navbar.js";
+
 //     ]
 // };
-
+InsertNavbar();
 const signoutbutton = document.getElementById("signout");
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");

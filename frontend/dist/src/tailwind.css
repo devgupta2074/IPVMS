@@ -19,4 +19,11 @@
     src: url("../assets/fonts/Axiforma/Kastelov\ \ Axiforma\ Regular.otf")
       format("woff");
   }
+  @font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../assets/fonts/Roboto/Roboto-Regular.ttf") format("woff");
+  }
 }

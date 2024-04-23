@@ -45,9 +45,14 @@
 //             "updatedAt": "2013-04-10T00:29:54.119Z"
 //         }
 
+import {
+  InsertNavbar,
+  NavbarHoverFunctionality,
+} from "../components/Navbar.js";
+
 //     ]
 // };
-
+InsertNavbar();
 var maxPages = 10;
 var pageSize = 5;
 var currentPage = 1;
@@ -60,7 +65,7 @@ const fetchCategory = async () => {
   console.log("fetching catehory");
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/categories/getAllCategories`,
+    `http://localhost:5001/api/categories/getAllCategories`,
     {
       method: "GET",
       headers: {
@@ -817,7 +822,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     category = "";
   }
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+    `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
     {
       method: "GET",
       headers: {
@@ -829,7 +834,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     .then((data) => {
       // Handle the response from the backend
       console.log(data);
-      if (data.success == false) {
+      if (data?.success == false) {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
       } else {
@@ -857,7 +862,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -880,7 +885,7 @@ const search = async () => {
   const searchText = document.getElementById("search").value;
   console.log("search func");
   const response = await fetch(
-    "http://ipvms-api.exitest.com/api/globalsearch/search",
+    "http://localhost:5001/api/globalsearch/search",
     {
       method: "POST",
       // mode: "no-cors",

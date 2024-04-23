@@ -27,7 +27,7 @@
         const getTemplatedoc = async (id) => {
           console.log("in get temo id in getTempdox is", id);
           const response = await fetch(
-            `http://127.0.0.1:3000/api/file/getTemplateById/${id}`,
+            `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
             {
               method: "GET",
             }
@@ -205,7 +205,7 @@
       document.getElementById("print_to_pdf").onclick = function () {
         const saveAsPdf = async () => {
           const response = await fetch(
-            "http://127.0.0.1:3000/api/file/saveAsPdf",
+            "http://127.0.0.1:5001/api/file/saveAsPdf",
             {
               method: "POST",
               headers: {

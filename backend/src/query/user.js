@@ -16,6 +16,7 @@ export const getUser = async (data) => {
 
 export const createUser = async (userData) => {
   const { firstName, lastName, email, hashedPassword, isActive } = userData;
+  console.log(firstName, lastName, email, hashedPassword, isActive);
 
   try {
     const query = {
@@ -23,6 +24,7 @@ export const createUser = async (userData) => {
       values: [firstName, lastName, email, hashedPassword, true],
     };
     const user = await pool.query(query);
+
     return user;
   } catch (error) {
     throw new DatabaseError("Error in creating User");

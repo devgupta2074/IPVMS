@@ -2,10 +2,11 @@ import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 import { makeRequest } from "./apiRequest.js";
 
 const apiUrl =
-  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.FORGET_PASSWORD;
-export async function ForgetPasswordApiRequest(email) {
+  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.INVITE_USER;
+export async function InviteApiRequest(email, name) {
   const requestData = {
     email: email,
+    name: name,
   };
 
   const requestOptions = {
@@ -20,8 +21,7 @@ export async function ForgetPasswordApiRequest(email) {
   try {
     const response = await makeRequest(apiUrl, requestOptions);
     console.log(response, "makerequest");
-
-    return response.json();
+    return response;
   } catch (error) {
     console.log(error, "error");
   }

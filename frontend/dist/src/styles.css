@@ -944,6 +944,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(234 238 255 / var(--tw-bg-opacity));
 }
+.bg-astronaut-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 64 118 / var(--tw-bg-opacity));
+}
 
 .bg-gulf-blue-950 {
   --tw-bg-opacity: 1;
@@ -1046,6 +1050,18 @@ video {
 
 .font-axiforma {
   font-family: Axiforma;
+}
+.font-roboto {
+  font-family: Roboto;
+}
+.text-chicago-700 {
+  --tw-bg-opacity: 1;
+  color: rgb(85 85 85 / var(--tw-bg-opacity));
+}
+
+.text-mineshaft-900 {
+  --tw-text-opacity: 1;
+  color: rgb(51 51 51 / var(--tw-text-opacity));
 }
 
 .font-sfprodisplay {

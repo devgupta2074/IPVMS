@@ -20,6 +20,10 @@
     />
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+<link rel="stylesheet" href="tailwind.css" />
+<script src="https://cdn.tailwindcss.com"></script>
 
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
 
@@ -380,8 +384,10 @@ border: 1px solid rgba(0, 255, 23, 1);
           </div>
         </div>
       </div>
-      <div>
-        <div id="container-content" contenteditable="true"></div>
+      <div  class="grid grid-cols-2 scale-[0.95] gap-20">
+      
+        <div id="container-content" ></div>
+        <div id="container-content-base" ></div>
         
       </div>
      
@@ -389,7 +395,7 @@ border: 1px solid rgba(0, 255, 23, 1);
     </div>
 
     <script src="/scripts/editor.js"></script>
-    <script src="/scripts/versioncontrol.js"></script>
+    <script src="/scripts/comparison.js"></script>
    
   </body>
   <script>

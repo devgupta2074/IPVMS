@@ -49,5 +49,13 @@
 </clipPath>
 </defs>
 </symbol>
-
+<symbol id="rightarrow" width="8" height="13" viewBox="0 0 8 13" fill="none"  xmlns="http://www.w3.org/2000/svg">
+<path d="M1 1.60107L6 6.60107L1 11.6011" stroke="#3689F5" stroke-width="2"/>
+</symbol>
 </svg>
+
+
+
+
+
+

@@ -4,6 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { letterTemplate } from "./Template/letterTemplate.js";
 import { BadGatewayError } from "../../Error/customError.js";
+import { invitationTemplate } from "./Template/invitationTemplate.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "./.env") });
 export const sendEmail = async (email, token) => {
@@ -59,6 +60,31 @@ export const sendLetterEmail = async (pdfFile, email) => {
         },
       ],
     });
+  } catch (error) {
+    console.log(error, "email not sent");
+  }
+};
+export const sendInvitationEmail = async (email, password) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+    const action_url = "";
+    const htmlTemp = invitationTemplate(email, password, action_url);
+    const mail = await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: "tarora@ex2india.com",
+      subject: "Invitation to platform",
+      html: htmlTemp,
+    });
+
+    return true;
   } catch (error) {
     console.log(error, "email not sent");
   }

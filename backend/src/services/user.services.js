@@ -1,18 +1,20 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { sendEmail } from "../core/Email/sendEmail.js";
+import { sendEmail, sendInvitationEmail } from "../core/Email/sendEmail.js";
 import {
   BadGatewayError,
   ConflictError,
   NotFoundError,
   ValidationError,
 } from "../Error/customError.js";
+import { generatePassword } from "../utils/randomPasswordGenerator.js";
 import {
   createUser,
   getAllUser,
   getUser,
   updatePassword,
 } from "../query/user.js";
+import { generateHashPassword } from "../utils/generateHashPassword.js";
 
 export const registerUserService = async (body) => {
   const { firstName, lastName, email, password, updatedBy } = body;
@@ -134,5 +136,43 @@ export const resetPasswordAuth = async (password, userId) => {
     return { user, token };
   } catch (error) {
     throw new ValidationError("error in reseting password");
+  }
+};
+
+export const sendInvite = async (body) => {
+  try {
+    const { name, email } = body;
+    //middleware check name and email null?
+    console.log(email, name);
+    if (!email || !name) {
+      throw new ValidationError("missing fields");
+    }
+    const user = await getUser({ email });
+    // if email already exist then conflict error
+    if (user.rows.length > 0) {
+      throw new ConflictError("User email already Exist");
+    } else {
+      const firstName = name.split(" ")[0];
+      const lastName = name.split(" ")[1];
+      const password = generatePassword();
+
+      const mailsuccess = await sendInvitationEmail(email, password);
+      if (mailsuccess) {
+        const hashedPassword = await generateHashPassword(password);
+        const isActive = true;
+        if (hashedPassword) {
+          const newUser = await createUser({
+            firstName,
+            lastName,
+            email,
+            hashedPassword,
+            isActive,
+          });
+          return true;
+        }
+      }
+    }
+  } catch (error) {
+    throw error;
   }
 };

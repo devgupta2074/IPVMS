@@ -17,13 +17,61 @@ var siblingCount = 1;
 
 
 
-const fetchDoc = async (currentPage, pageSize) => {
+const docCard = (index, title, created_by, created_at, id) => {
+  let date = new Date(created_at);
+  // console.log(created_at);
+  return `
+  
+  <tr
+  class="flex pl-5 justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3]"
+>
+  <td class="w-14">${index + 1}</td>
+  <td class="w-52">${title}</td>
+  <td class="w-28">${created_by}</td>
+  <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-28">${created_by}</td>
+  <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-28">${created_by}</td>
+  <td class="w-24">
+    <div class="flex gap-1">
+      <button>
+        <svg id="greenpen" class="h-6 w-4">
+          <use
+            xlink:href="/assets/icons/icon.svg#greenpen"
+          ></use>
+        </svg>
+      </button>
+
+      <button>
+        <svg id="redeye" class="h-6 w-6">
+          <use
+            xlink:href="/assets/icons/icon.svg#redeye"
+          ></use>
+        </svg>
+      </button>
+
+      <button>
+        <svg id="download" class="h-6 w-6">
+          <use
+            xlink:href="/assets/icons/icon.svg#download"
+          ></use>
+        </svg>
+      </button>
+    </div>
+  </td>
+</tr>
+      
+      `;
+  //   .toLocaleDateString('en-GB')
+};
+
+const fetchData = async () => {
   // document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:3000/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+    `http://localhost:3000/api/file/getRecentPolicies`,
     {
       method: "GET",
       headers: {
@@ -37,24 +85,24 @@ const fetchDoc = async (currentPage, pageSize) => {
       console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "No data found";
+        parentElement.innerHTML = "<tr>No data found</tr>";
       } else {
-        totalItems = data?.data[0]?.total_count;
+        // totalItems = data?.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         // document.getElementById("main-body").innerHTML = "";
-        data.data.map((item) => {
-          console.log(item);
+        data.data.map((item, index) => {
+          // console.log(item);
           parentElement.innerHTML += docCard(
+            index,
             item.title || "demo",
-            item.category_name,
-            item.created_by,
+            item.first_name,
             item.created_at,
             item.id
           );
 
-          document.getElementById("main-body").innerHTML += docxModal(item.id);
-          document.getElementById(item.id).style.display = "none";
+          // document.getElementById("main-body").innerHTML += docxModal(item.id);
+          // document.getElementById(item.id).style.display = "none";
         });
       }
     });
@@ -65,7 +113,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
-  await fetchDoc(currentPage - 1, pageSize);
+  await fetchData();
 });
 
 
@@ -131,12 +179,12 @@ function addTable() {
   <thead
     class="bg-[#D5DBEB] py-3 text-xs capitalize text-gray-700 flex rounded-t-md"
   >
-    <tr class="flex justify-around w-full">
+    <tr class="flex pl-5 justify-around w-full">
       <th scope="col" class="w-14">ID</th>
       <th scope="col" class="w-52">
         <div class="flex items-center">
           Policy name
-          <a href="#" onclick="sort(1,0)">
+          <a href="#" class="sort" name="sortTable(1,0)">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -148,7 +196,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Created by
-          <a href="#" onclick="sort(2,0)">
+          <a href="#" class="sort" name="sortTable(2,0)">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -160,7 +208,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Created at
-          <a href="#" onclick="sort(3,0)">
+          <a href="#" class="sort" name="sortTable(3,0)">
             <svg id="sorticon" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -172,7 +220,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Approved
-          <a href="#" onclick="sort(4,0)">
+          <a href="#" class="sort" name="sortTable(4,0)">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -184,7 +232,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Published on
-          <a href="#" onclick="sort(5,0)">
+          <a href="#" class="sort" name="sortTable(5,0)">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -196,7 +244,7 @@ function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center">
           Published by
-          <a href="#" onclick="sort(6,0)">
+          <a href="#" class="sort" name="sortTable(6,0)">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -205,7 +253,7 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">Action</th>
+      <th scope="col" class="w-24">Action</th>
     </tr>
   </thead>
   <tbody id="tbody">
@@ -219,7 +267,7 @@ function addTable() {
       <td class="w-28">Admin</td>
       <td class="w-28">2/30/24</td>
       <td class="w-28">James</td>
-      <td class="w-28">
+      <td class="w-24">
         <div class="flex gap-1">
           <button>
             <svg id="greenpen" class="h-6 w-4">
@@ -254,56 +302,6 @@ function addTable() {
 
 
 
-const docCard = (title, category, created_by, created_at, id) => {
-  let date = new Date(created_at);
-  // console.log(created_at);
-  return `
-  
-  <tr
-  class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3]"
->
-  <td class="w-14">1</td>
-  <td class="w-52">360 Performance Review Policy</td>
-  <td class="w-28">Emmy</td>
-  <td class="w-28">02/30/20</td>
-  <td class="w-28">Admin</td>
-  <td class="w-28">2/30/24</td>
-  <td class="w-28">James</td>
-  <td class="w-28">
-    <div class="flex gap-1">
-      <button>
-        <svg id="greenpen" class="h-6 w-4">
-          <use
-            xlink:href="/assets/icons/icon.svg#greenpen"
-          ></use>
-        </svg>
-      </button>
-
-      <button>
-        <svg id="redeye" class="h-6 w-6">
-          <use
-            xlink:href="/assets/icons/icon.svg#redeye"
-          ></use>
-        </svg>
-      </button>
-
-      <button>
-        <svg id="download" class="h-6 w-6">
-          <use
-            xlink:href="/assets/icons/icon.svg#download"
-          ></use>
-        </svg>
-      </button>
-    </div>
-  </td>
-</tr>
-      
-      `;
-  //   .toLocaleDateString('en-GB')
-};
-
-
-
 function getdate(dateString) {
   const parts = dateString.split("/");
   const day = parseInt(parts[0], 10);
@@ -313,7 +311,7 @@ function getdate(dateString) {
   return date;
 }
 
-function sort(col, order) {
+function sortTable(col, order) {
   // const table = document.getElementById('myTable');
   const tbody = document.getElementById("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
@@ -368,3 +366,12 @@ function sort(col, order) {
     tbody.appendChild(row);
   });
 }
+
+const sortButtons = document.querySelectorAll('.sort');
+
+sortButtons.forEach(e => {
+
+  e.addEventListener('click', () => {
+
+  });
+});

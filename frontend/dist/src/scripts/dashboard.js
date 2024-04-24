@@ -23,7 +23,7 @@ const docCard = (index, title, created_by, created_at, id) => {
   return `
   
   <tr
-  class="flex pl-5 justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3]"
+  class="flex pl-5 justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in"
 >
   <td class="w-14">${index + 1}</td>
   <td class="w-52">${title}</td>
@@ -272,40 +272,7 @@ function addTable() {
     <tr
       class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3]"
     >
-      <td class="w-14">1</td>
-      <td class="w-52">360 Performance Review Policy</td>
-      <td class="w-28">Emmy</td>
-      <td class="w-28">02/30/20</td>
-      <td class="w-28">Admin</td>
-      <td class="w-28">2/30/24</td>
-      <td class="w-28">James</td>
-      <td class="w-24">
-        <div class="flex gap-1">
-          <button>
-            <svg id="greenpen" class="h-6 w-4">
-              <use
-                xlink:href="/assets/icons/icon.svg#greenpen"
-              ></use>
-            </svg>
-          </button>
-
-          <button>
-            <svg id="redeye" class="h-6 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#redeye"
-              ></use>
-            </svg>
-          </button>
-
-          <button>
-            <svg id="download" class="h-6 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#download"
-              ></use>
-            </svg>
-          </button>
-        </div>
-      </td>
+    <td>Things are loading up. We appreciate your patience.</td>
     </tr>
   </tbody>
 </table>

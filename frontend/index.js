@@ -51,6 +51,9 @@ app.get("/", (req, res) => {
 app.get("/invite", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "invitation.html"));
 });
+app.get("/accountsetup", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "account-setup.html"));
+});
 
 // Start the server
 app.listen(PORT, () => {

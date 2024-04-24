@@ -52,6 +52,7 @@ async function SignIn() {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
+
           redirect(VIEWS_CONSTANTS.DASHBOARD);
         } else {
           if (data.error === LOGIN_CONSTANTS.INVALID_DOMAIN) {

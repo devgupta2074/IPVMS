@@ -2,8 +2,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendEmail, sendInvitationEmail } from "../core/Email/sendEmail.js";
 import {
+  AccountSetupError,
   BadGatewayError,
   ConflictError,
+  DatabaseError,
+  InvalidTokenError,
   NotFoundError,
   ValidationError,
 } from "../Error/customError.js";
@@ -13,15 +16,18 @@ import {
   getAllUser,
   getUser,
   updatePassword,
+  updatedUser,
 } from "../query/user.js";
 import { generateHashPassword } from "../utils/generateHashPassword.js";
 
 export const registerUserService = async (body) => {
+  // admin register user with false reset_password
   const { firstName, lastName, email, password, updatedBy } = body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   try {
     const user = await getUser({ email });
+
     if (user.rows.length > 0) {
       throw new ConflictError("User email already Exist");
     }
@@ -45,11 +51,36 @@ export const registerUserService = async (body) => {
     throw error;
   }
 };
+export const updateUserService = async (body) => {
+  // admin register user with false reset_password
+
+  const { firstName, lastName, email, password, updatedBy } = body;
+  console.log(body);
+  console.log(firstName, lastName, email, password);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  try {
+    console.log(firstName, lastName, email, hashedPassword);
+    const isActive = true;
+    const createdUserResult = await updatedUser({
+      firstName,
+      lastName,
+      email,
+      hashedPassword,
+      isActive,
+    });
+
+    return createdUserResult.rows[0];
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const loginUserService = async (body) => {
   const { email, password } = body;
   try {
     const user = await getUser({ email });
+    console.log("email", user.rows[0]);
     if (user.rows.length === 0) {
       throw new NotFoundError("User not found");
     }
@@ -87,14 +118,18 @@ export const forgotPasswordService = async (email) => {
       throw new NotFoundError("User not found");
     }
     //send email with token
-    const secretToken = jwt.sign(
-      { id: user.rows[0].id },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-    return secretToken;
+    try {
+      const secretToken = jwt.sign(
+        { id: user.rows[0].id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+      return secretToken;
+    } catch (error) {
+      throw new DatabaseError("error in generating token");
+    }
   } catch (error) {
-    throw new ValidationError("Cant generate token , some error with jwt key");
+    throw error;
   }
 };
 

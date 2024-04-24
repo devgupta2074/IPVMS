@@ -74,6 +74,7 @@ const ROUTES_CONSTANTS = {
   RESET_PASSWORD: "/api/user/resetPassword",
   GET_USER_INFO: "/api/user/getUserInfo",
   INVITE_USER: "/api/user/sendInvite",
+  SETUP_ACCOUNT: "/api/user/accountsetup",
 };
 export const style = `<style>
 .docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

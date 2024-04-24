@@ -2,7 +2,11 @@ import { pool } from "../../core/database/db.js";
 import dotenv from "dotenv";
 import path from "path";
 import * as userService from "../../services/user.Services.js";
-import { NotFoundError } from "../../Error/customError.js";
+import {
+  AuthorizationError,
+  ConflictError,
+  NotFoundError,
+} from "../../Error/customError.js";
 
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
@@ -148,6 +152,30 @@ export const sendInvite = async (req, res, next) => {
       success: true,
       message: "Invitation send successfully",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const setupAccount = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      throw new AuthorizationError(
+        "User is not logged in,log in first to setup your account"
+      );
+    }
+    const userId = req.user.id;
+    const user = await pool.query("SELECT * FROM puser WHERE id=$1", [userId]);
+    if (user.password_reset) {
+      throw new AccountSetupError("Account is already setup for user");
+    } else {
+      const createdUser = await userService.updateUserService(req.body);
+      console.log(createdUser);
+      return res.status(201).json({
+        success: true,
+        message: "User Registered Success",
+      });
+    }
   } catch (error) {
     next(error);
   }

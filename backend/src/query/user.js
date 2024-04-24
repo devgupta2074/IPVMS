@@ -31,6 +31,25 @@ export const createUser = async (userData) => {
   }
 };
 
+export const updatedUser = async (userData) => {
+  const { firstName, lastName, email, hashedPassword, isActive } = userData;
+  console.log(firstName, lastName, email, hashedPassword, isActive);
+
+  try {
+    const query = {
+      text: "UPDATE puser SET first_name=$1,last_name=$2,email=$3,password=$4,password_reset=$5 WHERE email=$3 RETURNING *",
+      values: [firstName, lastName, email, hashedPassword, true],
+    };
+
+    const user = await pool.query(query);
+    console.log(user.rows[0]);
+
+    return user;
+  } catch (error) {
+    throw new DatabaseError("Error in updating User");
+  }
+};
+
 export const getAllUser = async () => {
   try {
     const user = await pool.query(

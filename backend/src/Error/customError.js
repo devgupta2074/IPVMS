@@ -71,3 +71,12 @@ export class BadGatewayError extends Error {
     this.success = false;
   }
 }
+export class AccountSetupError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "User account is not setup";
+    this.statusCode = 418;
+    this.error = message;
+    this.success = false;
+  }
+}

@@ -49,6 +49,9 @@ app.get("/resetsuccess", (req, res) => {
 app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "dashboard.html"));
 });
+app.get("/zerostate", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "dashboard-zerostate.html"));
+});
 app.get("/document", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "document.html"));
 });

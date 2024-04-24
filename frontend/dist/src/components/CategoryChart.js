@@ -138,6 +138,7 @@ const fetchCategoryCount = async (item) => {
       return data.count;
     });
 };
+
 export const fetchCategory = async () => {
   const y = [];
 
@@ -176,32 +177,150 @@ export const fetchCategory = async () => {
       });
       console.log(x);
       document.getElementById("category-display").innerHTML = x;
-
-      new Chart(document.getElementById("myChart"), {
-        type: "doughnut",
-        data: {
-          labels: y.map((item) => item.category),
-          datasets: [
-            {
-              backgroundColor: y.map((item) => item.color),
-              borderColor: y.map((item) => item.color),
-              data: y.map((item) => item.count),
-              borderWidth: 0,
-              hoverBorderWidth: 12,
-              borderAlign: "center",
-              borderColor: y.map((item) => item.color),
-            },
-          ],
-        },
-        options: {
-          responsive: false,
-          cutoutPercentage: 65,
-          plugins: {
-            legend: {
-              display: false,
+      if (y.length > 0) {
+        new Chart(document.getElementById("myChart"), {
+          type: "doughnut",
+          data: {
+            labels: y.map((item) => item.category),
+            datasets: [
+              {
+                backgroundColor: y.map((item) => item.color),
+                borderColor: y.map((item) => item.color),
+                data: y.map((item) => item.count),
+                borderWidth: 0,
+                hoverBorderWidth: 12,
+                borderAlign: "center",
+                borderColor: y.map((item) => item.color),
+              },
+            ],
+          },
+          options: {
+            responsive: false,
+            cutoutPercentage: 65,
+            plugins: {
+              legend: {
+                display: false,
+              },
             },
           },
-        },
+        });
+      } else {
+        new Chart(document.getElementById("myChart"), {
+          type: "doughnut",
+          data: {
+            labels: ["No Policies"],
+            datasets: [
+              {
+                backgroundColor: "#FC6E62",
+                borderColor: "#FC6E62",
+                data: [100],
+                borderWidth: 0,
+                hoverBorderWidth: 12,
+                borderAlign: "center",
+                borderColor: "#FC6E62",
+              },
+            ],
+          },
+          options: {
+            responsive: false,
+            cutoutPercentage: 65,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      }
+    });
+};
+
+export const fetchCategoryZero = async () => {
+  const y = [];
+
+  const response = fetch(`http://localhost:5001/documents/count/category`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      // Handle the response from the backend
+      let x = "";
+      data.forEach((item, index) => {
+        console.log("item", item, index);
+
+        if (item.category !== "Total") {
+          const xy = generatecategorydisplayhtml(
+            item.category,
+            item.total_documents,
+            item.color,
+            item.svg
+          );
+          console.log("xy", xy);
+          x = x + xy;
+        } else {
+          document.getElementById("charttotal").innerHTML = 0;
+        }
       });
+      console.log(x);
+      //   document.getElementById("category-display").innerHTML = ;
+      if (y.length > 0) {
+        new Chart(document.getElementById("myChart"), {
+          type: "doughnut",
+          data: {
+            labels: y.map((item) => item.category),
+            datasets: [
+              {
+                backgroundColor: y.map((item) => item.color),
+                borderColor: y.map((item) => item.color),
+                data: y.map((item) => item.count),
+                borderWidth: 0,
+                hoverBorderWidth: 12,
+                borderAlign: "center",
+                borderColor: y.map((item) => item.color),
+              },
+            ],
+          },
+          options: {
+            responsive: false,
+            cutoutPercentage: 65,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      } else {
+        new Chart(document.getElementById("myChart"), {
+          type: "doughnut",
+          data: {
+            labels: ["No Policies"],
+            datasets: [
+              {
+                backgroundColor: "#FC6E62",
+                borderColor: "#FC6E62",
+                data: [100],
+                borderWidth: 0,
+                hoverBorderWidth: 12,
+                borderAlign: "center",
+                borderColor: "#FC6E62",
+              },
+            ],
+          },
+          options: {
+            responsive: false,
+            cutoutPercentage: 65,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      }
     });
 };

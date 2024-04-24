@@ -1,7 +1,7 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
 
 import { InviteApiRequest } from "../api/invitation.js";
-import { fetchCategory } from "../components/CategoryChart.js";
+import { fetchCategoryZero } from "../components/CategoryChart.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
@@ -110,42 +110,20 @@ const fetchDoc = async (currentPage, pageSize) => {
   // if (category == "Select a category") {
   //   category = "";
   // }
-  const response = await fetch(
-    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the backend
-      console.log(data);
-      if (data.success == false) {
-        const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "No data found";
-      } else {
-        totalItems = data?.data[0]?.total_count;
-        const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "";
-        document.getElementById("main-body").innerHTML = "";
-        data.data.map((item) => {
-          console.log(item);
-          parentElement.innerHTML += docCard(
-            item.title || "demo",
-            item.category_name,
-            item.created_by,
-            item.created_at,
-            item.id
-          );
 
-          document.getElementById("main-body").innerHTML += docxModal(item.id);
-          document.getElementById(item.id).style.display = "none";
-        });
-      }
-    });
+  const parentElement = document.getElementById("tbody");
+  parentElement.innerHTML = `
+  <div class="flex flex-col items-center justify-center  mt-10  mb-10 gap-0 ">
+  <svg class="h-20 w-60 ml-24">
+  <use xlink:href="/assets/icons/icon.svg#emptytable"></use>
+</svg>
+<div class ="flex flex-col justify-center items-center font-roboto text-boulder-400 text-base font-normal ">
+It seems there are no recent policy updates to display at the moment. 
+<p>Stay tuned for any new updates on policy changes.</p>
+
+ </div>
+ </div>
+        `;
 
   // document.getElementById("loading").style = "display:none";
 };
@@ -176,10 +154,10 @@ if (localStorage.getItem("token") === null) {
     userdata = data;
   });
 }
-fetchCategory();
+fetchCategoryZero();
 const signoutbutton = document.getElementById("signout");
 const todashboard = document.getElementById("dashboard");
-console.log("inviteButton dashboard", todashboard);
+
 const inviteButton = document.getElementById("inviteButton");
 console.log("inviteButton");
 const modal = document.getElementById("modal");
@@ -187,7 +165,6 @@ const closeButton = document.getElementById("closeButton");
 const inviteSubmit = document.getElementById("inviteSubmit");
 
 todashboard.addEventListener("click", () => {
-  console.log("inviteButton dash");
   window.location.href = "/dashboard";
 });
 const toeditor = document.getElementById("editor");
@@ -196,7 +173,6 @@ toeditor.addEventListener("click", () => {
 });
 const todocument = document.getElementById("document");
 todocument.addEventListener("click", () => {
-  console.log("inviteButton dash");
   window.location.href = "/document";
 });
 const toletters = document.getElementById("letters");
@@ -262,11 +238,11 @@ document.getElementById("inviteSubmit").addEventListener("click", function () {
 
 function addTable() {
   const tableDiv = document.getElementById("insert-table");
-  tableDiv.innerHTML = "";
 
   // console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-[69.5rem] mt-5 mb-5 text-left text-sm text-gray-500 bg-white">
+  tableDiv.innerHTML = `
+  <table class="w-[69.5rem] mt-5 mb-5 text-left text-sm text-gray-500 bg-white">
   <thead
     class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md"
   >
@@ -348,7 +324,7 @@ function addTable() {
     </tr>
   </thead>
   <tbody id="tbody">
-  <
+  
   </tbody>
 </table>
     `;

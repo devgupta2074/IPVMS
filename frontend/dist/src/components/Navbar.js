@@ -1,6 +1,6 @@
 const NavBar = `
 <div
-class="w-full h-[4rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-center justify-end gap-5"
+class="w-full h-[3.5rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-center justify-end gap-5"
 >
 <div
   class="flex-1 my-2 mx-5 flex items-center justify-end relative gap-3"
@@ -66,9 +66,9 @@ class="w-full h-[4rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-c
 </div>
 </div>
 <div
-class="w-[6rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
+class="w-[5rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
 >
-<div class="fixed z-100 top-4 left-8 flex text-white gap-3">
+<div class="fixed z-100 top-4 left-6 flex text-white gap-3">
   <figure class="">
     <img
       class=""
@@ -81,27 +81,107 @@ class="w-[6rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
 </div>
 
 <div
-  class="flex flex-col items-center mt-20 gap-y-16 w-full p-0 m-0 sidebar-icon"
+  class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon"
 >
-  <svg
-    id="dashboard"
-    class="h-[2.75rem] w-[2.75rem]"
-    
-  >
-    <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
-  </svg>
 
-  <svg id="documents" class="h-[1.5rem] w-[1.25rem]">
-    <use xlink:href="/assets/icons/icon.svg#shield"></use>
+<div  id="dashboard" class="relative">
+<div   class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg   class="  order-1 w-[9px] h-[13px] ml-10 ">
+    <use  xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
-  <svg id="letters" class="h-[1.5rem] w-[1.25rem]">
-    <use xlink:href="/assets/icons/icon.svg#policy"></use>
+ 
+  <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+    Dashboard</div>
+</div>
+<svg
+
+class="h-[2.5rem] w-[2.5rem] p-2  "
+
+>
+<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+</svg>
+
+
+</div>
+<div  id="document" class="relative">
+<div   class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg   class="  order-1 w-[9px] h-[13px] ml-10 ">
+    <use  xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
-  <svg id="editor" class="h-[1.5rem] w-[1.25rem]">
-    <use xlink:href="/assets/icons/icon.svg#document"></use>
+ 
+  <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+    Document</div>
+</div>
+<svg
+
+class="h-[2.5rem] w-[2.5rem] p-2  "
+
+>
+<use xlink:href="/assets/icons/icon.svg#document"></use>
+</svg>
+
+
+</div>
+
+
+<div  id="letters" class="relative">
+<div   class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg   class="  order-1 w-[9px] h-[13px] ml-10 ">
+    <use  xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
+ 
+  <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+  Letters</div>
+</div>
+<svg
+
+class="h-[2.5rem] w-[2.5rem] p-2  "
+
+>
+<use xlink:href="/assets/icons/icon.svg#policy"></use>
+</svg>
+
+
+</div>
+<div  id="editor" class="relative">
+<div   class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg   class="  order-1 w-[9px] h-[13px] ml-10 ">
+    <use  xlink:href="./assets/icons/icon.svg#triangle"></use>
+  </svg>
+ 
+  <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+  Editor</div>
+</div>
+<svg
+
+class="h-[2.5rem] w-[2.5rem] p-2  "
+
+>
+<use xlink:href="/assets/icons/icon.svg#document"></use>
+</svg>
+
+
+</div>
+<div  id="inviteButton" class="relative">
+<div   class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg   class="  order-1 w-[9px] h-[13px] ml-10 ">
+    <use  xlink:href="./assets/icons/icon.svg#triangle"></use>
+  </svg>
+ 
+  <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+  Invite Memeber</div>
+</div>
+<svg
+
+class="h-[2.5rem] w-[2.5rem] p-2  "
+
+>
+<use xlink:href="/assets/icons/icon.svg#document"></use>
+</svg>
+
+
+</div>
   
-  <i id="inviteButton" class=" text-white text-lg fa-solid fa-envelope-open-text h-[1.5rem] w-[1.25rem]"></i>
  
 </div>
 </div>`;
@@ -112,6 +192,16 @@ export function InsertNavbar() {
   navcomp.innerHTML = NavBar;
 
   body.insertBefore(navcomp, body.firstChild);
+  var url = window.location.pathname;
+
+  // Extracting just the word "dashboard"
+  var urlaction = url.split("/")[1];
+
+  console.log("dashboard dev", url);
+
+  document.getElementById(urlaction).classList.add("bg-[#718BD3]");
+  document.getElementById(urlaction).classList.add("shadow-lg");
+  document.getElementById(urlaction).classList.add("rounded-[10px]");
 }
 
 export function NavbarHoverFunctionality() {

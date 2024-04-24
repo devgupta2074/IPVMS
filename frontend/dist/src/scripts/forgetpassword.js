@@ -12,13 +12,11 @@ import {
 import { redirect, showNextPolicy } from "../utils/utils.js";
 const emailerror = document.getElementById("emailerror");
 async function ForgetPassword() {
+  emailerror.classList.add("hidden");
   let email = document.getElementById("email").value;
   if (email.length == 0) {
     emailerror.innerHTML = "Please enter your email address";
     emailerror.classList.remove("hidden");
-    setTimeout(() => {
-      emailerror.classList.add("hidden");
-    }, 3000);
   } else {
     const contenttype = HEADERS_CONSTANTS.CONTENT_TYPE;
     console.log(

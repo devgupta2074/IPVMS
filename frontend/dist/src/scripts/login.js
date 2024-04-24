@@ -44,7 +44,7 @@ async function SignIn() {
     // console.log(response, "he");
     await LoginApiRequest(email, password)
       .then((data) => {
-        console.log(data);
+        console.log(data, "dev");
         siginbutton.removeAttribute("disabled", "");
         siginbutton.setAttribute("enabled", "");
         siginbutton.innerHTML = `Sign In  `;
@@ -71,7 +71,7 @@ async function SignIn() {
             passworderror.classList.remove("opacity-0");
             setTimeout(() => {
               passworderror.classList.add("opacity-0");
-            }, 3000);
+            }, 6000);
           }
         }
       })

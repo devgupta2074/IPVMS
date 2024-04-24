@@ -37,7 +37,10 @@ async function ForgetPassword() {
 
           redirect(VIEWS_CONSTANTS.EMAIL_SENT + `?email=${email}`);
         } else {
-          if (data.message === LOGIN_CONSTANTS.USER_NOT_FOUND) {
+          if (
+            data.message === LOGIN_CONSTANTS.USER_NOT_FOUND ||
+            data.message === "Cant generate token , some error with jwt key"
+          ) {
             console.log(data.message, TOAST_COLORS.ERROR, TOAST_ICONS.ERROR);
             emailerror.innerHTML = "Please enter a valid email address";
             emailerror.classList.remove("hidden");

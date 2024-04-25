@@ -28,7 +28,8 @@ async function ForgetPassword() {
     await ForgetPasswordApiRequest(email)
       .then((data) => {
         // Handle the response from the backend
-        console.log(data);
+        console.log(data, "hello");
+        emailerror.classList.add("hidden");
 
         if (data.success) {
           console.log(data);
@@ -36,19 +37,16 @@ async function ForgetPassword() {
 
           redirect(VIEWS_CONSTANTS.EMAIL_SENT + `?email=${email}`);
         } else {
-          if (data.message === LOGIN_CONSTANTS.USER_NOT_FOUND) {
+          if (
+            data.message === LOGIN_CONSTANTS.USER_NOT_FOUND ||
+            data.message === "Cant generate token , some error with jwt key"
+          ) {
             console.log(data.message, TOAST_COLORS.ERROR, TOAST_ICONS.ERROR);
             emailerror.innerHTML = "Please enter a valid email address";
             emailerror.classList.remove("hidden");
-            setTimeout(() => {
-              emailerror.classList.add("hidden");
-            }, 3000);
           } else {
             emailerror.innerHTML = "Please enter a valid email address";
             emailerror.classList.remove("hidden");
-            setTimeout(() => {
-              emailerror.classList.add("hidden");
-            }, 3000);
           }
         }
       })

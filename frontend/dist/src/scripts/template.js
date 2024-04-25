@@ -4,9 +4,9 @@ const makeForm = () => {
   //extarction logic
 
   const selectElement = (title) => {
-    return `<div class="inline-block relative w-full px-2">
+    return `<div class="inline-block relative w-96 px-2">
             <h1>${title}</h1>
-            <input onchange="handleSubmit()" id=${title} class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
+            <input onchange="handleSubmit()" id=${title} class="appearance-none block w-full bg-white  rounded-md    border-2 border-gray-200 text-gray-700   py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
     </div>`;
   };
   const emailElement = (title) => {

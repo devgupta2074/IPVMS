@@ -99,7 +99,7 @@ async function ResetPassword() {
         // Handle the response from the backend
         console.log(data);
 
-        if (data.success) {
+        if (data?.success) {
           console.log(data);
 
           // window.location.href =

@@ -7,7 +7,7 @@ import { emailValidation, passwordValidation } from "../utils/utils.js";
 //   let password = document.getElementById("password").value;
 
 //   console.log("from webpage", email, password);
-//   const response = await fetch("http://127.0.0.1:3000/api/user/loginUser", {
+//   const response = await fetch("http://127.0.0.1:5001/api/user/loginUser", {
 //     method: "POST",
 //     headers: {
 //       "Content-Type": "application/json",
@@ -43,7 +43,7 @@ async function SignUp() {
     const passwordcheck = passwordValidation(password);
     if (emailcheck.success && passwordcheck.success) {
       const response = await fetch(
-        "http://127.0.0.1:3000/api/user/registerUser",
+        "http://127.0.0.1:5001/api/user/registerUser",
         {
           method: "POST",
           headers: {

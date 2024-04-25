@@ -1,20 +1,59 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
+
+import { InviteApiRequest } from "../api/invitation.js";
+import { fetchCategory } from "../components/CategoryChart.js";
+import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
   ROUTES_CONSTANTS,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
+import { docsstyle } from "../utils/docxstyle.js";
 
 import { redirect } from "../utils/utils.js";
 
 var maxPages = 10;
 var pageSize = 5;
-var currentPage = 1;
+var currentPage = 5;
 var totalItems;
 var title = "";
 // var category = "";
 var siblingCount = 1;
 
+const docxModal = (id) => {
+  return `
+  <div id=${id}  >
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
+    <!-- Background overlay -->
+    <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+
+    <!-- Modal content -->
+    <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+      <div class="absolute top-0 right-0 p-2 ">
+        <button onclick="closeModal(${id})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div id="printThis" class="p-6 pt-0  ">
+        <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+        ${docsstyle}
+        <div class='docx-wrapper' id='docx-wrapper'></div>
+          </div>
+        
+      
+        <a href="#" onclick="closeModal(${id})" class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
+         Close Modal
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  `;
+};
 
 
 const docCard = (index, title, created_by, created_at, id) => {
@@ -23,13 +62,13 @@ const docCard = (index, title, created_by, created_at, id) => {
   return `
   
   <tr
-  class="flex pl-5 justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in"
+  class="flex justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
 >
-  <td class="w-14">${index + 1}</td>
+  <td class="w-9">${index + 1}</td>
   <td class="w-52">${title}</td>
-  <td class="w-28">${created_by}</td>
-  <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
-  <td class="w-28">${created_by}</td>
+  <td class="w-24">${created_by}</td>
+  <td class="w-24">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-24">${created_by}</td>
   <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
   <td class="w-28">${created_by}</td>
   <td class="w-24">
@@ -42,7 +81,7 @@ const docCard = (index, title, created_by, created_at, id) => {
         </svg>
       </button>
 
-      <button>
+      <button onclick="openModal(${id})">
         <svg id="redeye" class="h-6 w-6">
           <use
             xlink:href="/assets/icons/icon.svg#redeye"
@@ -50,13 +89,13 @@ const docCard = (index, title, created_by, created_at, id) => {
         </svg>
       </button>
 
-      <button>
+      <a href="/policydownload/${id}" target="_blank" >
         <svg id="download" class="h-6 w-6">
           <use
             xlink:href="/assets/icons/icon.svg#download"
           ></use>
         </svg>
-      </button>
+      </a>
     </div>
   </td>
 </tr>
@@ -71,7 +110,7 @@ const fetchData = async () => {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:3000/api/file/getRecentPolicies`,
+    `http://localhost:5001/api/file/getRecentPolicies`,
     {
       method: "GET",
       headers: {
@@ -85,31 +124,57 @@ const fetchData = async () => {
       console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "<tr>No data found</tr>";
+        parentElement.innerHTML = "<tr class ='justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white'>No data found</tr>";
       } else {
         // totalItems = data?.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
-        // document.getElementById("main-body").innerHTML = "";
-        data.data.map((item, index) => {
-          // console.log(item);
-          parentElement.innerHTML += docCard(
-            index,
-            item.title || "demo",
-            item.first_name,
-            item.created_at,
-            item.id
-          );
+        document.getElementById("main-body").innerHTML = "";
+        const count = 0 ? true : false;
+        if (count) {
+          parentElement.innerHTML = `
+          <tr class="flex justify-around h-64 bg-white last:rounded-md">
+          <td class = "flex flex-col items-center justify-center gap-6" >
 
-          // document.getElementById("main-body").innerHTML += docxModal(item.id);
-          // document.getElementById(item.id).style.display = "none";
-        });
+          <svg id="empty-table" class="w-[108px] h-[70px]">
+          <use
+            xlink:href="/assets/icons/icon.svg#empty-table"
+          ></use>
+        </svg>
+
+        <div class= "flex flex-col items-center text-[#7C7C7C]">
+        <p>
+        It seems there are no recent policy updates to display at the moment.
+        </p>
+        <p>Stay tuned for any new updates on policy changes.
+        </p>
+        <div>
+          </td>       
+          </tr>
+          
+          `;
+
+        } else {
+          data.data.map((item, index) => {
+            // console.log(item);
+            parentElement.innerHTML += docCard(
+              index,
+              item.title || "demo",
+              item.first_name,
+              item.created_at,
+              item.id
+            );
+
+            document.getElementById("main-body").innerHTML += docxModal(item.id);
+            document.getElementById(item.id).style.display = "none";
+          });
+        }
+
       }
     });
 
   // document.getElementById("loading").style = "display:none";
 };
-
 
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
@@ -122,12 +187,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.addEventListener('click', () => {
       console.log(index);
       window.event.preventDefault();
-      sortTable(index, 0);
+      sortTable(index);
     });
   });
 
 });
 
+InsertNavbar();
 
 let userdata;
 if (localStorage.getItem("token") === null) {
@@ -136,12 +202,20 @@ if (localStorage.getItem("token") === null) {
   const token = localStorage.getItem("token");
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
-    console.log(data);
+    console.log(data, "d");
     userdata = data;
   });
 }
+fetchCategory();
 const signoutbutton = document.getElementById("signout");
 const todashboard = document.getElementById("dashboard");
+
+const inviteButton = document.getElementById("inviteButton");
+console.log("inviteButton");
+const modal = document.getElementById("modal");
+const closeButton = document.getElementById("closeButton");
+const inviteSubmit = document.getElementById("inviteSubmit");
+
 todashboard.addEventListener("click", () => {
   window.location.href = "/dashboard";
 });
@@ -161,42 +235,75 @@ signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
   window.location.href = VIEWS_CONSTANTS.LOGIN;
 });
-let btn = document.querySelector(".logo");
-let sidebar = document.querySelector(".sidebar");
+// let btn = document.querySelector(".logo");
+// let sidebar = document.querySelector(".sidebar");
+console.log(userdata);
 let name = document.getElementById("name");
+let modalname = document.getElementById("modalname");
+let dropdownname = document.getElementById("dropdownname");
+let dropdownemail = document.getElementById("dropdownemail");
+
+console.log(userdata);
+dropdownemail.textContent = userdata.data?.email;
 name.textContent = userdata.data.first_name + " " + userdata.data.last_name;
-btn.addEventListener("click", () => {
-  console.log("click");
-  sidebar.classList.toggle("close");
+dropdownname.textContent =
+  userdata.data.first_name + " " + userdata.data.last_name;
+modalname.innerHTML =
+  userdata.data.first_name +
+  " " +
+  userdata.data.last_name +
+  `  <svg
+  class="w-4 h-4 ml-2"
+  fill="none"
+  stroke="currentColor"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    d="M19 9l-7 7-7-7"
+  ></path>
+</svg>`;
+inviteButton.addEventListener("click", function () {
+  console.log("clicked");
+  modal.style.display = "block";
 });
 
-let arrows = document.querySelectorAll(".arrow");
-for (let i = 0; i < arrows.length; i++) {
-  arrows[i].addEventListener("click", (e) => {
-    let arrowParent = e.target.parentElement.parentElement;
+closeButton.addEventListener("click", function () {
+  modal.style.display = "none";
+});
+async function handleInvite() {
+  const name = document.getElementById("userName").value;
+  const email = document.getElementById("userName").value;
+  console.log(name, email);
+  const res = await InviteApiRequest(email, name);
 
-    arrowParent.classList.toggle("show");
-  });
+  modal.style.display = "none";
 }
+document.getElementById("inviteSubmit").addEventListener("click", function () {
+  handleInvite();
+});
 
+// api call to invite team member
 
 function addTable() {
-
-  const tableDiv = document.getElementById('insert-table');
+  const tableDiv = document.getElementById("insert-table");
 
   // console.log(tableDiv);
 
   tableDiv.innerHTML = `
-  <table class="w-full mx-10 text-left text-sm text-gray-500">
+  <table class="font-roboto w-full mx-10 text-left text-sm text-gray-500">
   <thead
-    class="bg-[#D5DBEB] py-3 text-xs capitalize text-gray-700 flex rounded-t-md"
+    class="bg-[#718BD3] text-[#FFFFFF] text-xs flex rounded-t-md"
   >
-    <tr class="flex pl-5 justify-around w-full">
-      <th scope="col" class="w-14">ID</th>
+    <tr class="flex px-8 justify-between w-full py-3.5">
+      <th  class ="font-medium w-9" scope="col">ID</th>
       <th scope="col" class="w-52">
-        <div class="flex items-center">
+        <div class=" font-medium flex items-center">
           Policy name
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -205,10 +312,10 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Created by
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -217,10 +324,10 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Created at
-          <a href="#" class="sort" name="true">
+          <a  class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -229,10 +336,10 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Approved
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -242,9 +349,9 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class="flex items-center">
+        <div class="font-medium flex items-center">
           Published on
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -254,9 +361,9 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class="flex items-center">
+        <div class=" font-medium flex items-center">
           Published by
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -265,15 +372,11 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-24">Action</th>
+      <th class= 'font-medium w-24' scope="col">Action</th>
     </tr>
   </thead>
   <tbody id="tbody">
-    <tr
-      class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3]"
-    >
-    <td>Things are loading up. We appreciate your patience.</td>
-    </tr>
+  
   </tbody>
 </table>
     `;
@@ -349,3 +452,46 @@ function sortTable(col) {
   });
 }
 
+const fetchAndRenderDoc = async (modalId) => {
+  const response = await fetch(
+    `http://localhost:5001/api/file/getFile/${modalId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data, "response issss");
+      const docData = data.data.data;
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = "";
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = docData;
+    });
+};
+
+window.openModal = async function (modalId) {
+  console.log(modalId, "modal id");
+  document.getElementById(modalId).style.display = "block";
+  document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
+  window.addEventListener("beforeprint", (event) => {
+    console.log("Before print");
+    const contents = document
+      .getElementById(modalId)
+      .getElementsByClassName("docx-wrapper")[0].outerHTML;
+    document.getElementById(modalId).innerHTML = contents;
+  });
+  await fetchAndRenderDoc(modalId);
+};
+
+window.closeModal = function (modalId) {
+  document.getElementById(modalId).style.display = "none";
+  document
+    .getElementsByTagName("body")[0]
+    .classList.remove("overflow-y-hidden");
+};

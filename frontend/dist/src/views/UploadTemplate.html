@@ -186,7 +186,7 @@ function handleUploadHtml(){
     console.log(data);
     const uploadDocx=async()=>{
         const response = await fetch(
-        "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+        "http://localhost:5001/api/file/uploadTemplate",
         {
           method: "POST",
           headers: {

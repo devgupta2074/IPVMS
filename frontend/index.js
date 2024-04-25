@@ -17,6 +17,13 @@ app.get("/login", (req, res) => {
 app.get("/editor", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "modify.html"));
 });
+app.get("/comparisontool", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "comparison.html"));
+});
+
+app.get("/policydownload/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));
+});
 app.get("/letters", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "templatedoc.html"));
 });
@@ -47,6 +54,12 @@ app.get("/document", (req, res) => {
 });
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "index.html"));
+});
+app.get("/invite", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "invitation.html"));
+});
+app.get("/accountsetup", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "account-setup.html"));
 });
 
 // Start the server

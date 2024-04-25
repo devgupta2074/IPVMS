@@ -18,7 +18,7 @@
                           <circle cx="11" cy="11" r="8" class=""></circle>
                           <line x1="21" y1="21" x2="16.65" y2="16.65" class=""></line>
                         </svg>
-                        <input type="name" name="search" class="h-12 w-full cursor-text rounded-md border border-gray-100 bg-gray-100 py-4 pr-40 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Search by name,Category or user" />
+                        <input type="name" name="search" class="h-12 w-full cursor-text rounded-md py-4 pr-40 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Search" />
                       </div>
               
                       <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -172,7 +172,7 @@ return pages;
 const fetchDoc=async(currentPage,pageSize)=>{
 document.getElementById("loading").style="display:block"    
 const response = await fetch(
-  `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
+  `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
   {
     method:"GET",
     headers: {

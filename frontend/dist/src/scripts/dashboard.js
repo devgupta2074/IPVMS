@@ -278,7 +278,7 @@ closeButton.addEventListener("click", function () {
 });
 async function handleInvite() {
   const name = document.getElementById("userName").value;
-  const email = document.getElementById("userName").value;
+  const email = document.getElementById("userEmail").value;
   console.log(name, email);
   const res = await InviteApiRequest(email, name);
 

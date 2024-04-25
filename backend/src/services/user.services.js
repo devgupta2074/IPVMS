@@ -188,22 +188,22 @@ export const sendInvite = async (body) => {
       throw new ConflictError("User email already Exist");
     } else {
       const firstName = name.split(" ")[0];
-      const lastName = name.split(" ")[1];
+      const lastName = name.split(" ")[1] || "";
       const password = generatePassword();
-
-      const mailsuccess = await sendInvitationEmail(email, password);
-      if (mailsuccess) {
-        const hashedPassword = await generateHashPassword(password);
-        const isActive = true;
-        if (hashedPassword) {
-          const newUser = await createUser({
-            firstName,
-            lastName,
-            email,
-            hashedPassword,
-            isActive,
-          });
-          return true;
+      console.log("");
+      const hashedPassword = await generateHashPassword(password);
+      const isActive = true;
+      if (hashedPassword) {
+        const newUser = await createUser({
+          firstName,
+          lastName,
+          email,
+          hashedPassword,
+          isActive,
+        });
+        if (newUser) {
+          const mailsuccess = await sendInvitationEmail(email, password);
+          console.log("mail success");
         }
       }
     }

@@ -23,13 +23,13 @@ var siblingCount = 1;
 const docxModal = (id) => {
   return `
   <div id=${id}  >
-  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 sm:block sm:p-0 ">
     <!-- Background overlay -->
-    <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+    <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity" aria-hidden="true"></div>
 
     <!-- Modal content -->
-    <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
-      <div class="absolute top-0 right-0 p-2 ">
+    <div class="fixed inset-0  w-4/5 h-full pt-12 pb-10 mx-auto my-12 z-50  bg-white rounded-lg shadow-xl  transform transition-all overflow-y-scroll scrollbar">
+      <div class="fixed top-0 right-0 p-2 inline">
         <button onclick="closeModal(${id})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -62,7 +62,7 @@ const docCard = (index, title, created_by, created_at, id) => {
   return `
   
   <tr
-  class="flex justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+  class="flex justify-between w-full px-8 py-3.5 text-[#333333] capitalize bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
 >
   <td class="w-9">${index + 1}</td>
   <td class="w-52">${title}</td>
@@ -104,13 +104,13 @@ const docCard = (index, title, created_by, created_at, id) => {
   //   .toLocaleDateString('en-GB')
 };
 
-const fetchData = async () => {
+const fetchDoc = async (currentPage, pageSize) => {
   // document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:5001/api/file/getRecentPolicies`,
+    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
     {
       method: "GET",
       headers: {
@@ -156,7 +156,7 @@ const fetchData = async () => {
 
         } else {
           data.data.map((item, index) => {
-            // console.log(item);
+            console.log(item);
             parentElement.innerHTML += docCard(
               index,
               item.title || "demo",
@@ -178,7 +178,7 @@ const fetchData = async () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
-  await fetchData();
+  await fetchDoc(currentPage - 1, pageSize);
 
   const sortButtons = document.querySelectorAll('.sort');
 
@@ -296,10 +296,10 @@ function addTable() {
 
   // console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-[69.5rem] mt-5 mb-5 text-left text-sm text-gray-500 bg-white">
-  <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">
+  tableDiv.innerHTML = `<table class="mt-5 mb-5 w-full text-left text-sm text-gray-500 bg-white rounded-t-md rounded-b-md">
+  <thead class=" bg-ship-cove-500 text-xs capitalize text-white flex rounded-t-md">
     <tr class="flex px-8 justify-between w-full py-3.5">
-      <th scope="col" class="class ="font-medium w-9"">ID</th>
+      <th scope="col" class ="font-medium w-9"">ID</th>
       <th scope="col" class="w-52">
         <div class=" font-medium flex items-center">
           Policy name

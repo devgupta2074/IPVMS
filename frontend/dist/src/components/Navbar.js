@@ -81,7 +81,7 @@ class="w-[5rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
 </div>
 
 <div
-  class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon"
+  class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon z-30"
 >
 
 <div  id="dashboard" class="relative">

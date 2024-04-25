@@ -55,24 +55,23 @@ const docxModal = (id) => {
   `;
 };
 
-const docCard = (title, category, created_by, created_at, id) => {
+
+const docCard = (index, title, created_by, created_at, id) => {
   let date = new Date(created_at);
-  date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
   return `
   
   <tr
-  
-  class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in"
+  class="flex justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
 >
-  <td class="w-14">${id}</td>
-  <td class="w-52">${title}</2td>
+  <td class="w-9">${index + 1}</td>
+  <td class="w-52">${title}</td>
+  <td class="w-24">${created_by}</td>
+  <td class="w-24">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-24">${created_by}</td>
+  <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
   <td class="w-28">${created_by}</td>
-  <td class="w-28">${date}</td>
-  <td class="w-28">Admin</td>
-  <td class="w-28">${date}</td>
-  <td class="w-28">${created_by}</td>
-  <td class="w-28">
+  <td class="w-24">
     <div class="flex gap-1">
       <button>
         <svg id="greenpen" class="h-6 w-4">
@@ -105,13 +104,13 @@ const docCard = (title, category, created_by, created_at, id) => {
   //   .toLocaleDateString('en-GB')
 };
 
-const fetchDoc = async (currentPage, pageSize) => {
+const fetchData = async () => {
   // document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+    `http://localhost:5001/api/file/getRecentPolicies`,
     {
       method: "GET",
       headers: {
@@ -125,25 +124,52 @@ const fetchDoc = async (currentPage, pageSize) => {
       console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "No data found";
+        parentElement.innerHTML = "<tr class ='justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white'>No data found</tr>";
       } else {
-        totalItems = data?.data[0]?.total_count;
+        // totalItems = data?.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
-        data.data.map((item) => {
-          console.log(item);
-          parentElement.innerHTML += docCard(
-            item.title || "demo",
-            item.category_name,
-            item.created_by,
-            item.created_at,
-            item.id
-          );
+        const count = 0 ? true : false;
+        if (count) {
+          parentElement.innerHTML = `
+          <tr class="flex justify-around h-64 bg-white last:rounded-md">
+          <td class = "flex flex-col items-center justify-center gap-6" >
 
-          document.getElementById("main-body").innerHTML += docxModal(item.id);
-          document.getElementById(item.id).style.display = "none";
-        });
+          <svg id="empty-table" class="w-[108px] h-[70px]">
+          <use
+            xlink:href="/assets/icons/icon.svg#empty-table"
+          ></use>
+        </svg>
+
+        <div class= "flex flex-col items-center text-[#7C7C7C]">
+        <p>
+        It seems there are no recent policy updates to display at the moment.
+        </p>
+        <p>Stay tuned for any new updates on policy changes.
+        </p>
+        <div>
+          </td>       
+          </tr>
+          
+          `;
+
+        } else {
+          data.data.map((item, index) => {
+            // console.log(item);
+            parentElement.innerHTML += docCard(
+              index,
+              item.title || "demo",
+              item.first_name,
+              item.created_at,
+              item.id
+            );
+
+            document.getElementById("main-body").innerHTML += docxModal(item.id);
+            document.getElementById(item.id).style.display = "none";
+          });
+        }
+
       }
     });
 
@@ -152,15 +178,19 @@ const fetchDoc = async (currentPage, pageSize) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
-  await fetchDoc(currentPage - 1, pageSize);
-  const sortButtons = document.querySelectorAll(".sort");
+  await fetchData();
+
+  const sortButtons = document.querySelectorAll('.sort');
+
   sortButtons.forEach((e, index) => {
-    e.addEventListener("click", () => {
+
+    e.addEventListener('click', () => {
       console.log(index);
       window.event.preventDefault();
-      sortTable(index, 0);
+      sortTable(index);
     });
   });
+
 });
 
 InsertNavbar();
@@ -268,12 +298,12 @@ function addTable() {
 
   tableDiv.innerHTML = `<table class="w-[69.5rem] mt-5 mb-5 text-left text-sm text-gray-500 bg-white">
   <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">
-    <tr class="flex justify-around w-full">
-      <th scope="col" class="w-14">ID</th>
+    <tr class="flex px-8 justify-between w-full py-3.5">
+      <th scope="col" class="class ="font-medium w-9"">ID</th>
       <th scope="col" class="w-52">
-        <div class="flex items-center">
+        <div class=" font-medium flex items-center">
           Policy name
-          <a href="#"class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -282,10 +312,10 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Created by
-          <a href="#" class="sort" name="true">
+          <a class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -294,8 +324,8 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Created at
           <a  class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
@@ -306,8 +336,8 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
+      <th scope="col" class="w-24">
+        <div class="font-medium flex items-center">
           Approved
           <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
@@ -319,7 +349,7 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class="flex items-center">
+        <div class="font-medium flex items-center">
           Published on
           <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
@@ -331,9 +361,9 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class="flex items-center">
+        <div class=" font-medium flex items-center">
           Published by
-          <a href="#" >
+          <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -342,7 +372,7 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28">Action</th>
+      <th class= 'font-medium w-24' scope="col">Action</th>
     </tr>
   </thead>
   <tbody id="tbody">
@@ -366,11 +396,13 @@ function sortTable(col) {
   const tbody = document.getElementById("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
 
-  const sort_th = document.querySelectorAll(".sort");
-  const order = sort_th[col].getAttribute("name") === "true" ? true : false;
+  const sort_th = document.querySelectorAll('.sort');
+  const order = sort_th[col].getAttribute('name') === 'true' ? true : false;
   // console.log(order, col);
 
+
   if (order) {
+
     sort_th[col].setAttribute("name", `${!order}`);
 
     if (col === 2 || col === 4) {
@@ -390,6 +422,7 @@ function sortTable(col) {
       });
     }
   } else {
+
     sort_th[col].setAttribute("name", `${!order}`);
 
     if (col === 2 || col === 4) {

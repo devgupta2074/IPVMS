@@ -43,7 +43,7 @@
                 </div>
                 <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
                   <button  class="rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-700 outline-none hover:opacity-80 focus:ring">Reset</button>
-                  <button type="button" onclick="handleFilter()" class="rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none hover:opacity-80 focus:ring">Search</button>
+                  <button type="button" id="filter" class="rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none hover:opacity-80 focus:ring">Search</button>
                 </div>
               </form>
             </div>
@@ -137,7 +137,8 @@
       </div>
         <a
           href="#"
-          onclick="handlePrevPage()"
+          id="ppage"
+          type="button"
           class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
         >
           <span class="sr-only">Previous</span>
@@ -157,9 +158,10 @@
         <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
         
         <div class="flex" id="pagination-controller"></div>
-        <a
+        <button
           href="#"
-          onclick="handleNextPage()"
+          id="npage"
+          type="button"
           class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
         >
           <span class="sr-only">Next</span>
@@ -175,7 +177,7 @@
               clip-rule="evenodd"
             />
           </svg>
-        </a>
+        </button>
         
       </nav>
     </section>

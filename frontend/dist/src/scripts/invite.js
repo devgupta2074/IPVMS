@@ -1,5 +1,3 @@
-import { InviteApiRequest } from "../api/invitation.js";
-
 const inviteButton = document.getElementById("inviteButton");
 const modal = document.getElementById("modal");
 const closeButton = document.getElementById("closeButton");
@@ -17,11 +15,10 @@ document.getElementById("inviteSubmit").addEventListener("click", function () {
 });
 
 async function handleInvite() {
-  const name = document.getElementById("userName").value;
-  const email = document.getElementById("userName").value;
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
   console.log(name, email);
-  const res = await InviteApiRequest(email, name);
-
+  // const res = await InviteApiRequest(email, name);
   modal.style.display = "none";
 }
 // api call to invite team member

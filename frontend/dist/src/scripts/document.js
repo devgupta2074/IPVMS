@@ -1074,3 +1074,7 @@ signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
   window.location.href = VIEWS_CONSTANTS.LOGIN;
 });
+
+document.getElementById("npage").addEventListener("click", handleNextPage);
+document.getElementById("ppage").addEventListener("click", handlePrevPage);
+document.getElementById("filter").addEventListener("click", handleFilter);

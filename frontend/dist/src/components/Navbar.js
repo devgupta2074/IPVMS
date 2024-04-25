@@ -198,10 +198,11 @@ export function InsertNavbar() {
   var urlaction = url.split("/")[1];
 
   console.log("dashboard dev", url);
-
-  document.getElementById(urlaction).classList.add("bg-[#718BD3]");
-  document.getElementById(urlaction).classList.add("shadow-lg");
-  document.getElementById(urlaction).classList.add("rounded-[10px]");
+  if (document.getElementById(urlaction)) {
+    document.getElementById(urlaction).classList.add("bg-[#718BD3]");
+    document.getElementById(urlaction).classList.add("shadow-lg");
+    document.getElementById(urlaction).classList.add("rounded-[10px]");
+  }
 }
 
 export function NavbarHoverFunctionality() {

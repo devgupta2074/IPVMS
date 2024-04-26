@@ -24,8 +24,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         const docData = data.data.data;
         document.getElementById("docx-wrapper").innerHTML = "";
         document.getElementById("docx-wrapper").innerHTML = docData;
-
-        window.print();
+        setTimeout(() => {
+          window.print();
+        }, 1000);
       });
   };
   fetchAndRenderDoc(id);

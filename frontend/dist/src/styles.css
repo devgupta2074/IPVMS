@@ -687,6 +687,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(14 165 233 / var(--tw-bg-opacity));
 }
+.border-dodger-blue-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(54 137 245 / var(--tw-border-opacity));
+}
 .mb-2 {
   margin-bottom: 0.5rem;
 }

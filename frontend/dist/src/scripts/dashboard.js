@@ -55,7 +55,6 @@ const docxModal = (id) => {
   `;
 };
 
-
 const docCard = (index, title, created_by, created_at, id) => {
   let date = new Date(created_at);
   // console.log(created_at);
@@ -67,9 +66,9 @@ const docCard = (index, title, created_by, created_at, id) => {
   <td class="w-9">${index + 1}</td>
   <td class="w-52">${title}</td>
   <td class="w-24">${created_by}</td>
-  <td class="w-24">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-24">${date.toLocaleDateString("en-GB")}</td>
   <td class="w-24">${created_by}</td>
-  <td class="w-28">${date.toLocaleDateString('en-GB')}</td>
+  <td class="w-28">${date.toLocaleDateString("en-GB")}</td>
   <td class="w-28">${created_by}</td>
   <td class="w-24">
     <div class="flex gap-1">
@@ -124,7 +123,8 @@ const fetchDoc = async (currentPage, pageSize) => {
       console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML = "<tr class ='justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white'>No data found</tr>";
+        parentElement.innerHTML =
+          "<tr class ='justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white'>No data found</tr>";
       } else {
         // totalItems = data?.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
@@ -153,7 +153,6 @@ const fetchDoc = async (currentPage, pageSize) => {
           </tr>
           
           `;
-
         } else {
           data.data.map((item, index) => {
             console.log(item);
@@ -165,11 +164,12 @@ const fetchDoc = async (currentPage, pageSize) => {
               item.id
             );
 
-            document.getElementById("main-body").innerHTML += docxModal(item.id);
+            document.getElementById("main-body").innerHTML += docxModal(
+              item.id
+            );
             document.getElementById(item.id).style.display = "none";
           });
         }
-
       }
     });
 
@@ -180,17 +180,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   addTable();
   await fetchDoc(currentPage - 1, pageSize);
 
-  const sortButtons = document.querySelectorAll('.sort');
+  const sortButtons = document.querySelectorAll(".sort");
 
   sortButtons.forEach((e, index) => {
-
-    e.addEventListener('click', () => {
+    e.addEventListener("click", () => {
       console.log(index);
       window.event.preventDefault();
       sortTable(index);
     });
   });
-
 });
 
 InsertNavbar();
@@ -396,13 +394,11 @@ function sortTable(col) {
   const tbody = document.getElementById("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
 
-  const sort_th = document.querySelectorAll('.sort');
-  const order = sort_th[col].getAttribute('name') === 'true' ? true : false;
+  const sort_th = document.querySelectorAll(".sort");
+  const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
 
-
   if (order) {
-
     sort_th[col].setAttribute("name", `${!order}`);
 
     if (col === 2 || col === 4) {
@@ -422,7 +418,6 @@ function sortTable(col) {
       });
     }
   } else {
-
     sort_th[col].setAttribute("name", `${!order}`);
 
     if (col === 2 || col === 4) {

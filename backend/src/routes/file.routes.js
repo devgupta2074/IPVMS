@@ -9,6 +9,7 @@ import {
   saveAsPdf,
   gettemplates,
   getRecentPolicies,
+  getpaginateddocuments,
 } from "../controllers/file/file.Controller.js";
 
 import {
@@ -25,7 +26,7 @@ fileRouter.get("/document", getdocument);
 fileRouter.post("/updateDocument/:id", editDocument);
 fileRouter.post("/saveAsPdf", saveAsPdf);
 fileRouter.get("/getTemplate", gettemplates);
-
-fileRouter.get('/getRecentPolicies', getRecentPolicies);
+fileRouter.get("/getpaginateddocuments", getpaginateddocuments);
+fileRouter.get("/getRecentPolicies", getRecentPolicies);
 
 export default fileRouter;

@@ -266,7 +266,7 @@ function addTable() {
 
   // console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-[69.5rem] mt-5 mb-5 text-left text-sm text-gray-500 bg-white">
+  tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white">
   <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">
     <tr class="flex justify-around w-full">
       <th scope="col" class="w-14">ID</th>

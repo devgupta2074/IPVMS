@@ -6,7 +6,7 @@ import {
   uploadTemplate,
   getdocument,
   editDocument,
-  saveAsPdf,
+
   gettemplates,
   getpaginateddocuments,
 } from "../controllers/file/file.Controller.js";
@@ -23,7 +23,7 @@ fileRouter.post("/uploadTemplate", uploadTemplateMiddleware, uploadTemplate);
 fileRouter.get("/getTemplateById/:id", getTemplateById);
 fileRouter.get("/document", getdocument);
 fileRouter.post("/updateDocument/:id", editDocument);
-fileRouter.post("/saveAsPdf", saveAsPdf);
+// fileRouter.post("/saveAsPdf", saveAsPdf);
 fileRouter.get("/getTemplate", gettemplates);
 
 fileRouter.get('/getpaginateddocuments', getpaginateddocuments);

@@ -24,27 +24,27 @@
   
     <!--css file-->
  
-    <div class="bg-zircon-50 h-full mt-14  ml-[5rem] w-[73.5rem] pb-7 mb-4 rounded-lg ">
-      <div class="flex flex-col gap-10 m-3 ml-8  ">
+    <div class="bg-zircon-50 h-full mt-14  ml-[5rem] w-[95%] p-12 rounded-lg ">
+      <div class="flex flex-col gap-10 ">
         <div
-          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-3xl font-roboto font-medium pt-10"
+          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-3xl font-roboto font-medium"
         >
           Welcome&nbsp;<span id="name"></span> 
         </div>
-        <div class="bg-white h-1/4 w-full p-2 rounded-lg shadow-lg">
-          <div class="flex border-b-2 pt-2 pb-2">
-            <div class="flex-1 font-roboto font-semibold text-xl">Policies</div>
-            <div
+        <div class="bg-white w-full px-4 rounded-lg ">
+          <div class="flex border-b-2 py-4">
+            <h2 class="flex-1 font-roboto font-semibold text-xl">Policies</h2>
+            <a href="#"
               class="font-roboto text-sm text-dodger-blue-500 font-medium flex gap-3 items-center justify-center"
             >
               View All
               <svg class="h-6 w-6 mt-2">
                 <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
               </svg>
-            </div>
+            </a>
           </div>
-          <div class="flex flex-row h-64">
-            <div class="relative -z-0 p-2">
+          <div class="flex justify-between p-5 items-center gap-8">
+            <div class="relative -z-0">
               <canvas width="250" height="250" id="myChart"></canvas>   
               <div class="justify-center text-center absolute top-[34%] left-[39%] ">
                 <p id="charttotal" class="font-roboto font-bold text-chicago-700 text-[2.5rem]"></p>
@@ -52,25 +52,20 @@
  
               </div>
             </div>
-           
-            <div id="category-display" class="grid grid-cols-3 m-4  p-5 ml-14 gap-2  overflow-y-scroll scrollbar">
-              
+            <div id="category-display" class="grid grid-cols-4 gap-x-[26px] gap-y-[41px]">
               </div> 
-
-           
-    
             </div>
           </div>
         </div>
         <div
-        class="p-4 mt-2 mx-4 flex flex-col justify-center items-center gap-14 w-full h-full"
+        class="flex flex-col justify-center items-center gap-14 w-full mt-[24px]"
       >
-        <div class="flex flex-row w-full gap-6 h-full ">
+        <div class="flex justify-between w-full gap-6 h-full ">
           <div
-          class="w-[34rem] h-80 flex justify-center items-center pt-4"
+          class="flex justify-center basis-1/2 items-center pt-4"
         >
             <div
-              class=" h-80  w-full p-4 bg-white rounded-lg shadow sm:p-8  "
+              class="w-full p-4 bg-white rounded-lg sm:p-8  "
             >
               <div class="flex items-center justify-between mb-4">
                 <h5
@@ -94,11 +89,11 @@
               <hr class="h-[1px] border-t-0 bg-[#ECEEF3]" />
               <div class="flow-root">
                 <ul role >
-                <ul role="list">
-                  <li class="pt-2">
+                <ul role="list" class="flex flex-col justify-between">
+                  <li class="mt-4">
                     <div
                       role="button"
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg "
                     >
                       <div
                         class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full "
@@ -120,16 +115,16 @@
                       </div>
                       <div class="w-20 flex justify-center items-center">
                         <div
-                          class="w-20 flex justify-center items-center box-border bg-[#E0E0E0] border-1 border-[#B2B0B0] text-[#575757] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#B2B0B0] hover:border-[#575757] hover:text-white"
+                          class="w-20 flex justify-center items-center box-border bg-[#E0E0E0] border-1 border-[#B2B0B0] text-[#575757] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#B2B0B0] hover:border-[#575757] hover:text-white"
                         >
                           Draft
                         </div>
                       </div>
                     </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2"
+                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
                       <div
@@ -148,18 +143,18 @@
                         </p>
                         <p class=" ">Increment letter</p>
                       </div>
-                      <div class="w-20 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <div
-                          class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          class="bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
                         >
                           Pending
                         </div>
                       </div>
                     </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg  pt-2"
+                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
                       <div
@@ -180,18 +175,18 @@
                           Increment letter
                         </p>
                       </div>
-                      <div class="w-20 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <div
-                          class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          class="bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
                         >
                           Pending
                         </div>
                       </div>
                     </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
                       <div
@@ -212,9 +207,9 @@
                           Increment letter
                         </p>
                       </div>
-                      <div class="w-20 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <div
-                          class="w-20 flex justify-center items-center box-border bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold me-2 px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
+                          class="bg-[#FFF0E1] border-1 border-[#F47960] text-[#F47960] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white"
                         >
                           Pending
                         </div>
@@ -226,10 +221,10 @@
             </div>
           </div>
           <div
-          class="w-[34rem] h-80 flex justify-center items-center pt-4"
+          class="flex justify-between items-center pt-4 basis-1/2"
         >
             <div
-              class="w-full  h-80 p-4 bg-white rounded-lg shadow sm:p-8  "
+              class="w-full p-4 bg-white rounded-lg sm:p-8  "
             >
               <div class="flex items-center justify-between mb-4">
                 <h5 class="text-lg font-semibold leading-none tex-[#333333]">
@@ -249,91 +244,91 @@
                 </div>
               </div>
               <hr class="h-[1px] border-t-0 bg-[#ECEEF3]" />
-              <div class="flow-root max-h-56">
+              <div class="flow-root">
                 <ul role="list ">
-                  <li class="pt-2">
+                  <li class="mt-4">
                     <div
                       role="button"
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg  pt-2  "
+                      class="flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                     >
-                      <div class="flex-1 min-w-0  w-44">
+                      <div>
                         <p
                           class="text-base font-medium text-[#333333] truncate"
                         >
                           Sabatical Leave Policy
                         </p>
-                        <p
+                        <span
                           class="text-sm text-gray-500 truncate "
                         >
                           Sent by Alena Gouse
-                        </p>
+                        </span>
                       </div>
-                      <div class="w-12 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <button
-                          class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 "
                         >
                           View
                         </button>
                       </div>
                     </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      class="flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
-                      <div class="flex-1 min-w-0  w-44">
+                      <div>
                         <p
                           class="text-sm font-medium text-gray-900 truncate "
                         >
                           Emergency Leave Policy
                         </p>
-                        <p
+                        <span
                           class="text-sm text-gray-500 truncate "
                         >
                           Sent by Alena Gouse
-                        </p>
+                        </span>
                       </div>
-                      <div class="w-12 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <button
-                          class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          class="text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 "
                         >
                           View
                         </button>
                       </div>
                     </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      class="flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
-                      <div class="flex-1 min-w-0  w-44">
+                      <div>
                         <p
                           class="text-sm font-medium text-gray-900 truncate "
                         >
                           Emergency Leave Policy
                         </p>
-                        <p
+                        <span
                           class="text-sm text-gray-500 truncate "
                         >
                           Sent by Alena Gouse
-                        </p>
+                        </span>
                       </div>
-                      <div class="w-12 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <button
-                          class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          class="text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 "
                         >
                           View
                         </button>
                       </div>
                   </li>
-                  <li class="pt-2">
+                  <li class="mt-6">
                     <div
-                      class="flex items-center transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg pt-2 "
+                      class="flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg"
                       role="button"
                     >
-                      <div class="flex-1 min-w-0  w-44">
+                      <div>
                         <p
                           class="text-sm font-medium text-gray-900 truncate "
                         >
@@ -345,9 +340,9 @@
                           Sent by Alena Gouse
                         </p>
                       </div>
-                      <div class="w-12 flex justify-center items-center">
+                      <div class="flex justify-center items-center">
                         <button
-                          class="w-12 flex justify-center items-center box-border bg-white  border border-[#DBDDDD] rounded-md text-[#6C7373] text-xs font-semibold me-2 px-4 py-1  transition-colors duration-300 "
+                          class="text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 "
                         >
                           View
                         </button>
@@ -360,8 +355,8 @@
         </div>
    
       </div>
-      <div class="h-full w-full"   id="main-body"></div>
-      <section  class="mt-5 pl-12 pr-20">
+      <div class="w-full"   id="main-body"></div>
+      <section  class="mt-16">
         <div class="font-roboto font-semibold text-mineshaft-900 text-2xl">Recent Policy Updates</div>
         <div class="" id="insert-table"></div>
       </section>

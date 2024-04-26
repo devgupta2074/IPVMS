@@ -1,6 +1,6 @@
 import { pool } from "../../core/database/db.js";
 import * as fileService from "../../services/file.services.js";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 import path from "path";
 import { sendLetterEmail } from "../../core/Email/sendEmail.js";
 import { getPagination } from "../../utils/getPagination.js";
@@ -226,47 +226,47 @@ RETURNING *
   }
 };
 
-export const saveAsPdf = async (req, res) => {
-  const { htmlData } = req.body;
+// export const saveAsPdf = async (req, res) => {
+//   const { htmlData } = req.body;
 
-  if (!htmlData) {
-    return res
-      .status(400)
-      .json({ message: "Invalid syntax error", success: false });
-  }
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+//   if (!htmlData) {
+//     return res
+//       .status(400)
+//       .json({ message: "Invalid syntax error", success: false });
+//   }
+//   const browser = await puppeteer.launch({ headless: true });
+//   const page = await browser.newPage();
 
-  await page.setContent(htmlData, {
-    waitUntil: "domcontentloaded",
-  });
+//   await page.setContent(htmlData, {
+//     waitUntil: "domcontentloaded",
+//   });
 
-  const pdfBuffer = await page.pdf({
-    margin: {
-      top: 20.15 * 1.33,
-      right: 59.15 * 1.33,
-      bottom: 72 * 1.33,
-      left: 72 * 1.33,
-    },
-    format: "A4",
-    height: 2500,
-  });
+//   const pdfBuffer = await page.pdf({
+//     margin: {
+//       top: 20.15 * 1.33,
+//       right: 59.15 * 1.33,
+//       bottom: 72 * 1.33,
+//       left: 72 * 1.33,
+//     },
+//     format: "A4",
+//     height: 2500,
+//   });
 
-  await page.pdf({
-    path: `${__dirname}/my-fance-invoice.pdf`,
-    displayHeaderFooter: true,
-    format: "A4",
-    footerTemplate:
-      "<div><div class='pageNumber'></div>1 of 2<div>/</div><div class='totalPages'></div></div>",
-  });
-  await browser.close();
-  sendLetterEmail(pdfBuffer, "tapasviarora2002@gmail.com");
+//   await page.pdf({
+//     path: `${__dirname}/my-fance-invoice.pdf`,
+//     displayHeaderFooter: true,
+//     format: "A4",
+//     footerTemplate:
+//       "<div><div class='pageNumber'></div>1 of 2<div>/</div><div class='totalPages'></div></div>",
+//   });
+//   await browser.close();
+//   sendLetterEmail(pdfBuffer, "tapasviarora2002@gmail.com");
 
-  return res.status(200).json({
-    message: "pdf file saved success email sent success",
-    success: true,
-  });
-};
+//   return res.status(200).json({
+//     message: "pdf file saved success email sent success",
+//     success: true,
+//   });
+// };
 export const getFileById = async (req, res) => {
   let { docId } = req.params;
   console.log(docId);

@@ -1,5 +1,5 @@
 const NavBar = `
-<div
+<header
 class="w-full h-[3.5rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-center justify-end gap-5"
 >
 <div
@@ -64,9 +64,9 @@ class="w-full h-[3.5rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items
   </div>
   <!-- Dropdown menu -->
 </div>
-</div>
-<div
-class="w-[5rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
+</header>
+<aside
+class="w-[5%] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
 >
 <div class="fixed z-100 top-4 left-6 flex text-white gap-3">
   <figure class="">
@@ -81,7 +81,7 @@ class="w-[5rem] z-40 h-full fixed top-0 left-0 p-[1.3125rem] bg-gulf-blue-950"
 </div>
 
 <div
-  class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon z-30"
+  class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon"
 >
 
 <div  id="dashboard" class="relative">
@@ -184,7 +184,7 @@ class="h-[2.5rem] w-[2.5rem] p-2  "
   
  
 </div>
-</div>`;
+</aside>`;
 
 export function InsertNavbar() {
   const body = document.getElementsByTagName("body")[0];

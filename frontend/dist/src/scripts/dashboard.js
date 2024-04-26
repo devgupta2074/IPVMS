@@ -23,13 +23,13 @@ var siblingCount = 1;
 const docxModal = (id) => {
   return `
   <div id=${id}  >
-  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 sm:block sm:p-0 ">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
     <!-- Background overlay -->
-    <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity" aria-hidden="true"></div>
+    <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
 
     <!-- Modal content -->
-    <div class="fixed inset-0  w-4/5 h-full pt-12 pb-10 mx-auto my-12 z-50  bg-white rounded-lg shadow-xl  transform transition-all overflow-y-scroll scrollbar">
-      <div class="fixed top-0 right-0 p-2 inline">
+    <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+      <div class="absolute top-0 right-0 p-2 ">
         <button onclick="closeModal(${id})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -55,22 +55,24 @@ const docxModal = (id) => {
   `;
 };
 
-const docCard = (index, title, created_by, created_at, id) => {
+const docCard = (title, category, created_by, created_at, id) => {
   let date = new Date(created_at);
+  date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
   return `
   
   <tr
-  class="flex justify-between w-full px-8 py-3.5 text-[#333333] capitalize bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+  
+  class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in"
 >
-  <td class="w-9">${index + 1}</td>
-  <td class="w-52">${title}</td>
-  <td class="w-24">${created_by}</td>
-  <td class="w-24">${date.toLocaleDateString("en-GB")}</td>
-  <td class="w-24">${created_by}</td>
-  <td class="w-28">${date.toLocaleDateString("en-GB")}</td>
+  <td class="w-14">${id}</td>
+  <td class="w-52">${title}</2td>
   <td class="w-28">${created_by}</td>
-  <td class="w-24">
+  <td class="w-28">${date}</td>
+  <td class="w-28">Admin</td>
+  <td class="w-28">${date}</td>
+  <td class="w-28">${created_by}</td>
+  <td class="w-28">
     <div class="flex gap-1">
       <button>
         <svg id="greenpen" class="h-6 w-4">
@@ -123,53 +125,25 @@ const fetchDoc = async (currentPage, pageSize) => {
       console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
-        parentElement.innerHTML =
-          "<tr class ='justify-between w-full px-7 py-3.5 text-[#333333] capitalize bg-white'>No data found</tr>";
+        parentElement.innerHTML = "No data found";
       } else {
-        // totalItems = data?.data[0]?.total_count;
+        totalItems = data?.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
-        const count = 0 ? true : false;
-        if (count) {
-          parentElement.innerHTML = `
-          <tr class="flex justify-around h-64 bg-white last:rounded-md">
-          <td class = "flex flex-col items-center justify-center gap-6" >
+        data.data.map((item) => {
+          console.log(item);
+          parentElement.innerHTML += docCard(
+            item.title || "demo",
+            item.category_name,
+            item.created_by,
+            item.created_at,
+            item.id
+          );
 
-          <svg id="empty-table" class="w-[108px] h-[70px]">
-          <use
-            xlink:href="/assets/icons/icon.svg#empty-table"
-          ></use>
-        </svg>
-
-        <div class= "flex flex-col items-center text-[#7C7C7C]">
-        <p>
-        It seems there are no recent policy updates to display at the moment.
-        </p>
-        <p>Stay tuned for any new updates on policy changes.
-        </p>
-        <div>
-          </td>       
-          </tr>
-          
-          `;
-        } else {
-          data.data.map((item, index) => {
-            console.log(item);
-            parentElement.innerHTML += docCard(
-              index,
-              item.title || "demo",
-              item.first_name,
-              item.created_at,
-              item.id
-            );
-
-            document.getElementById("main-body").innerHTML += docxModal(
-              item.id
-            );
-            document.getElementById(item.id).style.display = "none";
-          });
-        }
+          document.getElementById("main-body").innerHTML += docxModal(item.id);
+          document.getElementById(item.id).style.display = "none";
+        });
       }
     });
 
@@ -179,14 +153,12 @@ const fetchDoc = async (currentPage, pageSize) => {
 document.addEventListener("DOMContentLoaded", async () => {
   addTable();
   await fetchDoc(currentPage - 1, pageSize);
-
   const sortButtons = document.querySelectorAll(".sort");
-
   sortButtons.forEach((e, index) => {
     e.addEventListener("click", () => {
       console.log(index);
       window.event.preventDefault();
-      sortTable(index);
+      sortTable(index, 0);
     });
   });
 });
@@ -276,7 +248,7 @@ closeButton.addEventListener("click", function () {
 });
 async function handleInvite() {
   const name = document.getElementById("userName").value;
-  const email = document.getElementById("userEmail").value;
+  const email = document.getElementById("userName").value;
   console.log(name, email);
   const res = await InviteApiRequest(email, name);
 
@@ -294,14 +266,14 @@ function addTable() {
 
   // console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="mt-5 mb-5 w-full text-left text-sm text-gray-500 bg-white rounded-t-md rounded-b-md">
-  <thead class=" bg-ship-cove-500 text-xs capitalize text-white flex rounded-t-md">
-    <tr class="flex px-8 justify-between w-full py-3.5">
-      <th scope="col" class ="font-medium w-9"">ID</th>
+  tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white">
+  <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">
+    <tr class="flex justify-around w-full">
+      <th scope="col" class="w-14">ID</th>
       <th scope="col" class="w-52">
-        <div class=" font-medium flex items-center">
+        <div class="flex items-center">
           Policy name
-          <a class="sort" name="true">
+          <a href="#"class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -310,10 +282,10 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-24">
-        <div class="font-medium flex items-center">
+      <th scope="col" class="w-28">
+        <div class="flex items-center">
           Created by
-          <a class="sort" name="true">
+          <a href="#" class="sort" name="true">
             <svg id="sorticon" class="pl-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -322,8 +294,8 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-24">
-        <div class="font-medium flex items-center">
+      <th scope="col" class="w-28">
+        <div class="flex items-center">
           Created at
           <a  class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
@@ -334,8 +306,8 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-24">
-        <div class="font-medium flex items-center">
+      <th scope="col" class="w-28">
+        <div class="flex items-center">
           Approved
           <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
@@ -347,7 +319,7 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class="font-medium flex items-center">
+        <div class="flex items-center">
           Published on
           <a class="sort" name="true">
             <svg id="greenpen" class="px-2 h-4 w-6">
@@ -359,9 +331,9 @@ function addTable() {
         </div>
       </th>
       <th scope="col" class="w-28">
-        <div class=" font-medium flex items-center">
+        <div class="flex items-center">
           Published by
-          <a class="sort" name="true">
+          <a href="#" >
             <svg id="greenpen" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"
@@ -370,7 +342,7 @@ function addTable() {
           </a>
         </div>
       </th>
-      <th class= 'font-medium w-24' scope="col">Action</th>
+      <th scope="col" class="w-28">Action</th>
     </tr>
   </thead>
   <tbody id="tbody">

@@ -43,7 +43,7 @@ export const getAllUsers = async (req, res, next) => {
     const users = await userService.getAllUserService();
     return res
       .status(200)
-      .json({ success: true, message: "all user are", data: users });
+      .json({ success: true, message: "all users are", data: users });
   } catch (error) {
     next(error);
   }

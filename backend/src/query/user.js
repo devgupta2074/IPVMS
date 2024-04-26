@@ -3,7 +3,7 @@ import { DatabaseError } from "../Error/customError.js";
 export const getUser = async (data) => {
   const { email } = data;
   const query = {
-    text: "SELECT * FROM puser WHERE email=$1",
+    text: "SELECT * FROM user_table WHERE email=$1",
     values: [email],
   };
   try {
@@ -20,7 +20,7 @@ export const createUser = async (userData) => {
 
   try {
     const query = {
-      text: "INSERT INTO puser(first_name,last_name,email,password,is_active) VALUES($1,$2,$3,$4,$5) RETURNING *",
+      text: "INSERT INTO user_table(first_name,last_name,email,password,is_active) VALUES($1,$2,$3,$4,$5) RETURNING *",
       values: [firstName, lastName, email, hashedPassword, true],
     };
     const user = await pool.query(query);
@@ -37,7 +37,7 @@ export const updatedUser = async (userData) => {
 
   try {
     const query = {
-      text: "UPDATE puser SET first_name=$1,last_name=$2,email=$3,password=$4,password_reset=$5 WHERE email=$3 RETURNING *",
+      text: "UPDATE user_table SET first_name=$1,last_name=$2,email=$3,password=$4,password_reset=$5 WHERE email=$3 RETURNING *",
       values: [firstName, lastName, email, hashedPassword, true],
     };
 
@@ -53,7 +53,7 @@ export const updatedUser = async (userData) => {
 export const getAllUser = async () => {
   try {
     const user = await pool.query(
-      "SELECT first_name,last_name,created_at,updated_at,email,id FROM puser"
+      "SELECT first_name,last_name,created_at,updated_at,email,id FROM user_table"
     );
     return user;
   } catch (error) {
@@ -65,7 +65,7 @@ export const updatePassword = async (data) => {
   const { hashedPassword, userId } = data;
   try {
     const user = await pool.query(
-      "UPDATE puser SET password=$1 WHERE id=$2 RETURNING *",
+      "UPDATE user_table SET password=$1 WHERE id=$2 RETURNING *",
       [hashedPassword, userId]
     );
     return user;

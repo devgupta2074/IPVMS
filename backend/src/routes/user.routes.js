@@ -7,6 +7,8 @@ import {
   resetPassword,
   resetPasswordAuth,
   getUserInfo,
+  sendInvite,
+  setupAccount,
 } from "../controllers/user/auth.controller.js";
 
 import {
@@ -36,4 +38,6 @@ userRouter.post(
   resetPasswordAuth
 );
 userRouter.get("/getUserInfo", authorizationMiddeleware, getUserInfo);
+userRouter.post("/sendInvite", sendInvite);
+userRouter.post("/accountsetup", authorizationMiddeleware, setupAccount);
 export default userRouter;

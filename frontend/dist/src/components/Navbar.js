@@ -129,7 +129,7 @@ class="w-full py-5 pl-8  bg-gulf-blue-950 flex items-center justify-end gap-5 co
   </svg>
 </div>
 <div class="flex items-center justify-center gap-5 pr-10">
-  <svg class="h-6 w-6 z-50">
+  <svg class="h-6 w-6 ">
     <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
   </svg>
   <figure class=" ">
@@ -157,18 +157,23 @@ class="w-full py-5 pl-8  bg-gulf-blue-950 flex items-center justify-end gap-5 co
     id="dropdown"
   >
     <div class="px-4 py-3">
-      <span id="dropdownname" class="block text-sm"></span>
-      <span id="dropdownemail" class="block text-sm font-medium text-gray-900 truncate"
-        ></span
-      >
+      <span id="dropdownname" class=" hidden text-sm"></span>
+      <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"
+        ></span>
+        <span  class="block text-sm font-medium  text-boulder-500 truncate"
+        >Hr Admin</span>
     </div>
     <ul class="py-1" aria-labelledby="dropdown">
       <li>
         <a
           href="#"
           id="signout"
-          class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-          >Sign out</a
+          class="text-sm flex flex-row hover:bg-gray-100 text-black gap-2 items-center   px-4 py-2"
+          >
+          <svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M7.36693 10.7338L9.42474 8.67581H3.60634C2.77053 8.67581 2.77053 7.40607 3.60634 7.40607H9.42492L7.36693 5.34826L8.26452 4.45067C8.65792 4.84407 11.3988 7.53649 11.5051 7.72022C11.6544 7.97817 11.6068 8.29105 11.4017 8.49406L8.26452 11.6314L7.36693 10.7338ZM6.748 1.26956V0H2.56122C1.3466 0 0.35498 0.991619 0.35498 2.20624V13.8758C0.35498 15.0904 1.3466 16.0821 2.56122 16.0821H6.74818V14.8125H2.56122C2.04731 14.8125 1.62454 14.3897 1.62454 13.8758V2.20624C1.62454 1.69233 2.04731 1.26956 2.56122 1.26956H6.748Z" fill="black"/>
+</svg>
+<span class="font-roboto  font-medium"> Log Out</span></a
         >
       </li>
     </ul>

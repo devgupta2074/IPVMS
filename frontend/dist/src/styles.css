@@ -617,6 +617,10 @@ video {
   top: 2.5rem;
 }
 
+.text-boulder-500 {
+  --tw-text-opacity: 1;
+  color: rgb(109 109 109 / var(--tw-text-opacity));
+}
 .-right-20 {
   right: -5rem;
 }

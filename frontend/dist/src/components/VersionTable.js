@@ -1,13 +1,16 @@
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(id) {
-  const htmljson = await fetch("http://localhost:5001/api/file/getFile/4", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer " + token,
-    },
-  })
+  const htmljson = await fetch(
+    "http://ipvms-api.exitest.com/api/file/getFile/4",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
@@ -16,7 +19,7 @@ async function ChangeVersion(id) {
       return htmljson;
     });
   const firstv = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -29,12 +32,15 @@ async function ChangeVersion(id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -58,7 +64,7 @@ function openDash(id) {
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {

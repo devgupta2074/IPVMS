@@ -111,7 +111,7 @@ const fetchDoc = async (currentPage, pageSize) => {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+    `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
     {
       method: "GET",
       headers: {
@@ -425,7 +425,7 @@ function sortTable(col) {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

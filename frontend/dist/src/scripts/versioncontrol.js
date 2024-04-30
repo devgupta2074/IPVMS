@@ -312,7 +312,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   const response = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -634,7 +634,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.log(devDiv, "ggg");
 
       const response = await fetch(
-        "http://localhost:5001/api/file/uploadFile",
+        "http://ipvms-api.exitest.com/api/file/uploadFile",
         {
           method: "POST",
           headers: {
@@ -658,7 +658,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
       const response2 = await fetch(
-        "http://localhost:5001/api/file/getFile/4",
+        "http://ipvms-api.exitest.com/api/file/getFile/4",
         {
           method: "GET",
           headers: {
@@ -881,7 +881,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
-        "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+        "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
         {
           method: "POST",
           headers: {
@@ -958,13 +958,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     //   tag.y = v2.imageTags[image].y;
     // }
     // imageLoaded();
-    const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: "Bearer " + token,
-      },
-    })
+    const response2 = await fetch(
+      "http://ipvms-api.exitest.com/api/file/getFile/4",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: "Bearer " + token,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
@@ -999,13 +1002,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(id) {
-  const htmljson = await fetch("http://localhost:5001/api/file/getFile/4", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer " + token,
-    },
-  })
+  const htmljson = await fetch(
+    "http://ipvms-api.exitest.com/api/file/getFile/4",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
@@ -1014,7 +1020,7 @@ async function ChangeVersion(id) {
       return htmljson;
     });
   const firstv = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -1027,12 +1033,15 @@ async function ChangeVersion(id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1056,7 +1065,7 @@ function openDash(id) {
 const fetchVersionsDateWise = async (id) => {
   const y = [];
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {

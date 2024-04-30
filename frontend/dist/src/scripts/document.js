@@ -65,7 +65,7 @@ const fetchCategory = async () => {
   console.log("fetching catehory");
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://localhost:5001/api/categories/getAllCategories`,
+    `http://ipvms-api.exitest.com/api/categories/getAllCategories`,
     {
       method: "GET",
       headers: {
@@ -822,7 +822,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     category = "";
   }
   const response = await fetch(
-    `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
     {
       method: "GET",
       headers: {
@@ -862,7 +862,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -885,7 +885,7 @@ const search = async () => {
   const searchText = document.getElementById("search").value;
   console.log("search func");
   const response = await fetch(
-    "http://localhost:5001/api/globalsearch/search",
+    "http://ipvms-api.exitest.com/api/globalsearch/search",
     {
       method: "POST",
       // mode: "no-cors",
@@ -1052,7 +1052,7 @@ const handleFilter = async () => {
 const signoutbutton = document.getElementById("signout");
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = "http://localhost:5555/login";
+  window.location.href = "http://ipvms.exitest.com/login";
 });
 const todashboard = document.getElementById("dashboard");
 todashboard.addEventListener("click", () => {

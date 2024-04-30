@@ -67,7 +67,15 @@ app.get("/invite", (req, res) => {
 app.get("/accountsetup", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "account-setup.html"));
 });
-
+app.get("/allemployee", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "employees.html"));
+});
+app.get("/users", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "userProfile.html"));
+});
+app.get("/uploadpolicy", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "uploadpolicy.html"));
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

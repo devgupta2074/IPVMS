@@ -75,6 +75,11 @@ const ROUTES_CONSTANTS = {
   GET_USER_INFO: "/api/user/getUserInfo",
   INVITE_USER: "/api/user/sendInvite",
   SETUP_ACCOUNT: "/api/user/accountsetup",
+  GETALLUSERS: "/api/user/getAllUsers",
+  GETUSERS: "/api/user/getUsers",
+  GET_ALL_TEMPLATES: "/api/file/getTemplate",
+  CREATE_POLICY: "/api/file/createPolicy",
+  GET_ALL_CATEGORY: "/api/categories/getAllCategories",
 };
 export const style = `<style>
 .docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

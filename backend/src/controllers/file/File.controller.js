@@ -307,8 +307,9 @@ export const getFileById = async (req, res) => {
 
 export const gettemplates = async (req, res) => {
   const query = req.query;
-  const title = req.query.title;
-  console.log(query);
+  const title = req.query.title || "";
+
+  console.log(query, "query is");
   //  /document?page=1&size=2
   const page = parseInt(query.page);
   const size = parseInt(query.size);
@@ -454,5 +455,34 @@ paginated_data pd;
     return res
       .status(500)
       .json({ message: "Internal server error", error: error, success: false });
+  }
+};
+
+export const createPolicy = async (req, res, next) => {
+  let { htmlText, htmlJson, categoryId, title } = req.body;
+
+  const textBytesSize = Buffer.byteLength(htmlText, "utf8");
+  // middleware
+  if (textBytesSize > 10 * 1024 * 1024) {
+    return res.status(400).json({
+      success: false,
+      message: "File size should be less than 10MB",
+    });
+  }
+  if (htmlText === undefined) {
+    return res
+      .status(400)
+      .json({ success: false, message: "File not uploaded,Invalid input" });
+  }
+
+  try {
+    const doc = await fileService.createPolicy(req.body);
+    return res.status(201).json({
+      success: true,
+      message: "File uploaded",
+      document: doc,
+    });
+  } catch (error) {
+    next(error);
   }
 };

@@ -73,7 +73,7 @@ const docCard = (title, category, created_by, created_at, id) => {
   <td class="w-28">${date}</td>
   <td class="w-28">${created_by}</td>
   <td class="w-28">
-    <div class="flex gap-1">
+    <div class="flex gap-3">
       <button>
         <svg id="greenpen" class="h-6 w-4">
           <use

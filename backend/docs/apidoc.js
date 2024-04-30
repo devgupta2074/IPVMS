@@ -30,11 +30,11 @@ const apiDocumentation = {
   },
   servers: [
     {
-      url: "http://ipvms-api.exitest.com",
+      url: "http://localhost:5001",
       description: "Local Server",
     },
     {
-      url: "http://ipvms-api.exitest.com",
+      url: "http://localhost:5001",
       description: "Production Server",
     },
   ],

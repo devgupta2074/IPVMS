@@ -1,11 +1,17 @@
 import { pool } from "../core/database/db.js";
-export const fileuploadService = async (version_number, doc_id, delta, res) => {
+export const fileuploadService = async (
+  version_number,
+  doc_id,
+  delta,
+  created_by,
+  res
+) => {
   const query = `
-      INSERT INTO document_version(version_number, doc_id, delta)
-      VALUES($1, $2, $3)
+      INSERT INTO document_version(version_number, doc_id, delta, created_by)
+      VALUES($1, $2, $3, $4)
       RETURNING *;
     `;
-  const values = [version_number, doc_id, delta];
+  const values = [version_number, doc_id, delta, created_by];
 
   const result = await pool.query(query, values);
   //   const document = await pool.query(

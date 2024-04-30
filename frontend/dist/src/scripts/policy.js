@@ -111,7 +111,7 @@ const fetchDoc = async (currentPage, pageSize) => {
   //   category = "";
   // }
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
     {
       method: "GET",
       headers: {
@@ -151,7 +151,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await fetchDoc(currentPage - 1, pageSize);
+  // await fetchDoc(currentPage - 1, pageSize);
   const sortButtons = document.querySelectorAll(".sort");
   sortButtons.forEach((e, index) => {
     e.addEventListener("click", () => {
@@ -424,7 +424,7 @@ function sortTable(col) {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

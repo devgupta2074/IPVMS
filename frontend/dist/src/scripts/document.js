@@ -65,7 +65,7 @@ const fetchCategory = async () => {
   console.log("fetching catehory");
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/categories/getAllCategories`,
+    `http://localhost:5001/api/categories/getAllCategories`,
     {
       method: "GET",
       headers: {
@@ -822,7 +822,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     category = "";
   }
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+    `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
     {
       method: "GET",
       headers: {
@@ -862,7 +862,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -885,7 +885,7 @@ const search = async () => {
   const searchText = document.getElementById("search").value;
   console.log("search func");
   const response = await fetch(
-    "http://ipvms-api.exitest.com/api/globalsearch/search",
+    "http://localhost:5001/api/globalsearch/search",
     {
       method: "POST",
       // mode: "no-cors",

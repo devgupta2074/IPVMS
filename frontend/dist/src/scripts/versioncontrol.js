@@ -1,4 +1,16 @@
+import { UserInfoApiRequest } from "../api/dashboard.js";
+import {
+  API_CONSTANTS,
+  ROUTES_CONSTANTS,
+  VIEWS_CONSTANTS,
+} from "../utils/constants.js";
+
+import { redirect } from "../utils/utils.js";
+
 let imagesposition = [];
+let userdata;
+
+let htmljson;
 function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
     if (tagName == "tbody") {
@@ -13,6 +25,60 @@ function isIdInJson(id, json, tagName) {
   }
   return false;
 }
+async function applyChangesFromV2toV1(callback) {
+  // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
+  // console.log(allredhighlightedtags, "allredhighlighted");
+  // if (allredhighlightedtags) {
+  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+  //     allredhighlightedtags[i].classList.remove("redhighlight");
+  //   }
+  // }
+  // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
+
+  // if (allredhighlightedtags) {
+  //   console.log(allredhighlightedtags, "bluehighlight");
+  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+  //     allredhighlightedtags[i].classList.remove("bluehighlight");
+  //   }
+  // }
+  // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
+  // console.log(allredhighlightedtags, "allredhighlighted");
+  // if (allredhighlightedtags) {
+  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+  //     allredhighlightedtags[i].classList.remove("redhighlight");
+  //   }
+  // }
+
+  // for (const image in v2.imageTags) {
+  //   const tag = document.getElementById(v2.imageTags[image].id);
+  //   // tag.src = v2.imageTags[image].src;
+  //   tag.style = v2.imageTags[image].style;
+  //   tag.id = v2.imageTags[image].id;
+  //   tag.width = v2.imageTags[image].width;
+  //   tag.height = v2.imageTags[image].height;
+  //   tag.x = v2.imageTags[image].x;
+  //   tag.y = v2.imageTags[image].y;
+  // }
+  // imageLoaded();
+  const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the backend
+      // console.log(data.data.data);
+      document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+        data.data.data;
+      htmljson = data.data.htmljson;
+    });
+  imageLoaded();
+  callback();
+}
+
 function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
   for (const tagid in v2.newTags) {
     console.log(tagid, "newtags");
@@ -308,11 +374,25 @@ function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
 
 document.addEventListener("DOMContentLoaded", async function () {
   document.getElementById("loading").style = "display:block";
+  if (localStorage.getItem("token") === null) {
+    redirect(VIEWS_CONSTANTS.LOGIN);
+  } else {
+    const token = localStorage.getItem("token");
+    await UserInfoApiRequest(token).then((data) => {
+      // Handle the response from the backend
+      console.log(data, "d");
+      if (data.statusCode == 401) {
+        redirect(VIEWS_CONSTANTS.LOGIN);
+      } else {
+        userdata = data.data;
+      }
+    });
+  }
   localStorage.setItem("container-content-json", null);
 
   let document_version = [];
   const response = await fetch(
-    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
+    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -634,7 +714,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.log(devDiv, "ggg");
 
       const response = await fetch(
-        "http://ipvms-api.exitest.com/api/file/uploadFile",
+        "http://localhost:5001/api/file/uploadFile",
         {
           method: "POST",
           headers: {
@@ -658,7 +738,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
       const response2 = await fetch(
-        "http://ipvms-api.exitest.com/api/file/getFile/4",
+        "http://localhost:5001/api/file/getFile/4",
         {
           method: "GET",
           headers: {
@@ -700,7 +780,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const articles = document.querySelectorAll("article");
       console.log(articles.length, "articcle length");
       if (articles.length > 1) {
-        checkDivSizeBack();
+        // checkDivSizeBack();
         removeEmptyPages();
       }
       handleChanges();
@@ -881,7 +961,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
-        "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+        "http://localhost:5001/api/versioncontrol/createDocumentVersion",
         {
           method: "POST",
           headers: {
@@ -891,6 +971,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             version_number: version,
             doc_id: 4,
             delta: changes,
+            created_by: userdata.id,
           }),
         }
       )
@@ -923,61 +1004,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Function to apply changes from v1 to v2
 
   // Function to apply changes from v2 to v1
-  async function applyChangesFromV2toV1(divElement, v1, v2, firstv) {
-    // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
-    // console.log(allredhighlightedtags, "allredhighlighted");
-    // if (allredhighlightedtags) {
-    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-    //     allredhighlightedtags[i].classList.remove("redhighlight");
-    //   }
-    // }
-    // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
-
-    // if (allredhighlightedtags) {
-    //   console.log(allredhighlightedtags, "bluehighlight");
-    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-    //     allredhighlightedtags[i].classList.remove("bluehighlight");
-    //   }
-    // }
-    // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
-    // console.log(allredhighlightedtags, "allredhighlighted");
-    // if (allredhighlightedtags) {
-    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-    //     allredhighlightedtags[i].classList.remove("redhighlight");
-    //   }
-    // }
-
-    // for (const image in v2.imageTags) {
-    //   const tag = document.getElementById(v2.imageTags[image].id);
-    //   // tag.src = v2.imageTags[image].src;
-    //   tag.style = v2.imageTags[image].style;
-    //   tag.id = v2.imageTags[image].id;
-    //   tag.width = v2.imageTags[image].width;
-    //   tag.height = v2.imageTags[image].height;
-    //   tag.x = v2.imageTags[image].x;
-    //   tag.y = v2.imageTags[image].y;
-    // }
-    // imageLoaded();
-    const response2 = await fetch(
-      "http://ipvms-api.exitest.com/api/file/getFile/4",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: "Bearer " + token,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from the backend
-        // console.log(data.data.data);
-        document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-          data.data.data;
-        htmljson = data.data.htmljson;
-      });
-    imageLoaded();
-  }
 
   // Example usage:
   // Assuming you have divElement, v1, and v2 from previous steps
@@ -986,7 +1012,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   v2tov1.addEventListener("click", function () {
     const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
     const divElement = document.getElementsByClassName("docx-wrapper")[0];
-    applyChangesFromV2toV1(divElement, htmljson, changes);
+    applyChangesFromV2toV1();
     removeemptyimage();
   });
   // const v1tov2 = document.getElementById("v1tov2");
@@ -1002,16 +1028,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(id) {
-  const htmljson = await fetch(
-    "http://ipvms-api.exitest.com/api/file/getFile/4",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: "Bearer " + token,
-      },
-    }
-  )
+  const htmljson = await fetch("http://localhost:5001/api/file/getFile/4", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: "Bearer " + token,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
@@ -1020,7 +1043,7 @@ async function ChangeVersion(id) {
       return htmljson;
     });
   const firstv = await fetch(
-    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
+    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -1033,15 +1056,12 @@ async function ChangeVersion(id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1050,7 +1070,9 @@ async function ChangeVersion(id) {
       const v1 = htmljson;
       const v2 = data[0].delta;
       console.log(divElement, v1, v2, firstv);
-      applyChangesFromV1toV2(divElement, v1, v2, firstv);
+      applyChangesFromV2toV1(function () {
+        applyChangesFromV1toV2(divElement, v1, v2, firstv);
+      });
     });
 }
 function openDash(id) {
@@ -1065,7 +1087,7 @@ function openDash(id) {
 const fetchVersionsDateWise = async (id) => {
   const y = [];
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -1402,7 +1424,9 @@ function checkDivSize() {
       let articleHeight = article.scrollHeight;
       console.log("removearticlewhileloop first");
       removearticlewhileloop(articleHeight, article, i);
-      article.style.height = "842pt";
+      // article.style.height = "842pt";
+      article.clientHeight = 842;
+      article.scrollHeight = 842;
     } else {
       let article = document.getElementsByTagName("article")[i];
       let articleHeight = article.scrollHeight;
@@ -1436,7 +1460,8 @@ function checkDivSize() {
         article.lastChild.remove();
         articleHeight = article.scrollHeight;
         removearticlewhileloop(article, articleHeight, i);
-        article.style.height = "842pt";
+        article.clientHeight = 842;
+        article.scrollHeight = 842;
       }
     }
 

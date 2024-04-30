@@ -96,17 +96,6 @@ app.get("/getVersionbyID", async (req, res) => {
   }
 });
 
-app.get("/documents/count", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT COUNT(*) FROM document");
-    const count = result.rows[0].count;
-    res.json({ count });
-  } catch (error) {
-    console.error("Error executing query", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
 app.use(exceptionHandler);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

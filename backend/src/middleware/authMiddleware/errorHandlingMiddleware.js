@@ -3,6 +3,7 @@ export const exceptionHandler = (error, req, res, next) => {
   const message = error.message;
   const errormessage = error.error;
   const success = error.success;
+  //
   console.log(error);
   // status code null handle
   //   console.log("the status code is", statusCode, error);

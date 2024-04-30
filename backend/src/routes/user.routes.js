@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   getAllUsers,
+  getUsers,
   forgotPassword,
   resetPassword,
   resetPasswordAuth,
@@ -24,6 +25,8 @@ const userRouter = express.Router();
 userRouter.post("/registerUser", registerMiddleware, registerUser);
 userRouter.post("/loginUser", loginMiddleware, loginUser);
 userRouter.get("/getAllUsers", getAllUsers);
+userRouter.get("/getUsers", getUsers);
+
 userRouter.post("/forgotPassword", forgotPassword);
 userRouter.post(
   "/resetPassword/:token",
@@ -38,6 +41,7 @@ userRouter.post(
   resetPasswordAuth
 );
 userRouter.get("/getUserInfo", authorizationMiddeleware, getUserInfo);
+
 userRouter.post("/sendInvite", sendInvite);
 userRouter.post("/accountsetup", authorizationMiddeleware, setupAccount);
 export default userRouter;

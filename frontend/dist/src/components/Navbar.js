@@ -188,10 +188,28 @@ class="h-[2.5rem] w-[2.5rem] p-2  "
 
 export function InsertNavbar() {
   const body = document.getElementsByTagName("body")[0];
-  const navcomp = document.createElement("nav");
+  const navcomp = document.createElement("div");
+  navcomp.id = "navbar-removed";
   navcomp.innerHTML = NavBar;
 
   body.insertBefore(navcomp, body.firstChild);
+  const parentElement = document.getElementsByTagName("body")[0];
+  const toBeDeletedElement = document.getElementById("navbar-removed");
+  console.log(toBeDeletedElement, parentElement, "gggh");
+  // Check if both the parent and to-be-deleted elements exist
+  if (parentElement && toBeDeletedElement) {
+    // Move children of the to-be-deleted element to the parent element
+
+    while (toBeDeletedElement.firstChild) {
+      parentElement.insertBefore(
+        toBeDeletedElement.firstChild,
+        parentElement.firstChild
+      );
+    }
+
+    // Remove the to-be-deleted element
+    parentElement.removeChild(toBeDeletedElement);
+  }
   var url = window.location.pathname;
 
   // Extracting just the word "dashboard"

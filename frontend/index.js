@@ -20,6 +20,9 @@ app.get("/editor", (req, res) => {
 app.get("/comparisontool", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "comparison.html"));
 });
+app.get("/policy", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "policy.html"));
+});
 
 app.get("/policydownload/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));

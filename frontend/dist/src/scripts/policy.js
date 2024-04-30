@@ -1,7 +1,7 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
 
 import { InviteApiRequest } from "../api/invitation.js";
-import { fetchCategory } from "../components/CategoryChart.js";
+
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
@@ -151,7 +151,6 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  addTable();
   await fetchDoc(currentPage - 1, pageSize);
   const sortButtons = document.querySelectorAll(".sort");
   sortButtons.forEach((e, index) => {
@@ -180,7 +179,7 @@ if (localStorage.getItem("token") === null) {
     }
   });
 }
-fetchCategory();
+
 const signoutbutton = document.getElementById("signout");
 const todashboard = document.getElementById("dashboard");
 console.log("inviteButton dashboard", todashboard);

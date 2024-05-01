@@ -1,6 +1,7 @@
 import { pool } from "../../core/database/db.js";
 
 export const globalSearch = async (req, res) => {
+
   try {
 
     const { searchString, category } = req.body;

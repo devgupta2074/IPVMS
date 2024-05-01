@@ -12,6 +12,7 @@ import { apiDocumentation } from "./docs/apidoc.js";
 
 import categoryRouter from "./src/routes/catogery.routes.js";
 
+import { getDocumentCategories } from "./src/controllers/catogery/catogery.controller.js";
 import searchRouter from "./src/routes/globalsearch.routes.js";
 import versionControlRouter from "./src/routes/versioncontrol.routes.js";
 import { exceptionHandler } from "./src/middleware/authMiddleware/errorHandlingMiddleware.js";
@@ -40,38 +41,8 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/file", fileRouter);
 app.use("/api/globalsearch", searchRouter);
 app.use("/api/versioncontrol", versionControlRouter);
-app.get("/documents/count/category", async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT c.category, c.color, c.svg, COUNT(d.id) AS total_documents
-      FROM category c
-      LEFT JOIN document d ON c.id = d.category_id
-      GROUP BY c.category,c.color,c.svg UNION
+app.get("/documents/count/category", getDocumentCategories);
 
-SELECT 
-    'Total',NULL,NULL,
-    COUNT(*) AS total_documents
-FROM 
-    document;`
-    );
-    const count = result.rows;
-    res.json(count);
-  } catch (error) {
-    console.error("Error executing query", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.get("/documents/count", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT COUNT(*) FROM document");
-    const count = result.rows[0].count;
-    res.json({ count });
-  } catch (error) {
-    console.error("Error executing query", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 app.use(exceptionHandler);
 const PORT = process.env.PORT || 3000;

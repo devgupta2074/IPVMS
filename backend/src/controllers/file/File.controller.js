@@ -6,6 +6,8 @@ import { sendLetterEmail } from "../../core/Email/sendEmail.js";
 import { getPagination } from "../../utils/getPagination.js";
 
 const __dirname = path.resolve();
+
+
 export const uploadFile = async (req, res) => {
   let { htmlText, docId, htmljson } = req.body;
 
@@ -49,6 +51,7 @@ export const uploadFile = async (req, res) => {
     });
   }
 };
+
 export const getFile = async (req, res) => {
   let { docId } = req.params;
   console.log(docId);

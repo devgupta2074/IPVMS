@@ -1,11 +1,25 @@
 import express from "express";
 import {
   createDocumentVersion,
-  getVersions,
-} from "../controllers/versioncontrol/document.controller.js";
+  getDocumentVersionsById,
+  getDocumentVersionsDatewise,
+} from "../controllers/document/document.controller.js";
+import {
+  createTemplateVersion,
+  getTemplateVersionsById,
+  getTemplateVersionsDatewise
+} from "../controllers/template/template.controller.js";
 
 const versionControlRouter = express.Router();
 
 versionControlRouter.post("/createDocumentVersion", createDocumentVersion);
-versionControlRouter.get("/getVersions", getVersions);
+versionControlRouter.get("/getDocumentVersionsDatewise", getDocumentVersionsDatewise);
+versionControlRouter.get("/getDocumentVersionsById", getDocumentVersionsById);
+
+
+versionControlRouter.post("/createTemplateVersion", createTemplateVersion);
+versionControlRouter.get("/getTemplateVersionsDatewise", getTemplateVersionsDatewise);
+versionControlRouter.get("/getTemplateVersionsById", getTemplateVersionsById);
+
+
 export default versionControlRouter;

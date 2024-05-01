@@ -62,10 +62,26 @@ export const deleteCategory = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Successfully deleted category",
-      length: deleteCategoryresut.length,
-      data: ''
+      length: deleteCategoryresut.length
     });
 
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getDocumentCategories = async (req, res, next) => {
+
+  try {
+    const getDocumentCategoriesResult = await categoryServices.getdocumentCategoriesService();
+
+    return res.status(200).json({
+      success: true,
+      message: "Document Categories are:",
+      length: getDocumentCategoriesResult.length,
+      data: getDocumentCategoriesResult.rows
+    });
   } catch (error) {
     next(error);
   }

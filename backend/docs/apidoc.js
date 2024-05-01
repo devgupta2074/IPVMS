@@ -12,7 +12,21 @@ import {
   resetPasswordAuth,
 } from "./user.js";
 
-import { createNewCategory, editCategory, getAllCategories, registerCategoryBody } from './category.js';
+import {
+  createNewCategory,
+  deleteCategory,
+  deleteCategoryBody,
+  editCategory,
+  editCategoryBody,
+  getAllCategories,
+  getDocumentCategories,
+  registerCategoryBody
+} from './category.js';
+
+
+
+
+
 const apiDocumentation = {
   openapi: "3.0.1",
   info: {
@@ -36,7 +50,7 @@ const apiDocumentation = {
       description: "Local Server",
     },
     {
-      url: "http://127.0.0.1:5001",
+      url: "http://ipvms-api.exitest.com",
       description: "Production Server",
     },
   ],
@@ -80,6 +94,12 @@ const apiDocumentation = {
     "/api/categories/editCategory": {
       patch: editCategory,
     },
+    "/api/categories/deleteCategory": {
+      patch: deleteCategory
+    },
+    "/documents/count/category": {
+      get: getDocumentCategories
+    }
 
   },
   components: {
@@ -96,7 +116,9 @@ const apiDocumentation = {
       forgotUserBody,
       resetUserBody,
       resetAuthUserBody,
-      registerCategoryBody
+      registerCategoryBody,
+      editCategoryBody,
+      deleteCategoryBody
     },
   },
 };

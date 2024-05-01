@@ -89,6 +89,7 @@ export const loginUserService = async (body) => {
       throw new ValidationError("invalid credentials");
     }
 
+    console.log(process.env.JWT_SECRET);
     const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRY_TIME,
     });

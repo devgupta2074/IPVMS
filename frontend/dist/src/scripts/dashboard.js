@@ -14,7 +14,7 @@ import { redirect } from "../utils/utils.js";
 
 var maxPages = 10;
 var pageSize = 5;
-var currentPage = 5;
+var currentPage = 1;
 var totalItems;
 var title = "";
 // var category = "";

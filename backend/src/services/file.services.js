@@ -99,10 +99,8 @@ export const createPolicy = async (body) => {
 
   try {
     const document = await pool.query(
-
       "INSERT INTO  document   (htmldata,category_id,title,htmljson) VALUES($1,$2,$3,$4) RETURNING *",
       [htmlData, categoryId, title, htmlJson]
-
     );
     return document.rows[0];
   } catch (error) {

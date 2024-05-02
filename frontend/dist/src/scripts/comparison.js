@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   let contentdocument;
   async function renderDocx(file) {
     try {
-      currentDocument = file;
+      const currentDocument = file;
       console.log("ffs");
       if (!currentDocument) {
         const docxOptions = Object.assign(docx.defaultOptions, {

@@ -1,4 +1,4 @@
-export async function renderDocx(file, elementId) {
+async function renderDocx(file, elementId) {
   try {
     console.log("in render docx ");
     const currentDocument = file;

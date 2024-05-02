@@ -616,6 +616,8 @@ const getDocumentCategories = {
         },
     },
 };
+
+
 export {
     createNewCategory,
     registerCategoryBody,

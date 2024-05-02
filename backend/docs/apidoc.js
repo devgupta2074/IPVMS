@@ -9,15 +9,35 @@ import {
   resetPassword,
   resetUserBody,
   resetAuthUserBody,
-  resetPasswordAuth,
+  resetPasswordAuth
 } from "./user.js";
 
 import {
   createNewCategory,
   editCategory,
   getAllCategories,
-  registerCategoryBody,
-} from "./category.js";
+  getDocumentCategories,
+  registerCategoryBody
+} from './category.js';
+
+import {
+  createDocumentVersion,
+  createDocumentVersionBody,
+  getDocumentVersionById,
+  getDocumentVersionsDatewise
+} from "./documents.js";
+
+import {
+  createTemplateVersion,
+  createTemplateVersionBody,
+  getTemplateVersionById,
+  getTemplateVersionsDatewise
+} from "./templates.js";
+
+
+
+
+
 const apiDocumentation = {
   openapi: "3.0.1",
   info: {
@@ -52,6 +72,15 @@ const apiDocumentation = {
     {
       name: "Users",
     },
+    {
+      name: "Category",
+    },
+    {
+      name: "Documents"
+    },
+    {
+      name: 'Templates'
+    }
   ],
   paths: {
     "/api/user/registerUser": {
@@ -81,6 +110,31 @@ const apiDocumentation = {
     "/api/categories/editCategory": {
       patch: editCategory,
     },
+    "/api/categories/deleteCategory": {
+      patch: deleteCategory
+    },
+    "/documents/count/category": {
+      get: getDocumentCategories
+    },
+    "/api/versioncontrol/createDocumentVersion": {
+      post: createDocumentVersion
+    },
+    "/api/versioncontrol/getDocumentVersionsDatewise?docId=": {
+      get: getDocumentVersionsDatewise
+    },
+    "/api/versioncontrol/getDocumentVersionById?id=": {
+      get: getDocumentVersionById
+    },
+    "/api/versioncontrol/createTemplateVersion": {
+      post: createTemplateVersion
+    },
+    "/api/versioncontrol/getTemplateVersionsDatewise?docId=": {
+      get: getTemplateVersionsDatewise
+    },
+    "/api/versioncontrol/getTemplateVersionById?id=": {
+      get: getTemplateVersionById
+    }
+
   },
   components: {
     securitySchemes: {
@@ -97,6 +151,10 @@ const apiDocumentation = {
       resetUserBody,
       resetAuthUserBody,
       registerCategoryBody,
+      editCategoryBody,
+      deleteCategoryBody,
+      createDocumentVersionBody,
+      createTemplateVersionBody
     },
   },
 };

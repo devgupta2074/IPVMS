@@ -1,7 +1,7 @@
-const createNewCategory = {
-    tags: ["Category"],
-    description: "Create a new category in the system",
-    operationId: "createNewCategory",
+const createDocumentVersion = {
+    tags: ["Documents"],
+    description: "Create a new version of Document in the system",
+    operationId: "createDocumentVersion",
     security: [
         {
             bearerAuth: [],
@@ -11,7 +11,7 @@ const createNewCategory = {
         content: {
             "application/json": {
                 schema: {
-                    $ref: "#/components/schemas/registerCategoryBody",
+                    $ref: "#/components/schemas/createDocumentVersionBody",
                 },
             },
         },
@@ -31,258 +31,7 @@ const createNewCategory = {
                             },
                             message: {
                                 type: "string",
-                                example: "Category Registered",
-                            },
-                            data: {
-                                type: "object",
-                                properties: {
-                                    id: {
-                                        type: "number",
-                                        example: "980765",
-                                    },
-                                    category: {
-                                        type: "string",
-                                        example: "IT",
-                                    },
-                                    created_at: {
-                                        type: "string",
-                                        example: "2024-04-16T01:05:55.959Z",
-                                    },
-                                    is_active: {
-                                        type: "boolean",
-                                        example: true,
-                                    },
-                                    svg: {
-                                        type: "string",
-                                        example: null,
-                                    },
-                                    color: {
-                                        type: 'string',
-                                        example: null
-                                    }
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        500: {
-            description: "Internal Server Error",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Error in creating Category",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        409: {
-            description: "Conflict",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Category already Exists",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        400: {
-            description: "bad request",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Category name required",
-                            },
-                        },
-                    }
-                }
-            },
-        }
-    }
-};
-
-
-const registerCategoryBody = {
-    type: "object",
-    properties: {
-        category: {
-            type: "string",
-            example: "IT",
-        },
-    },
-};
-
-const getAllCategories = {
-    tags: ["Category"],
-    description: "Get All Categories in the system",
-    operationId: "getAllCategories",
-    security: [
-        {
-            bearerAuth: [],
-        },
-    ],
-    responses: {
-        200: {
-            description: "Get All Categories Succeess",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: true,
-                            },
-                            message: {
-                                type: "string",
-                                example: "All Categories are :",
-                            },
-                            length: {
-                                type: "number",
-                                example: 8
-
-                            },
-                            data: {
-                                type: "array",
-                                items: {
-                                    type: "object",
-                                    properties: {
-                                        id: {
-                                            type: "number",
-                                            example: "4818",
-                                        },
-                                        category: {
-                                            type: "string",
-                                            example: "IT",
-                                        },
-                                        created_at: {
-                                            type: "string",
-                                            example: "2024-04-16T01:05:55.959Z",
-                                        },
-                                        is_active: {
-                                            type: "boolean",
-                                            example: true,
-                                        },
-                                        svg: {
-                                            type: "string",
-                                            example: '',
-                                        },
-                                        color: {
-                                            type: "sting",
-                                            example: '#0C3D99',
-                                        }
-
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        500: {
-            description: "Internal Server Error",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Internal Server Error",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        404: {
-            description: "Not found",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            message: {
-                                type: "string",
-                                example: "No categories exists.",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    },
-};
-
-const editCategory = {
-
-    tags: ["Category"],
-    description: "Editing name of category.",
-    operationId: "editCategory",
-    security: [
-        {
-            bearerAuth: [],
-        },
-    ],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/editCategoryBody",
-                },
-            },
-        },
-        required: true,
-    },
-    responses: {
-        200: {
-            description: "Editing name of category Success",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: true,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Updated category:",
+                                example: "Document version created:",
                             },
                             length: {
                                 type: "number",
@@ -293,29 +42,159 @@ const editCategory = {
                                 properties: {
                                     id: {
                                         type: "number",
-                                        example: 818,
+                                        example: "980765",
                                     },
-                                    category: {
-                                        type: "string",
-                                        example: "IT",
+                                    version_number: {
+                                        type: "number",
+                                        example: "1.3",
+                                    },
+                                    doc_id: {
+                                        type: "number",
+                                        example: '4'
+                                    },
+                                    delta: {
+                                        type: "json",
+                                        example: `{'hioini': 'ninianolanc'}`
                                     },
                                     created_at: {
                                         type: "string",
                                         example: "2024-04-16T01:05:55.959Z",
                                     },
-                                    is_active: {
-                                        type: "boolean",
-                                        example: true,
+                                    created_by: {
+                                        type: "number",
+                                        example: "3",
                                     },
-                                    svg: {
-                                        type: "string",
-                                        example: "",
-                                    },
-                                    color: {
-                                        type: "string",
-                                        example: "#987hj"
-                                    }
                                 },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        400: {
+            description: "Version creation error",
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            success: {
+                                type: "boolean",
+                                example: false,
+                            },
+                            message: {
+                                type: "string",
+                                example: "version_number or doc_id or delta are missing",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        500: {
+            description: "Internal Server Error",
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            success: {
+                                type: "boolean",
+                                example: false,
+                            },
+                            message: {
+                                type: "string",
+                                example: "Error in Creating Document Versions",
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+};
+
+const createDocumentVersionBody = {
+    type: "object",
+    properties: {
+        version_number: {
+            type: "string",
+            example: '2.2'
+        },
+        doc_id: {
+            type: "string",
+            example: "2"
+        },
+        delta: {
+            type: "json",
+            example: `{"hioini":"ninianolanc"}`
+        },
+        created_by: {
+            type: "string",
+            example: '5'
+        }
+
+    },
+};
+
+const getDocumentVersionsDatewise = {
+    tags: ["Documents"],
+    description: "Get document versions Datewise to show in editor",
+    operationId: "getDocumentVersionsDatewise",
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    parameters: [
+        {
+            name: "docId",
+            in: "query",
+            required: true,
+            schema: {
+                type: "string",
+            },
+            description: "Document id to get all version  details of it",
+        },
+    ],
+    responses: {
+        200: {
+            description: "reset Password Success",
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            success: {
+                                type: "boolean",
+                                example: true,
+                            },
+                            message: {
+                                type: "string",
+                                example: "reset password success",
+                            },
+                            length: {
+                                type: "number",
+                                example: 3
+                            },
+
+                            data: {
+                                type: "array",
+                                items: {
+                                    type: "object",
+                                    properties: {
+                                        date: {
+                                            type: "string",
+                                            example: "2024-04-30T18:30:00.000Z",
+                                        },
+                                        grouped_values: {
+                                            type: "string",
+                                            example: "[28,1.1,4,2024-05-01 04:54:00.505154,Dev], [26,1.1,4,2024-05-01 04:46:29.035146,Dev]",
+                                        },
+                                    },
+
+                                },
+
                             },
                         },
                     },
@@ -331,7 +210,7 @@ const editCategory = {
                         properties: {
                             message: {
                                 type: "string",
-                                example: "Error in reseting user password",
+                                example: "Error in getting Document Versions details.",
                             },
                         },
                     },
@@ -347,23 +226,7 @@ const editCategory = {
                         properties: {
                             message: {
                                 type: "string",
-                                example: "Error in reseting User password",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        404: {
-            description: "Not found",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            message: {
-                                type: "string",
-                                example: "user not found",
+                                example: "doc id required",
                             },
                         },
                     },
@@ -372,13 +235,130 @@ const editCategory = {
         },
     },
 
+
+};
+
+const getDocumentVersionById = {
+    tags: ["Documents"],
+    description: "Get document version",
+    operationId: "getDocumentVersionById",
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
+    parameters: [
+        {
+            name: "id",
+            in: "query",
+            required: true,
+            schema: {
+                type: "string",
+            },
+            description: "id to get specific version of document",
+        },
+    ],
+    responses: {
+        200: {
+            description: "reset Password Success",
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            success: {
+                                type: "boolean",
+                                example: true,
+                            },
+                            message: {
+                                type: "string",
+                                example: "reset password success",
+                            },
+                            length: {
+                                type: "number",
+                                example: 1
+                            },
+
+                            data: {
+                                type: "object",
+                                properties: {
+                                    id: {
+                                        type: "number",
+                                        example: 1
+                                    },
+                                    version_number: {
+                                        type: "number",
+                                        example: '2.2'
+                                    },
+                                    doc_id: {
+                                        type: "string",
+                                        example: "2"
+                                    },
+                                    delta: {
+                                        type: "json",
+                                        example: `
+                                        {"hioini":"ninianolanc"}
+                                        `
+                                    },
+                                    created_by: {
+                                        type: "string",
+                                        example: '5'
+                                    },
+                                    created_at: {
+                                        type: "string",
+                                        example: "2024-04-30T23:18:30.263Z"
+                                    }
+
+                                },
+                            },
+
+
+                        },
+                    },
+                },
+            },
+        },
+    },
+    500: {
+        description: "Database Error",
+        content: {
+            "application/json": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        message: {
+                            type: "string",
+                            example: "Error in getting Document Version.",
+                        },
+                    },
+                },
+            },
+        },
+    },
+    400: {
+        description: "Validation Error",
+        content: {
+            "application/json": {
+                schema: {
+                    type: "object",
+                    properties: {
+                        message: {
+                            type: "string",
+                            example: "id required",
+                        },
+                    },
+                },
+            },
+        },
+    },
 };
 
 
-export {
-    createNewCategory,
-    registerCategoryBody,
-    getAllCategories,
-    editCategory,
 
+
+export {
+    createDocumentVersion,
+    createDocumentVersionBody,
+    getDocumentVersionsDatewise,
+    getDocumentVersionById
 };

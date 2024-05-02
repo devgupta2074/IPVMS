@@ -10,6 +10,7 @@ import {
   getUserInfo,
   sendInvite,
   setupAccount,
+  getUserInfoById,
 } from "../controllers/user/auth.controller.js";
 
 import {
@@ -41,6 +42,7 @@ userRouter.post(
   resetPasswordAuth
 );
 userRouter.get("/getUserInfo", authorizationMiddeleware, getUserInfo);
+userRouter.get("/getUserInfo/:id", getUserInfoById);
 
 userRouter.post("/sendInvite", sendInvite);
 userRouter.post("/accountsetup", authorizationMiddeleware, setupAccount);

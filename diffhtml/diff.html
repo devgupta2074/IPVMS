@@ -10,30 +10,25 @@
         font: normal 14px/1.4 sans-serif;
         background: #f1f1f1;
       }
-
       h4 {
         font-family: "Comic Neue", cursive;
         font-weight: 700;
         font-size: 26px;
       }
-
       p {
         margin: 0 0 1rem;
         font-family: "Comic Neue", cursive;
         font-weight: 400;
         font-size: 20px;
       }
-
       p.bold {
         font-weight: 700;
       }
-
       .blockquote {
         background: rgb(188 188 188 / 30%);
         border-left: 3px solid black;
         padding: 0 15px;
       }
-
       table {
         border-collapse: collapse;
         width: 100%;
@@ -41,7 +36,6 @@
       table td {
         border: 1px solid #ccc;
       }
-
       .card {
         background: #fff;
         border: 1px solid #ccc;
@@ -49,42 +43,34 @@
         margin: 1rem;
         padding: 1rem;
       }
-
       .card .card {
         margin: 0;
         flex: 1 0 0;
       }
-
       .row {
         display: flex;
         justify-content: space-between;
         margin-right: -8px;
       }
-
       .col {
         display: flex;
         flex: 1 0 0;
         flex-direction: column;
         margin-right: 8px;
       }
-
       .current-document ins {
         background: lightgreen;
         text-decoration: none;
       }
-
       .current-document del {
         background: pink;
       }
-
       .system-generated del {
         visibility: hidden;
       }
-
       .system-generated ins {
         text-decoration: none;
       }
-
       .system-generated ins ~ del {
         display: none;
       }
@@ -93,7 +79,7 @@
       }
     </style>
   </head>
-  <script src="./diff.js"></script>
+
   <body>
     <div class="card">
       <div class="row">
@@ -125,16 +111,80 @@
   Gordon steps out. The overhead lights come on. Batman is behind him. The Joker
   blinks in the harsh white light.
 </p>
-
+<p>
+  WHAM! The Joker's face hits the table- comes up for air-CRACK! CRACK! To the
+  head. Batman is in front of him. The Joker stares, fascinated. Bleeding.
+</p>
+<p>
+  JOKER: Never start with the head, the victim gets all fuzzy. He can't feel the
+  next-
+</p>
+<p  class="blockquote">
+  CRACK! Batman's fist smacks down on the Joker's fingers.
+</p>
+<p>
+  JOKER (calm): See?
+</p>
+<p>
+  Batman: You wanted me. Here I am.
+</p>
+<p>
+  JOKER: I wanted to see what you'd do...and you didn't disappoint. You let 5
+  people die. Then you let Dent take your place. Even to a guy like me, that's
+  cold.
+</p>
+<p>
+  JOKER: Those mob fools want you dead so they can get back to the way things
+  were. But I know the truth: there's no going back. You've changed things.
+  Forever.
+</p>
+<p>
+  BATMAN: Then why do you want to kill me?
+</p>
+<p class="blockquote">
+  The Joker starts laughing. After a moment he's laughing so hard it sounds like
+  sobbing.
+</p>
 `;
-
     let newHTML = `<p class="bold">
   Gordon walks out and lights a cigar. The overhead lights come on. Batman is behind him.
 </p>
+<p>
+  WHAM! The Joker's face hits the table- comes up for air-CRACK! CRACK! To the
+  head. Batman is in front of him. The Joker stares, fascinated. Bleeding.
+</p>
+<p>
+  JOKER: Never start with the head, the victim gets all fuzzy. He can't feel the
+  next-
+</p>
+<p class="blockquote">
+  CRACK! Batman's fist smacks down on the Joker's fingers.
+</p>
+<p>
+  JOKER (calm): See?
+</p>
+<p>
+  Batman: You wanted me. Here I am.
+</p>
+<p>
+  JOKER: I wanted to see what you'd do...and you didn't disappoint. You let 5
+  people die. Then you let Dent take your place. Even to a guy like me, that's
+  cold.
+</p>
+<p>
+  BATMAN: Where's Dent?
+</p>
+<p>
+  JOKER: Those mob fools want you dead so they can get back to the way things
+  were. But I know the truth: there's no going back. You've changed things.
+  Forever.
+</p>
+<p class="blockquote">
+  The Joker starts laughing. After a moment he's laughing so hard it sounds like
+  sobbing.
+</p>
 `;
-
     // Diff HTML strings
-
     // Show HTML diff output as HTML!
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("output").innerHTML = originalHTML;
@@ -147,14 +197,46 @@
   Gordon steps out. The overhead lights come on. Batman is behind him. The Joker
   blinks in the harsh white light.
 </p>
+<p>
+  WHAM! The Joker's face hits the table- comes up for air-CRACK! CRACK! To the
+  head. Batman is in front of him. The Joker stares, fascinated. Bleeding.
+</p>
+<p>
+  JOKER: Never start with the head, the victim gets all fuzzy. He can't feel the
+  next-
+</p>
+<p  class="blockquote">
+  CRACK! Batman's fist smacks down on the Joker's fingers.
+</p>
+<p>
+  JOKER (calm): See?
+</p>
+<p>
+  Batman: You wanted me. Here I am.
+</p>
+<p>
+  JOKER: I wanted to see what you'd do...and you didn't disappoint. You let 5
+  people die. Then you let Dent take your place. Even to a guy like me, that's
+  cold.
+</p>
+<p>
+  JOKER: Those mob fools want you dead so they can get back to the way things
+  were. But I know the truth: there's no going back. You've changed things.
+  Forever.
+</p>
+<p>
+  BATMAN: Then why do you want to kill me?
+</p>
+<p class="blockquote">
+  The Joker starts laughing. After a moment he's laughing so hard it sounds like
+  sobbing.
+</p>
 `;
-
       console.log("clickedsadada");
       const newHtmltext = document.getElementById("outputNew").innerHTML;
       console.log(newHtmltext);
       let output = htmldiff(originalHTML, newHtmltext);
       document.getElementById("output").innerHTML = output;
-      console.log(output);
       // document.getElementById("outputOriginal").innerHTML = originalHTML;
     };
   </script>

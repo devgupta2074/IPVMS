@@ -30,7 +30,7 @@ app.get("/policydownload/:id", (req, res) => {
 app.get("/letters", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "templatedoc.html"));
 });
-app.get("/template/:id", (req, res) => {
+app.get("/template", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "template.html"));
 });
 app.get("/forgotpassword", (req, res) => {

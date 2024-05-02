@@ -1,9 +1,9 @@
+import { DatabaseError } from "../Error/customError.js";
 import { pool } from "../core/database/db.js";
 import {
   getTemplate,
   updateDocument,
   uploadTemplate,
-  getDocumentById
 } from "../query/document.js";
 export const fileuploadService = async (htmlText, docId, res) => {
   try {
@@ -89,5 +89,22 @@ export const getTemplateByIdService = async (res, id) => {
     });
   } catch (error) {
     return res.status(400).json({ message: error.message, success: false });
+  }
+};
+export const createPolicy = async (body) => {
+  let { htmlText, htmlJson, categoryId, title } = body;
+  const htmlData = Buffer.from(htmlText, "utf8");
+  console.log();
+  console.log("hit");
+
+  try {
+    const document = await pool.query(
+      "INSERT INTO  document   (htmldata,category_id,title,htmljson) VALUES($1,$2,$3,$4) RETURNING *",
+      [htmlData, categoryId, title, htmlJson]
+    );
+    return document;
+  } catch (error) {
+    console.log(error.message);
+    throw new DatabaseError("cant create policy");
   }
 };

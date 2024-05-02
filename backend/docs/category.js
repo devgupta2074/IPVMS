@@ -130,6 +130,7 @@ const createNewCategory = {
     }
 };
 
+
 const registerCategoryBody = {
     type: "object",
     properties: {
@@ -328,13 +329,9 @@ const editCategory = {
                     schema: {
                         type: "object",
                         properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
                             message: {
                                 type: "string",
-                                example: "Internal Server error happened",
+                                example: "Error in reseting user password",
                             },
                         },
                     },
@@ -348,250 +345,9 @@ const editCategory = {
                     schema: {
                         type: "object",
                         properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
                             message: {
                                 type: "string",
-                                example: "id or Category name should not be empty.",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        404: {
-            description: "Not found",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Category not found to update.",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    },
-
-};
-
-const editCategoryBody = {
-    type: "object",
-    properties: {
-        category: {
-            type: "string",
-            example: "IT",
-        },
-    },
-};
-
-const deleteCategory = {
-
-    tags: ["Category"],
-    description: "Setting isActive false i.e deleting category.",
-    operationId: "deleteCategory",
-    security: [
-        {
-            bearerAuth: [],
-        },
-    ],
-    requestBody: {
-        content: {
-            "application/json": {
-                schema: {
-                    $ref: "#/components/schemas/deleteCategoryBody",
-                },
-            },
-        },
-        required: true,
-    },
-    responses: {
-        200: {
-            description: "Successfully deleted category",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: true,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Successfully deleted category",
-                            },
-                            length: {
-                                type: "number",
-                                example: 1
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        500: {
-            description: "Database Error",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Internal Server error happened",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        400: {
-            description: "Validation Error",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "id should be not be empty.",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        404: {
-            description: "Not found",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Category not found to delete.",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    },
-
-};
-
-const deleteCategoryBody = {
-    type: "object",
-    properties: {
-        id: {
-            type: "number",
-            example: 20,
-        },
-    },
-};
-
-const getDocumentCategories = {
-    tags: ["Category"],
-    description: "Get All document Categories in the system",
-    operationId: "getDocumentCategories",
-    security: [
-        {
-            bearerAuth: [],
-        },
-    ],
-    responses: {
-        200: {
-            description: "Get All Categories Succeess",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: true,
-                            },
-                            message: {
-                                type: "string",
-                                example: "All Categories are :",
-                            },
-                            length: {
-                                type: "number",
-                                example: 8
-
-                            },
-                            data: {
-                                type: "array",
-                                items: {
-                                    type: "object",
-                                    properties: {
-                                        // id: {
-                                        //     type: "number",
-                                        //     example: "4818",
-                                        // },
-                                        category: {
-                                            type: "string",
-                                            example: "IT",
-                                        },
-                                        svg: {
-                                            type: "string",
-                                            example: '',
-                                        },
-                                        color: {
-                                            type: "sting",
-                                            example: '#0C3D99',
-                                        },
-                                        total_documents: {
-                                            type: 'string',
-                                            example: '9'
-                                        }
-
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        500: {
-            description: "Internal Server Error",
-            content: {
-                "application/json": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            success: {
-                                type: "boolean",
-                                example: false,
-                            },
-                            message: {
-                                type: "string",
-                                example: "Internal Server Error",
+                                example: "Error in reseting User password",
                             },
                         },
                     },
@@ -607,7 +363,7 @@ const getDocumentCategories = {
                         properties: {
                             message: {
                                 type: "string",
-                                example: "No categories exists.",
+                                example: "user not found",
                             },
                         },
                     },
@@ -615,15 +371,14 @@ const getDocumentCategories = {
             },
         },
     },
+
 };
+
+
 export {
     createNewCategory,
     registerCategoryBody,
     getAllCategories,
     editCategory,
-    editCategoryBody,
-    deleteCategory,
-    deleteCategoryBody,
-    getDocumentCategories
 
 };

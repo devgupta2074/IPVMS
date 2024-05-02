@@ -14,7 +14,7 @@ import { redirect } from "../utils/utils.js";
 
 var maxPages = 10;
 var pageSize = 5;
-var currentPage = 5;
+var currentPage = 1;
 var totalItems;
 var title = "";
 // var category = "";
@@ -122,7 +122,7 @@ const fetchDoc = async (currentPage, pageSize) => {
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
-      console.log(data);
+      console.log(data, "heelo");
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
@@ -265,10 +265,11 @@ document.getElementById("inviteSubmit").addEventListener("click", function () {
 // api call to invite team member
 
 function addTable() {
+  console.log("nufnrfnru");
   const tableDiv = document.getElementById("insert-table");
   tableDiv.innerHTML = "";
 
-  // console.log(tableDiv);
+  console.log(tableDiv);
 
   tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white">
   <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">

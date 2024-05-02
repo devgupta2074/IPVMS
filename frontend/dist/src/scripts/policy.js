@@ -3,6 +3,7 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { InviteApiRequest } from "../api/invitation.js";
 
 import { InsertNavbar } from "../components/Navbar.js";
+import { fetchVersionsDateWise } from "../components/VersionTable.js";
 import {
   API_CONSTANTS,
   ROUTES_CONSTANTS,
@@ -11,10 +12,11 @@ import {
 import { docsstyle } from "../utils/docxstyle.js";
 
 import { redirect } from "../utils/utils.js";
+import { imageLoaded } from "./versioncontrol.js";
 
 var maxPages = 10;
 var pageSize = 5;
-var currentPage = 5;
+var currentPage = 1;
 var totalItems;
 var title = "";
 // var category = "";
@@ -22,7 +24,7 @@ var siblingCount = 1;
 
 const docxModal = (id) => {
   return `
-  <div id=${id}  >
+  <div id=${id} class="hidden" >
   <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
     <!-- Background overlay -->
     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
@@ -74,7 +76,7 @@ const docCard = (title, category, created_by, created_at, id) => {
   <td class="w-28">${created_by}</td>
   <td class="w-28">
     <div class="flex gap-1">
-      <button>
+      <button onclick="openEditor(${id})">
         <svg id="greenpen" class="h-6 w-4">
           <use
             xlink:href="/assets/icons/icon.svg#greenpen"
@@ -151,7 +153,9 @@ const fetchDoc = async (currentPage, pageSize) => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // await fetchDoc(currentPage - 1, pageSize);
+  addTable();
+  await fetchDoc(currentPage - 1, pageSize);
+
   const sortButtons = document.querySelectorAll(".sort");
   sortButtons.forEach((e, index) => {
     e.addEventListener("click", () => {
@@ -172,7 +176,7 @@ if (localStorage.getItem("token") === null) {
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
     console.log(data, "d");
-    if (data.statusCode == 401) {
+    if (data == undefined || data.statusCode == 401) {
       redirect(VIEWS_CONSTANTS.LOGIN);
     } else {
       userdata = data;
@@ -458,7 +462,40 @@ window.openModal = async function (modalId) {
   });
   await fetchAndRenderDoc(modalId);
 };
+window.openEditor = async function (modalId) {
+  localStorage.setItem("modalId", modalId);
+  console.log("fniefniefnir");
+  let htmljson;
+  document.getElementById("extralarge-modal").classList.remove("hidden");
+  const response2 = await fetch(
+    `http://localhost:5001/api/file/getFile/${modalId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      fetchVersionsDateWise(modalId);
+      // Handle the response from the backend
+      console.log(data.data, "fffffkbnjb ");
+      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
+      htmljson = data.data.htmljson;
+      localStorage.setItem("htmljson", JSON.stringify(htmljson));
+      console.log("ddddddddddddddddddddddddd");
+    });
+  // const container = document.getElementsByClassName("docx-wrapper")[0];
+  // container.id = "docx-wrapper";
+  imageLoaded();
+};
 
+window.closeEditor = function () {
+  console.log("fniefniefnir");
+  document.getElementById("extralarge-modal").classList.add("hidden");
+};
 window.closeModal = function (modalId) {
   document.getElementById(modalId).style.display = "none";
   document

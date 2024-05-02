@@ -169,7 +169,7 @@ class="h-[2.5rem] w-[2.5rem] p-2  "
   </svg>
  
   <div  class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
-  Invite Memeber</div>
+  Invite Member</div>
 </div>
 <svg
 

@@ -1,7 +1,7 @@
-async function renderDocx(file, elementId) {
+export async function renderDocx(file, elementId) {
   try {
     console.log("in render docx ");
-    currentDocument = file;
+    const currentDocument = file;
     if (!currentDocument) {
       const docxOptions = Object.assign(docx.defaultOptions, {
         debug: true,
@@ -31,6 +31,7 @@ async function renderDocx(file, elementId) {
         null,
         docxOptions
       );
+
       const result = document.getElementById(`${elementId}`);
       return result.innerHTML;
     }

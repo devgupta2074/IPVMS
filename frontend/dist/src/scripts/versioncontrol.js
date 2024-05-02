@@ -25,7 +25,54 @@ function isIdInJson(id, json, tagName) {
   }
   return false;
 }
-async function applyChangesFromV2toV1(callback) {
+function findWordDifference(text1, text2, style) {
+  const words1 = text1.split(/\s+/);
+  const words2 = text2.split(/\s+/);
+  const maxLength = Math.max(words1.length, words2.length);
+  let difference = "";
+  let changedgreen = "";
+  let changedred = "";
+  for (let i = 0; i < maxLength; i++) {
+    if (words1[i] !== words2[i]) {
+      console.log(words1[i] + " " + words2[i]);
+      if (words1[i] !== undefined) {
+        changedgreen += words1[i] + " "; // Add space here
+      }
+      if (words2[i] !== undefined) {
+        changedred += words2[i] + " "; // Add space here
+      }
+    } else {
+      console.log(changedgreen + " " + changedred, "hello dhee", style);
+      if (changedgreen !== "") {
+        difference += `<s style="background-color: #ffaaaa">${changedgreen}</s>`;
+        changedgreen = "";
+      }
+      if (changedred !== "") {
+        difference += `<span style="background-color: #aaffaa ${style}">${changedred}</span>`;
+        changedred = "";
+      }
+      difference += words1[i] || "";
+    }
+
+    difference += " "; // Add space here
+  }
+  difference = difference.trimEnd();
+
+  if (changedgreen !== "") {
+    difference += `<s style="background-color: #ffaaaa">${changedgreen}</s>`;
+    changedgreen = "";
+  }
+  if (changedred !== "") {
+    difference += `<span style="background-color: #aaffaa; ${style}">${changedred}</span>`;
+    changedred = "";
+  }
+  console.log(difference, "hello archit");
+  return difference; // Trim extra spaces
+}
+
+// Test the function
+
+async function applyChangesFromV2toV1(id, callback) {
   // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
   // console.log(allredhighlightedtags, "allredhighlighted");
   // if (allredhighlightedtags) {
@@ -60,26 +107,29 @@ async function applyChangesFromV2toV1(callback) {
   //   tag.y = v2.imageTags[image].y;
   // }
   // imageLoaded();
-  const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer " + token,
-    },
-  })
+  console.log(id, "");
+  const response2 = await fetch(
+    `http://localhost:5001/api/file/getFile/${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
-      // console.log(data.data.data);
-      document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-        data.data.data;
+      console.log(data.data);
+      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
       htmljson = data.data.htmljson;
     });
   imageLoaded();
   callback();
 }
 
-function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
+export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
   for (const tagid in v2.newTags) {
     console.log(tagid, "newtags");
     console.log(v2.newTags[tagid], "tapasvai");
@@ -283,15 +333,44 @@ function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           isIdInJson(v2.changedTags[tagId].id, firstv.changedTags, "a") == false
         ) {
           console.log(v2.changedTags[tagId].textContent, "text text text");
-          tag.classList.add("bluehighlight");
+          // tag.classList.add("bluehighlight");
         }
         if (v2.changedTags[tagId].style) {
-          tag.style = v2.changedTags[tagId].style;
+          tag.style.cssText = v2.changedTags[tagId].style;
+          tag.classList.add("bluehighlight");
         }
         if (v2.changedTags[tagId].textContent) {
+          console.log(
+            v1[v2.changedTags[tagId].id].textContent.split(" ").length,
+            v2.changedTags[tagId].textContent.split(" ").length,
+            "hello tap"
+          );
+
           tag.textContent = v2.changedTags[tagId].textContent;
-          // tag.style = tag.style + "border : 1px  red solid;";
+          console.log(tag.style.cssText);
+          const style = tag.style.cssText;
+
+          const difference = findWordDifference(
+            v1[v2.changedTags[tagId].id].textContent,
+            tag.textContent,
+            style
+          );
+          console.log(
+            "hello archit",
+            tag,
+            v1[v2.changedTags[tagId].id].textContent,
+            tag.textContent,
+            difference
+          );
+
+          // Highlight the differing part
+
+          tag.innerHTML = difference;
+          tag.style = style;
         }
+
+        // tag.style = tag.style + "border : 1px  red solid;";
+
         // //
         //           tag.textContent = v2.changedTags[tagId].textContent;
         // if (tag.textContent !== "") {
@@ -356,8 +435,8 @@ function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       img.id = v2.imageTags[image].id;
       img.width = v2.imageTags[image].width;
       img.height = v2.imageTags[image].height;
-      img.x = v2.imageTags[image].x;
-      img.y = v2.imageTags[image].y;
+      img.style.left = v2.imageTags[image].x + "px";
+      img.style.top = v2.imageTags[image].y + "px";
       parent.appendChild(img);
     } else {
       tag.src = v2.imageTags[image].src;
@@ -365,8 +444,8 @@ function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       tag.id = v2.imageTags[image].id;
       tag.width = v2.imageTags[image].width;
       tag.height = v2.imageTags[image].height;
-      tag.x = v2.imageTags[image].x;
-      tag.y = v2.imageTags[image].y;
+      tag.style.left = v2.imageTags[image].x + "px";
+      tag.style.top = v2.imageTags[image].y + "px";
     }
   }
   // imageLoaded();
@@ -381,75 +460,75 @@ document.addEventListener("DOMContentLoaded", async function () {
     await UserInfoApiRequest(token).then((data) => {
       // Handle the response from the backend
       console.log(data, "d");
-      if (data.statusCode == 401) {
+      if (data == undefined || data.statusCode == 401) {
         redirect(VIEWS_CONSTANTS.LOGIN);
       } else {
         userdata = data.data;
       }
     });
   }
-  localStorage.setItem("container-content-json", null);
+  localStorage.setItem("container-content-1-json", null);
 
   let document_version = [];
-  const response = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the backend
-      console.log(data);
-      document_version = data.data;
-      const buttonContainer = document.getElementById("buttonContainer");
-      if (document_version != undefined) {
-        document_version.forEach((item) => {
-          console.log(item);
-          // Create a button element
-          // const button = document.createElement("button");
+  // const response = await fetch(
+  //   "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+  //   {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }
+  // )
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     // Handle the response from the backend
+  //     console.log(data);
+  //     document_version = data.data;
+  //     const buttonContainer = document.getElementById("buttonContainer");
+  //     if (document_version != undefined) {
+  //       document_version.forEach((item) => {
+  //         console.log(item);
+  //         // Create a button element
+  //         // const button = document.createElement("button");
 
-          // // Set button text to array item
-          // button.innerText = "revert " + item.id;
-          // button.className =
-          //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
+  //         // // Set button text to array item
+  //         // button.innerText = "revert " + item.id;
+  //         // button.className =
+  //         //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
-          // // Add click event listener to the button
-          // button.addEventListener("click", () => {
-          //   const changes = item.delta;
-          //   const divElement = document.getElementById("docx-wrapper");
-          //   applyChangesFromV2toV1(divElement, htmljson, changes);
-          //   // Replace 'yourDivElementId' with the actual ID of your div element
-          //   hideTextNodes(divElement);
-          // });
+  //         // // Add click event listener to the button
+  //         // button.addEventListener("click", () => {
+  //         //   const changes = item.delta;
+  //         //   const divElement = document.getElementById("docx-wrapper");
+  //         //   applyChangesFromV2toV1(divElement, htmljson, changes);
+  //         //   // Replace 'yourDivElementId' with the actual ID of your div element
+  //         //   hideTextNodes(divElement);
+  //         // });
 
-          const button2 = document.createElement("button");
+  //         const button2 = document.createElement("button");
 
-          // Set button text to array item
-          button2.innerText = item.id;
-          button2.className =
-            "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
+  //         // Set button text to array item
+  //         button2.innerText = item.id;
+  //         button2.className =
+  //           "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
-          // Add click event listener to the button
-          button2.addEventListener("click", () => {
-            const changes = item.delta;
-            const divElement = document.getElementById("docx-wrapper");
-            const firstv = document_version[0].delta;
-            applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
-            removeemptyimage();
-          });
+  //         // Add click event listener to the button
+  //         button2.addEventListener("click", () => {
+  //           const changes = item.delta;
+  //           const divElement = document.getElementById("docx-wrapper");
+  //           const firstv = document_version[0].delta;
+  //           applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
+  //           removeemptyimage();
+  //         });
 
-          // Append the button to the container
-          // buttonContainer.appendChild(button);
-          // buttonContainer.appendChild(button2);
-        });
-      }
-    });
+  //         // Append the button to the container
+  //         // buttonContainer.appendChild(button);
+  //         // buttonContainer.appendChild(button2);
+  //       });
+  //     }
+  //   });
   let htmljson;
-  localStorage.setItem("container-content-json", null);
+  localStorage.setItem("container-content-1-json", null);
   localStorage.setItem("version", 1);
   localStorage.setItem("jsondetectedchanges", null);
   localStorage.setItem("jsonchanges", null);
@@ -475,22 +554,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function extractParentText(parentId) {
+    console.log("Extracting parent", parentId);
     const parentElement = document.getElementById(parentId);
     // console.log(parentId);
     let textContent = "";
-
-    // Iterate over child nodes
-    if (parentElement !== null && parentElement.childNodes.length > 0) {
-      for (let i = 0; i < parentElement.childNodes.length; i++) {
-        const childNode = parentElement.childNodes[i];
-        // Check if the node is a text node
-        if (childNode.nodeType === Node.TEXT_NODE) {
-          textContent += childNode.textContent;
+    if (parentElement) {
+      if (parentElement !== null && parentElement.childNodes.length > 0) {
+        for (let i = 0; i < parentElement.childNodes.length; i++) {
+          const childNode = parentElement.childNodes[i];
+          // Check if the node is a text node
+          if (childNode.nodeType === Node.TEXT_NODE) {
+            textContent += childNode.textContent;
+          }
         }
+      } else {
+        textContent = parentElement.textContent;
       }
     } else {
-      textContent = parentElement.textContent;
+      textContent = "";
     }
+
+    // Iterate over child nodes
 
     return textContent;
   }
@@ -585,187 +669,187 @@ document.addEventListener("DOMContentLoaded", async function () {
     return jsonOutput;
   }
   let contentdocument;
-  async function renderDocx(file) {
-    try {
-      const currentDocument = file;
-      console.log("ffs");
-      if (!currentDocument) {
-        const docxOptions = Object.assign(docx.defaultOptions, {
-          debug: true,
-          experimental: true,
+  // async function renderDocx(file) {
+  //   try {
+  //     const currentDocument = file;
+  //     console.log("ffs");
+  //     if (!currentDocument) {
+  //       const docxOptions = Object.assign(docx.defaultOptions, {
+  //         debug: true,
+  //         experimental: true,
 
-          ignoreLastRenderedPageBreak: false,
-        });
-        console.log(docxOptions);
-        var docData = await convertDocxToBlob();
-        console.log(document.getElementById("container-content"));
-        console.log(docData);
-        console.log(docx);
-        await docx.renderAsync(
-          docData,
-          document.getElementById("container-content"),
-          null,
-          docxOptions
-        );
-      } else {
-        const docxOptions = Object.assign(docx.defaultOptions, {
-          debug: true,
-          experimental: true,
+  //         ignoreLastRenderedPageBreak: false,
+  //       });
+  //       console.log(docxOptions);
+  //       var docData = await convertDocxToBlob();
+  //       console.log(document.getElementById("container-content-1"));
+  //       console.log(docData);
+  //       console.log(docx);
+  //       await docx.renderAsync(
+  //         docData,
+  //         document.getElementById("container-content-1"),
+  //         null,
+  //         docxOptions
+  //       );
+  //     } else {
+  //       const docxOptions = Object.assign(docx.defaultOptions, {
+  //         debug: true,
+  //         experimental: true,
 
-          ignoreLastRenderedPageBreak: false,
-        });
-        var docData = await convertDocxToBlob();
-        await docx.renderAsync(
-          currentDocument,
-          document.getElementById("container-content"),
-          null,
-          docxOptions
-        );
-      }
+  //         ignoreLastRenderedPageBreak: false,
+  //       });
+  //       var docData = await convertDocxToBlob();
+  //       await docx.renderAsync(
+  //         currentDocument,
+  //         document.getElementById("container-content-1"),
+  //         null,
+  //         docxOptions
+  //       );
+  //     }
 
-      var tbodyElements = document.querySelectorAll("tbody");
-      // console.log("tbody elements: " + tbodyElements.length);
-      const blobToBase64 = (blob) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        return new Promise((resolve) => {
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-        });
-      };
+  //     var tbodyElements = document.querySelectorAll("tbody");
+  //     // console.log("tbody elements: " + tbodyElements.length);
+  //     const blobToBase64 = (blob) => {
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(blob);
+  //       return new Promise((resolve) => {
+  //         reader.onloadend = () => {
+  //           resolve(reader.result);
+  //         };
+  //       });
+  //     };
 
-      async function convertImagesToBase64(divId) {
-        // Find the div element
-        var div = document.getElementById(divId);
+  //     async function convertImagesToBase64(divId) {
+  //       // Find the div element
+  //       var div = document.getElementById(divId);
 
-        // Find all images within the div
-        var images = div.getElementsByTagName("img");
+  //       // Find all images within the div
+  //       var images = div.getElementsByTagName("img");
 
-        // Iterate over each image
-        if (images.length > 0) {
-          for (var i = 0; i < images.length; i++) {
-            var img = images[i];
+  //       // Iterate over each image
+  //       if (images.length > 0) {
+  //         for (var i = 0; i < images.length; i++) {
+  //           var img = images[i];
 
-            // Create a blob URL for the image
-            var blob = await fetch(img.src).then((response) => response.blob());
+  //           // Create a blob URL for the image
+  //           var blob = await fetch(img.src).then((response) => response.blob());
 
-            // Convert blob to base64
-            var base64 = await blobToBase64(blob);
+  //           // Convert blob to base64
+  //           var base64 = await blobToBase64(blob);
 
-            img.src = base64;
-          }
-        }
-      }
+  //           img.src = base64;
+  //         }
+  //       }
+  //     }
 
-      convertImagesToBase64("container-content");
-      var tags = document.querySelectorAll(".docx-wrapper *");
-      // console.log(tags);
-      var idCounter = 1;
-      tags.forEach(function (tag) {
-        if (!tag.id) {
-          tag.id = "id_" + idCounter;
-          idCounter++;
-        }
-      });
-      // var tbodyElements = document.getElementsByTagName("tbody");
-      // // console.log("tbody elements: " + tbodyElements.length);
+  //     convertImagesToBase64("container-content-1");
+  //     var tags = document.querySelectorAll(".docx-wrapper *");
+  //     // console.log(tags);
+  //     var idCounter = 1;
+  //     tags.forEach(function (tag) {
+  //       if (!tag.id) {
+  //         tag.id = "id_" + idCounter;
+  //         idCounter++;
+  //       }
+  //     });
+  //     // var tbodyElements = document.getElementsByTagName("tbody");
+  //     // // console.log("tbody elements: " + tbodyElements.length);
 
-      // // Loop through each tbody element
-      // for (var i = 0; i < tbodyElements.length; i++) {
-      //   // Generate a unique ID for each tbody element
-      //   var id = "tbody_" + i;
+  //     // // Loop through each tbody element
+  //     // for (var i = 0; i < tbodyElements.length; i++) {
+  //     //   // Generate a unique ID for each tbody element
+  //     //   var id = "tbody_" + i;
 
-      //   // Set the id attribute for the tbody element
-      //   tbodyElements[i].setAttribute("id", id);
-      // }
-      const sections = document.getElementsByClassName("docx");
-      console.log(sections);
-      for (var i = 0; i < sections.length; i++) {
-        console.log("section height chages");
-        sections[i].setAttribute(
-          "style",
-          "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-        );
-      }
-      const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
-      const headers = containerdocx.getElementsByTagName("header");
-      console.log(headers);
-      // for (var i = 0; i < headers.length; i++) {
-      //   console.log("section height chages");
-      //   headers[i].setAttribute(
-      //     "style",
-      //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-      //   );
-      // }
-      const articles = containerdocx.getElementsByTagName("article");
-      console.log(articles);
-      // for (var i = 0; i < articles.length; i++) {
-      //   console.log("section height chages");
-      //   articles[i].setAttribute("style", "margin-top: 48px; ");
-      // }
+  //     //   // Set the id attribute for the tbody element
+  //     //   tbodyElements[i].setAttribute("id", id);
+  //     // }
+  //     const sections = document.getElementsByClassName("docx");
+  //     console.log(sections);
+  //     for (var i = 0; i < sections.length; i++) {
+  //       console.log("section height chages");
+  //       sections[i].setAttribute(
+  //         "style",
+  //         "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+  //       );
+  //     }
+  //     const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
+  //     const headers = containerdocx.getElementsByTagName("header");
+  //     console.log(headers);
+  //     // for (var i = 0; i < headers.length; i++) {
+  //     //   console.log("section height chages");
+  //     //   headers[i].setAttribute(
+  //     //     "style",
+  //     //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+  //     //   );
+  //     // }
+  //     const articles = containerdocx.getElementsByTagName("article");
+  //     console.log(articles);
+  //     // for (var i = 0; i < articles.length; i++) {
+  //     //   console.log("section height chages");
+  //     //   articles[i].setAttribute("style", "margin-top: 48px; ");
+  //     // }
 
-      var containerContent = document.getElementById("container-content");
+  //     var containerContent = document.getElementById("container-content-1");
 
-      // Get the div element with the class "dev" inside container-content
-      var devDiv = containerContent.lastChild;
-      contentdocument = devDiv.innerHTML;
+  //     // Get the div element with the class "dev" inside container-content-1
+  //     var devDiv = containerContent.lastChild;
+  //     contentdocument = devDiv.innerHTML;
 
-      console.log(devDiv, "ggg");
+  //     console.log(devDiv, "ggg");
 
-      const response = await fetch(
-        "http://localhost:5001/api/file/uploadFile",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            htmlText: contentdocument,
-            docId: "4",
-            htmljson: extractHtmlToJson(
-              document.getElementsByClassName("docx-wrapper")[0]
-            ),
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend
-          console.log(data);
-          console.log("ddddddddddddddddddddddddd");
-        });
+  //     const response = await fetch(
+  //       "http://localhost:5001/api/file/uploadFile",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           // Authorization: "Bearer " + token,
+  //         },
+  //         body: JSON.stringify({
+  //           htmlText: contentdocument,
+  //           docId: "4",
+  //           htmljson: extractHtmlToJson(
+  //             document.getElementsByClassName("docx-wrapper")[0]
+  //           ),
+  //         }),
+  //       }
+  //     )
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // Handle the response from the backend
+  //         console.log(data);
+  //         console.log("ddddddddddddddddddddddddd");
+  //       });
 
-      const response2 = await fetch(
-        "http://localhost:5001/api/file/getFile/4",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: "Bearer " + token,
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend
-          // console.log(data.data.data);
-          document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-            data.data.data;
-          htmljson = data.data.htmljson;
-          console.log("ddddddddddddddddddddddddd");
-        });
-      const container = document.getElementsByClassName("docx-wrapper")[0];
-      container.id = "docx-wrapper";
-      imageLoaded();
-      console.log("");
-    } catch (error) {
-      console.error("Error rendering DOCX:", error);
-    }
-  }
+  //     const response2 = await fetch(
+  //       "http://localhost:5001/api/file/getFile/4",
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           // Authorization: "Bearer " + token,
+  //         },
+  //       }
+  //     )
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // Handle the response from the backend
+  //         // consolRAe.log(data.data.data);
+  //         document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+  //           data.data.data;
+  //         htmljson = data.data.htmljson;
+  //         console.log("ddddddddddddddddddddddddd");
+  //       });
+  //     const container = document.getElementsByClassName("docx-wrapper")[0];
+  //     container.id = "docx-wrapper";
+  //     imageLoaded();
+  //     console.log("");
+  //   } catch (error) {
+  //     console.error("Error rendering DOCX:", error);
+  //   }
+  // }
   console.log("render_docx");
-  renderDocx();
+  // renderDocx();
   document.getElementById("loading").style = "display:none";
 
   console.log("render_docx");
@@ -775,9 +859,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   // });
   const buttondd = document.getElementById("json");
   buttondd.addEventListener("click", function () {
+    const modalid = localStorage.getItem("modalId");
     document.getElementById("loading").style = "display:block";
-    async function detectChanges(divElement, jsonResult) {
-      const articles = document.querySelectorAll("article");
+    async function detectChanges(divElement) {
+      const jsonResult = JSON.parse(localStorage.getItem("htmljson"));
+      console.log(divElement, "ffff", jsonResult);
+      const articles = divElement.querySelectorAll("article");
       console.log(articles.length, "articcle length");
       if (articles.length > 1) {
         // checkDivSizeBack();
@@ -792,7 +879,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         imageTags: [],
       };
 
-      const dynamicImages = document.getElementsByTagName("img");
+      const dynamicImages = document
+        .getElementById("docx-wrapper-1")
+        .getElementsByTagName("img");
       const blobToBase64 = (blob) => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -809,20 +898,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Convert blob to base64
         var base64 = await blobToBase64(blob);
 
-        imagesposition[h].x2 = image.offsetLeft;
-        imagesposition[h].y2 = image.offsetTop;
-        imagesposition[h].width = image.offsetWidth;
-        imagesposition[h].height = image.offsetHeight;
-        imagesposition[h].style = image.style.cssText;
-        imagesposition[h].src = base64;
-        imagesposition[h].id = image.id;
-        imagesposition[h].parent = image.parentElement.parentElement.id;
+        const gh = {
+          x2: image.offsetLeft,
+          y2: image.offsetTop,
+          width: image.offsetWidth,
+          height: image.offsetHeight,
+          style: image.style.cssText,
+          src: base64,
+          id: image.id,
+          parent: image.parentElement.parentElement.id,
+        };
+        changes.imageTags.push(gh);
       }
 
-      changes.imageTags = imagesposition;
-
-      const htmlTags = divElement.getElementsByTagName("*");
-      console.log(htmlTags);
+      console.log(document.getElementById("docx-wrapper-1"));
+      const htmlTags = document
+        .getElementById("docx-wrapper-1")
+        .getElementsByTagName("*");
+      console.log(htmlTags, "rr");
 
       for (let i = 0; i < htmlTags.length; i++) {
         const tag = htmlTags[i];
@@ -836,7 +929,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           console.log("here");
           console.log(tag);
           // New tag found
-          const parentId = tag.parentElement.id || "di";
+          const parentId = tag.parentElement.id || "docx-wrapper-1";
           const parenttag = document.getElementById(tag.parentElement.id);
           console.log(tag.parentElement);
           let position = -1;
@@ -912,7 +1005,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             childnodeposition: childnodeposition,
           };
           changes.newTags.push(newTag);
-          console.log(jsonResult[parenttag.id], "parent");
+          // console.log(jsonResult[parenttag.id], "parent");
           // if (jsonResult[parenttag.id] !== undefined) {
           //   // changes.changedTags.push({
           //   //   id: parenttag.id,
@@ -953,11 +1046,28 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         }
       }
-      for (const tagId in jsonResult) {
-        if (!divElement.querySelector(`#${tagId}`)) {
-          changes.removedTags.push(tagId);
+      var keys = Object.keys(jsonResult);
+      console.log(jsonResult);
+      console.log(keys);
+      keys.forEach(function (key) {
+        if (jsonResult.hasOwnProperty(key)) {
+          console.log(key, "fff");
+          if (!divElement.querySelector(`#${key}`)) {
+            changes.removedTags.push(key);
+          }
         }
-      }
+      });
+      // for (var tagId in jsonResult) {
+      //   console.log(tagId);
+      //   if (jsonResult.hasOwnProperty(tagId)) {
+      //     console.log(tagId, "fff");
+      //     if (!divElement.querySelector(`#${tagId}`)) {
+      //       changes.removedTags.push(tagId);
+      //     }
+      //   }
+      // }
+      console.log(changes, "changes");
+
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
@@ -969,7 +1079,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           },
           body: JSON.stringify({
             version_number: version,
-            doc_id: 4,
+            doc_id: modalid,
             delta: changes,
             created_by: userdata.id,
           }),
@@ -980,16 +1090,17 @@ document.addEventListener("DOMContentLoaded", async function () {
           // Handle the response from the backend
           console.log(data);
           localStorage.setItem("version", version);
+          fetchVersionsDateWise(modalid);
           document.getElementById("loading").style = "display:none";
-          window.location.reload();
+          // window.location.reload();
         });
 
       return changes;
     }
 
-    const divElement = document.getElementsByClassName("docx-wrapper")[0];
+    const divElement = document.getElementById("docx-wrapper-1");
     let version = parseInt(localStorage.getItem("version"));
-    const changes = detectChanges(divElement, htmljson);
+    const changes = detectChanges(divElement);
 
     console.log("version: " + version);
     if (version == NaN) {
@@ -1008,13 +1119,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Example usage:
   // Assuming you have divElement, v1, and v2 from previous steps
   // Applying changes from v1 to v2
-  const v2tov1 = document.getElementById("v2tov1");
-  v2tov1.addEventListener("click", function () {
-    const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-    const divElement = document.getElementsByClassName("docx-wrapper")[0];
-    applyChangesFromV2toV1();
-    removeemptyimage();
-  });
+  // const v2tov1 = document.getElementById("v2tov1");
+  // v2tov1.addEventListener("click", function () {
+  //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
+  //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
+  //   applyChangesFromV2toV1();
+  //   removeemptyimage();
+  // });
   // const v1tov2 = document.getElementById("v1tov2");
   // // v1tov2.addEventListener("click", function () {
   // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
@@ -1027,23 +1138,29 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 import { letterColorMapping } from "../utils/letterstyle.js";
 
-async function ChangeVersion(id) {
-  const htmljson = await fetch("http://localhost:5001/api/file/getFile/4", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer " + token,
-    },
-  })
+async function ChangeVersion(modalid, id) {
+  // const modalid = localStorage.getItem("modalid");
+  // console.log(modalid, "ddd eug");
+  const htmljson = await fetch(
+    `http://localhost:5001/api/file/getFile/${modalid}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
       // console.log(data.data.data);
+      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
       const htmljson = data.data.htmljson;
       return htmljson;
     });
   const firstv = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1070,7 +1187,7 @@ async function ChangeVersion(id) {
       const v1 = htmljson;
       const v2 = data[0].delta;
       console.log(divElement, v1, v2, firstv);
-      applyChangesFromV2toV1(function () {
+      applyChangesFromV2toV1(modalid, function () {
         applyChangesFromV1toV2(divElement, v1, v2, firstv);
       });
     });
@@ -1230,22 +1347,20 @@ const fetchVersionsDateWise = async (id) => {
           document.querySelectorAll(".version-id-button");
         versionIdButtons.forEach((button) => {
           button.addEventListener("click", () => {
-            ChangeVersion(button.id);
+            ChangeVersion(id, button.id);
           });
         });
       });
     });
 };
 
-fetchVersionsDateWise(4);
-
 var changesx = 1;
 var version = 1;
 var currentNearestElement = null;
 
 function assignIDsToElements() {
-  const container = document.getElementsByClassName("docx-wrapper")[0];
-  container.id = "docx-wrapper";
+  const container = document.getElementById("docx-wrapper-1");
+
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changesx}`;
@@ -1309,21 +1424,21 @@ function handleChanges() {
 }
 
 document
-  .getElementById("container-content")
+  .getElementById("container-content-1")
   .addEventListener("mouseup", handleChanges);
 document
-  .getElementById("container-content")
+  .getElementById("container-content-1")
   .addEventListener("keyup", handleChanges);
 
 // document
-//   .getElementById("container-content")
+//   .getElementById("container-content-1")
 //   .addEventListener("input", handleChanges);
 
 document
-  .getElementById("container-content")
+  .getElementById("container-content-1")
   .addEventListener("input", checkDivSize);
 document
-  .getElementById("container-content")
+  .getElementById("container-content-1")
   .addEventListener("input", imageLoaded, assignIDsToElements, handleChanges);
 // document.addEventListener("keydown", function (event) {
 //   // Check if the Control key and the "v" key are pressed simultaneously
@@ -1333,7 +1448,7 @@ document
 //   }
 // // });
 document
-  .getElementById("container-content")
+  .getElementById("container-content-1")
   .addEventListener("input", function (event) {
     // Check if the input event was triggered by pressing the backspace or delete key
     if (
@@ -1424,9 +1539,9 @@ function checkDivSize() {
       let articleHeight = article.scrollHeight;
       console.log("removearticlewhileloop first");
       removearticlewhileloop(articleHeight, article, i);
-      // article.style.height = "842pt";
-      article.clientHeight = 842;
-      article.scrollHeight = 842;
+      // // article.style.height = "842pt";
+      // article.clientHeight = 842;
+      // article.scrollHeight = 842;
     } else {
       let article = document.getElementsByTagName("article")[i];
       let articleHeight = article.scrollHeight;
@@ -1460,8 +1575,8 @@ function checkDivSize() {
         article.lastChild.remove();
         articleHeight = article.scrollHeight;
         removearticlewhileloop(article, articleHeight, i);
-        article.clientHeight = 842;
-        article.scrollHeight = 842;
+        // article.clientHeight = 842;
+        // article.scrollHeight = 842;
       }
     }
 
@@ -1471,7 +1586,7 @@ function checkDivSize() {
   removeEmptyPages();
 }
 
-function imageLoaded() {
+export function imageLoaded() {
   imagesposition = [];
   const dynamicImages = document.querySelectorAll("img");
   console.log(dynamicImages);
@@ -1646,8 +1761,8 @@ function checkDivSizeBack() {
     let article = document.getElementsByTagName("article")[i];
     let articleHeight = article.scrollHeight;
     addarticlewhileloop(articleHeight, article, i);
-    article.clientHeight = 842;
-    article.scrollHeight = 842;
+    // article.clientHeight = 842;
+    // article.scrollHeight = 842;
 
     // editableDiv.appendChild(newpage);
   }

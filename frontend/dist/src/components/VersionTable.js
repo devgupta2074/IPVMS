@@ -1,22 +1,27 @@
+import { applyChangesFromV1toV2 } from "../scripts/versioncontrol.js";
 import { letterColorMapping } from "../utils/letterstyle.js";
 
-async function ChangeVersion(id) {
-  const htmljson = await fetch("http://localhost:5001/api/file/getFile/4", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      // Authorization: "Bearer " + token,
-    },
-  })
+async function ChangeVersion(docid, id) {
+  const htmljson = await fetch(
+    `http://localhost:5001/api/file/getFile/${docid}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
       // console.log(data.data.data);
+      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
       const htmljson = data.data.htmljson;
       return htmljson;
     });
   const firstv = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -57,6 +62,7 @@ function openDash(id) {
 }
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
+  const docid = id;
   const response = fetch(
     `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
@@ -201,7 +207,7 @@ export const fetchVersionsDateWise = async (id) => {
           document.querySelectorAll(".version-id-button");
         versionIdButtons.forEach((button) => {
           button.addEventListener("click", () => {
-            ChangeVersion(button.id);
+            ChangeVersion(docid, button.id);
           });
         });
       });

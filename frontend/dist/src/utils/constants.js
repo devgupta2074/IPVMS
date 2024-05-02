@@ -9,7 +9,7 @@ const API_CONSTANTS = {
   TOKEN: "token",
 };
 const URL_CONSTANTS = {
-  FRONTEND_BASE_URL: "http://localhost:5555",
+  FRONTEND_BASE_URL: "http://ipvms.exitest.com",
 };
 
 const HEADERS_CONSTANTS = {

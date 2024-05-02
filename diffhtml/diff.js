@@ -433,11 +433,6 @@ op_map = {
     val = before_tokens.slice(op.start_in_before, +op.end_in_before + 1 || 9e9);
     return wrap("del", val);
   },
-  style: function (op, before_tokens, after_tokens) {
-    var val;
-    val = before_tokens.slice(op.start_in_before, +op.end_in_before + 1 || 9e9);
-    return wrap("del", val);
-  },
 };
 op_map.replace = function (op, before_tokens, after_tokens) {
   return (
@@ -479,3 +474,100 @@ if (typeof define === "function") {
 } else {
   this.htmldiff = diff;
 }
+
+// DIFF ACTION
+
+let originalHTML = `
+<p class="bold">
+  Gordon steps out. The overhead lights come on. Batman is behind him. The Joker
+  blinks in the harsh white light.
+</p>
+
+<p>
+  WHAM! The Joker's face hits the table- comes up for air-CRACK! CRACK! To the
+  head. Batman is in front of him. The Joker stares, fascinated. Bleeding.
+</p>
+
+<p>
+  JOKER: Never start with the head, the victim gets all fuzzy. He can't feel the
+  next-
+</p>
+
+<p  class="blockquote">
+  CRACK! Batman's fist smacks down on the Joker's fingers.
+</p>
+<p>
+  JOKER (calm): See?
+</p>
+<p>
+  Batman: You wanted me. Here I am.
+</p>
+<p>
+  JOKER: I wanted to see what you'd do...and you didn't disappoint. You let 5
+  people die. Then you let Dent take your place. Even to a guy like me, that's
+  cold.
+</p>
+<p>
+  JOKER: Those mob fools want you dead so they can get back to the way things
+  were. But I know the truth: there's no going back. You've changed things.
+  Forever.
+</p>
+<p>
+  BATMAN: Then why do you want to kill me?
+</p>
+<p class="blockquote">
+  The Joker starts laughing. After a moment he's laughing so hard it sounds like
+  sobbing.
+</p>
+`;
+
+let newHTML = `<p class="bold">
+  Gordon walks out and lights a cigar. The overhead lights come on. Batman is behind him.
+</p>
+
+<p>
+  WHAM! The Joker's face hits the table- comes up for air-CRACK! CRACK! To the
+  head. Batman is in front of him. The Joker stares, fascinated. Bleeding.
+</p>
+
+<p>
+  JOKER: Never start with the head, the victim gets all fuzzy. He can't feel the
+  next-
+</p>
+
+<p class="blockquote">
+  CRACK! Batman's fist smacks down on the Joker's fingers.
+</p>
+<p>
+  JOKER (calm): See?
+</p>
+<p>
+  Batman: You wanted me. Here I am.
+</p>
+<p>
+  JOKER: I wanted to see what you'd do...and you didn't disappoint. You let 5
+  people die. Then you let Dent take your place. Even to a guy like me, that's
+  cold.
+</p>
+<p>
+  BATMAN: Where's Dent?
+</p>
+<p>
+  JOKER: Those mob fools want you dead so they can get back to the way things
+  were. But I know the truth: there's no going back. You've changed things.
+  Forever.
+</p>
+<p class="blockquote">
+  The Joker starts laughing. After a moment he's laughing so hard it sounds like
+  sobbing.
+</p>
+`;
+
+// Diff HTML strings
+let output = htmldiff(originalHTML, newHTML);
+let input = htmldiff(newHTML, originalHTML);
+
+// Show HTML diff output as HTML!
+document.getElementById("output").innerHTML = output;
+// document.getElementById("outputOriginal").innerHTML = originalHTML;
+document.getElementById("outputNew").innerHTML = input;

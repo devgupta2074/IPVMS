@@ -1,10 +1,10 @@
-const makeForm = () => {
+const makeForm = (result) => {
   const htmlContent = document.getElementById("container").innerHTML;
   const handlebarsRegex = /\{\{([^{}]+)\}\}/g;
   //extarction logic
 
   const selectElement = (title) => {
-    return `<div class="inline-block relative w-96 px-2">
+    return `<div  class="inline-block relative w-96 px-2">
             <h1>${title}</h1>
             <input onchange="handleSubmit()" id=${title} class="appearance-none block w-full bg-white  rounded-md    border-2 border-gray-200 text-gray-700   py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
     </div>`;
@@ -194,4 +194,7 @@ const makeForm = () => {
       el.innerHTML += dateElement(item.name);
     }
   });
+  console.log(result.first_name, "first name is");
+  document.getElementById("firstname").value = result.first_name;
+  document.getElementById("lastname").value = result.last_name;
 };

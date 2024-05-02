@@ -17,14 +17,11 @@ export async function ForgetPasswordApiRequest(email) {
     body: requestData,
   };
 
-  try {
-    const response = await makeRequest(apiUrl, requestOptions);
-    console.log(response, "makerequest");
+  const response = await makeRequest(apiUrl, requestOptions);
+  console.log(response, "makerequest");
 
-    return response;
-  } catch (error) {
-    console.log(error, "error");
-  }
+  return response.json();
+
   // await makeRequest(apiUrl, requestOptions)
   //   .then((data) => {
   //     console.log(data, "makerequest");

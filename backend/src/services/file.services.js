@@ -3,6 +3,7 @@ import {
   getTemplate,
   updateDocument,
   uploadTemplate,
+  getDocumentById
 } from "../query/document.js";
 export const fileuploadService = async (htmlText, docId, res) => {
   try {

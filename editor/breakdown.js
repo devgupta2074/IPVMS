@@ -1,4 +1,4 @@
-const response = fetch("http://localhost:3000/api/file/getFile/1", {
+const response = fetch("http://localhost:5001/api/file/getFile/1", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",

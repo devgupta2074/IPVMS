@@ -14,6 +14,22 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "login.html"));
 });
 
+app.get("/editor", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "modify.html"));
+});
+app.get("/comparisontool", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "comparison.html"));
+});
+
+app.get("/policydownload/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));
+});
+app.get("/letters", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "templatedoc.html"));
+});
+app.get("/template/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "template.html"));
+});
 app.get("/forgotpassword", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "forget-password.html"));
 });
@@ -33,11 +49,20 @@ app.get("/resetsuccess", (req, res) => {
 app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "dashboard.html"));
 });
+app.get("/zerostate", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "dashboard-zerostate.html"));
+});
 app.get("/document", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "document.html"));
 });
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "index.html"));
+});
+app.get("/invite", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "invitation.html"));
+});
+app.get("/accountsetup", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "account-setup.html"));
 });
 
 // Start the server

@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-
 import dotenv from "dotenv";
 import path from "path";
 import userRouter from "./src/routes/user.Routes.js";
@@ -13,9 +12,11 @@ import { apiDocumentation } from "./docs/apidoc.js";
 
 import categoryRouter from "./src/routes/catogery.routes.js";
 
+import { getDocumentCategories } from "./src/controllers/catogery/catogery.controller.js";
 import searchRouter from "./src/routes/globalsearch.routes.js";
 import versionControlRouter from "./src/routes/versioncontrol.routes.js";
 import { exceptionHandler } from "./src/middleware/authMiddleware/errorHandlingMiddleware.js";
+import { pool } from "./src/core/database/db.js";
 
 const __dirname = path.resolve();
 
@@ -40,6 +41,9 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/file", fileRouter);
 app.use("/api/globalsearch", searchRouter);
 app.use("/api/versioncontrol", versionControlRouter);
+app.get("/documents/count/category", getDocumentCategories);
+
+
 app.use(exceptionHandler);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

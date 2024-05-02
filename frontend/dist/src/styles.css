@@ -679,9 +679,26 @@ video {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
-
+.bg-ship-cove-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(113 139 211 / var(--tw-bg-opacity));
+}
+.bg-lightBlue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(14 165 233 / var(--tw-bg-opacity));
+}
+.border-dodger-blue-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(54 137 245 / var(--tw-border-opacity));
+}
 .mb-2 {
   margin-bottom: 0.5rem;
+}
+.ml-28 {
+  margin-left: 7rem /* 112px */;
+}
+.ml-24 {
+  margin-left: 6rem /* 96px */;
 }
 
 .ml-auto {
@@ -944,10 +961,18 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(234 238 255 / var(--tw-bg-opacity));
 }
+.bg-astronaut-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 64 118 / var(--tw-bg-opacity));
+}
 
 .bg-gulf-blue-950 {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 25 87 / var(--tw-bg-opacity));
+  background-color: rgb(0 24 83 / var(--tw-bg-opacity));
+}
+.bg-zircon-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 247 253 / var(--tw-bg-opacity));
 }
 
 .bg-sunset-orange-500 {
@@ -1042,6 +1067,18 @@ video {
 
 .font-axiforma {
   font-family: Axiforma;
+}
+.font-roboto {
+  font-family: Roboto;
+}
+.text-chicago-700 {
+  --tw-bg-opacity: 1;
+  color: rgb(85 85 85 / var(--tw-bg-opacity));
+}
+
+.text-mineshaft-900 {
+  --tw-text-opacity: 1;
+  color: rgb(51 51 51 / var(--tw-text-opacity));
 }
 
 .font-sfprodisplay {
@@ -1171,7 +1208,19 @@ video {
   --tw-text-opacity: 1;
   color: rgb(54 137 245 / var(--tw-text-opacity));
 }
+.bg-dodger-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(54 137 245 / var(--tw-bg-opacity));
+}
+.hover\:bg-dodger-blue-800:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 72 174 / var(--tw-bg-opacity));
+}
 
+.text-boulder-400 {
+  --tw-text-opacity: 1;
+  color: rgb(124 124 124 / var(--tw-text-opacity));
+}
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
@@ -1179,7 +1228,7 @@ video {
 
 .text-gulf-blue-950 {
   --tw-text-opacity: 1;
-  color: rgb(0 25 87 / var(--tw-text-opacity));
+  color: rgb(0 24 83 / var(--tw-text-opacity));
 }
 
 .text-red-600 {
@@ -1267,7 +1316,10 @@ video {
     var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate)
     var(--tw-sepia) var(--tw-drop-shadow);
 }
-
+.bg-zircon-950 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(32 38 75 / var(--tw-bg-opacity));
+}
 .transition {
   transition-property: color, background-color, border-color,
     text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,

@@ -24,7 +24,7 @@ async function SignIn() {
     emailerror.innerHTML = "Please enter your email address";
     emailerror.classList.remove("opacity-0");
     setTimeout(() => {
-      emailerror.classList.add("opacity-1");
+      emailerror.classList.add("opacity-0");
     }, 3000);
   } else if (password.length == 0) {
     passworderror.innerHTML = "Please enter your password";
@@ -44,11 +44,11 @@ async function SignIn() {
     // console.log(response, "he");
     await LoginApiRequest(email, password)
       .then((data) => {
-        console.log(data);
+        console.log(data, "dev");
         siginbutton.removeAttribute("disabled", "");
         siginbutton.setAttribute("enabled", "");
         siginbutton.innerHTML = `Sign In  `;
-        if (data.success) {
+        if (data?.success) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
@@ -71,7 +71,7 @@ async function SignIn() {
             passworderror.classList.remove("opacity-0");
             setTimeout(() => {
               passworderror.classList.add("opacity-0");
-            }, 3000);
+            }, 6000);
           }
         }
       })

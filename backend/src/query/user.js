@@ -2,12 +2,12 @@ import { pool } from "../core/database/db.js";
 import { DatabaseError } from "../Error/customError.js";
 export const getUser = async (data) => {
   const { email } = data;
-
+  const query = {
+    text: "SELECT * FROM user_table WHERE email=$1",
+    values: [email],
+  };
   try {
-    const user = await pool.query("SELECT * FROM user_table WHERE email=$1", [
-      email,
-    ]);
-
+    const user = await pool.query(query);
     return user;
   } catch (error) {
     throw error;
@@ -81,23 +81,5 @@ export const resetPassword = async ({ data }) => {
     return user;
   } catch (error) {
     throw new Error("Error" + error.message);
-  }
-};
-export const getUsers = async (data) => {
-  const name = data;
-
-  const firstName = name?.split(" ")[0] || "";
-  let lastName = name?.split(" ")[1] || "";
-  console.log(firstName, lastName);
-  //first name  space last name
-
-  try {
-    const user = await pool.query(
-      " SELECT first_name,last_name,created_at,updated_at,email,id FROM user_table WHERE first_name ILIKE '%'||$1||'%' or last_name ILIKE '%'||$1||'%' and last_name ILIKE '%'||$2||'%'  ",
-      [firstName, lastName]
-    );
-    return user;
-  } catch (error) {
-    throw new DatabaseError("Error in getting User");
   }
 };

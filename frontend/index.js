@@ -20,9 +20,6 @@ app.get("/editor", (req, res) => {
 app.get("/comparisontool", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "comparison.html"));
 });
-app.get("/policy", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "policy.html"));
-});
 
 app.get("/policydownload/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));
@@ -67,15 +64,7 @@ app.get("/invite", (req, res) => {
 app.get("/accountsetup", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "account-setup.html"));
 });
-app.get("/allemployee", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "employees.html"));
-});
-app.get("/users", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "userProfile.html"));
-});
-app.get("/uploadpolicy", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "uploadpolicy.html"));
-});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -15,7 +15,6 @@ import {
   createUser,
   getAllUser,
   getUser,
-  getUsers,
   updatePassword,
   updatedUser,
 } from "../query/user.js";
@@ -79,7 +78,6 @@ export const updateUserService = async (body) => {
 
 export const loginUserService = async (body) => {
   const { email, password } = body;
-
   try {
     const user = await getUser({ email });
     console.log("email", user.rows[0]);
@@ -91,6 +89,7 @@ export const loginUserService = async (body) => {
       throw new ValidationError("invalid credentials");
     }
 
+    console.log(process.env.JWT_SECRET);
     const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRY_TIME,
     });
@@ -209,18 +208,6 @@ export const sendInvite = async (body) => {
         }
       }
     }
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getUsersService = async (name) => {
-  try {
-    const data = await getUsers(name);
-    if (data.rows.length === 0) {
-      throw new NotFoundError("User not found");
-    }
-    return data.rows;
   } catch (error) {
     throw error;
   }

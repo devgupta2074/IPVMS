@@ -1,5 +1,5 @@
 
-import { createCategory, getAllCategory, updateCategory } from "../query/category.js";
+import { createCategory, getAllCategory, updateCategory, getDocumentCategories } from "../query/category.js";
 import {
     BadGatewayError,
     ConflictError,
@@ -19,7 +19,7 @@ export const createNewCategoryService = async (body) => {
 
         const data = {
             length: createdCategoryResult.rowCount,
-            data: createdCategoryResult.rows
+            rows: createdCategoryResult.rows
         };
 
         return data;
@@ -61,6 +61,10 @@ export const deleteCategoryService = async (body) => {
     const { id } = body;
     const type = "delete";
 
+    if (id === null || id === '') {
+        throw new ValidationError("id should be not be empty.");
+    }
+
     try {
         const deleteCategoryresut = await updateCategory({
             id,
@@ -75,7 +79,7 @@ export const deleteCategoryService = async (body) => {
             };
             return data;
         } else {
-            throw new NotFoundError('No Category found to delete.');
+            throw new NotFoundError('Category not found to delete.');
         }
 
     } catch (error) {
@@ -90,8 +94,8 @@ export const editCategoryService = async (body) => {
     const { id, category } = body;
     const type = "edit";
 
-    if (category === '' || null) {
-        throw ValidationError("Category name should not be empty.");
+    if (category === '' || null || id === null || id === '') {
+        throw new ValidationError("id or Category name should not be empty.");
     }
 
     try {
@@ -109,6 +113,30 @@ export const editCategoryService = async (body) => {
             return data;
         } else {
             throw new NotFoundError("Category not found to update.");
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getdocumentCategoriesService = async () => {
+
+
+    try {
+        const returnedCategories = await getDocumentCategories();
+
+
+        if ((returnedCategories.rowCount != 0) || null) {
+            const data = {
+                length: returnedCategories.rowCount,
+                rows: returnedCategories.rows
+            };
+            return data;
+
+        } else {
+
+            throw new NotFoundError('No categories exists.');
+
         }
     } catch (error) {
         throw error;

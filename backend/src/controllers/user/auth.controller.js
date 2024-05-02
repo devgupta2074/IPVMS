@@ -120,9 +120,7 @@ export const resetPasswordAuth = async (req, res, next) => {
 export const getUserInfo = async (req, res) => {
   try {
     const userId = req.user.id;
-    const user = await pool.query("SELECT * FROM user_table WHERE id=$1", [
-      userId,
-    ]);
+    const user = await pool.query("SELECT * FROM user_table WHERE id=$1", [userId]);
     const users = user.rows[0];
     delete users["password"];
 
@@ -167,9 +165,7 @@ export const setupAccount = async (req, res, next) => {
       );
     }
     const userId = req.user.id;
-    const user = await pool.query("SELECT * FROM user_table WHERE id=$1", [
-      userId,
-    ]);
+    const user = await pool.query("SELECT * FROM user_table WHERE id=$1", [userId]);
     if (user.password_reset) {
       throw new AccountSetupError("Account is already setup for user");
     } else {
@@ -180,24 +176,6 @@ export const setupAccount = async (req, res, next) => {
         message: "User Registered Success",
       });
     }
-  } catch (error) {
-    next(error);
-  }
-};
-export const getUsers = async (req, res, next) => {
-  try {
-    const { name } = req.query;
-    console.log(name);
-    if (name === "") {
-      return res
-        .status(200)
-        .json({ success: true, message: "all users are", data: null });
-    }
-    // console.log("name is", name);
-    const users = await userService.getUsersService(name);
-    return res
-      .status(200)
-      .json({ success: true, message: "all users are", data: users });
   } catch (error) {
     next(error);
   }

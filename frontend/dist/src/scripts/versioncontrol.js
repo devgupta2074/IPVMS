@@ -1,534 +1,68 @@
-import { UserInfoApiRequest } from "../api/dashboard.js";
-import {
-  API_CONSTANTS,
-  ROUTES_CONSTANTS,
-  VIEWS_CONSTANTS,
-} from "../utils/constants.js";
-
-import { redirect } from "../utils/utils.js";
-
 let imagesposition = [];
-let userdata;
+document.addEventListener("DOMContentLoaded", async function () {
+  document.getElementById("loading").style = "display:block";
+  localStorage.setItem("container-content-json", null);
 
-let htmljson;
-function isIdInJson(id, json, tagName) {
-  for (let i = 0; i < json.length; i++) {
-    if (tagName == "tbody") {
-      return true;
-    }
-    if (tagName == "b") {
-      return false;
-    }
-    if (json[i]["id"] === id) {
-      return true;
-    }
-  }
-  return false;
-}
-function findWordDifference(text1, text2, style) {
-  const words1 = text1.split(/\s+/);
-  const words2 = text2.split(/\s+/);
-  const maxLength = Math.max(words1.length, words2.length);
-  let difference = "";
-  let changedgreen = "";
-  let changedred = "";
-  for (let i = 0; i < maxLength; i++) {
-    if (words1[i] !== words2[i]) {
-      console.log(words1[i] + " " + words2[i]);
-      if (words1[i] !== undefined) {
-        changedgreen += words1[i] + " "; // Add space here
-      }
-      if (words2[i] !== undefined) {
-        changedred += words2[i] + " "; // Add space here
-      }
-    } else {
-      console.log(changedgreen + " " + changedred, "hello dhee", style);
-      if (changedgreen !== "") {
-        difference += `<s style="background-color: #ffaaaa">${changedgreen}</s>`;
-        changedgreen = "";
-      }
-      if (changedred !== "") {
-        difference += `<span style="background-color: #aaffaa ${style}">${changedred}</span>`;
-        changedred = "";
-      }
-      difference += words1[i] || "";
-    }
-
-    difference += " "; // Add space here
-  }
-  difference = difference.trimEnd();
-
-  if (changedgreen !== "") {
-    difference += `<s style="background-color: #ffaaaa">${changedgreen}</s>`;
-    changedgreen = "";
-  }
-  if (changedred !== "") {
-    difference += `<span style="background-color: #aaffaa; ${style}">${changedred}</span>`;
-    changedred = "";
-  }
-  console.log(difference, "hello archit");
-  return difference; // Trim extra spaces
-}
-
-// Test the function
-
-async function applyChangesFromV2toV1(id, callback) {
-  // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
-
-  // if (allredhighlightedtags) {
-  //   console.log(allredhighlightedtags, "bluehighlight");
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("bluehighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-
-  // for (const image in v2.imageTags) {
-  //   const tag = document.getElementById(v2.imageTags[image].id);
-  //   // tag.src = v2.imageTags[image].src;
-  //   tag.style = v2.imageTags[image].style;
-  //   tag.id = v2.imageTags[image].id;
-  //   tag.width = v2.imageTags[image].width;
-  //   tag.height = v2.imageTags[image].height;
-  //   tag.x = v2.imageTags[image].x;
-  //   tag.y = v2.imageTags[image].y;
-  // }
-  // imageLoaded();
-  console.log(id, "");
-  const response2 = await fetch(
-    `http://localhost:5001/api/file/getFile/${id}`,
+  let document_version = [];
+  const response = await fetch(
+    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: "Bearer " + token,
       },
     }
   )
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
-      console.log(data.data);
-      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
-      htmljson = data.data.htmljson;
-    });
-  imageLoaded();
-  callback();
-}
+      console.log(data);
+      document_version = data.data;
+      const buttonContainer = document.getElementById("buttonContainer");
+      if (document_version != undefined) {
+        document_version.forEach((item) => {
+          console.log(item);
+          // Create a button element
+          // const button = document.createElement("button");
 
-export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
-  for (const tagid in v2.newTags) {
-    console.log(tagid, "newtags");
-    console.log(v2.newTags[tagid], "tapasvai");
-    console.log(
-      !isIdInJson(
-        v2.newTags[tagid].id,
-        firstv.newTags,
-        v2.newTags[tagid].tagName
-      ),
-      "isid"
-    );
+          // // Set button text to array item
+          // button.innerText = "revert " + item.id;
+          // button.className =
+          //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
-    if (v2.newTags[tagid]) {
-      // console.log(`#${v2.newTags[tagid].parentId}`);
-      const tag = document.getElementById(v2.newTags[tagid].parentId);
-      var childElement = document.createElement(v2.newTags[tagid].tagName);
-      childElement.textContent = v2.newTags[tagid].textContent;
-      console.log(childElement.textContent);
-      childElement.style = v2.newTags[tagid].style;
-      childElement.className = v2.newTags[tagid].class;
-      console.log(v2.newTags[tagid].textContent, "textContent");
+          // // Add click event listener to the button
+          // button.addEventListener("click", () => {
+          //   const changes = item.delta;
+          //   const divElement = document.getElementById("docx-wrapper");
+          //   applyChangesFromV2toV1(divElement, htmljson, changes);
+          //   // Replace 'yourDivElementId' with the actual ID of your div element
+          //   hideTextNodes(divElement);
+          // });
 
-      childElement.id = v2.newTags[tagid].id;
-      childElement.color = v2.newTags[tagid].color;
-      childElement.size = v2.newTags[tagid].size;
-      childElement.face = v2.newTags[tagid].face;
-      // childElement.children = v2.newTags[tagid].children;
-      console.log("eye", v2.newTags[tagid].children);
-      if (v2.newTags[tagid].children.length > 0) {
-        for (var i = 0; i < v2.newTags[tagid].children.length; i++) {
-          const child = document.getElementById(v2.newTags[tagid].children[i]);
-          if (child) {
-            const x = child;
-            child.remove();
-            childElement.appendChild(x);
-            console.log("eye", child);
-          }
-        }
-      }
-      console.log(tag);
-      console.log(v2.newTags[tagid].parentId);
-      const children = tag.childNodes;
-      const position = v2.newTags[tagid].childnodeposition;
-      console.log(tag);
-      console.log(childElement);
-      console.log(
-        "position",
-        position,
-        children,
-        children.length,
-        position >= 0 && position <= children.length,
-        childElement,
-        "ipvms"
-      );
-      if (position == 0 && children.length == 1 && children[0].nodeType == 3) {
-        const newtext = children[0].textContent
-          .replace(childElement.textContent, "")
-          .replace(v2.newTags[tagid].textbefore, "");
-        const newchildbefore = document.createTextNode(
-          v2.newTags[tagid].textbefore
-        );
-        tag.insertBefore(newchildbefore, children[0]);
-        tag.removeChild(children[1]);
-        children[0].nodeValue = newtext;
-        console.log(children, "exsq");
-      } else {
-        if (position > children.length) {
-          console.log("archit");
-          if (
-            tag.childNodes.length > 0 &&
-            tag.childNodes[children.length - 2] &&
-            tag.childNodes[children.length - 2].nodeName === "#text"
-          ) {
-            console.log(v2.newTags[tagid]);
-            let newtext = children[children.length - 2].nodeValue.replace(
-              childElement.textContent,
-              ""
-            );
+          const button2 = document.createElement("button");
 
-            newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
-            console.log(newtext, "vvv");
-            const newchildbefore = document.createTextNode(
-              v2.newTags[tagid].textbefore
-            );
-            const newchildafter = document.createTextNode(
-              v2.newTags[tagid].textafter
-            );
-            console.log(newchildafter, newchildbefore);
-            tag.insertBefore(newchildbefore, children[children.length - 1]);
-            tag.insertBefore(newchildafter, children[children.length - 1]);
+          // Set button text to array item
+          button2.innerText = item.id;
+          button2.className =
+            "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
 
-            // children[0].nodeValue = newtext;
-            tag.removeChild(children[position - 1]);
-            console.log(children, "exsq");
-          } else {
-            tag.appendChild(childElement);
-          }
-        } else if (position - 1 > 0 && position + 1 < children.length) {
-          if (
-            tag.childNodes[position - 1].nodeName === "#text" &&
-            tag.childNodes[position + 1].nodeName === "#text"
-          ) {
-            tag.removeChild(tag.childNodes[position]);
-            console.log("yeeeeeee");
-          }
-        } else if (position + 1 <= children.length - 1) {
-          if (tag.childNodes[position + 1].nodeName === "#text") {
-            tag.removeChild(tag.childNodes[position]);
-            console.log("yeeeeeee");
-          }
-        } else if (position - 1 > 0 || position == children.length) {
-          console.log("vishal", tag.childNodes, "position", position);
-          if (
-            tag.childNodes.length > 0 &&
-            tag.childNodes[position - 1].nodeName === "#text"
-          ) {
-            console.log(v2.newTags[tagid]);
-            let newtext = children[position - 1].nodeValue.replace(
-              childElement.textContent,
-              ""
-            );
+          // Add click event listener to the button
+          button2.addEventListener("click", () => {
+            const changes = item.delta;
+            const divElement = document.getElementById("docx-wrapper");
+            const firstv = document_version[0].delta;
+            applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
+            removeemptyimage();
+          });
 
-            newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
-            console.log(newtext, "vvv");
-            const newchildbefore = document.createTextNode(
-              v2.newTags[tagid].textbefore
-            );
-            const newchildafter = document.createTextNode(
-              v2.newTags[tagid].textafter
-            );
-            console.log(newchildafter, newchildbefore);
-            tag.insertBefore(newchildbefore, children[position]);
-            tag.insertBefore(newchildafter, children[position + 1]);
-
-            // children[0].nodeValue = newtext;
-            tag.removeChild(children[position - 1]);
-            console.log(children, "exsq");
-          } else {
-            tag.appendChild(childElement);
-          }
-        } else if (position === children.length - 1) {
-          tag.removeChild(tag.childNodes[position]);
-          console.log("ye3");
-        }
-      }
-
-      if (position >= 0 && position <= children.length) {
-        console.log(position, children.length, tag.childNodes);
-        if (position === children.length) {
-          // If position is at the end, simply append the child
-          tag.appendChild(childElement);
-        } else {
-          // Otherwise, insert the child before the element at the specified position
-          // let sp2 = document.getElementById(children[childnodeposition].id);
-          console.log("Inserting");
-          tag.insertBefore(childElement, tag.childNodes[position]);
-        }
-      } else {
-        tag.appendChild(childElement);
-      }
-    }
-    console.log(
-      childElement.childNodes,
-      "childelement",
-      isIdInJson(
-        v2.newTags[tagid].id,
-        firstv.newTags,
-        v2.newTags[tagid].tagName
-      ),
-      childElement.childNodes,
-      childElement.childNodes.length
-    );
-    if (
-      isIdInJson(
-        v2.newTags[tagid].id,
-        firstv.newTags,
-        v2.newTags[tagid].tagName
-      ) == false &&
-      childElement.childNodes &&
-      childElement.childNodes.length > 0
-    ) {
-      childElement.classList.add("greenhighlight");
-    }
-  }
-  console.log(v1);
-
-  for (const tagId in v2.changedTags) {
-    console.log(tagId, "d");
-    if (v2.changedTags[tagId].id) {
-      const tagInfo = v2.changedTags[tagId];
-      console.log(v2.changedTags[tagId].id);
-
-      const tag = document.getElementById(v2.changedTags[tagId].id);
-
-      console.log("tag: " + tag);
-      if (!tag) continue;
-
-      // Apply cges to text content and style
-      if (tag) {
-        if (
-          isIdInJson(v2.changedTags[tagId].id, firstv.changedTags, "a") == false
-        ) {
-          console.log(v2.changedTags[tagId].textContent, "text text text");
-          // tag.classList.add("bluehighlight");
-        }
-        if (v2.changedTags[tagId].style) {
-          tag.style.cssText = v2.changedTags[tagId].style;
-          tag.classList.add("bluehighlight");
-        }
-        if (v2.changedTags[tagId].textContent) {
-          console.log(
-            v1[v2.changedTags[tagId].id].textContent.split(" ").length,
-            v2.changedTags[tagId].textContent.split(" ").length,
-            "hello tap"
-          );
-
-          tag.textContent = v2.changedTags[tagId].textContent;
-          console.log(tag.style.cssText);
-          const style = tag.style.cssText;
-
-          const difference = findWordDifference(
-            v1[v2.changedTags[tagId].id].textContent,
-            tag.textContent,
-            style
-          );
-          console.log(
-            "hello archit",
-            tag,
-            v1[v2.changedTags[tagId].id].textContent,
-            tag.textContent,
-            difference
-          );
-
-          // Highlight the differing part
-
-          tag.innerHTML = difference;
-          tag.style = style;
-        }
-
-        // tag.style = tag.style + "border : 1px  red solid;";
-
-        // //
-        //           tag.textContent = v2.changedTags[tagId].textContent;
-        // if (tag.textContent !== "") {
-        //   tag.style =
-        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
-        // } else {
-        //   tag.style = v2.changedTags[tagId].style;
-        // }
-
-        tag.className = tag.className;
-        console.log(tag);
-      }
-
-      // Apply changes to image source
-      if (tagInfo.isTagImg && v2[tagId]) {
-        tag.src = v2[tagId].src;
-      }
-    }
-  }
-
-  for (const tagid in v2.removedTags) {
-    console.log(tagid, "removedtags");
-    console.log(v1[v2.removedTags[tagid]]);
-
-    if (v2.removedTags[tagid]) {
-      const tag = document.getElementById(v1[v2.removedTags[tagid]].id);
-
-      //  tag.parentElement.classList.add("redhighlight");
-      console.log("tag: " + tag);
-      if (tag) {
-        if (
-          isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-            false &&
-          tag.textContent !== ""
-        ) {
-          const removedelement = document.createElement("p");
-          removedelement.classList.add("redhighlight");
-          tag.parentElement.insertBefore(removedelement, tag);
-          console.log(tag.id, "removed");
-          console.log(tag.parentElement, "remove remove remove");
-          console.log(v2.removedTags[tagid].textContent, "text text text");
-          if (tag.parentElement.tagName.toLowerCase() !== "article") {
-            tag.parentElement.classList.add("redhighlight");
-          }
-        }
-        if (tag != null) {
-          tag.remove();
-        }
-      } else {
-        continue;
-      }
-    }
-  }
-  for (const image in v2.imageTags) {
-    console.log(v2.imageTags[image]);
-    const tag = document.getElementById(v2.imageTags[image].id);
-    if (!tag) {
-      const parent = document.getElementById(v2.imageTags[image].parent);
-      const img = document.createElement("img");
-      img.src = v2.imageTags[image].src;
-      img.style = v2.imageTags[image].style;
-      img.id = v2.imageTags[image].id;
-      img.width = v2.imageTags[image].width;
-      img.height = v2.imageTags[image].height;
-      img.style.left = v2.imageTags[image].x + "px";
-      img.style.top = v2.imageTags[image].y + "px";
-      parent.appendChild(img);
-    } else {
-      tag.src = v2.imageTags[image].src;
-      tag.style = v2.imageTags[image].style;
-      tag.id = v2.imageTags[image].id;
-      tag.width = v2.imageTags[image].width;
-      tag.height = v2.imageTags[image].height;
-      tag.style.left = v2.imageTags[image].x + "px";
-      tag.style.top = v2.imageTags[image].y + "px";
-    }
-  }
-  // imageLoaded();
-}
-
-document.addEventListener("DOMContentLoaded", async function () {
-  document.getElementById("loading").style = "display:block";
-  if (localStorage.getItem("token") === null) {
-    redirect(VIEWS_CONSTANTS.LOGIN);
-  } else {
-    const token = localStorage.getItem("token");
-    await UserInfoApiRequest(token).then((data) => {
-      // Handle the response from the backend
-      console.log(data, "d");
-      if (data == undefined || data.statusCode == 401) {
-        redirect(VIEWS_CONSTANTS.LOGIN);
-      } else {
-        userdata = data.data;
+          // Append the button to the container
+          // buttonContainer.appendChild(button);
+          buttonContainer.appendChild(button2);
+        });
       }
     });
-  }
-  localStorage.setItem("container-content-1-json", null);
-
-  let document_version = [];
-  // const response = await fetch(
-  //   "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     // Handle the response from the backend
-  //     console.log(data);
-  //     document_version = data.data;
-  //     const buttonContainer = document.getElementById("buttonContainer");
-  //     if (document_version != undefined) {
-  //       document_version.forEach((item) => {
-  //         console.log(item);
-  //         // Create a button element
-  //         // const button = document.createElement("button");
-
-  //         // // Set button text to array item
-  //         // button.innerText = "revert " + item.id;
-  //         // button.className =
-  //         //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // // Add click event listener to the button
-  //         // button.addEventListener("click", () => {
-  //         //   const changes = item.delta;
-  //         //   const divElement = document.getElementById("docx-wrapper");
-  //         //   applyChangesFromV2toV1(divElement, htmljson, changes);
-  //         //   // Replace 'yourDivElementId' with the actual ID of your div element
-  //         //   hideTextNodes(divElement);
-  //         // });
-
-  //         const button2 = document.createElement("button");
-
-  //         // Set button text to array item
-  //         button2.innerText = item.id;
-  //         button2.className =
-  //           "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // Add click event listener to the button
-  //         button2.addEventListener("click", () => {
-  //           const changes = item.delta;
-  //           const divElement = document.getElementById("docx-wrapper");
-  //           const firstv = document_version[0].delta;
-  //           applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
-  //           removeemptyimage();
-  //         });
-
-  //         // Append the button to the container
-  //         // buttonContainer.appendChild(button);
-  //         // buttonContainer.appendChild(button2);
-  //       });
-  //     }
-  //   });
   let htmljson;
-  localStorage.setItem("container-content-1-json", null);
+  localStorage.setItem("container-content-json", null);
   localStorage.setItem("version", 1);
   localStorage.setItem("jsondetectedchanges", null);
   localStorage.setItem("jsonchanges", null);
@@ -554,27 +88,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function extractParentText(parentId) {
-    console.log("Extracting parent", parentId);
     const parentElement = document.getElementById(parentId);
     // console.log(parentId);
     let textContent = "";
-    if (parentElement) {
-      if (parentElement !== null && parentElement.childNodes.length > 0) {
-        for (let i = 0; i < parentElement.childNodes.length; i++) {
-          const childNode = parentElement.childNodes[i];
-          // Check if the node is a text node
-          if (childNode.nodeType === Node.TEXT_NODE) {
-            textContent += childNode.textContent;
-          }
-        }
-      } else {
-        textContent = parentElement.textContent;
-      }
-    } else {
-      textContent = "";
-    }
 
     // Iterate over child nodes
+    if (parentElement !== null && parentElement.childNodes.length > 0) {
+      for (let i = 0; i < parentElement.childNodes.length; i++) {
+        const childNode = parentElement.childNodes[i];
+        // Check if the node is a text node
+        if (childNode.nodeType === Node.TEXT_NODE) {
+          textContent += childNode.textContent;
+        }
+      }
+    } else {
+      textContent = parentElement.textContent;
+    }
 
     return textContent;
   }
@@ -669,205 +198,191 @@ document.addEventListener("DOMContentLoaded", async function () {
     return jsonOutput;
   }
   let contentdocument;
-  // async function renderDocx(file) {
-  //   try {
-  //     const currentDocument = file;
-  //     console.log("ffs");
-  //     if (!currentDocument) {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
+  async function renderDocx(file) {
+    try {
+      currentDocument = file;
+      console.log("ffs");
+      if (!currentDocument) {
+        const docxOptions = Object.assign(docx.defaultOptions, {
+          debug: true,
+          experimental: true,
 
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       console.log(docxOptions);
-  //       var docData = await convertDocxToBlob();
-  //       console.log(document.getElementById("container-content-1"));
-  //       console.log(docData);
-  //       console.log(docx);
-  //       await docx.renderAsync(
-  //         docData,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     } else {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
+          ignoreLastRenderedPageBreak: false,
+        });
+        var docData = await convertDocxToBlob();
+        await docx.renderAsync(
+          docData,
+          document.getElementById("container-content"),
+          null,
+          docxOptions
+        );
+      } else {
+        const docxOptions = Object.assign(docx.defaultOptions, {
+          debug: true,
+          experimental: true,
 
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       var docData = await convertDocxToBlob();
-  //       await docx.renderAsync(
-  //         currentDocument,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     }
+          ignoreLastRenderedPageBreak: false,
+        });
+        var docData = await convertDocxToBlob();
+        await docx.renderAsync(
+          currentDocument,
+          document.getElementById("container-content"),
+          null,
+          docxOptions
+        );
+      }
 
-  //     var tbodyElements = document.querySelectorAll("tbody");
-  //     // console.log("tbody elements: " + tbodyElements.length);
-  //     const blobToBase64 = (blob) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(blob);
-  //       return new Promise((resolve) => {
-  //         reader.onloadend = () => {
-  //           resolve(reader.result);
-  //         };
-  //       });
-  //     };
+      var tbodyElements = document.querySelectorAll("tbody");
+      // console.log("tbody elements: " + tbodyElements.length);
+      const blobToBase64 = (blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        return new Promise((resolve) => {
+          reader.onloadend = () => {
+            resolve(reader.result);
+          };
+        });
+      };
 
-  //     async function convertImagesToBase64(divId) {
-  //       // Find the div element
-  //       var div = document.getElementById(divId);
+      async function convertImagesToBase64(divId) {
+        // Find the div element
+        var div = document.getElementById(divId);
 
-  //       // Find all images within the div
-  //       var images = div.getElementsByTagName("img");
+        // Find all images within the div
+        var images = div.getElementsByTagName("img");
 
-  //       // Iterate over each image
-  //       if (images.length > 0) {
-  //         for (var i = 0; i < images.length; i++) {
-  //           var img = images[i];
+        // Iterate over each image
+        if (images.length > 0) {
+          for (var i = 0; i < images.length; i++) {
+            var img = images[i];
 
-  //           // Create a blob URL for the image
-  //           var blob = await fetch(img.src).then((response) => response.blob());
+            // Create a blob URL for the image
+            var blob = await fetch(img.src).then((response) => response.blob());
 
-  //           // Convert blob to base64
-  //           var base64 = await blobToBase64(blob);
+            // Convert blob to base64
+            var base64 = await blobToBase64(blob);
 
-  //           img.src = base64;
-  //         }
-  //       }
-  //     }
+            img.src = base64;
+          }
+        }
+      }
 
-  //     convertImagesToBase64("container-content-1");
-  //     var tags = document.querySelectorAll(".docx-wrapper *");
-  //     // console.log(tags);
-  //     var idCounter = 1;
-  //     tags.forEach(function (tag) {
-  //       if (!tag.id) {
-  //         tag.id = "id_" + idCounter;
-  //         idCounter++;
-  //       }
-  //     });
-  //     // var tbodyElements = document.getElementsByTagName("tbody");
-  //     // // console.log("tbody elements: " + tbodyElements.length);
+      convertImagesToBase64("container-content");
+      var tags = document.querySelectorAll(".docx-wrapper *");
+      // console.log(tags);
+      var idCounter = 1;
+      tags.forEach(function (tag) {
+        if (!tag.id) {
+          tag.id = "id_" + idCounter;
+          idCounter++;
+        }
+      });
+      var tbodyElements = document.getElementsByTagName("tbody");
+      // console.log("tbody elements: " + tbodyElements.length);
 
-  //     // // Loop through each tbody element
-  //     // for (var i = 0; i < tbodyElements.length; i++) {
-  //     //   // Generate a unique ID for each tbody element
-  //     //   var id = "tbody_" + i;
+      // Loop through each tbody element
+      for (var i = 0; i < tbodyElements.length; i++) {
+        // Generate a unique ID for each tbody element
+        var id = "tbody_" + i;
 
-  //     //   // Set the id attribute for the tbody element
-  //     //   tbodyElements[i].setAttribute("id", id);
-  //     // }
-  //     const sections = document.getElementsByClassName("docx");
-  //     console.log(sections);
-  //     for (var i = 0; i < sections.length; i++) {
-  //       console.log("section height chages");
-  //       sections[i].setAttribute(
-  //         "style",
-  //         "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-  //       );
-  //     }
-  //     const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
-  //     const headers = containerdocx.getElementsByTagName("header");
-  //     console.log(headers);
-  //     // for (var i = 0; i < headers.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   headers[i].setAttribute(
-  //     //     "style",
-  //     //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-  //     //   );
-  //     // }
-  //     const articles = containerdocx.getElementsByTagName("article");
-  //     console.log(articles);
-  //     // for (var i = 0; i < articles.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   articles[i].setAttribute("style", "margin-top: 48px; ");
-  //     // }
+        // Set the id attribute for the tbody element
+        tbodyElements[i].setAttribute("id", id);
+      }
+      const sections = document.getElementsByClassName("docx");
+      console.log(sections);
+      for (var i = 0; i < sections.length; i++) {
+        console.log("section height chages");
+        sections[i].setAttribute(
+          "style",
+          "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+        );
+      }
+      const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
+      const headers = containerdocx.getElementsByTagName("header");
+      console.log(headers);
+      // for (var i = 0; i < headers.length; i++) {
+      //   console.log("section height chages");
+      //   headers[i].setAttribute(
+      //     "style",
+      //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+      //   );
+      // }
+      const articles = containerdocx.getElementsByTagName("article");
+      console.log(articles);
+      // for (var i = 0; i < articles.length; i++) {
+      //   console.log("section height chages");
+      //   articles[i].setAttribute("style", "margin-top: 48px; ");
+      // }
+      contentdocument =
+        document.getElementsByClassName("docx-wrapper")[0].innerHTML;
 
-  //     var containerContent = document.getElementById("container-content-1");
+      // console.log(contentdocument);
 
-  //     // Get the div element with the class "dev" inside container-content-1
-  //     var devDiv = containerContent.lastChild;
-  //     contentdocument = devDiv.innerHTML;
+      const response = await fetch(
+        "http://localhost:5001/api/file/uploadFile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            htmlText: contentdocument,
+            docId: "4",
+            htmljson: extractHtmlToJson(
+              document.getElementsByClassName("docx-wrapper")[0]
+            ),
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend
+          console.log(data);
+        });
 
-  //     console.log(devDiv, "ggg");
-
-  //     const response = await fetch(
-  //       "http://localhost:5001/api/file/uploadFile",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //         body: JSON.stringify({
-  //           htmlText: contentdocument,
-  //           docId: "4",
-  //           htmljson: extractHtmlToJson(
-  //             document.getElementsByClassName("docx-wrapper")[0]
-  //           ),
-  //         }),
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         console.log(data);
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-
-  //     const response2 = await fetch(
-  //       "http://localhost:5001/api/file/getFile/4",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         // consolRAe.log(data.data.data);
-  //         document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-  //           data.data.data;
-  //         htmljson = data.data.htmljson;
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-  //     const container = document.getElementsByClassName("docx-wrapper")[0];
-  //     container.id = "docx-wrapper";
-  //     imageLoaded();
-  //     console.log("");
-  //   } catch (error) {
-  //     console.error("Error rendering DOCX:", error);
-  //   }
-  // }
+      const response2 = await fetch(
+        "http://localhost:5001/api/file/getFile/4",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: "Bearer " + token,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend
+          // console.log(data.data.data);
+          document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+            data.data.data;
+          htmljson = data.data.htmljson;
+        });
+      const container = document.getElementsByClassName("docx-wrapper")[0];
+      container.id = "docx-wrapper";
+      imageLoaded();
+    } catch (error) {
+      console.error("Error rendering DOCX:", error);
+    }
+  }
   console.log("render_docx");
-  // renderDocx();
+  renderDocx();
   document.getElementById("loading").style = "display:none";
 
   console.log("render_docx");
-  // fileInput.addEventListener("change", (ev) => {
-  //   renderDocx(fileInput.files[0]);
-  //   // testDocuments.selectedIndex = 0;
-  // });
+  fileInput.addEventListener("change", (ev) => {
+    renderDocx(fileInput.files[0]);
+    // testDocuments.selectedIndex = 0;
+  });
   const buttondd = document.getElementById("json");
   buttondd.addEventListener("click", function () {
-    const modalid = localStorage.getItem("modalId");
     document.getElementById("loading").style = "display:block";
-    async function detectChanges(divElement) {
-      const jsonResult = JSON.parse(localStorage.getItem("htmljson"));
-      console.log(divElement, "ffff", jsonResult);
-      const articles = divElement.querySelectorAll("article");
+    async function detectChanges(divElement, jsonResult) {
+      const articles = document.querySelectorAll("article");
       console.log(articles.length, "articcle length");
       if (articles.length > 1) {
-        // checkDivSizeBack();
+        checkDivSizeBack();
         removeEmptyPages();
       }
       handleChanges();
@@ -879,9 +394,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         imageTags: [],
       };
 
-      const dynamicImages = document
-        .getElementById("docx-wrapper-1")
-        .getElementsByTagName("img");
+      const dynamicImages = document.getElementsByTagName("img");
       const blobToBase64 = (blob) => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -898,24 +411,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Convert blob to base64
         var base64 = await blobToBase64(blob);
 
-        const gh = {
-          x2: image.offsetLeft,
-          y2: image.offsetTop,
-          width: image.offsetWidth,
-          height: image.offsetHeight,
-          style: image.style.cssText,
-          src: base64,
-          id: image.id,
-          parent: image.parentElement.parentElement.id,
-        };
-        changes.imageTags.push(gh);
+        imagesposition[h].x2 = image.offsetLeft;
+        imagesposition[h].y2 = image.offsetTop;
+        imagesposition[h].width = image.offsetWidth;
+        imagesposition[h].height = image.offsetHeight;
+        imagesposition[h].style = image.style.cssText;
+        imagesposition[h].src = base64;
+        imagesposition[h].id = image.id;
+        imagesposition[h].parent = image.parentElement.parentElement.id;
       }
 
-      console.log(document.getElementById("docx-wrapper-1"));
-      const htmlTags = document
-        .getElementById("docx-wrapper-1")
-        .getElementsByTagName("*");
-      console.log(htmlTags, "rr");
+      changes.imageTags = imagesposition;
+
+      const htmlTags = divElement.getElementsByTagName("*");
+      console.log(htmlTags);
 
       for (let i = 0; i < htmlTags.length; i++) {
         const tag = htmlTags[i];
@@ -929,7 +438,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           console.log("here");
           console.log(tag);
           // New tag found
-          const parentId = tag.parentElement.id || "docx-wrapper-1";
+          const parentId = tag.parentElement.id || "di";
           const parenttag = document.getElementById(tag.parentElement.id);
           console.log(tag.parentElement);
           let position = -1;
@@ -1005,7 +514,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             childnodeposition: childnodeposition,
           };
           changes.newTags.push(newTag);
-          // console.log(jsonResult[parenttag.id], "parent");
+          console.log(jsonResult[parenttag.id], "parent");
           // if (jsonResult[parenttag.id] !== undefined) {
           //   // changes.changedTags.push({
           //   //   id: parenttag.id,
@@ -1046,28 +555,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         }
       }
-      var keys = Object.keys(jsonResult);
-      console.log(jsonResult);
-      console.log(keys);
-      keys.forEach(function (key) {
-        if (jsonResult.hasOwnProperty(key)) {
-          console.log(key, "fff");
-          if (!divElement.querySelector(`#${key}`)) {
-            changes.removedTags.push(key);
-          }
+      for (const tagId in jsonResult) {
+        if (!divElement.querySelector(`#${tagId}`)) {
+          changes.removedTags.push(tagId);
         }
-      });
-      // for (var tagId in jsonResult) {
-      //   console.log(tagId);
-      //   if (jsonResult.hasOwnProperty(tagId)) {
-      //     console.log(tagId, "fff");
-      //     if (!divElement.querySelector(`#${tagId}`)) {
-      //       changes.removedTags.push(tagId);
-      //     }
-      //   }
-      // }
-      console.log(changes, "changes");
-
+      }
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
@@ -1079,9 +571,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           },
           body: JSON.stringify({
             version_number: version,
-            doc_id: modalid,
+            doc_id: 4,
             delta: changes,
-            created_by: userdata.id,
           }),
         }
       )
@@ -1090,17 +581,16 @@ document.addEventListener("DOMContentLoaded", async function () {
           // Handle the response from the backend
           console.log(data);
           localStorage.setItem("version", version);
-          fetchVersionsDateWise(modalid);
           document.getElementById("loading").style = "display:none";
-          // window.location.reload();
+          window.location.reload();
         });
 
       return changes;
     }
 
-    const divElement = document.getElementById("docx-wrapper-1");
+    const divElement = document.getElementsByClassName("docx-wrapper")[0];
     let version = parseInt(localStorage.getItem("version"));
-    const changes = detectChanges(divElement);
+    const changes = detectChanges(divElement, htmljson);
 
     console.log("version: " + version);
     if (version == NaN) {
@@ -1112,20 +602,386 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log(changes);
   });
 
+  function isIdInJson(id, json, tagName) {
+    for (let i = 0; i < json.length; i++) {
+      if (tagName == "tbody") {
+        return true;
+      }
+      if (tagName == "b") {
+        return false;
+      }
+      if (json[i]["id"] === id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Function to apply changes from v1 to v2
+  function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
+    for (const tagid in v2.newTags) {
+      console.log(tagid, "newtags");
+      console.log(v2.newTags[tagid], "tapasvai");
+      console.log(
+        !isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ),
+        "isid"
+      );
+
+      if (v2.newTags[tagid]) {
+        // console.log(`#${v2.newTags[tagid].parentId}`);
+        const tag = document.getElementById(v2.newTags[tagid].parentId);
+        var childElement = document.createElement(v2.newTags[tagid].tagName);
+        childElement.textContent = v2.newTags[tagid].textContent;
+        console.log(childElement.textContent);
+        childElement.style = v2.newTags[tagid].style;
+        childElement.className = v2.newTags[tagid].class;
+        console.log(v2.newTags[tagid].textContent, "textContent");
+
+        childElement.id = v2.newTags[tagid].id;
+        childElement.color = v2.newTags[tagid].color;
+        childElement.size = v2.newTags[tagid].size;
+        childElement.face = v2.newTags[tagid].face;
+        // childElement.children = v2.newTags[tagid].children;
+        console.log("eye", v2.newTags[tagid].children);
+        if (v2.newTags[tagid].children.length > 0) {
+          for (var i = 0; i < v2.newTags[tagid].children.length; i++) {
+            const child = document.getElementById(
+              v2.newTags[tagid].children[i]
+            );
+            if (child) {
+              const x = child;
+              child.remove();
+              childElement.appendChild(x);
+              console.log("eye", child);
+            }
+          }
+        }
+        console.log(tag);
+        console.log(v2.newTags[tagid].parentId);
+        const children = tag.childNodes;
+        const position = v2.newTags[tagid].childnodeposition;
+        console.log(tag);
+        console.log(childElement);
+        console.log(
+          "position",
+          position,
+          children,
+          children.length,
+          position >= 0 && position <= children.length,
+          childElement,
+          "ipvms"
+        );
+        if (
+          position == 0 &&
+          children.length == 1 &&
+          children[0].nodeType == 3
+        ) {
+          const newtext = children[0].textContent
+            .replace(childElement.textContent, "")
+            .replace(v2.newTags[tagid].textbefore, "");
+          const newchildbefore = document.createTextNode(
+            v2.newTags[tagid].textbefore
+          );
+          tag.insertBefore(newchildbefore, children[0]);
+          tag.removeChild(children[1]);
+          children[0].nodeValue = newtext;
+          console.log(children, "exsq");
+        } else {
+          if (position > children.length) {
+            console.log("archit");
+            if (
+              tag.childNodes.length > 0 &&
+              tag.childNodes[children.length - 2] &&
+              tag.childNodes[children.length - 2].nodeName === "#text"
+            ) {
+              console.log(v2.newTags[tagid]);
+              let newtext = children[children.length - 2].nodeValue.replace(
+                childElement.textContent,
+                ""
+              );
+
+              newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
+              console.log(newtext, "vvv");
+              const newchildbefore = document.createTextNode(
+                v2.newTags[tagid].textbefore
+              );
+              const newchildafter = document.createTextNode(
+                v2.newTags[tagid].textafter
+              );
+              console.log(newchildafter, newchildbefore);
+              tag.insertBefore(newchildbefore, children[children.length - 1]);
+              tag.insertBefore(newchildafter, children[children.length - 1]);
+
+              // children[0].nodeValue = newtext;
+              tag.removeChild(children[position - 1]);
+              console.log(children, "exsq");
+            } else {
+              tag.appendChild(childElement);
+            }
+          } else if (position - 1 > 0 && position + 1 < children.length) {
+            if (
+              tag.childNodes[position - 1].nodeName === "#text" &&
+              tag.childNodes[position + 1].nodeName === "#text"
+            ) {
+              tag.removeChild(tag.childNodes[position]);
+              console.log("yeeeeeee");
+            }
+          } else if (position + 1 <= children.length - 1) {
+            if (tag.childNodes[position + 1].nodeName === "#text") {
+              tag.removeChild(tag.childNodes[position]);
+              console.log("yeeeeeee");
+            }
+          } else if (position - 1 > 0 || position == children.length) {
+            console.log("vishal", tag.childNodes, "position", position);
+            if (
+              tag.childNodes.length > 0 &&
+              tag.childNodes[position - 1].nodeName === "#text"
+            ) {
+              console.log(v2.newTags[tagid]);
+              let newtext = children[position - 1].nodeValue.replace(
+                childElement.textContent,
+                ""
+              );
+
+              newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
+              console.log(newtext, "vvv");
+              const newchildbefore = document.createTextNode(
+                v2.newTags[tagid].textbefore
+              );
+              const newchildafter = document.createTextNode(
+                v2.newTags[tagid].textafter
+              );
+              console.log(newchildafter, newchildbefore);
+              tag.insertBefore(newchildbefore, children[position]);
+              tag.insertBefore(newchildafter, children[position + 1]);
+
+              // children[0].nodeValue = newtext;
+              tag.removeChild(children[position - 1]);
+              console.log(children, "exsq");
+            } else {
+              tag.appendChild(childElement);
+            }
+          } else if (position === children.length - 1) {
+            tag.removeChild(tag.childNodes[position]);
+            console.log("ye3");
+          }
+        }
+
+        if (position >= 0 && position <= children.length) {
+          console.log(position, children.length, tag.childNodes);
+          if (position === children.length) {
+            // If position is at the end, simply append the child
+            tag.appendChild(childElement);
+          } else {
+            // Otherwise, insert the child before the element at the specified position
+            // let sp2 = document.getElementById(children[childnodeposition].id);
+            console.log("Inserting");
+            tag.insertBefore(childElement, tag.childNodes[position]);
+          }
+        } else {
+          tag.appendChild(childElement);
+        }
+      }
+      console.log(
+        childElement.childNodes,
+        "childelement",
+        isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ),
+        childElement.childNodes,
+        childElement.childNodes.length
+      );
+      if (
+        isIdInJson(
+          v2.newTags[tagid].id,
+          firstv.newTags,
+          v2.newTags[tagid].tagName
+        ) == false &&
+        childElement.childNodes &&
+        childElement.childNodes.length > 0
+      ) {
+        childElement.classList.add("greenhighlight");
+      }
+    }
+    console.log(v1);
+
+    for (const tagId in v2.changedTags) {
+      console.log(tagId, "d");
+      if (v2.changedTags[tagId].id) {
+        const tagInfo = v2.changedTags[tagId];
+        console.log(v2.changedTags[tagId].id);
+
+        const tag = document.getElementById(v2.changedTags[tagId].id);
+
+        console.log("tag: " + tag);
+        if (!tag) continue;
+
+        // Apply cges to text content and style
+        if (tag) {
+          if (
+            isIdInJson(v2.changedTags[tagId].id, firstv.changedTags, "a") ==
+            false
+          ) {
+            console.log(v2.changedTags[tagId].textContent, "text text text");
+            tag.classList.add("bluehighlight");
+          }
+          if (v2.changedTags[tagId].style) {
+            tag.style = v2.changedTags[tagId].style;
+          }
+          if (v2.changedTags[tagId].textContent) {
+            tag.textContent = v2.changedTags[tagId].textContent;
+            // tag.style = tag.style + "border : 1px  red solid;";
+          }
+          // //
+          //           tag.textContent = v2.changedTags[tagId].textContent;
+          // if (tag.textContent !== "") {
+          //   tag.style =
+          //     v2.changedTags[tagId].style + "border : 1px  red solid;";
+          // } else {
+          //   tag.style = v2.changedTags[tagId].style;
+          // }
+
+          tag.className = tag.className;
+          console.log(tag);
+        }
+
+        // Apply changes to image source
+        if (tagInfo.isTagImg && v2[tagId]) {
+          tag.src = v2[tagId].src;
+        }
+      }
+    }
+
+    for (const tagid in v2.removedTags) {
+      console.log(tagid, "removedtags");
+      console.log();
+
+      if (v2.removedTags[tagid]) {
+        const tag = document.getElementById(v1[v2.removedTags[tagid]].id);
+
+        //  tag.parentElement.classList.add("redhighlight");
+        console.log("tag: " + tag);
+        if (tag) {
+          if (
+            isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
+              false &&
+            tag.textContent !== ""
+          ) {
+            const removedelement = document.createElement("p");
+            removedelement.classList.add("redhighlight");
+            tag.parentElement.insertBefore(removedelement, tag);
+            console.log(tag.id, "removed");
+            console.log(tag.parentElement, "remove remove remove");
+            console.log(v2.removedTags[tagid].textContent, "text text text");
+            if (tag.parentElement.tagName.toLowerCase() !== "article") {
+              tag.parentElement.classList.add("redhighlight");
+            }
+          }
+          if (tag != null) {
+            tag.remove();
+          }
+        } else {
+          continue;
+        }
+      }
+    }
+    for (const image in v2.imageTags) {
+      console.log(v2.imageTags[image]);
+      const tag = document.getElementById(v2.imageTags[image].id);
+      if (!tag) {
+        const parent = document.getElementById(v2.imageTags[image].parent);
+        const img = document.createElement("img");
+        img.src = v2.imageTags[image].src;
+        img.style = v2.imageTags[image].style;
+        img.id = v2.imageTags[image].id;
+        img.width = v2.imageTags[image].width;
+        img.height = v2.imageTags[image].height;
+        img.x = v2.imageTags[image].x;
+        img.y = v2.imageTags[image].y;
+        parent.appendChild(img);
+      } else {
+        tag.src = v2.imageTags[image].src;
+        tag.style = v2.imageTags[image].style;
+        tag.id = v2.imageTags[image].id;
+        tag.width = v2.imageTags[image].width;
+        tag.height = v2.imageTags[image].height;
+        tag.x = v2.imageTags[image].x;
+        tag.y = v2.imageTags[image].y;
+      }
+    }
+    imageLoaded();
+  }
 
   // Function to apply changes from v2 to v1
+  async function applyChangesFromV2toV1(divElement, v1, v2, firstv) {
+    // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
+    // console.log(allredhighlightedtags, "allredhighlighted");
+    // if (allredhighlightedtags) {
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("redhighlight");
+    //   }
+    // }
+    // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
+
+    // if (allredhighlightedtags) {
+    //   console.log(allredhighlightedtags, "bluehighlight");
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("bluehighlight");
+    //   }
+    // }
+    // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
+    // console.log(allredhighlightedtags, "allredhighlighted");
+    // if (allredhighlightedtags) {
+    //   for (let i = 0; i < allredhighlightedtags.length; i++) {
+    //     allredhighlightedtags[i].classList.remove("redhighlight");
+    //   }
+    // }
+
+    // for (const image in v2.imageTags) {
+    //   const tag = document.getElementById(v2.imageTags[image].id);
+    //   // tag.src = v2.imageTags[image].src;
+    //   tag.style = v2.imageTags[image].style;
+    //   tag.id = v2.imageTags[image].id;
+    //   tag.width = v2.imageTags[image].width;
+    //   tag.height = v2.imageTags[image].height;
+    //   tag.x = v2.imageTags[image].x;
+    //   tag.y = v2.imageTags[image].y;
+    // }
+    // imageLoaded();
+    const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        // console.log(data.data.data);
+        document.getElementsByClassName("docx-wrapper")[0].innerHTML =
+          data.data.data;
+        htmljson = data.data.htmljson;
+      });
+    imageLoaded();
+  }
 
   // Example usage:
   // Assuming you have divElement, v1, and v2 from previous steps
   // Applying changes from v1 to v2
-  // const v2tov1 = document.getElementById("v2tov1");
-  // v2tov1.addEventListener("click", function () {
-  //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-  //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
-  //   applyChangesFromV2toV1();
-  //   removeemptyimage();
-  // });
+  const v2tov1 = document.getElementById("v2tov1");
+  v2tov1.addEventListener("click", function () {
+    const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
+    const divElement = document.getElementsByClassName("docx-wrapper")[0];
+    applyChangesFromV2toV1(divElement, htmljson, changes);
+    removeemptyimage();
+  });
   // const v1tov2 = document.getElementById("v1tov2");
   // // v1tov2.addEventListener("click", function () {
   // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
@@ -1136,231 +992,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Applying changes from v2 to v1
 });
 
-import { letterColorMapping } from "../utils/letterstyle.js";
-
-async function ChangeVersion(modalid, id) {
-  // const modalid = localStorage.getItem("modalid");
-  // console.log(modalid, "ddd eug");
-  const htmljson = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalid}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: "Bearer " + token,
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      // Handle the response from the backend
-      // console.log(data.data.data);
-      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
-      const htmljson = data.data.htmljson;
-      return htmljson;
-    });
-  const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data.data[0], "firtv");
-      return data.data[0].delta;
-    });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-
-      const divElement = "";
-      const v1 = htmljson;
-      const v2 = data[0].delta;
-      console.log(divElement, v1, v2, firstv);
-      applyChangesFromV2toV1(modalid, function () {
-        applyChangesFromV1toV2(divElement, v1, v2, firstv);
-      });
-    });
-}
-function openDash(id) {
-  console.log(id, "sss");
-  const dash = document.getElementById(id);
-  if (dash.classList.contains("hidden")) {
-    dash.classList.remove("hidden");
-  } else {
-    dash.classList.add("hidden");
-  }
-}
-const fetchVersionsDateWise = async (id) => {
-  const y = [];
-  const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("data datewise", data);
-
-      // Parse each element into an array
-      data.forEach((element) => {
-        const arrayOfArrays = element.grouped_values
-          .slice(1, -1)
-          .split("], [")
-          .map((item) => item.split(","));
-        console.log(arrayOfArrays);
-
-        // Step 1: Split the string into an array of arrays
-        const result = arrayOfArrays.map((subArray) => {
-          const id = parseInt(subArray[0]);
-          const version_number = parseFloat(subArray[1]);
-          const doc_id = parseInt(subArray[2]); // Access JSON value
-
-          return {
-            id,
-            version_number,
-            doc_id,
-            time: subArray[3].split(" ")[1].split(":").slice(0, 2).join(":"),
-            created_by: subArray[4],
-          };
-        });
-        console.log("data datewise", result);
-        y.push({ date: element.date, version: result });
-      });
-
-      console.log("data datewise", y);
-
-      const versiontable = document.getElementById("version-table");
-      versiontable.innerHTML = `
-          <li class="mb-1 ms-4 p-4 bg-zircon-100">
-          <svg class=" absolute mt-2  -start-[0.25rem]  " width="10" height="10" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="3.5" cy="3.5" r="2.5" fill="white" stroke="black"/>
-            </svg>
-            
-           
-           <div class="flex flex-row items-center gap-2 w-full">
-            <p class=" text-base font-normal text-gray-500   ">
-            Current Version
-              </p>
-            
-           </div>
-           
-            
-        </li>`;
-      y.map((item) => {
-        console.log(item);
-
-        var dateObject = new Date(item.date);
-
-        // Get the day, month, and year
-        var day = dateObject.getDate();
-        var month = dateObject.getMonth() + 1; // January is 0, so we add 1
-        var year = dateObject.getFullYear();
-
-        // Pad day and month with leading zeros if necessary
-        day = day < 10 ? "0" + day : day;
-        month = month < 10 ? "0" + month : month;
-
-        // Format the date into "dd-mm-yyyy" format
-        var formattedDate = day + "-" + month + "-" + year;
-        versiontable.innerHTML += `
-            <li class="mb-1 ms-4  ">
-            <svg class=" absolute mt-2  -start-[0.25rem] open-dash-svg  " width="10" height="10" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="3.5" cy="3.5" r="2.5" fill="white" stroke="black"/>
-              </svg>
-              
-                 <div class="flex flex-row items-center gap-6 w-full p-4 hover:bg-gallery-100">
-              <p class=" text-base font-normal text-gray-500    ">
-                ${formattedDate}
-               
-                </p>
-                <button class="open-dash-btn" data-day="${day}" data-month="${month}">
-                <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.9097 0.583008C10.4346 0.583008 10.6974 1.24544 10.3263 1.63286L5.91657 6.23622C5.6865 6.47638 5.3135 6.47638 5.08343 6.23622L0.673729 1.63286C0.302607 1.24544 0.565451 0.583008 1.0903 0.583008L9.9097 0.583008Z" fill="#52525B"/>
-                </svg></button>
-               
-                
-             </div>
-             
-              <ol class="hidden" id="${day}-${month}">
-              
-            </ol>
-              
-          </li>
-            `;
-
-        const dayversions = document.getElementById(`${day}-${month}`);
-        dayversions.innerHTML = ``;
-        item.version.map((version) => {
-          console.log(version, "ffffk");
-          dayversions.innerHTML += `
-          <li id=${
-            version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
-         
-            
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
-              version.time
-            }</time>
-           <div class="flex flex-row items-center  gap-1 w-full ">
-            <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${
-              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
-            }] rounded-full w-5 h-5 flex items-center justify-center">
-             ${version.created_by.charAt(0)}
-             </p>
-           
-              </p>
-              <p>
-               ${version.created_by}
-              </p>
-           </div>
-           
-            
-        </li>
-`;
-        });
-
-        const openDashButtons = document.querySelectorAll(".open-dash-btn");
-        openDashButtons.forEach((button) => {
-          button.addEventListener("click", () => {
-            const day = button.dataset.day;
-            const month = button.dataset.month;
-            openDash(`${day}-${month}`);
-          });
-        });
-        const versionIdButtons =
-          document.querySelectorAll(".version-id-button");
-        versionIdButtons.forEach((button) => {
-          button.addEventListener("click", () => {
-            ChangeVersion(id, button.id);
-          });
-        });
-      });
-    });
-};
-
 var changesx = 1;
 var version = 1;
 var currentNearestElement = null;
 
 function assignIDsToElements() {
-  const container = document.getElementById("docx-wrapper-1");
-
+  const container = document.getElementsByClassName("docx-wrapper")[0];
+  container.id = "docx-wrapper";
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changesx}`;
@@ -1424,21 +1062,21 @@ function handleChanges() {
 }
 
 document
-  .getElementById("container-content-1")
+  .getElementById("container-content")
   .addEventListener("mouseup", handleChanges);
 document
-  .getElementById("container-content-1")
+  .getElementById("container-content")
   .addEventListener("keyup", handleChanges);
 
 // document
-//   .getElementById("container-content-1")
+//   .getElementById("container-content")
 //   .addEventListener("input", handleChanges);
 
 document
-  .getElementById("container-content-1")
+  .getElementById("container-content")
   .addEventListener("input", checkDivSize);
 document
-  .getElementById("container-content-1")
+  .getElementById("container-content")
   .addEventListener("input", imageLoaded, assignIDsToElements, handleChanges);
 // document.addEventListener("keydown", function (event) {
 //   // Check if the Control key and the "v" key are pressed simultaneously
@@ -1448,7 +1086,7 @@ document
 //   }
 // // });
 document
-  .getElementById("container-content-1")
+  .getElementById("container-content")
   .addEventListener("input", function (event) {
     // Check if the input event was triggered by pressing the backspace or delete key
     if (
@@ -1487,7 +1125,7 @@ function removearticlewhileloop(articleHeight, article, i) {
   while (842 < articleHeight && totalarticles.length > i + 1 && index < 100) {
     console.log("removearticlewhileloop");
     index += 1;
-    var pages = document.getElementsByClassName("docx");
+    pages = document.getElementsByClassName("docx");
     const nextarticle = document.getElementsByTagName("article")[i + 1];
     article.lastChild.id = null;
     setIdToNull(article.lastChild);
@@ -1539,9 +1177,8 @@ function checkDivSize() {
       let articleHeight = article.scrollHeight;
       console.log("removearticlewhileloop first");
       removearticlewhileloop(articleHeight, article, i);
-      // // article.style.height = "842pt";
-      // article.clientHeight = 842;
-      // article.scrollHeight = 842;
+      article.clientHeight = 842;
+      article.scrollHeight = 842;
     } else {
       let article = document.getElementsByTagName("article")[i];
       let articleHeight = article.scrollHeight;
@@ -1575,8 +1212,8 @@ function checkDivSize() {
         article.lastChild.remove();
         articleHeight = article.scrollHeight;
         removearticlewhileloop(article, articleHeight, i);
-        // article.clientHeight = 842;
-        // article.scrollHeight = 842;
+        article.clientHeight = 842;
+        article.scrollHeight = 842;
       }
     }
 
@@ -1586,7 +1223,7 @@ function checkDivSize() {
   removeEmptyPages();
 }
 
-export function imageLoaded() {
+function imageLoaded() {
   imagesposition = [];
   const dynamicImages = document.querySelectorAll("img");
   console.log(dynamicImages);
@@ -1761,8 +1398,8 @@ function checkDivSizeBack() {
     let article = document.getElementsByTagName("article")[i];
     let articleHeight = article.scrollHeight;
     addarticlewhileloop(articleHeight, article, i);
-    // article.clientHeight = 842;
-    // article.scrollHeight = 842;
+    article.clientHeight = 842;
+    article.scrollHeight = 842;
 
     // editableDiv.appendChild(newpage);
   }

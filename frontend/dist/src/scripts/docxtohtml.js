@@ -1,7 +1,7 @@
-export async function renderDocx(file, elementId) {
+async function renderDocx(file) {
   try {
     console.log("in render docx ");
-    const currentDocument = file;
+    currentDocument = file;
     if (!currentDocument) {
       const docxOptions = Object.assign(docx.defaultOptions, {
         debug: true,
@@ -12,7 +12,7 @@ export async function renderDocx(file, elementId) {
       var docData = await convertDocxToBlob();
       await docx.renderAsync(
         docData,
-        document.getElementById(`${elementId}`),
+        document.getElementById("container-content"),
         null,
         docxOptions
       );
@@ -27,12 +27,11 @@ export async function renderDocx(file, elementId) {
       console.log("gere", docData);
       const res = await docx.renderAsync(
         currentDocument,
-        document.getElementById(`${elementId}`),
+        document.getElementById("container-content"),
         null,
         docxOptions
       );
-
-      const result = document.getElementById(`${elementId}`);
+      const result = document.getElementById("container-content");
       return result.innerHTML;
     }
   } catch (error) {

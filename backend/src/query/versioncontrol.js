@@ -25,7 +25,7 @@ export const documentVersionUpload = async (data) => {
         return dbResponse;
 
     } catch (error) {
-        throw new DatabaseError();
+        throw new DatabaseError('Error in Creating Document Versions');
     }
 
 
@@ -55,7 +55,7 @@ export const getDocumentVersionsDatewise = async (data) => {
         return dbResponse;
 
     } catch (error) {
-        throw new DatabaseError();
+        throw new DatabaseError('Error in getting Document Versions details');
     }
 
 };
@@ -78,7 +78,7 @@ export const getDocumentVersionsById = async (data) => {
         return dbResponse;
 
     } catch (error) {
-        throw new DatabaseError();
+        throw new DatabaseError('Error in getting Document Version');
     }
 
 };
@@ -153,7 +153,7 @@ export const getTemplateVersionsById = async (data) => {
         return dbResponse;
 
     } catch (error) {
-        throw new DatabaseError();
+        throw new DatabaseError('Error in getting Document Version');
     }
 
 };

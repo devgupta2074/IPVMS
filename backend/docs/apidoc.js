@@ -9,7 +9,7 @@ import {
   resetPassword,
   resetUserBody,
   resetAuthUserBody,
-  resetPasswordAuth,
+  resetPasswordAuth
 } from "./user.js";
 
 import {
@@ -22,6 +22,20 @@ import {
   getDocumentCategories,
   registerCategoryBody
 } from './category.js';
+
+import {
+  createDocumentVersion,
+  createDocumentVersionBody,
+  getDocumentVersionById,
+  getDocumentVersionsDatewise
+} from "./documents.js";
+
+import {
+  createTemplateVersion,
+  createTemplateVersionBody,
+  getTemplateVersionById,
+  getTemplateVersionsDatewise
+} from "./templates.js";
 
 
 
@@ -64,7 +78,12 @@ const apiDocumentation = {
     {
       name: "Category",
     },
-
+    {
+      name: "Documents"
+    },
+    {
+      name: 'Templates'
+    }
   ],
   paths: {
     "/api/user/registerUser": {
@@ -99,6 +118,24 @@ const apiDocumentation = {
     },
     "/documents/count/category": {
       get: getDocumentCategories
+    },
+    "/api/versioncontrol/createDocumentVersion": {
+      post: createDocumentVersion
+    },
+    "/api/versioncontrol/getDocumentVersionsDatewise?docId=": {
+      get: getDocumentVersionsDatewise
+    },
+    "/api/versioncontrol/getDocumentVersionById?id=": {
+      get: getDocumentVersionById
+    },
+    "/api/versioncontrol/createTemplateVersion": {
+      post: createTemplateVersion
+    },
+    "/api/versioncontrol/getTemplateVersionsDatewise?docId=": {
+      get: getTemplateVersionsDatewise
+    },
+    "/api/versioncontrol/getTemplateVersionById?id=": {
+      get: getTemplateVersionById
     }
 
   },
@@ -118,7 +155,9 @@ const apiDocumentation = {
       resetAuthUserBody,
       registerCategoryBody,
       editCategoryBody,
-      deleteCategoryBody
+      deleteCategoryBody,
+      createDocumentVersionBody,
+      createTemplateVersionBody
     },
   },
 };

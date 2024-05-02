@@ -1,25 +1,30 @@
 import express from "express";
 import {
   createDocumentVersion,
-  getDocumentVersionsById,
+  getDocumentVersionById,
   getDocumentVersionsDatewise,
 } from "../controllers/document/document.controller.js";
 import {
   createTemplateVersion,
-  getTemplateVersionsById,
+  getTemplateVersionById,
   getTemplateVersionsDatewise
 } from "../controllers/template/template.controller.js";
+import {
+  checkDocIdMiddleware,
+  checkIdMiddleware,
+  createVersionMiddleware
+} from "../middleware/fileHandlingMiddleware.js";
 
 const versionControlRouter = express.Router();
 
-versionControlRouter.post("/createDocumentVersion", createDocumentVersion);
-versionControlRouter.get("/getDocumentVersionsDatewise", getDocumentVersionsDatewise);
-versionControlRouter.get("/getDocumentVersionsById", getDocumentVersionsById);
+versionControlRouter.post("/createDocumentVersion", createVersionMiddleware, createDocumentVersion);
+versionControlRouter.get("/getDocumentVersionsDatewise", checkDocIdMiddleware, getDocumentVersionsDatewise);
+versionControlRouter.get("/getDocumentVersionById", checkIdMiddleware, getDocumentVersionById);
 
 
-versionControlRouter.post("/createTemplateVersion", createTemplateVersion);
-versionControlRouter.get("/getTemplateVersionsDatewise", getTemplateVersionsDatewise);
-versionControlRouter.get("/getTemplateVersionsById", getTemplateVersionsById);
+versionControlRouter.post("/createTemplateVersion", createVersionMiddleware, createTemplateVersion);
+versionControlRouter.get("/getTemplateVersionsDatewise", checkDocIdMiddleware, getTemplateVersionsDatewise);
+versionControlRouter.get("/getTemplateVersionById", checkIdMiddleware, getTemplateVersionById);
 
 
 export default versionControlRouter;

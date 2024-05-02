@@ -1,4 +1,5 @@
 import { pool } from "../core/database/db.js";
+import { DatabaseError } from "../Error/customError.js";
 
 export const updateDocument = async (data) => {
   try {
@@ -50,5 +51,48 @@ export const getTemplate = async (data) => {
     return result;
   } catch (error) {
     throw new Error("Error" + error.message);
+  }
+};
+
+export const getPaginatedDocumentDetailsWithSearch = async (data, orderByColumn, orderByDirection) => {
+
+  const query = {
+    text: `
+    WITH paginated_data AS (
+      SELECT 
+        id, 
+        category_id as cid,
+        created_at, 
+        created_by, 
+        title
+      FROM document d
+      WHERE 
+      title ILIKE '%'||$3||'%'
+      ORDER BY ${orderByColumn} ${orderByDirection}
+      LIMIT $1 OFFSET $2
+    ),
+    total_count AS (
+      SELECT COUNT(*) as total_count FROM document
+    )
+    SELECT 
+      pd.*, 
+      (SELECT total_count FROM total_count) as total_count,
+      c.category as category_name
+    FROM 
+    paginated_data pd
+    JOIN  category c 
+    ON c.id=pd.cid
+    WHERE 
+      c.category ILIKE '%'||$4||'%';
+    `,
+    values: data,
+  };
+
+  try {
+    const dbResponse = await pool.query(query);
+    return dbResponse;
+
+  } catch (error) {
+    throw new DatabaseError('Error while getting documents details.');
   }
 };

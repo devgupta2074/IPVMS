@@ -9,7 +9,7 @@ export const createTemplateVersion = async (req, res, next) => {
         const body = req.body;
         const result = await versioncontrol.templateVersionUploadService(body);
 
-        return res.status(200).json({
+        return res.status(201).json({
             success: true,
             message: "Document version created:",
             length: result.length,
@@ -39,7 +39,7 @@ export const getTemplateVersionsDatewise = async (req, res, next) => {
     }
 };
 
-export const getTemplateVersionsById = async (req, res, next) => {
+export const getTemplateVersionById = async (req, res, next) => {
     try {
         const docId = parseInt(req.query.id);
         console.log(docId);
@@ -49,7 +49,7 @@ export const getTemplateVersionsById = async (req, res, next) => {
             status: "success",
             message: "Document version:",
             length: result.length,
-            data: result.rows
+            data: result.rows[0]
         });
 
     } catch (error) {

@@ -107,7 +107,27 @@ const createNewCategory = {
                 },
             },
         },
-    },
+        400: {
+            description: "bad request",
+            content: {
+                "application/json": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            success: {
+                                type: "boolean",
+                                example: false,
+                            },
+                            message: {
+                                type: "string",
+                                example: "Category name required",
+                            },
+                        },
+                    }
+                }
+            },
+        }
+    }
 };
 
 const registerCategoryBody = {

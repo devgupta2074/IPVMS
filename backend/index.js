@@ -15,7 +15,7 @@ import categoryRouter from "./src/routes/catogery.routes.js";
 import { getDocumentCategories } from "./src/controllers/catogery/catogery.controller.js";
 import searchRouter from "./src/routes/globalsearch.routes.js";
 import versionControlRouter from "./src/routes/versioncontrol.routes.js";
-import { exceptionHandler } from "./src/middleware/authMiddleware/errorHandlingMiddleware.js";
+import { exceptionHandler } from "./src/middleware/errorHandlingMiddleware.js";
 import { pool } from "./src/core/database/db.js";
 
 const __dirname = path.resolve();

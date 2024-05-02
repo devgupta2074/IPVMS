@@ -3,8 +3,12 @@ import {
   getTemplate,
   updateDocument,
   uploadTemplate,
-  getDocumentById
-} from "../query/document.js";
+  getDocumentById,
+  getPaginatedDocumentDetailsWithSearch
+} from "../query/file.js";
+import { getPagination } from "../utils/getPagination.js";
+
+
 export const fileuploadService = async (htmlText, docId, res) => {
   try {
     const document = await updateDocument({ htmlText, docId });
@@ -90,4 +94,38 @@ export const getTemplateByIdService = async (res, id) => {
   } catch (error) {
     return res.status(400).json({ message: error.message, success: false });
   }
+};
+
+
+export const getPaginatedDocumentDetailsWithSearchService = async (req) => {
+  const query = req.query;
+  const title = req.query.title;
+  const category = req.query.category;
+  console.log(title);
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = getPagination(page, size);
+  console.log(category);
+  //order by
+  const orderByColumn = query?.orderByColumn || "created_at";
+  const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
+
+  try {
+    const response = await getPaginatedDocumentDetailsWithSearch([limit, offset, title, category], orderByColumn, orderByDirection);
+
+    if ((response.rowCount != 0) || null) {
+      const data = {
+        length: response.rowCount,
+        rows: response.rows
+      };
+      return data;
+
+    } else {
+      throw new NotFoundError('No documents found.');
+    }
+  } catch (error) {
+    throw error;
+  }
+
 };

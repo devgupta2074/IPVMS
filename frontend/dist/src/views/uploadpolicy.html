@@ -8,12 +8,84 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
+    <style>  .file-list {
+      display: grid;
+      margin-top:5px ;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  
+    .file-name {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+  
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+  
+    .progress {
+      height: 100%;
+      background-color: #3498db;
+    }
+  
+    .status {
+      margin-left: 10px;
+      font-weight: bold;
+      margin-right:10px;
+    }
+  
+    .status.success {
+      color: green;
+    }
+  
+    .status.failed {
+      color: red;
+
+    }
+  
+    .retry-btn {
+      padding: 5px 10px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left:"10px";
+    }
+  
+    .retry-btn:hover {
+      background-color: #2980b9;
+    }
+  
+  
+  
+  </style>
   </head>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="../scripts/docxtohtml.js"></script>
   <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
   <script src="../scripts/docx-preview.min.js"></script>
+  <script type="module" src="/scripts/bulkupload.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+    integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
 
   <body>
     <div>
@@ -40,10 +112,10 @@
         aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full"
       >
-        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <div class="relative p-4 w-full max-w-2xl h-full ">
           <!-- Modal content -->
           <div
-            class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+            class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5 overflow-y-scroll"
           >
             <!-- Modal header -->
             <div
@@ -74,35 +146,8 @@
               </button>
             </div>
             <!-- Modal body -->
-            <form action="#">
+            <form action="#" id="modal-form">
               <div class="grid gap-4 mb-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Title</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="title"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholder="Type product name"
-                    required=""
-                  />
-                </div>
-
-                <div>
-                  <label
-                    for="category"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >Category</label
-                  >
-                  <select
-                    id="category"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  ></select>
-                </div>
                 <div class="sm:col-span-2">
                   <div class="flex items-center justify-center w-full">
                     <label
@@ -137,15 +182,17 @@
                           Docx upto 5mb
                         </p>
                       </div>
-                      <input id="file-upload" type="file" />
+                      <input   id="file-upload" multiple type="file" accept=".docx" />
                     </label>
                   </div>
-                </div>
+                  <!--  file list for status of file upload -->
+                  <div class="file-list" id="fileList"></div>
               </div>
+              <div>
               <button
                 type="button"
                 id="uploadFile"
-                class="text-black inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                class="hidden text-black  items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
                 <svg
                   class="mr-1 -ml-1 w-6 h-6"
@@ -161,6 +208,20 @@
                 </svg>
                 Upload Policy
               </button>
+              <div id="upload-error" class=" hidden text-red-500">No file to upload</div>
+              </div>
+              <div class="w-full flex justify-end items-center" id="">
+              <div id="next-error" class=" hidden text-red-500">No file to upload</div>
+                <button
+                type="button"
+
+                id="nextstep"
+
+                class="hidden justify-end w-full items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
+             next
+              </button>
+            </div>
             </form>
           </div>
         </div>
@@ -169,5 +230,7 @@
     </div>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-  <script type="module" src="/scripts/uploadpolicy.js"></script>
+
+ 
+  
 </html>

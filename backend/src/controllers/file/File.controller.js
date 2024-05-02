@@ -486,3 +486,34 @@ export const createPolicy = async (req, res, next) => {
     next(error);
   }
 };
+
+export const setPolicyDetail = async (req, res, next) => {
+  const { docDetail } = req.body;
+  console.log(docDetail, "doc Deatil is");
+  // docDetail->title,category,
+  try {
+    const values = docDetail.map((doc) => {
+      return `(${parseInt(doc.categoryId)},'${doc.title.toString()}',${parseInt(
+        doc.docId
+      )})`;
+    });
+
+    console.log(values.join(","));
+    const query = {
+      text: `UPDATE document AS d
+    SET 
+    category_id=c.category_id,
+    title=c.title
+  FROM (
+    VALUES 
+    ${values.join(",")}
+  ) AS c(category_id,title,doc_id)
+  WHERE d.id = c.doc_id
+`,
+    };
+    const result = await pool.query(query);
+    return res.status(200).json({ message: "document upload success" });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -10,6 +10,7 @@ import {
   getRecentPolicies,
   getpaginateddocuments,
   createPolicy,
+  setPolicyDetail,
 } from "../controllers/file/file.Controller.js";
 
 import {
@@ -20,6 +21,7 @@ const fileRouter = express.Router();
 
 fileRouter.post("/uploadFile", fileuploadMiddleware, uploadFile);
 fileRouter.post("/createPolicy", createPolicy);
+fileRouter.post("/setPolicyDetail", setPolicyDetail);
 fileRouter.get("/getFile/:docId", getFile);
 fileRouter.post("/uploadTemplate", uploadTemplateMiddleware, uploadTemplate);
 fileRouter.get("/getTemplateById/:id", getTemplateById);

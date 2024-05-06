@@ -1,3 +1,6 @@
+import { UserInfoApiRequest } from "../api/dashboard.js";
+import { VIEWS_CONSTANTS } from "../utils/constants.js";
+
 const NavBar = `
 <header
 class="w-full h-[3.5rem] z-20 fixed top-0 left-0 p-1 bg-gulf-blue-950 flex items-center justify-end gap-5"
@@ -186,7 +189,22 @@ class="h-[2.5rem] w-[2.5rem] p-2  "
 </div>
 </aside>`;
 
-export function InsertNavbar() {
+export async function InsertNavbar() {
+  let userdata;
+  if (localStorage.getItem("token") === null) {
+    redirect(VIEWS_CONSTANTS.LOGIN);
+  } else {
+    const token = localStorage.getItem("token");
+    await UserInfoApiRequest(token).then((data) => {
+      // Handle the response from the backend
+      console.log(data, "d");
+      if (data.statusCode == 401) {
+        redirect(VIEWS_CONSTANTS.LOGIN);
+      } else {
+        userdata = data;
+      }
+    });
+  }
   const body = document.getElementsByTagName("body")[0];
   const navcomp = document.createElement("div");
   navcomp.id = "navbar-removed";
@@ -289,26 +307,6 @@ export function InsertNavbar() {
 
   closeButton.addEventListener("click", function () {
     modal.style.display = "none";
-  });
-}
-
-export function NavbarHoverFunctionality() {
-  document.querySelectorAll(".sidebar-icon").forEach((item) => {
-    console.log();
-    item.addEventListener("mouseover", (event) => {
-      console.log(item);
-      const tooltipText = event.target.getAttribute("data-tooltip");
-      const tooltip = document.querySelector(".tooltip");
-      tooltip.innerText = tooltipText;
-      tooltip.style.display = "block";
-      tooltip.style.top = event.pageY + "px";
-      tooltip.style.left = event.pageX + "px";
-    });
-
-    item.addEventListener("mouseout", () => {
-      const tooltip = document.querySelector(".tooltip");
-      tooltip.style.display = "none";
-    });
   });
 }
 

@@ -221,6 +221,75 @@ export function InsertNavbar() {
     document.getElementById(urlaction).classList.add("shadow-lg");
     document.getElementById(urlaction).classList.add("rounded-[10px]");
   }
+  const signoutbutton = document.getElementById("signout");
+  const todashboard = document.getElementById("dashboard");
+  console.log("inviteButton dashboard", todashboard);
+  const inviteButton = document.getElementById("inviteButton");
+  console.log("inviteButton");
+  const modal = document.getElementById("modal");
+  const closeButton = document.getElementById("closeButton");
+  const inviteSubmit = document.getElementById("inviteSubmit");
+
+  todashboard.addEventListener("click", () => {
+    console.log("inviteButton dash");
+    window.location.href = "/dashboard";
+  });
+  const toeditor = document.getElementById("editor");
+  toeditor.addEventListener("click", () => {
+    window.location.href = "/editor";
+  });
+  const todocument = document.getElementById("document");
+  todocument.addEventListener("click", () => {
+    console.log("inviteButton dash");
+    window.location.href = "/document";
+  });
+  const toletters = document.getElementById("letters");
+  toletters.addEventListener("click", () => {
+    window.location.href = "/letters";
+  });
+  signoutbutton.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.href = VIEWS_CONSTANTS.LOGIN;
+  });
+  // let btn = document.querySelector(".logo");
+  // let sidebar = document.querySelector(".sidebar");
+  console.log(userdata);
+  let name = document.getElementById("name");
+  let modalname = document.getElementById("modalname");
+  let dropdownname = document.getElementById("dropdownname");
+  let dropdownemail = document.getElementById("dropdownemail");
+
+  console.log(userdata);
+  dropdownemail.textContent = userdata.data?.email;
+  name.textContent = userdata.data.first_name + " " + userdata.data.last_name;
+  dropdownname.textContent =
+    userdata.data.first_name + " " + userdata.data.last_name;
+  modalname.innerHTML =
+    userdata.data.first_name +
+    " " +
+    userdata.data.last_name +
+    `  <svg
+  class="w-4 h-4 ml-2"
+  fill="none"
+  stroke="currentColor"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    d="M19 9l-7 7-7-7"
+  ></path>
+</svg>`;
+  inviteButton.addEventListener("click", function () {
+    console.log("clicked");
+    modal.style.display = "block";
+  });
+
+  closeButton.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
 }
 
 export function NavbarHoverFunctionality() {

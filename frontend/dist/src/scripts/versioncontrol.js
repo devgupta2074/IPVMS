@@ -1264,7 +1264,8 @@ const fetchVersionsDateWise = async (id) => {
       y.map((item) => {
         console.log(item);
 
-        var dateObject = new Date(item.date);
+        let dateObject = new Date(item.date);
+        dateObject = dateObject.toLocaleDateString("en-GB");
 
         // Get the day, month, and year
         var day = dateObject.getDate();
@@ -1588,7 +1589,9 @@ function checkDivSize() {
 
 export function imageLoaded() {
   imagesposition = [];
-  const dynamicImages = document.querySelectorAll("img");
+  const dynamicImages = document
+    .getElementById("container-content-1")
+    .querySelectorAll("img");
   console.log(dynamicImages);
   console.log("images");
   const existingHandles = document.querySelectorAll(".resize-handle");

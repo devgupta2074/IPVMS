@@ -6,24 +6,24 @@ import { getPaginatedDocumentDetailsWithSearchService } from "../../services/fil
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
-
-
 export const createDocumentVersion = async (req, res, next) => {
   try {
     // middleware apply user
-    // const { version_number, doc_id, delta } 
-    const body = req.body;
-    const result = await versioncontrol.documentVersionUploadService(body);
+    const { version_number, doc_id, delta, created_by } = req.body;
+    const result = await versioncontrol.fileuploadService(
+      version_number,
+      doc_id,
+      delta,
+      created_by
+    );
 
     return res.status(201).json({
       success: true,
       message: "Document version created:",
-      length: result.length,
-      data: result.rows
     });
   } catch (error) {
     next(error);
-  };
+  }
 };
 
 export const getDocumentVersionsDatewise = async (req, res, next) => {
@@ -32,14 +32,15 @@ export const getDocumentVersionsDatewise = async (req, res, next) => {
     const docId = parseInt(req.query.docId);
     console.log(docId);
 
-    const result = await versioncontrol.getDocumentVersionsDatewiseService({ docId });
+    const result = await versioncontrol.getDocumentVersionsDatewiseService({
+      docId,
+    });
     return res.status(200).json({
       status: "success",
       message: "Document version:",
       length: result.length,
-      data: result.rows
+      data: result.rows,
     });
-
   } catch (error) {
     next(error);
   }
@@ -50,29 +51,30 @@ export const getDocumentVersionById = async (req, res, next) => {
     const docId = parseInt(req.query.id);
     // console.log(docId);
 
-    const result = await versioncontrol.getDocumentVersionsByIdService({ docId });
+    const result = await versioncontrol.getDocumentVersionsByIdService({
+      docId,
+    });
     return res.status(200).json({
       status: "success",
       message: "Document version:",
       length: result.length,
-      data: result.rows[0]
+      data: result.rows[0],
     });
-
   } catch (error) {
     next(error);
   }
 };
 
-
 export const getPaginatedDocumentDetailsWithSearch = async (req, res, next) => {
-
   try {
-
     const result = await getPaginatedDocumentDetailsWithSearchService(req);
 
-    return res
-      .status(200)
-      .json({ message: "documents are", success: true, length: result.length, data: result.rows });
+    return res.status(200).json({
+      message: "documents are",
+      success: true,
+      length: result.length,
+      data: result.rows,
+    });
   } catch (error) {
     next(error);
   }

@@ -228,6 +228,21 @@ export async function InsertNavbar() {
     // Remove the to-be-deleted element
     parentElement.removeChild(toBeDeletedElement);
   }
+  const parentElement = document.getElementsByTagName("body")[0];
+  const toBeDeletedElement = document.getElementById("navbar-removed");
+  console.log(toBeDeletedElement, parentElement, "gggh");
+  // Check if both the parent and to-be-deleted elements exist
+  if (parentElement && toBeDeletedElement) {
+    // Move children of the to-be-deleted element to the parent element
+    while (toBeDeletedElement.firstChild) {
+      parentElement.insertBefore(
+        toBeDeletedElement.firstChild,
+        parentElement.firstChild
+      );
+    }
+    // Remove the to-be-deleted element
+    parentElement.removeChild(toBeDeletedElement);
+  }
   var url = window.location.pathname;
 
   // Extracting just the word "dashboard"

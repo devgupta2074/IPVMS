@@ -625,6 +625,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(224 232 249 / var(--tw-bg-opacity));
 }
+.text-chicago-600 {
+  --tw-text-opacity: 1;
+  color: rgb(93 93 93 / var(--tw-text-opacity));
+}
 .top-10 {
   top: 2.5rem;
 }

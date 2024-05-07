@@ -3,6 +3,7 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { InviteApiRequest } from "../api/invitation.js";
 
 import { InsertNavbar } from "../components/Navbar.js";
+import { addTable, sortTable, getdate } from "../components/TableGenerator.js";
 import { fetchVersionsDateWise } from "../components/VersionTable.js";
 import {
   API_CONSTANTS,
@@ -184,248 +185,69 @@ if (localStorage.getItem("token") === null) {
   });
 }
 
-const signoutbutton = document.getElementById("signout");
-const todashboard = document.getElementById("dashboard");
-console.log("inviteButton dashboard", todashboard);
-const inviteButton = document.getElementById("inviteButton");
-console.log("inviteButton");
-const modal = document.getElementById("modal");
-const closeButton = document.getElementById("closeButton");
-const inviteSubmit = document.getElementById("inviteSubmit");
+// const signoutbutton = document.getElementById("signout");
+// const todashboard = document.getElementById("dashboard");
+// console.log("inviteButton dashboard", todashboard);
+// const inviteButton = document.getElementById("inviteButton");
+// console.log("inviteButton");
+// const modal = document.getElementById("modal");
+// const closeButton = document.getElementById("closeButton");
+// const inviteSubmit = document.getElementById("inviteSubmit");
 
-todashboard.addEventListener("click", () => {
-  console.log("inviteButton dash");
-  window.location.href = "/dashboard";
-});
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
-const todocument = document.getElementById("document");
-todocument.addEventListener("click", () => {
-  console.log("inviteButton dash");
-  window.location.href = "/document";
-});
-const toletters = document.getElementById("letters");
-toletters.addEventListener("click", () => {
-  window.location.href = "/letters";
-});
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = VIEWS_CONSTANTS.LOGIN;
-});
 // let btn = document.querySelector(".logo");
 // let sidebar = document.querySelector(".sidebar");
-console.log(userdata);
-let name = document.getElementById("name");
-let modalname = document.getElementById("modalname");
-let dropdownname = document.getElementById("dropdownname");
-let dropdownemail = document.getElementById("dropdownemail");
+// console.log(userdata);
+// let name = document.getElementById("name");
+// let modalname = document.getElementById("modalname");
+// let dropdownname = document.getElementById("dropdownname");
+// let dropdownemail = document.getElementById("dropdownemail");
 
-console.log(userdata);
-dropdownemail.textContent = userdata.data?.email;
-name.textContent = userdata.data.first_name + " " + userdata.data.last_name;
-dropdownname.textContent =
-  userdata.data.first_name + " " + userdata.data.last_name;
-modalname.innerHTML =
-  userdata.data.first_name +
-  " " +
-  userdata.data.last_name +
-  `  <svg
-  class="w-4 h-4 ml-2"
-  fill="none"
-  stroke="currentColor"
-  viewBox="0 0 24 24"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    stroke-width="2"
-    d="M19 9l-7 7-7-7"
-  ></path>
-</svg>`;
-inviteButton.addEventListener("click", function () {
-  console.log("clicked");
-  modal.style.display = "block";
-});
+// console.log(userdata);
+// dropdownemail.textContent = userdata.data?.email;
+// name.textContent = userdata.data.first_name + " " + userdata.data.last_name;
+// dropdownname.textContent =
+//   userdata.data.first_name + " " + userdata.data.last_name;
+// modalname.innerHTML =
+//   userdata.data.first_name +
+//   " " +
+//   userdata.data.last_name +
+//   `  <svg
+//   class="w-4 h-4 ml-2"
+//   fill="none"
+//   stroke="currentColor"
+//   viewBox="0 0 24 24"
+//   xmlns="http://www.w3.org/2000/svg"
+// >
+//   <path
+//     stroke-linecap="round"
+//     stroke-linejoin="round"
+//     stroke-width="2"
+//     d="M19 9l-7 7-7-7"
+//   ></path>
+// </svg>`;
+// inviteButton.addEventListener("click", function () {
+//   console.log("clicked");
+//   modal.style.display = "block";
+// });
 
-closeButton.addEventListener("click", function () {
-  modal.style.display = "none";
-});
-async function handleInvite() {
-  const name = document.getElementById("userName").value;
-  const email = document.getElementById("userName").value;
-  console.log(name, email);
-  const res = await InviteApiRequest(email, name);
+// closeButton.addEventListener("click", function () {
+//   modal.style.display = "none";
+// });
+// async function handleInvite() {
+//   const name = document.getElementById("userName").value;
+//   const email = document.getElementById("userName").value;
+//   console.log(name, email);
+//   const res = await InviteApiRequest(email, name);
 
-  modal.style.display = "none";
-}
-document.getElementById("inviteSubmit").addEventListener("click", function () {
-  handleInvite();
-});
+//   modal.style.display = "none";
+// }
+// document.getElementById("inviteSubmit").addEventListener("click", function () {
+//   handleInvite();
+// });
 
 // api call to invite team member
 
-function addTable() {
-  const tableDiv = document.getElementById("insert-table");
-  tableDiv.innerHTML = "";
-
-  // console.log(tableDiv);
-
-  tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white">
-  <thead class=" bg-ship-cove-500 py-3 text-xs capitalize text-white flex rounded-t-md">
-    <tr class="flex justify-around w-full">
-      <th scope="col" class="w-14">ID</th>
-      <th scope="col" class="w-52">
-        <div class="flex items-center">
-          Policy name
-          <a href="#"class="sort" name="true">
-            <svg id="sorticon" class="pl-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
-          Created by
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="pl-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
-          Created at
-          <a  class="sort" name="true">
-            <svg id="sorticon" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
-          Approved
-          <a class="sort" name="true">
-            <svg id="greenpen" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
-          Published on
-          <a class="sort" name="true">
-            <svg id="greenpen" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center">
-          Published by
-          <a href="#" >
-            <svg id="greenpen" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">Action</th>
-    </tr>
-  </thead>
-  <tbody id="tbody">
-  
-  </tbody>
-</table>
-    `;
-}
-
-function getdate(dateString) {
-  const parts = dateString.split("/");
-  const day = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10) - 1; // Month is 0-based
-  const year = parseInt(parts[2], 10);
-  const date = new Date(year, month, day);
-  return date;
-}
-
-function sortTable(col) {
-  // const table = document.getElementById('myTable');
-  const tbody = document.getElementById("tbody");
-  const rows = Array.from(tbody.querySelectorAll("tr"));
-
-  const sort_th = document.querySelectorAll(".sort");
-  const order = sort_th[col].getAttribute("name") === "true" ? true : false;
-  // console.log(order, col);
-
-  if (order) {
-    sort_th[col].setAttribute("name", `${!order}`);
-
-    if (col === 2 || col === 4) {
-      rows.sort((rowA, rowB) => {
-        let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
-        let cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
-        cellA = getdate(cellA);
-        cellB = getdate(cellB);
-        // console.log(cellA);
-        return cellA - cellB;
-      });
-    } else {
-      rows.sort((rowA, rowB) => {
-        const cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
-        const cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
-        return cellA.localeCompare(cellB, "en", { numeric: true });
-      });
-    }
-  } else {
-    sort_th[col].setAttribute("name", `${!order}`);
-
-    if (col === 2 || col === 4) {
-      rows.sort((rowA, rowB) => {
-        let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
-        let cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
-        cellA = getdate(cellA);
-        cellB = getdate(cellB);
-        // console.log(cellA);
-        return cellB - cellA;
-      });
-    } else {
-      rows.sort((rowA, rowB) => {
-        const cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
-        const cellB = rowB.querySelectorAll("td")[col + 1].textContent.trim();
-        return cellB.localeCompare(cellA, "en", { numeric: true });
-      });
-    }
-  }
-
-  while (tbody.firstChild) {
-    tbody.removeChild(tbody.firstChild);
-  }
-
-  rows.forEach((row) => {
-    tbody.appendChild(row);
-  });
-}
-
+addTable();
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
     `http://localhost:5001/api/file/getFile/${modalId}`,

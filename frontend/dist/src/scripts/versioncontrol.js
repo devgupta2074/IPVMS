@@ -1265,7 +1265,7 @@ const fetchVersionsDateWise = async (id) => {
         console.log(item);
 
         let dateObject = new Date(item.date);
-        dateObject = dateObject.toLocaleDateString("en-GB");
+        // dateObject = dateObject.toLocaleDateString("en-GB");
 
         // Get the day, month, and year
         var day = dateObject.getDate();

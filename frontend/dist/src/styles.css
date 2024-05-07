@@ -612,6 +612,14 @@ video {
 .inset-0 {
   inset: 0px;
 }
+.bg-deep-cove-950 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(14 18 62 / var(--tw-bg-opacity));
+}
+.text-deep-cove-950 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(14 18 62 / var(--tw-bg-opacity));
+}
 .border-dodger-blue-500 {
   --tw-border-opacity: 1;
   border-color: rgb(54 137 245 / var(--tw-border-opacity));

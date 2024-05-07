@@ -170,6 +170,7 @@ if (localStorage.getItem("token") === null) {
   redirect(VIEWS_CONSTANTS.LOGIN);
 } else {
   const token = localStorage.getItem("token");
+  console.log("token is", token);
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
     console.log(data, "d");

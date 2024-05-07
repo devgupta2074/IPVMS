@@ -5,134 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard | IPVMS</title>
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-  />
-  <link
-    href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
-    rel="stylesheet"
-  />
-  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
 
- 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="tailwind.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tailwind.css" />
 
-  <!-- <script type="module" src="/scripts/versioncontrol.js"></script>
+    <!-- <script type="module" src="/scripts/versioncontrol.js"></script>
   <script type="module" src="/scripts/editor.js"></script> -->
-
-  
   </head>
-  <body class="grid grid-cols-[104px_1fr] bg-gulf-blue-950 h-lvh overflow-hidden">
-  
-    
- 
-    <main class="bg-zircon-50 w-[auto] mr-6 mb-8 p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
-      <div class="flex flex-col gap-3 ">
+  <body
+    class="grid grid-cols-[104px_1fr] bg-gulf-blue-950 h-lvh overflow-hidden"
+  >
+    <main
+      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
+    >
+      <div class="flex flex-col gap-3">
         <div
-          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold "
+          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
         >
           Letters
         </div>
-       <div class="flex flex-row gap-20 p-3 border-b-2 font-roboto font-medium text-base">
-        <div class="cursor-pointer">Recent  Sent Letters</div>
-        <div class="cursor-pointer">Send Letter</div>
-        <div class="cursor-pointer">Letter Templates</div>
-       </div>
-      <div class="flex  gap-4">
-   <div class="flex flex-col gap-4">
-    <div
-    class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold "
-  >
-   Send Letters
-  </div>
-  <div class="text-chicago-600 font-roboto  text-sm  leading-5 ">
-     You can easily search for or select an employee by their name or employee ID to send a letter. Simply choose the desired letter from the options below, and all relevant data will be automatically fetched and filled into the letter. You can also preview it before sending it to the employee.
-  </div>
-   </div>
-   <button type="button" class="text-white text-base  bg-blue-700 hover:bg-blue-800 focus:ring-4   p-1 w-1/6  h-16 me-2 mb-2  rounded-md">Generate Letter</button>
-
-      </div>
+        <div
+          class="flex flex-row gap-20 p-3 border-b-2 font-roboto font-medium text-base"
+        >
+          <div class="cursor-pointer">Recent Sent Letters</div>
+          <div class="cursor-pointer">Send Letter</div>
+          <div class="cursor-pointer">Letter Templates</div>
         </div>
-        <div class="w-full p-5 flex flex-row">
-          <div class="w-1/2 flex justify-center items-center">
-            <button
-              id="dropdownSearchButton"
-              data-dropdown-toggle="dropdownSearch"
-              data-dropdown-placement="bottom"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              type="button"
-            >
-              Select User
-              <svg
-                class="w-2.5 h-2.5 ms-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-    
-            <!-- Dropdown menu -->
+        <div class="flex gap-4">
+          <div class="flex flex-col gap-4">
             <div
-              id="dropdownSearch"
-              class="z-10 hidden bg-white rounded-lg shadow w-1/2 dark:bg-gray-700"
+              class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
             >
-              <div class="p-3">
-                <label for="input-group-search" class="sr-only">Search</label>
-                <div class="relative">
-                  <div
-                    class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
-                  >
-                    <svg
-                      class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    id="search"
-                    class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search user"
-                  />
-                </div>
-              </div>
-              <ul
-                class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
-                id="search-user"
-                aria-labelledby="dropdownSearchButton"
-              ></ul>
+              Send Letters
+            </div>
+            <div class="text-chicago-600 font-roboto text-sm leading-5">
+              You can easily search for or select an employee by their name or
+              employee ID to send a letter. Simply choose the desired letter
+              from the options below, and all relevant data will be
+              automatically fetched and filled into the letter. You can also
+              preview it before sending it to the employee.
             </div>
           </div>
-          <div class="w-1/2 flex justify-center items-center">
+          <button
+            id="generateLetter"
+            type="button"
+            class="text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-16 me-2 mb-2 rounded-md"
+          >
+            Generate Letter
+          </button>
+        </div>
+      </div>
+      <div class="w-full mt-5 flex flex-row gap-5">
+        <div class="w-full flex flex-col">
+          <label class="text-chicago-700 font-normal leading-5 mb-2">To*</label>
+          <button
+            id="dropdownSearchButton"
+            class="text-chicago-600 leading-5 bg-white w-full font-normal text-sm px-5 py-2.5 flex flex-row items-center"
+            type="button"
+          >
+            <p class="flex-1">Select User</p>
+
+            <svg
+              class="w-2.5 h-2.5 ms-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 10 6"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 1 4 4 4-4"
+              />
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div
+            id="dropdownSearchx"
+            class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+          >
+            <div class="p-3">
+              <label for="input-group-search" class="sr-only">Search</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-500"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="search"
+                  class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Search user"
+                />
+              </div>
+            </div>
+            <ul
+              class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
+              id="search-user"
+            ></ul>
+          </div>
+        </div>
+        <div class="w-full flex gap-2 flex-col">
+          <div class="w-full flex flex-col">
+            <label class="text-chicago-700 font-normal leading-5"
+              >Template*</label
+            >
             <button
-              id="dropdownBgHoverButton"
-              data-dropdown-toggle="dropdownBgHover"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="text-chicago-600 leading-5 bg-white w-full font-normal text-sm px-5 py-2.5 text-center inline-flex items-center"
               type="button"
+              id="dropdownUsersButton"
             >
               Select Template
               <svg
                 class="w-2.5 h-2.5 ms-3"
+                style="margin-left: 500px"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -147,187 +159,26 @@
                 />
               </svg>
             </button>
-    
-            <!-- Dropdown menu -->
-            <div
-              id="dropdownBgHover"
-              class="z-10 hidden w-1/2 bg-white rounded-lg shadow dark:bg-gray-700"
-            >
-              <ul
-                id="template_option"
-                class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownBgHoverButton"
-              ></ul>
-            </div>
           </div>
-        </div>
-      <div class="w-full"   id="main-body"></div>
-      <section  class="mt-16">
-        <div class="font-roboto font-semibold text-mineshaft-900 text-2xl">Recent Policy Updates</div>
-        <div class="" id="insert-table"></div>
-      </section>
-    
-      
-      </div>
-      <div
-      id="modal"
-      class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40"
-    >
-      <div
-        class="modal-content mx-auto my-20 p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
-      >
-        <div class="modal-header flex items-center justify-between mb-4">
-          <h1 class="modal-title text-xl font-medium text-gray-800">
-            Invite member
-          </h1>
-          <button
-            id="closeButton"
-            class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
+          <!-- Dropdown menu -->
+          <div
+            class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
+            id="dropdownUser"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </button>
-        </div>
-        <p class="modal-text text-sm text-gray-500">
-          Send invitation to the user for joining the platform
-        </p>
-        <form id="inviteForm" class="invite-form">
-          <div class="mb-4">
-            <label
-              for="userName"
-              class="pt-2 block text-sm text-gray-700 capitalize"
-              >User name</label
-            >
-            <input
-              id="userName"
-              placeholder="Arthur Melo"
-              type="text"
-              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-            />
-          </div>
-
-          <div class="mb-4">
-            <label
-              for="userEmail"
-              class="block text-sm text-gray-700 capitalize"
-              >User email</label
-            >
-            <input
-              id="userEmail"
-              placeholder="arthurmelo@example.app"
-              type="email"
-              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-            />
-          </div>
-
-          <div class="flex justify-end">
-            <button
-              id="inviteSubmit"
-              type="button"
-          
-              class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
-            >
-              Invite Member
-            </button>
+            <ul
+              id="template_option"
+              class="p-3 space-y-1 text-sm text-chicago-700"
+              aria-labelledby="dropdownUsersButton"
+            ></ul>
           </div>
         </div>
-       
-        </form>
       </div>
-    </div>
-    <div
-    id="drawer-name-left"
-    data-modal-target
-    class="hidden absolute inset-0 overflow-hidden z-[8999]"
-  >
-    <div
-      data-modal-close
-      data-modal-overlay
-      tabindex="-1"
-      data-class-in="opacity-50"
-      data-class-out="opacity-0"
-      class="fixed inset-0 w-full z-40 opacity-0 transition-opacity duration-500 bg-black select-none"
-    ></div>
-    <div
-    id="buttonContainer"
-      data-modal-wrapper
-      data-class-in="translate-x-0"
-      data-class-out="-translate-x-full"
-      class="fixed flex items-center top-0 left-0 bottom-0 w-10/12 h-full max-w-md z-50 overflow-auto scrolling-touch transition-transform duration-500 bg-white flex flex-col shadow-xl transform -translate-x-full"
-    >
-      <div class="flex items-center justify-between border-b p-6">
-       
-        <button
-          data-modal-close
-          class="text-gray-700 hover:text-black focus:text-black transition ease-in-out duration-150 ml-auto"
-          aria-label="Close"
-        >
-          <svg
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-      <div
-        class="relative h-full flex-grow overflow-x-hidden overflow-y-hidden p-6"
-      >
-       
-        <div class="mb-2">
-         
-        </div>
-        <div class="text-right">
-          <!-- <button data-modal-close type="button" class="underline">
-            Close Drawer
-          </button> -->
-        
-        </div>
-      </div>
-    </div>
-  </div>
-    
-      </div>
-  </div>
-  <div id="loading"  style="display:none;">
-    <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
-    <div class="flex gap-2 justify-center items-center h-screen">
-        <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
-        <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
-        <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
-    </div>
-    </div>  
-      </div>
-
-      <script>
-       
-      </script>
+      <div class="w-full mt-5 flex flex-row gap-5 bg-white">hello</div>
+    </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="/scripts/docx-preview.min.js"></script>
+  <script src="/scripts/docx-preview.min.js"></script>
   <script type="module" src="/scripts/letters.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-
-  
 </html>

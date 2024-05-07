@@ -11,6 +11,7 @@ import {
   getpaginateddocuments,
   createPolicy,
   setPolicyDetail,
+  getAllTemplates,
 } from "../controllers/file/file.Controller.js";
 
 import {
@@ -31,6 +32,8 @@ fileRouter.get("/getTemplateById/:id", getTemplateById);
 fileRouter.post("/updateDocument/:id", editDocument);
 // fileRouter.post("/saveAsPdf", saveAsPdf);
 fileRouter.get("/getTemplate", gettemplates);
+fileRouter.get("/getAllTemplate", getAllTemplates);
+
 fileRouter.get("/getpaginateddocuments", getpaginateddocuments);
 fileRouter.get("/getRecentPolicies", getRecentPolicies);
 

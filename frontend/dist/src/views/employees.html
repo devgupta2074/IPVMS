@@ -6,14 +6,10 @@
     <title>Document</title>
     <link rel="stylesheet" href="tailwind.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
-      rel="stylesheet"
-    />
   </head>
   <body>
-    <div class="w-full p-5 flex flex-row">
-      <div class="w-1/2 flex justify-center items-center">
+    <div class="w-full p-5 flex flex-row h-full border border-red">
+      <div class="w-1/2 flex justify-start gap-2 items-center flex-col">
         <button
           id="dropdownSearchButton"
           data-dropdown-toggle="dropdownSearch"
@@ -42,7 +38,7 @@
         <!-- Dropdown menu -->
         <div
           id="dropdownSearch"
-          class="z-10 hidden bg-white rounded-lg shadow w-1/2 dark:bg-gray-700"
+          class="z-10 hidden items-start bg-white rounded-lg shadow w-1/2 dark:bg-gray-700"
         >
           <div class="p-3">
             <label for="input-group-search" class="sr-only">Search</label>
@@ -75,51 +71,55 @@
             </div>
           </div>
           <ul
-            class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+            class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
             id="search-user"
             aria-labelledby="dropdownSearchButton"
           ></ul>
         </div>
       </div>
-      <div class="w-1/2 flex justify-center items-center">
+      <div class="w-1/2 flex justify-start items-center flex-col gap-2">
         <button
-          id="dropdownBgHoverButton"
-          data-dropdown-toggle="dropdownBgHover"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center"
           type="button"
+          id="dropdownUsersButton"
         >
           Select Template
           <svg
-            class="w-2.5 h-2.5 ms-3"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 ml-2"
             fill="none"
-            viewBox="0 0 10 6"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke="currentColor"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
+              d="M19 9l-7 7-7-7"
+            ></path>
           </svg>
         </button>
 
         <!-- Dropdown menu -->
         <div
-          id="dropdownBgHover"
-          class="z-10 hidden w-1/2 bg-white rounded-lg shadow dark:bg-gray-700"
+          class="z-10 overflow-y-auto max-h-48 hidden items-start w-72 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+          id="dropdownUser"
         >
           <ul
             id="template_option"
             class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownBgHoverButton"
+            aria-labelledby="dropdownUsersButton"
           ></ul>
         </div>
       </div>
     </div>
+    <div
+      class="w-full rounded-md p-5 flex justify-center items-center hover:cursor-pointer"
+      id="generateLetter"
+    >
+      Generate Letter
+    </div>
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
   <script type="module" src="/scripts/employee.js"></script>
 </html>

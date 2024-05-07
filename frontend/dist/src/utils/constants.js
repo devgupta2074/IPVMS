@@ -77,7 +77,7 @@ const ROUTES_CONSTANTS = {
   SETUP_ACCOUNT: "/api/user/accountsetup",
   GETALLUSERS: "/api/user/getAllUsers",
   GETUSERS: "/api/user/getUsers",
-  GET_ALL_TEMPLATES: "/api/file/getTemplate",
+  GET_ALL_TEMPLATES: "/api/file/getAllTemplate",
   CREATE_POLICY: "/api/file/createPolicy",
   GET_ALL_CATEGORY: "/api/categories/getAllCategories",
 };

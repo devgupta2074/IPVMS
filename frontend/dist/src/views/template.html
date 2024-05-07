@@ -22,9 +22,10 @@
       var htmlData;
       var category;
       var description;
-      const getTemplate = (id) => {
+      const getTemplate = (id, userId) => {
         console.log("in get temo id is", id);
-        const getTemplatedoc = async (id) => {
+
+        const getTemplatedoc = async (id, userId, result2) => {
           console.log("in get temo id in getTempdox is", id);
           const response = await fetch(
             `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
@@ -42,14 +43,34 @@
               htmlData = result.htmldata;
               title = result.title;
               document.getElementById("container").innerHTML = htmlData;
-              makeForm();
+              makeForm(result2);
             })
             .catch((error) => {
               console.error("Error:", error);
             });
         };
-
-        getTemplatedoc(id);
+        const getUserDetails = async (userId) => {
+          console.log("in user deatil user id is", userId);
+          const response = await fetch(
+            `http://localhost:5001/api/user/getUserInfo/${userId}`,
+            {
+              method: "GET",
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const result = data.data;
+              // Handle the response from the backend
+              console.log(result);
+              console.log(document.getElementById("firstname"));
+              console.log(document.getElementById("lastname"));
+              getTemplatedoc(id, userId, result);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        };
+        getUserDetails(userId);
       };
     </script>
     <style>
@@ -189,13 +210,14 @@
       document.addEventListener("DOMContentLoaded", function (event) {
         const url = window.location.href;
         console.log("URL:", url);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        console.log(urlParams);
+        const id = urlParams.get("templateId");
+        const userId = urlParams.get("userId");
+        console.log("user id is", userId);
 
-        const match = url.match(/\/(\d+)$/);
-        console.log("Match:", match);
-
-        const id = match ? match[1] : null;
-        console.log("ID:", id);
-        getTemplate(id);
+        getTemplate(id, userId);
       });
     </script>
     <script></script>

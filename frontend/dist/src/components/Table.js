@@ -185,7 +185,7 @@ function addTable() {
 
 
 let maxPages = 10;
-let pageSize = 6;
+let pageSize = 7;
 let currentPage = 1;
 let totalItems;
 let title = "";
@@ -425,6 +425,7 @@ function addPagination(item) {
   document.getElementById(item + "pagination").className =
     "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
   addPrevAndNextfeature();
+  handlePaginationOnClick();
 }
 
 
@@ -548,10 +549,19 @@ function addPrevAndNextfeature() {
 export const resetVariables = () => {
 
   maxPages = 10;
-  pageSize = 6;
+  pageSize = 7;
   currentPage = 1;
   totalItems;
   title = "";
   category = "";
   siblingCount = 1;
-};  
+};
+
+
+function handlePaginationOnClick() {
+  const paginationButtons = document.querySelectorAll('div#pagination_controller > button');
+
+  window.handlePagination = async function (Id) {
+    handlePagination(Id);
+  };
+}

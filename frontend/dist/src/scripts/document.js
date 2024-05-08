@@ -1,54 +1,5 @@
-// let response = {
-//     "success": true,
-//     "message": "all user are",
-//     "data": [
-//         {
-//             "fileName": "policy1",
-//             "category": 'RE',
-//             "updatedBy": "rithvik",
-//             "updatedAt": "2024-01-22T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy2",
-//             "category": 'IT',
-//             "updatedBy": "dev",
-//             "updatedAt": "2023-04-29T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy3",
-//             "category": 'ABC',
-//             "updatedBy": "archit",
-//             "updatedAt": "2024-07-25T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy4",
-//             "category": 'CBR',
-//             "updatedBy": "tapasvi",
-//             "updatedAt": "2014-02-20T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy5",
-//             "category": 'hr',
-//             "updatedBy": "yash",
-//             "updatedAt": "2022-04-06T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy5",
-//             "category": 'hr',
-//             "updatedBy": "siraj",
-//             "updatedAt": "2018-03-01T00:29:54.119Z"
-//         },
-//         {
-//             "fileName": "policy5",
-//             "category": 'hr',
-//             "updatedBy": "sahil",
-//             "updatedAt": "2013-04-10T00:29:54.119Z"
-//         }
-
 import { fetchCategories } from "../components/Categories.js";
-import {
-  InsertNavbar,
-} from "../components/Navbar.js";
+import { InsertNavbar } from "../components/Navbar.js";
 import { fetchTable } from "../components/Table.js";
 
 InsertNavbar();
@@ -159,7 +110,6 @@ document.onkeydown = function (event) {
 //   addDocPageStatus();
 // };
 
-
 // const search = async () => {
 //   const searchText = document.getElementById("search").value;
 //   console.log("search func");
@@ -215,7 +165,6 @@ document.onkeydown = function (event) {
 //     });
 // };
 
-
 // const removepagination = () => {
 //   const paginationElement = document.getElementById("pagination-controller");
 //   paginationElement.innerHTML = "";
@@ -227,8 +176,8 @@ document.onkeydown = function (event) {
 // });
 
 const tableType = {
-  name: '',
-  category: ''
+  name: "",
+  category: "",
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -271,32 +220,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 //   console.log(category, title);
 //   fetchDoc(currentPage - 1, pageSize);
 // };
-
-const signoutbutton = document.getElementById("signout");
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = "http://localhost:5555/login";
-});
-const todashboard = document.getElementById("dashboard");
-todashboard.addEventListener("click", () => {
-  window.location.href = "/dashboard";
-});
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
-const todocument = document.getElementById("document");
-todocument.addEventListener("click", () => {
-  window.location.href = "/document";
-});
-const toletters = document.getElementById("letters");
-toletters.addEventListener("click", () => {
-  window.location.href = "/letters";
-});
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = VIEWS_CONSTANTS.LOGIN;
-});
 
 // document.getElementById("npage").addEventListener("click", handleNextPage);
 // document.getElementById("ppage").addEventListener("click", handlePrevPage);

@@ -95,7 +95,7 @@ export const getTemplateByIdService = async (res, id) => {
     return res.status(400).json({ message: error.message, success: false });
   }
 };
-export const createPolicy = async (body) => {
+export const createPolicy = async (body, userid) => {
   let { htmlText, htmlJson, categoryId, title } = body;
   const htmlData = Buffer.from(htmlText, "utf8");
   console.log();
@@ -103,8 +103,8 @@ export const createPolicy = async (body) => {
 
   try {
     const document = await pool.query(
-      "INSERT INTO  document   (htmldata,category_id,title,htmljson) VALUES($1,$2,$3,$4) RETURNING *",
-      [htmlData, categoryId, title, htmlJson]
+      "INSERT INTO  document   (htmldata,category_id,title,htmljson,created_by) VALUES($1,$2,$3,$4,$5) RETURNING *",
+      [htmlData, categoryId, title, htmlJson, userid]
     );
     return document.rows[0];
   } catch (error) {

@@ -14,19 +14,20 @@
   <script src="../scripts/docxtohtml.js"></script>
   <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
   <script src="../scripts/docx-preview.min.js"></script>
+  <script src = "docxhtml.css"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
     integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   ></script>
-  <body class="grid grid-cols-[104px_1fr] col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
-   
-
+  <body
+  class="grid grid-cols-[104px_1fr] bg-gulf-blue-950 h-lvh overflow-hidden"
+>
     <main class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
 
-      <section>
-        <div class="flex flex-col gap-8" >
+      <section class="flex flex-col gap-8">
+       
 
           <div class="flex flex-row justify-between">
             <div class="font-semibold text-mineshaft-900 text-2xl inline-block">Policies</div>
@@ -64,42 +65,7 @@
         
         <!-- Table COMPLETED -->
         </section>
-        <!-- <div
-          class="p-10 mx-20 flex flex-col justify-center items-center gap-14"
-        >
-        -->
-    <!-- <div    class="flex items-center justify-center">
-      <div class="pt-5 w-screen max-w-screen-md h-">
-          <div class="flex flex-col justify-center items-center w-full">
-            <div class="rounded-xl  bg-white p-6 shadow-sm">
-              <form class="">
-             
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  <div class="flex flex-col">
-                    <label for="name" class="text-sm font-medium text-stone-600">Name</label>
-                    <input type="text" id="doctitle" placeholder="Polciy 1" class="mt-2 block w-full rounded-md border border-gray-100 bg-white px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                  </div>
-        
-                  <div class="flex flex-col">
-                    <label for="Category" class="text-sm font-medium text-stone-600">Category</label>
-        
-                    <select id="doccategory" class="mt-2 block w-full rounded-md border border-gray-100 bg-white px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                      <option>Select a category</option>
-                    </select>
-                  </div>
-        
-                  
-                </div>
-                <div class="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
-                  <button  class="rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-700 outline-none hover:opacity-80 focus:ring">Reset</button>
-                  <button type="button" id="filter" class="rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none hover:opacity-80 focus:ring">Search</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>   
-  </div> -->
-  <!-- </div> -->
+     
 
  
   <section class="w-full flex flex-col justify-center items-center">
@@ -378,7 +344,7 @@
       
           
       </div>
-      div>
+
       <!-- MODAL-->      
       <div id="modalcontainer"></div>
 <!-- EDITOR COMPLETED -->
@@ -391,6 +357,8 @@
   </div>
   </div>  
     </div>
+    <!-- HIDDEN ELEMENT FOR UPLOADING POLICY -->
+    <div id="container-html1" class="hidden"></div>
   </main>
 
 

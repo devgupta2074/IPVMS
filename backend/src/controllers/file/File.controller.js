@@ -487,6 +487,8 @@ paginated_data pd;
 };
 
 export const createPolicy = async (req, res, next) => {
+  const userid = req.user.id;
+  console.log(req.user);
   let { htmlText, htmlJson, categoryId, title } = req.body;
 
   const textBytesSize = Buffer.byteLength(htmlText, "utf8");
@@ -504,7 +506,7 @@ export const createPolicy = async (req, res, next) => {
   }
 
   try {
-    const doc = await fileService.createPolicy(req.body);
+    const doc = await fileService.createPolicy(req.body, userid);
     return res.status(201).json({
       success: true,
       message: "File uploaded",

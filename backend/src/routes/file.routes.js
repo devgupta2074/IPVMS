@@ -12,7 +12,7 @@ import {
   createPolicy,
   setPolicyDetail,
   getAllTemplates,
-} from "../controllers/file/file.Controller.js";
+} from "../controllers/file/File.controller.js";
 
 import {
   fileuploadMiddleware,
@@ -20,11 +20,12 @@ import {
 } from "../middleware/fileHandlingMiddleware.js";
 
 import { getPaginatedDocumentDetailsWithSearch } from "../controllers/document/document.controller.js";
+import { authorizationMiddeleware } from "../middleware/authMiddleware/authMiddleware.js";
 
 const fileRouter = express.Router();
 
 fileRouter.post("/uploadFile", fileuploadMiddleware, uploadFile);
-fileRouter.post("/createPolicy", createPolicy);
+fileRouter.post("/createPolicy", authorizationMiddeleware, createPolicy);
 fileRouter.post("/setPolicyDetail", setPolicyDetail);
 fileRouter.get("/getFile/:docId", getFile);
 fileRouter.post("/uploadTemplate", uploadTemplateMiddleware, uploadTemplate);

@@ -1,4 +1,5 @@
 import { imageLoaded } from "../scripts/versioncontrol.js";
+import { style } from "../utils/constants.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
 
 const docxModal = (id) => {
@@ -20,8 +21,10 @@ const docxModal = (id) => {
   
         <div id="printThis" class="p-6 pt-0  ">
           <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
-
-          <div class='docx-wrapper' id='docx-wrapper'></div>
+          ${style}
+          <div class='docx-wrapper' id='docx-wrapper'>
+          </div>
+          
             </div>
           
         
@@ -180,9 +183,7 @@ function addTable() {
   addSortFeature();
   addEditorOpenCloseFeature();
   addModalOpenCloseFeature();
-
 }
-
 
 let maxPages = 10;
 let pageSize = 6;
@@ -192,29 +193,26 @@ let title = "";
 let category = "";
 let siblingCount = 1;
 
-
 export const fetchTable = async (tableType) => {
   console.log(tableType);
-  let apiLink = '';
+  let apiLink = "";
 
   category = tableType.category;
-
 
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1}&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${
+      currentPage - 1
+    }&size=${pageSize}&title=&category=${category}`;
   }
 
-  const response = await fetch(
-    apiLink,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = await fetch(apiLink, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
@@ -224,8 +222,7 @@ export const fetchTable = async (tableType) => {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
       } else {
-
-        console.log('jhishi', data.data);
+        console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
@@ -328,10 +325,8 @@ function addSortFeature() {
   });
 }
 
-
 // View Modal
 function addEditorOpenCloseFeature() {
-
   window.openEditor = async function (modalId) {
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
@@ -368,7 +363,6 @@ function addEditorOpenCloseFeature() {
 }
 
 function addModalOpenCloseFeature() {
-
   window.openModal = async function (modalId) {
     console.log(modalId, "modal id");
     document.getElementById(modalId).style.display = "block";
@@ -427,8 +421,6 @@ function addPagination() {
   addPrevAndNextfeature();
 }
 
-
-
 const handleNextPage = async () => {
   currentPage++;
 
@@ -467,14 +459,23 @@ const handlePagination = async (item) => {
   document.getElementById(item + "pagination").className =
     "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
   const tableType = {
-    name: '',
-    category: category
+    name: "",
+    category: category,
   };
   await fetchTable(tableType);
 };
 
 const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
-  console.log('totI', totalItems, 'currentP', currentPage, 'pagesize', pageSize, 'sibc', siblingCount);
+  console.log(
+    "totI",
+    totalItems,
+    "currentP",
+    currentPage,
+    "pagesize",
+    pageSize,
+    "sibc",
+    siblingCount
+  );
   const totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
@@ -544,13 +545,11 @@ const addPaginationElement = (arr) => {
 };
 
 function addPrevAndNextfeature() {
-
   document.getElementById("npage").addEventListener("click", handleNextPage);
   document.getElementById("ppage").addEventListener("click", handlePrevPage);
 }
 
 export const resetVariables = () => {
-
   maxPages = 10;
   pageSize = 6;
   currentPage = 1;
@@ -558,4 +557,4 @@ export const resetVariables = () => {
   title = "";
   category = "";
   siblingCount = 1;
-};  
+};

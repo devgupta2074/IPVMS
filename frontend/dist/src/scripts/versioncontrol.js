@@ -2,6 +2,7 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import {
   API_CONSTANTS,
   ROUTES_CONSTANTS,
+  style,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
 
@@ -1155,7 +1156,8 @@ async function ChangeVersion(modalid, id) {
     .then((data) => {
       // Handle the response from the backend
       // console.log(data.data.data);
-      document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
+      document.getElementById("docx-wrapper-1").innerHTML =
+        style + data.data.data;
       const htmljson = data.data.htmljson;
       return htmljson;
     });
@@ -1169,7 +1171,267 @@ async function ChangeVersion(modalid, id) {
     }
   )
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
+      if (data.data.length == 0) {
+        const divElement = document.getElementById("docx-wrapper-1");
+        async function detectChanges(divElement) {
+          const jsonResult = JSON.parse(localStorage.getItem("htmljson"));
+          console.log(divElement, "ffff", jsonResult);
+          const articles = divElement.querySelectorAll("article");
+          console.log(articles.length, "articcle length");
+          if (articles.length > 1) {
+            // checkDivSizeBack();
+            removeEmptyPages();
+          }
+          handleChanges();
+          assignIDsToElements();
+          const changes = {
+            changedTags: [],
+            newTags: [],
+            removedTags: [],
+            imageTags: [],
+          };
+
+          const dynamicImages = document
+            .getElementById("docx-wrapper-1")
+            .getElementsByTagName("img");
+          const blobToBase64 = (blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((resolve) => {
+              reader.onloadend = () => {
+                resolve(reader.result);
+              };
+            });
+          };
+          for (let h = 0; h < dynamicImages.length; h++) {
+            const image = dynamicImages[h];
+            var blob = await fetch(image.src).then((response) =>
+              response.blob()
+            );
+
+            // Convert blob to base64
+            var base64 = await blobToBase64(blob);
+
+            const gh = {
+              x2: image.offsetLeft,
+              y2: image.offsetTop,
+              width: image.offsetWidth,
+              height: image.offsetHeight,
+              style: image.style.cssText,
+              src: base64,
+              id: image.id,
+              parent: image.parentElement.parentElement.id,
+            };
+            changes.imageTags.push(gh);
+          }
+
+          console.log(document.getElementById("docx-wrapper-1"));
+          const htmlTags = document
+            .getElementById("docx-wrapper-1")
+            .getElementsByTagName("*");
+          console.log(htmlTags, "rr");
+
+          for (let i = 0; i < htmlTags.length; i++) {
+            const tag = htmlTags[i];
+            const tagId = tag.id;
+            const isImgTag = tag.tagName.toLowerCase() === "img";
+            const isLinkTag = tag.tagName.toLowerCase() === "a";
+            const tagInfo = jsonResult[tagId];
+
+            if (!tagInfo) {
+              // if (tag.children.length === 0) {
+              console.log("here");
+              console.log(tag);
+              // New tag found
+              const parentId = tag.parentElement.id || "docx-wrapper-1";
+              const parenttag = document.getElementById(tag.parentElement.id);
+              console.log(tag.parentElement);
+              let position = -1;
+              let childnodeposition = -1;
+              if (tag.parentElement != null) {
+                const childrens = tag.parentElement.children;
+                const childnodes = tag.parentElement.childNodes;
+                // Default position if tag is not found in its parent's children list
+
+                // Find the position of the tag within its parent's children
+                if (childrens) {
+                  for (let j = 0; j < childrens.length; j++) {
+                    if (childrens[j] === tag) {
+                      position = j;
+                      break;
+                    }
+                  }
+                }
+                if (childnodes) {
+                  for (let j = 0; j < childnodes.length; j++) {
+                    if (childnodes[j] === tag) {
+                      childnodeposition = j;
+                      break;
+                    }
+                  }
+                }
+              }
+              let textbefore;
+              let textafter;
+              console.log(tag.parentElement, "hello world!");
+              if (tag.parentElement && tag.parentElement.childNodes) {
+                console.log("hello world!");
+                textbefore =
+                  childnodeposition - 1 >= 0
+                    ? tag.parentElement.childNodes[childnodeposition - 1]
+                        .nodeValue
+                    : null;
+                textafter =
+                  childnodeposition + 1 < tag.parentElement.childNodes.length
+                    ? tag.parentElement.childNodes[childnodeposition + 1]
+                        .nodeValue
+                    : null;
+              }
+              console.log(tag.children, "hello hello");
+              const childElements = tag.children;
+              const childIds = [];
+
+              for (let i = 0; i < childElements.length; i++) {
+                const childId = childElements[i].id;
+                if (childId) {
+                  childIds.push(childId);
+                }
+              }
+
+              const newTag = {
+                id: tagId,
+                parentId: parentId,
+                tagName: tag.tagName.toLowerCase(),
+                textContent: extractParentText(tagId),
+                class: tag.getAttribute("class") || "",
+                style: tag.getAttribute("style") || "",
+                isTagImg: isImgTag,
+                position: position,
+                textafter: textafter || "",
+                textbefore: textbefore || "",
+                className: tag.className || "",
+                isTagLink: isLinkTag,
+                src: isImgTag ? tag.getAttribute("src") : "",
+                children: childIds,
+                color: tag.getAttribute("color") || "",
+                size: tag.getAttribute("size") || "",
+                face: tag.getAttribute("face") || "",
+                // childArray: childNodesMap,
+                // parentchildNodes: tag.parentNode.childNodes,
+                childnodeposition: childnodeposition,
+              };
+              changes.newTags.push(newTag);
+              // console.log(jsonResult[parenttag.id], "parent");
+              // if (jsonResult[parenttag.id] !== undefined) {
+              //   // changes.changedTags.push({
+              //   //   id: parenttag.id,
+              //   //   textContent: newTag.textContent,
+              //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
+              //   //   style: jsonResult[parenttag.id].style,
+              //   //   src: jsonResult[parenttag.id].isImgTag
+              //   //     ? jsonResult[parenttag.id].isImgTag
+              //   //     : "",
+              //   //   isParentToNewTag: true,
+              //   // });
+              //   // }
+              // }
+            } else {
+              // Check for changes in text style or image source
+              if (
+                tag.children.length === 0 &&
+                tag.tagName.toLowerCase() !== "style"
+              ) {
+                if (tagInfo.textContent !== extractParentText(tag.id)) {
+                  changes.changedTags.push({
+                    id: tagId,
+                    textContent: extractParentText(tag.id),
+                  });
+                }
+                if (tagInfo.style !== tag.getAttribute("style")) {
+                  changes.changedTags.push({
+                    id: tagId,
+                    style: tag.getAttribute("style") || "",
+                  });
+                }
+                if (
+                  tagInfo.isTagImg &&
+                  tagInfo.src !== tag.getAttribute("src")
+                ) {
+                  changes.changedTags.push({
+                    id: tagId,
+                    src: isImgTag ? tag.getAttribute("src") : "",
+                  });
+                }
+              }
+            }
+          }
+          var keys = Object.keys(jsonResult);
+          console.log(jsonResult);
+          console.log(keys);
+          keys.forEach(function (key) {
+            if (jsonResult.hasOwnProperty(key)) {
+              console.log(key, "fff");
+              if (!divElement.querySelector(`#${key}`)) {
+                changes.removedTags.push(key);
+              }
+            }
+          });
+          // for (var tagId in jsonResult) {
+          //   console.log(tagId);
+          //   if (jsonResult.hasOwnProperty(tagId)) {
+          //     console.log(tagId, "fff");
+          //     if (!divElement.querySelector(`#${tagId}`)) {
+          //       changes.removedTags.push(tagId);
+          //     }
+          //   }
+          // }
+          console.log(changes, "changes");
+
+          localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
+
+          const response = fetch(
+            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                version_number: version,
+                doc_id: modalid,
+                delta: changes,
+                created_by: userdata.id,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the response from the backend
+              console.log(data);
+              localStorage.setItem("version", version);
+              fetchVersionsDateWise(modalid);
+              document.getElementById("loading").style = "display:none";
+              // window.location.reload();
+            });
+
+          return changes;
+        }
+
+        const changes = detectChanges(divElement);
+        const firstversion = await fetch(
+          `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {});
+      } else {
+      }
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
@@ -1359,7 +1621,7 @@ var changesx = 1;
 var version = 1;
 var currentNearestElement = null;
 
-function assignIDsToElements() {
+export function assignIDsToElements() {
   const container = document.getElementById("docx-wrapper-1");
 
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
@@ -1401,7 +1663,7 @@ function assignIDsToElements() {
     // console.log("JSON Data:", jsonData);
   });
 }
-function handleChanges() {
+export function handleChanges() {
   console.log("tapas");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   const elementsWithIds = editableDiv.querySelectorAll("[id]");
@@ -1459,7 +1721,7 @@ document
       checkDivSizeBack();
     }
   });
-function setIdToNull(node) {
+export function setIdToNull(node) {
   // Set the id attribute of the current node to null
   node.id = null;
 
@@ -1482,7 +1744,7 @@ function hideTextNodes(node) {
   }
 }
 
-function removearticlewhileloop(articleHeight, article, i) {
+export function removearticlewhileloop(articleHeight, article, i) {
   let index = 0;
   const totalarticles = document.getElementsByTagName("article");
   while (842 < articleHeight && totalarticles.length > i + 1 && index < 100) {
@@ -1777,7 +2039,7 @@ function checkDivSizeBack() {
   // checkclientheightofarticles();
 }
 
-function removeEmptyPages() {
+export function removeEmptyPages() {
   const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {

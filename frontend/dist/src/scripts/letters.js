@@ -643,7 +643,7 @@ function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
-      window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 

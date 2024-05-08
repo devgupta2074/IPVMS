@@ -1,4 +1,4 @@
-import * as versioncontrolService from "../../services/versioncontrol.services.js";
+import { VersionfileuploadService } from "../../services/versioncontrol.services.js";
 import path from "path";
 import dotenv from "dotenv";
 import { pool } from "../../core/database/db.js";
@@ -10,12 +10,7 @@ export const createDocumentVersion = async (req, res, next) => {
   try {
     // middleware apply user
     const { version_number, doc_id, delta, created_by } = req.body;
-    await versioncontrolService.fileuploadService(
-      version_number,
-      doc_id,
-      delta,
-      created_by
-    );
+    await VersionfileuploadService(version_number, doc_id, delta, created_by);
     return res.status(200).json({
       status: "success",
       message: "Document Version Created",

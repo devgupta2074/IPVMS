@@ -1,6 +1,6 @@
 import { pool } from "../core/database/db.js";
 import { DatabaseError, ValidationError } from "../Error/customError.js";
-export const fileuploadService = async (
+export const VersionfileuploadService = async (
   version_number,
   doc_id,
   delta,

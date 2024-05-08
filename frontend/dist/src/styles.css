@@ -1456,7 +1456,10 @@ video {
 .focus\:z-20:focus {
   z-index: 20;
 }
-
+.text-ship-cove-900 {
+  --tw-text-opacity: 1;
+  color: rgb(31 45 227 / var(--tw-text-opacity));
+}
 .focus\:border-aluminium-400:focus {
   --tw-border-opacity: 1;
   border-color: rgb(183 186 194 / var(--tw-border-opacity));

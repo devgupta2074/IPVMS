@@ -43,12 +43,11 @@ const docCard = (title, created_by, created_at, id, index) => {
   return `
     
     <tr
-    onclick="openModal(${id})"
-    
+ 
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
     <td class="w-14">${index + 1}</td>
-    <td class="w-52">${title}</2td>
+    <td class="w-52"     onclick="openModal(${id})">${title}</2td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${date}</td>
     <td class="w-28">Admin</td>

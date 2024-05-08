@@ -185,7 +185,7 @@ function addTable() {
 
 
 let maxPages = 10;
-let pageSize = 7;
+let pageSize = 6;
 let currentPage = 1;
 let totalItems;
 let title = "";
@@ -552,7 +552,7 @@ function addPrevAndNextfeature() {
 export const resetVariables = () => {
 
   maxPages = 10;
-  pageSize = 7;
+  pageSize = 6;
   currentPage = 1;
   totalItems;
   title = "";

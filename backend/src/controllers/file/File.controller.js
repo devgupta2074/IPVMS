@@ -97,7 +97,8 @@ export const getdocument = async (req, res) => {
   const page = parseInt(query.page);
   const size = parseInt(query.size);
   const { limit, offset } = getPagination(page, size);
-  console.log(category);
+  console.log("page", limit, offset);
+  console.log(category.toString(), title.toString());
   //order by
   const orderByColumn = query?.orderByColumn || "created_at";
   const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
@@ -116,7 +117,7 @@ WITH paginated_data AS (
   WHERE 
   title ILIKE '%'||$3||'%'
   ORDER BY ${orderByColumn} ${orderByDirection}
-  LIMIT $1 OFFSET $2
+  
 ),
 total_count AS (
   SELECT COUNT(*) as total_count FROM document
@@ -130,12 +131,12 @@ paginated_data pd
 JOIN  category c 
 ON c.id=pd.cid
 WHERE 
-  c.category ILIKE '%'||$4||'%';
+  c.category ILIKE '%'||$4||'%'
+  LIMIT $1 OFFSET $2  
 `;
 
     const data = await pool.query(query, [limit, offset, title, category]);
 
-    console.log(data);
     if (data.rows.length === 0) {
       return res
         .status(404)

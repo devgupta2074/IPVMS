@@ -73,6 +73,9 @@ app.get("/users", (req, res) => {
 app.get("/uploadpolicy", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "uploadpolicy.html"));
 });
+app.get("/uploadpolicy1", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "uploadpolicy1.html"));
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -78,17 +78,17 @@ const docCard = (title, category, created_by, created_at, id) => {
   <td class="w-28">
     <div class="flex gap-1">
       <button onclick="openEditor(${id})">
-        <svg id="greenpen" class="h-6 w-4">
+        <svg id="edit" class="h-6 w-4">
           <use
-            xlink:href="/assets/icons/icon.svg#greenpen"
+            xlink:href="/assets/icons/icon.svg#edit"
           ></use>
         </svg>
       </button>
 
       <button onclick="openModal(${id})">
-        <svg id="redeye" class="h-6 w-6">
+        <svg id="view" class="h-6 w-6">
           <use
-            xlink:href="/assets/icons/icon.svg#redeye"
+            xlink:href="/assets/icons/icon.svg#view"
           ></use>
         </svg>
       </button>
@@ -114,7 +114,7 @@ const fetchDoc = async (currentPage, pageSize) => {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+    `http://localhost:5001/api/file/getRecentPolicies`,
     {
       method: "GET",
       headers: {

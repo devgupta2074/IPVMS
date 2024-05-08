@@ -60,36 +60,50 @@ export const getPaginatedDocumentDetailsWithSearch = async (data, orderByColumn,
     text: `
     WITH paginated_data AS (
       SELECT 
-        id, 
-        category_id as cid,
-        created_at, 
-        created_by, 
-        title
+          id, 
+          category_id as cid,
+          created_at, 
+          created_by, 
+          title
       FROM document d
       WHERE 
       title ILIKE '%'||$3||'%'
       ORDER BY ${orderByColumn} ${orderByDirection}
-      LIMIT $1 OFFSET $2
-    ),
-    total_count AS (
-      SELECT COUNT(*) as total_count FROM document
-    )
-    SELECT 
-      pd.*, 
-      (SELECT total_count FROM total_count) as total_count,
-      c.category as category_name
-    FROM 
-    paginated_data pd
-    JOIN  category c 
-    ON c.id=pd.cid
-    WHERE 
-      c.category ILIKE '%'||$4||'%';
+  ),
+  filtered_data AS (
+      SELECT 
+          pd.*, 
+          c.category as category_name, 
+          ut.first_name
+      FROM 
+          paginated_data pd
+      JOIN 
+          user_table ut ON pd.created_by = ut.id
+      JOIN  
+          category c ON c.id=pd.cid
+      WHERE 
+          c.category ILIKE '%'||$4||'%'
+  ),
+  total_count AS (
+      SELECT 
+          COUNT(*) as total_count 
+      FROM 
+          filtered_data
+  )
+  SELECT 
+      fd.*, 
+      (SELECT total_count FROM total_count) as total_count
+  FROM 
+      filtered_data fd
+  LIMIT $1 OFFSET $2;
     `,
     values: data,
   };
 
   try {
+    // console.log(query);
     const dbResponse = await pool.query(query);
+    // console.log(dbResponse);
     return dbResponse;
 
   } catch (error) {

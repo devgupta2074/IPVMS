@@ -114,3 +114,7 @@ export const editCategoryService = async (body) => {
         throw error;
     }
 };
+
+export const getDocumentCategoryNamesService = async () => {
+
+};

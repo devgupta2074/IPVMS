@@ -1,4 +1,4 @@
-import { DatabaseError } from "../Error/customError.js";
+import { DatabaseError, NotFoundError } from "../Error/customError.js";
 import { pool } from "../core/database/db.js";
 import {
   getTemplate,

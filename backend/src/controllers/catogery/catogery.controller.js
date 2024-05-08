@@ -70,3 +70,14 @@ export const deleteCategory = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getDocumentCategoryNames = async (req, res, next) => {
+
+  try {
+    const results = categoryServices.getDocumentCategoryNamesService(req.body);
+
+  } catch (error) {
+    next(error);
+  }
+}; 

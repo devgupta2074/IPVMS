@@ -7,7 +7,7 @@ const NavBar = `
 
 <div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
 
-<div id="dashboard" class="relative bg-[#718BD3] shadow-lg rounded-[10px]">
+<div id="dashboard" class="relative ">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -88,7 +88,7 @@ const NavBar = `
  
 </div>
 </aside>
-<header class="w-full py-5 pl-8  bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full">
+<header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
   <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">

@@ -33,147 +33,23 @@
           Letters
         </div>
         <div
-          class="flex flex-row gap-20 p-3 border-b-2 font-roboto font-medium text-base"
+          class="flex flex-row gap-20 border-b-2 font-roboto font-medium text-base"
         >
-          <div class="cursor-pointer">Recent Sent Letters</div>
-          <div class="cursor-pointer">Send Letter</div>
-          <div class="cursor-pointer">Letter Templates</div>
-        </div>
-        <div class="flex gap-4">
-          <div class="flex flex-col gap-4">
-            <div
-              class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
-            >
-              Send Letters
-            </div>
-            <div class="text-chicago-600 font-roboto text-sm leading-5">
-              You can easily search for or select an employee by their name or
-              employee ID to send a letter. Simply choose the desired letter
-              from the options below, and all relevant data will be
-              automatically fetched and filled into the letter. You can also
-              preview it before sending it to the employee.
-            </div>
+          <div id="recentsentletters" class="cursor-pointer p-3">
+            Recent Sent Letters
           </div>
-          <button
-            id="generateLetter"
-            type="button"
-            class="text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-16 me-2 mb-2 rounded-md"
-          >
-            Generate Letter
-          </button>
-        </div>
-      </div>
-      <div class="w-full mt-5 flex flex-row gap-5">
-        <div class="w-full flex flex-col">
-          <label class="text-chicago-700 font-normal leading-5 mb-2">To*</label>
-          <button
-            id="dropdownSearchButton"
-            class="text-chicago-600 leading-5 bg-white w-full font-normal text-sm px-5 py-2.5 flex flex-row items-center"
-            type="button"
-          >
-            <p class="flex-1">Select User</p>
-
-            <svg
-              class="w-2.5 h-2.5 ms-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 10 6"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m1 1 4 4 4-4"
-              />
-            </svg>
-          </button>
-
-          <!-- Dropdown menu -->
           <div
-            id="dropdownSearchx"
-            class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+            id="sendletters"
+            class="cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6"
           >
-            <div class="p-3">
-              <label for="input-group-search" class="sr-only">Search</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="search"
-                  class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Search user"
-                />
-              </div>
-            </div>
-            <ul
-              class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
-              id="search-user"
-            ></ul>
+            Send Letter
+          </div>
+          <div id="lettertemplates" class="cursor-pointer p-3">
+            Letter Templates
           </div>
         </div>
-        <div class="w-full flex gap-2 flex-col">
-          <div class="w-full flex flex-col">
-            <label class="text-chicago-700 font-normal leading-5"
-              >Template*</label
-            >
-            <button
-              class="text-chicago-600 leading-5 bg-white w-full font-normal text-sm px-5 py-2.5 text-center inline-flex items-center"
-              type="button"
-              id="dropdownUsersButton"
-            >
-              Select Template
-              <svg
-                class="w-2.5 h-2.5 ms-3"
-                style="margin-left: 500px"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-          </div>
-          <!-- Dropdown menu -->
-          <div
-            class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
-            id="dropdownUser"
-          >
-            <ul
-              id="template_option"
-              class="p-3 space-y-1 text-sm text-chicago-700"
-              aria-labelledby="dropdownUsersButton"
-            ></ul>
-          </div>
-        </div>
+        <div id="sectiondetails" class="flex gap-4"></div>
       </div>
-      <div class="w-full mt-5 flex flex-row gap-5 bg-white">hello</div>
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>

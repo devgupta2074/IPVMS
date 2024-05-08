@@ -14,7 +14,10 @@ import {
 
 import {
   createNewCategory,
+  deleteCategory,
+  deleteCategoryBody,
   editCategory,
+  editCategoryBody,
   getAllCategories,
   getDocumentCategories,
   registerCategoryBody
@@ -57,11 +60,11 @@ const apiDocumentation = {
   },
   servers: [
     {
-      url: "http://localhost:5001",
+      url: "http://127.0.0.1:5001",
       description: "Local Server",
     },
     {
-      url: "http://127.0.0.1:5001",
+      url: "http://ipvms-api.exitest.com",
       description: "Production Server",
     },
   ],
@@ -105,7 +108,7 @@ const apiDocumentation = {
       post: createNewCategory,
     },
     "/api/categories/getAllCategories": {
-      get: getAllCategories,
+      get: getAllCategories
     },
     "/api/categories/editCategory": {
       patch: editCategory,

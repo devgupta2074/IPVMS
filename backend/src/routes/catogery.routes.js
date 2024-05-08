@@ -14,5 +14,7 @@ categoryRouter.post("/createNewCategory", checkCategoryName, createNewCategory);
 categoryRouter.get("/getAllCategories", getAllCategories);
 categoryRouter.patch("/editCategory", checkIdMiddleware, checkCategoryName, editCategory);
 categoryRouter.patch("/deleteCategory", checkIdMiddleware, deleteCategory);
+// categoryRouter.get('/getDocumentCategories',);
+
 
 export default categoryRouter;

@@ -43,16 +43,18 @@ app.use("/api/versioncontrol", versionControlRouter);
 app.get("/documents/count/category", async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT c.category, c.color, c.svg, COUNT(d.id) AS total_documents
+      `SELECT c.id, c.category, c.color, c.svg, COUNT(d.id) AS total_documents
       FROM category c
       LEFT JOIN document d ON c.id = d.category_id
-      GROUP BY c.category,c.color,c.svg UNION
+      GROUP BY c.id, c.category,c.color,c.svg UNION
 
 SELECT 
-    'Total',NULL,NULL,
+    NULL,'Total',NULL,NULL,
     COUNT(*) AS total_documents
 FROM 
-    document;`
+    document
+    
+    Order BY total_documents DESC;`
     );
     const count = result.rows;
     res.json(count);

@@ -153,7 +153,7 @@ export const fetchCategory = async () => {
       // Handle the response from the backend
       let x = "";
       data.forEach((item, index) => {
-        console.log("item", item, index);
+        // console.log("item", item, index);
 
         if (item.category !== "Total") {
           y.push({
@@ -167,14 +167,14 @@ export const fetchCategory = async () => {
             item.color,
             item.svg
           );
-          console.log("xy", xy);
+          // console.log("xy", xy);
           x = x + xy;
         } else {
           document.getElementById("charttotal").innerHTML =
             item.total_documents;
         }
       });
-      console.log(x);
+      // console.log(x);
       document.getElementById("category-display").innerHTML = x;
       if (y.length > 0) {
         new Chart(document.getElementById("myChart"), {

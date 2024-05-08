@@ -549,3 +549,12 @@ export const resetVariables = () => {
   title = "";
   category = "";
 };
+
+
+function handlePaginationOnClick() {
+  const paginationButtons = document.querySelectorAll('div#pagination_controller > button');
+
+  window.handlePagination = async function (Id) {
+    handlePagination(Id);
+  };
+}

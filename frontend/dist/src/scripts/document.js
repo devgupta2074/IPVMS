@@ -1,9 +1,5 @@
-
-
 import { fetchCategories } from "../components/Categories.js";
-import {
-  InsertNavbar,
-} from "../components/Navbar.js";
+import { InsertNavbar } from "../components/Navbar.js";
 import { fetchTable } from "../components/Table.js";
 
 InsertNavbar();
@@ -28,7 +24,6 @@ document.onkeydown = function (event) {
   }
 };
 
-
 const tableType = {
   name: '',
   category: '',
@@ -40,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   fetchTable(tableType);
   // console.log("f");
   fetchCategories();
-
 });
 
 const signoutbutton = document.getElementById("signout");

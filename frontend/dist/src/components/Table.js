@@ -1,4 +1,5 @@
 import { imageLoaded } from "../scripts/versioncontrol.js";
+import { style } from "../utils/constants.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
 
 const docxModal = (id) => {
@@ -20,8 +21,10 @@ const docxModal = (id) => {
   
         <div id="printThis" class="p-6 pt-0  ">
           <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
-
-          <div class='docx-wrapper' id='docx-wrapper'></div>
+          ${style}
+          <div class='docx-wrapper' id='docx-wrapper'>
+          </div>
+          
             </div>
           
         
@@ -172,9 +175,7 @@ function addTable() {
   addSortFeature();
   addEditorOpenCloseFeature();
   addModalOpenCloseFeature();
-
 }
-
 
 let maxPages = 10;
 let pageSize = 7;
@@ -184,30 +185,26 @@ let title = "";
 let category = "";
 let siblingCount = 1;
 
-
 export const fetchTable = async (tableType) => {
   document.getElementById("loading").style = "display:block";
   console.log(tableType);
-  let apiLink = '';
+  let apiLink = "";
 
   category = tableType.category;
-
 
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1}&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=&category=${category}`;
   }
 
-  const response = await fetch(
-    apiLink,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = await fetch(apiLink, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
@@ -217,8 +214,7 @@ export const fetchTable = async (tableType) => {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
       } else {
-
-        console.log('jhishi', data.data);
+        console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
@@ -323,10 +319,8 @@ function addSortFeature() {
   });
 }
 
-
 // View Modal
 function addEditorOpenCloseFeature() {
-
   window.openEditor = async function (modalId) {
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
@@ -363,7 +357,6 @@ function addEditorOpenCloseFeature() {
 }
 
 function addModalOpenCloseFeature() {
-
   window.openModal = async function (modalId) {
     console.log(modalId, "modal id");
     document.getElementById(modalId).style.display = "block";
@@ -423,8 +416,6 @@ function addPagination(item) {
   handlePaginationOnClick();
 }
 
-
-
 const handleNextPage = async () => {
   currentPage++;
 
@@ -467,7 +458,16 @@ const handlePagination = async (item) => {
 };
 
 const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
-  console.log('totI', totalItems, 'currentP', currentPage, 'pagesize', pageSize, 'sibc', siblingCount);
+  console.log(
+    "totI",
+    totalItems,
+    "currentP",
+    currentPage,
+    "pagesize",
+    pageSize,
+    "sibc",
+    siblingCount
+  );
   const totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
@@ -537,27 +537,15 @@ const addPaginationElement = (arr) => {
 };
 
 function addPrevAndNextfeature() {
-
   document.getElementById("npage").addEventListener("click", handleNextPage);
   document.getElementById("ppage").addEventListener("click", handlePrevPage);
 }
 
 export const resetVariables = () => {
-
   maxPages = 10;
   pageSize = 7;
   currentPage = 1;
   totalItems;
   title = "";
   category = "";
-  siblingCount = 1;
 };
-
-
-function handlePaginationOnClick() {
-  const paginationButtons = document.querySelectorAll('div#pagination_controller > button');
-
-  window.handlePagination = async function (Id) {
-    handlePagination(Id);
-  };
-}

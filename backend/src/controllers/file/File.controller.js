@@ -487,6 +487,8 @@ paginated_data pd;
 };
 
 export const createPolicy = async (req, res, next) => {
+  const userid = req.user.id;
+  console.log(req.user);
   let { htmlText, htmlJson, categoryId, title } = req.body;
 
   const textBytesSize = Buffer.byteLength(htmlText, "utf8");
@@ -504,7 +506,7 @@ export const createPolicy = async (req, res, next) => {
   }
 
   try {
-    const doc = await fileService.createPolicy(req.body);
+    const doc = await fileService.createPolicy(req.body, userid);
     return res.status(201).json({
       success: true,
       message: "File uploaded",
@@ -543,5 +545,65 @@ export const setPolicyDetail = async (req, res, next) => {
     return res.status(200).json({ message: "document upload success" });
   } catch (error) {
     next(error);
+  }
+};
+
+export const getLetters = async (req, res) => {
+  const query = req.query;
+  const name = req.query.name;
+  const template = req.query.template;
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = getPagination(page, size);
+  console.log("page", limit, offset);
+  console.log(name.toString(), template.toString());
+  //order by
+
+  try {
+    const query = `
+WITH paginated_data AS (
+  SELECT 
+    id, 
+    template_id as tid,
+    filepath,   
+    created_at, 
+    created_by, 
+    employee_name
+  FROM letters l
+  WHERE 
+  employee_name ILIKE '%'||$3||'%'
+),
+total_count AS (
+  SELECT COUNT(*) as total_count FROM letters
+)
+SELECT 
+  pd.*, 
+  (SELECT total_count FROM total_count) as total_count,
+  t.title as template_name,c.category
+FROM 
+paginated_data pd
+JOIN  template t
+JOIN category c
+ON t.category_id=c.id 
+ON t.id=pd.tid
+WHERE 
+  t.title ILIKE '%'||$4||'%'
+  LIMIT $1 OFFSET $2  
+`;
+    const data = await pool.query(query, [limit, offset, name, template]);
+    if (data.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "no document dound" });
+    }
+    console.log(data.rows.length);
+    return res
+      .status(200)
+      .json({ message: "documents are", success: true, data: data.rows });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error, success: false });
   }
 };

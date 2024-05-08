@@ -22,7 +22,7 @@ export const sendEmail = async (email, token) => {
       },
     });
     const htmlTemp = template(
-      `http://ipvms.exitest.com/resetpassword?token=${token}`,
+      `http://localhost:5555/resetpassword?token=${token}`,
       new Date().toLocaleDateString()
     );
     await transporter.sendMail({

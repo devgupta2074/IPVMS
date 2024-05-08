@@ -28,9 +28,9 @@ app.get("/policydownload/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));
 });
 app.get("/letters", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "templatedoc.html"));
+  res.sendFile(path.join(__dirname, "src/views", "letters.html"));
 });
-app.get("/template/:id", (req, res) => {
+app.get("/template", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "template.html"));
 });
 app.get("/forgotpassword", (req, res) => {

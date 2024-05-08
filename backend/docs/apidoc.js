@@ -9,7 +9,7 @@ import {
   resetPassword,
   resetUserBody,
   resetAuthUserBody,
-  resetPasswordAuth
+  resetPasswordAuth,
 } from "./user.js";
 
 import {
@@ -19,27 +19,23 @@ import {
   editCategory,
   editCategoryBody,
   getAllCategories,
-  getDocumentCategories,
-  registerCategoryBody
-} from './category.js';
+  // getDocumentCategories,
+  registerCategoryBody,
+} from "./category.js";
 
 import {
   createDocumentVersion,
   createDocumentVersionBody,
   getDocumentVersionById,
-  getDocumentVersionsDatewise
+  getDocumentVersionsDatewise,
 } from "./documents.js";
 
 import {
   createTemplateVersion,
   createTemplateVersionBody,
   getTemplateVersionById,
-  getTemplateVersionsDatewise
+  getTemplateVersionsDatewise,
 } from "./templates.js";
-
-
-
-
 
 const apiDocumentation = {
   openapi: "3.0.1",
@@ -79,11 +75,11 @@ const apiDocumentation = {
       name: "Category",
     },
     {
-      name: "Documents"
+      name: "Documents",
     },
     {
-      name: 'Templates'
-    }
+      name: "Templates",
+    },
   ],
   paths: {
     "/api/user/registerUser": {
@@ -113,31 +109,30 @@ const apiDocumentation = {
     "/api/categories/editCategory": {
       patch: editCategory,
     },
-    "/api/categories/deleteCategory": {
-      patch: deleteCategory
-    },
-    "/documents/count/category": {
-      get: getDocumentCategories
-    },
+    // "/api/categories/deleteCategory": {
+    //   patch: deleteCategory,
+    // },
+    // "/documents/count/category": {
+    //   get: getDocumentCategories,
+    // },
     "/api/versioncontrol/createDocumentVersion": {
-      post: createDocumentVersion
+      post: createDocumentVersion,
     },
     "/api/versioncontrol/getDocumentVersionsDatewise?docId=": {
-      get: getDocumentVersionsDatewise
+      get: getDocumentVersionsDatewise,
     },
     "/api/versioncontrol/getDocumentVersionById?id=": {
-      get: getDocumentVersionById
+      get: getDocumentVersionById,
     },
     "/api/versioncontrol/createTemplateVersion": {
-      post: createTemplateVersion
+      post: createTemplateVersion,
     },
     "/api/versioncontrol/getTemplateVersionsDatewise?docId=": {
-      get: getTemplateVersionsDatewise
+      get: getTemplateVersionsDatewise,
     },
     "/api/versioncontrol/getTemplateVersionById?id=": {
-      get: getTemplateVersionById
-    }
-
+      get: getTemplateVersionById,
+    },
   },
   components: {
     securitySchemes: {
@@ -154,10 +149,10 @@ const apiDocumentation = {
       resetUserBody,
       resetAuthUserBody,
       registerCategoryBody,
-      editCategoryBody,
-      deleteCategoryBody,
+      // editCategoryBody,
+      // deleteCategoryBody,
       createDocumentVersionBody,
-      createTemplateVersionBody
+      createTemplateVersionBody,
     },
   },
 };

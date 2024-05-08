@@ -243,7 +243,7 @@ export const fetchTable = async (tableType) => {
           document.getElementById("main-body").innerHTML += docxModal(item.id);
           document.getElementById(item.id).style.display = "none";
         });
-        addPagination();
+        addPagination(currentPage);
       }
     });
 
@@ -416,13 +416,13 @@ const fetchAndRenderDoc = async (modalId) => {
 
 // Pagination
 
-function addPagination() {
+function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
-  document.getElementById(1 + "pagination").className =
+  document.getElementById(item + "pagination").className =
     "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
   addPrevAndNextfeature();
 }
@@ -460,12 +460,8 @@ const range = (start, end) => {
 
 const handlePagination = async (item) => {
   currentPage = item;
-  const paginationElement = document.getElementById("pagination-controller");
-  const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
-  paginationElement.innerHTML = "";
-  addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+  addPagination(currentPage);
+
   const tableType = {
     name: '',
     category: category

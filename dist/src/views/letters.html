@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | IPVMS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tailwind.css" />
+
+    <!-- <script type="module" src="/scripts/versioncontrol.js"></script>
+  <script type="module" src="/scripts/editor.js"></script> -->
+  </head>
+  <body
+    class="grid grid-cols-[104px_1fr] bg-gulf-blue-950 h-lvh overflow-hidden"
+  >
+    <main
+      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
+    >
+      <div class="flex flex-col gap-3">
+        <div
+          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
+        >
+          Letters
+        </div>
+        <div
+          class="flex flex-row gap-20 border-b-2 font-roboto font-medium text-base"
+        >
+          <div id="recentsentletters" class="cursor-pointer p-3">
+            Recent Sent Letters
+          </div>
+          <div
+            id="sendletters"
+            class="cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6"
+          >
+            Send Letter
+          </div>
+          <div id="lettertemplates" class="cursor-pointer p-3">
+            Letter Templates
+          </div>
+        </div>
+        <div id="sectiondetails" class="flex gap-4"></div>
+      </div>
+    </main>
+  </body>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="/scripts/docx-preview.min.js"></script>
+  <script type="module" src="/scripts/letters.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</html>

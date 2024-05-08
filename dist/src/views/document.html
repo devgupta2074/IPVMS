@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DocumentS | IPVMS</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tailwind.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
+  </head>
+  <link rel="stylesheet" href="tailwind.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../scripts/docxtohtml.js"></script>
+  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+  <script src="../scripts/docx-preview.min.js"></script>
+  <script src = "docxhtml.css"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+    integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <body
+  class="grid grid-cols-[104px_1fr] bg-gulf-blue-950 h-lvh overflow-hidden"
+>
+    <main class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
+
+      <section class="flex flex-col gap-8">
+       
+
+          <div class="flex flex-row justify-between">
+            <div class="font-semibold text-mineshaft-900 text-2xl inline-block">Policies</div>
+            <div class="flex gap-3">
+              <button id="uploadpolicy"      class="flex text-[#1F2DE3] p-2" >  
+                <svg id="upload" class="h-4 w-4 m-1">
+                  <use
+                    xlink:href="/assets/icons/icon.svg#upload"
+                  ></use>
+                </svg>
+                Upload Policy
+              </button>
+              <button class="flex bg-[#1F2DE3] text-white rounded-md px-2 pt-2">
+                <svg id="plusSymbol" class="h-6 w-4 m-1">
+                <use
+                  xlink:href="/assets/icons/icon.svg#plusSymbol"
+                ></use>
+              </svg>
+               Add New Policy</button>
+            </div>
+          </div>
+  
+          <div id="insert-categories">
+        </div>
+
+      </section>
+
+      <section>
+
+        <!-- Table -->
+        
+        <div id="insert-table">
+        
+        </div>
+        
+        <!-- Table COMPLETED -->
+        </section>
+     
+
+ 
+  <section class="w-full flex flex-col justify-center items-center">
+    <div class="h-full w-full"   id="main-body">
+
+    </div>
+    <nav
+      class="isolate inline-flex -space-x-px rounded-md items-center  w-full justify-between"
+      aria-label="Pagination"
+    >
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div id="doc-status"></div>
+      <div></div>
+    </div>
+      <a
+        href="#"
+        id="ppage"
+        type="button"
+        class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+      >
+        <span class="sr-only">Previous</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
+      <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+      
+      <div class="flex" id="pagination-controller"></div>
+      <button
+        href="#"
+        id="npage"
+        type="button"
+        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+      >
+        <span class="sr-only">Next</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      
+    </nav>
+  </section>
+  
+  <!-- EDITOR -->
+<div id="extralarge-modal" tabindex="-1" class="fixed hidden  top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative w-full max-h-full">
+
+      <div class="relative bg-white rounded-lg shadow ">
+      
+          <div class="flex items-center justify-between p-3 border-b rounded-t ">
+              <h3 class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
+                Statement of work
+                <button
+                id="modalname"
+                  type="button"
+                data-dropdown-toggle="dropdown" >
+                  <svg class="flex items-center justify-center" width="23" height="5" viewBox="0 0 23 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="2.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                    <circle cx="11.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                    <circle cx="20.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                    </svg>
+                </button>
+                <div
+                class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
+                id="dropdown"
+              >
+                <div class="px-4 py-3">
+                  <span id="dropdownname" class="block text-sm"></span>
+                  <span id="dropdownemail" class="block text-sm font-medium text-gray-900 truncate"
+                    ></span
+                  >
+                </div>
+                <ul class="py-1" aria-labelledby="dropdown">
+                  <li>
+                    <a
+                      href="#"
+                      id="signout"
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      >Sign out</a
+                    >
+                  </li>
+                </ul>
+              </div>
+                  
+              </h3>
+              <div class="flex flex-row gap-5">
+                <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
+
+                <button id="json" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save a Version as Draft</button>
+
+                <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+              </button>
+              </div>
+        
+          </div>
+     
+       
+            <div class="flex flex-row gap-5 m-3 ">
+              <div class="flex-1 flex flex-row gap-5 m-3 options ">
+                <div class="flex  flex-row gap-0">
+                  <select id="fontName" class="adv-option-button bg-gray-50 border border-gray-300 text-gray-900 text-xs  w-[5.0625rem] h-[1.75rem] rounded-l-md  p-1 m-0  "></select>
+                  <select id="fontSize" class="adv-option-button bg-gray-50 border border-gray-300 text-gray-900 text-xs  w-[3.75rem] h-[1.75rem] rounded-r-md p-1 m-0 "></select>
+             
+                </div>
+      
+                <div class="flex  flex-row gap-1">
+                  <button  id="bold" class="option-button format">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9.33333 12.8337H14.5833C15.3569 12.8337 16.0987 12.5264 16.6457 11.9794C17.1927 11.4324 17.5 10.6905 17.5 9.91699C17.5 9.14344 17.1927 8.40158 16.6457 7.8546C16.0987 7.30762 15.3569 7.00033 14.5833 7.00033H9.33333V12.8337ZM21 18.0837C21 18.7731 20.8642 19.4558 20.6004 20.0927C20.3365 20.7297 19.9498 21.3085 19.4623 21.796C18.9748 22.2835 18.396 22.6702 17.7591 22.934C17.1221 23.1979 16.4394 23.3337 15.75 23.3337H7.65C7.29101 23.3337 7 23.0426 7 22.6837V5.31699C7 4.95801 7.29101 4.66699 7.65 4.66699H14.5833C15.6111 4.66704 16.6163 4.96875 17.4742 5.53473C18.3321 6.10071 19.005 6.90606 19.4095 7.85091C19.814 8.79576 19.9322 9.83854 19.7495 10.85C19.5669 11.8614 19.0914 12.797 18.382 13.5407C19.1784 14.0018 19.8396 14.6644 20.2991 15.4617C20.7586 16.2591 21.0003 17.1633 21 18.0837ZM9.33333 15.167V21.0003H15.75C16.5235 21.0003 17.2654 20.693 17.8124 20.1461C18.3594 19.5991 18.6667 18.8572 18.6667 18.0837C18.6667 17.3101 18.3594 16.5682 17.8124 16.0213C17.2654 15.4743 16.5235 15.167 15.75 15.167H9.33333Z" fill="#52525B"/>
+                      </svg>
+                  </button>
+                  <button  id="italic" class="option-button format">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 5.83366C10.5 5.18933 11.0224 4.66699 11.6667 4.66699H22.1667C22.811 4.66699 23.3334 5.18933 23.3334 5.83366C23.3334 6.47799 22.811 7.00033 22.1667 7.00033H17.7744L12.6702 21.0003H16.3334C16.9777 21.0003 17.5 21.5227 17.5 22.167C17.5 22.8113 16.9777 23.3337 16.3334 23.3337H5.83335C5.18902 23.3337 4.66669 22.8113 4.66669 22.167C4.66669 21.5227 5.18902 21.0003 5.83335 21.0003H10.2256L15.3298 7.00033H11.6667C11.0224 7.00033 10.5 6.47799 10.5 5.83366Z" fill="#52525B"/>
+                      </svg>
+                    </button>
+                    <button  id="underline" class="option-button format">   
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.33331 4.66667C9.33331 4.02233 8.81098 3.5 8.16665 3.5C7.52231 3.5 6.99998 4.02233 6.99998 4.66667V12.8333C6.99998 17.3437 8.16664 21 14 21C19.8333 21 21 17.3437 21 12.8333V4.66667C21 4.02233 20.4776 3.5 19.8333 3.5C19.189 3.5 18.6666 4.02233 18.6666 4.66667V12.8333C18.6666 16.055 18.6666 18.6667 14 18.6667C9.33331 18.6667 9.33331 16.055 9.33331 12.8333V4.66667Z" fill="#52525B"/>
+                        <path d="M6.99998 22.1667C6.35565 22.1667 5.83331 22.689 5.83331 23.3333C5.83331 23.9777 6.35565 24.5 6.99998 24.5H21C21.6443 24.5 22.1666 23.9777 22.1666 23.3333C22.1666 22.689 21.6443 22.1667 21 22.1667H6.99998Z" fill="#52525B"/>
+                        </svg>
+                        </button> 
+                        <button  id="strikethrough" class="option-button format">
+                        <svg width="22" height="28" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.013 11.8337C17.2813 12.4357 17.4167 13.1053 17.4167 13.8403C17.4167 15.406 16.8053 16.631 15.5838 17.5118C14.36 18.3927 12.6718 18.8337 10.517 18.8337C8.82204 18.8337 7.14265 18.4848 5.47801 17.7864C5.08155 17.62 4.83533 17.225 4.83533 16.795C4.83533 15.938 5.77187 15.393 6.57184 15.7005C7.78861 16.1683 9.02421 16.4023 10.279 16.4023C13.2552 16.4023 14.7473 15.5483 14.7578 13.8392C14.764 13.4926 14.7002 13.1484 14.5703 12.8271C14.4404 12.5057 14.2471 12.2139 14.0018 11.969L13.8618 11.8325H1.66667C1.02233 11.8325 0.5 11.3102 0.5 10.6658C0.5 10.0215 1.02233 9.49916 1.66667 9.49916H20.3333C20.9777 9.49916 21.5 10.0215 21.5 10.6658C21.5 11.3102 20.9777 11.8325 20.3333 11.8325H17.013V11.8337ZM12.1988 8.3142C12.2095 8.31788 12.2069 8.33366 12.1956 8.33366H5.90437C5.90188 8.33366 5.89948 8.33273 5.89764 8.33105C5.69438 8.14542 5.50758 7.94253 5.33933 7.72466C4.83533 7.07366 4.58333 6.28733 4.58333 5.36099C4.58333 3.91899 5.127 2.69283 6.21317 1.68249C7.30167 0.672159 8.98283 0.166992 11.259 0.166992C12.7547 0.166992 14.1946 0.457661 15.5771 1.039C15.9536 1.19729 16.1847 1.57399 16.1847 1.98236C16.1847 2.80333 15.284 3.3322 14.5038 3.07695C13.5804 2.77489 12.6062 2.62399 11.581 2.62399C8.68767 2.62399 7.24217 3.53633 7.24217 5.36099C7.24217 5.85099 7.4965 6.27799 8.00517 6.64316C8.51383 7.00833 9.887 7.51816 9.887 7.51816L12.1988 8.3142Z" fill="#52525B"/>
+                          </svg>
+                        </button>
+                        <button class="flex items-center">
+                      
+                          <input type="color" id="foreColor1" class=" adv-option-button opacity-0 absolute w-8 h-0 "/>
+                          <svg width="28" height="28" viewBox="0 0 28 29" class="w-6 h-6 text-gray-600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.0787 16.8333H9.92134L8.34802 20.7666C8.17085 21.2096 7.74187 21.5 7.26483 21.5C6.43948 21.5 5.87511 20.6664 6.18164 19.9001L12.54 4.73338C12.7172 4.29044 13.1462 4 13.6232 4H14.3768C14.8539 4 15.2829 4.29044 15.46 4.73338L21.8184 19.9001C22.1249 20.6664 21.5605 21.5 20.7352 21.5C20.2582 21.5 19.8292 21.2096 19.652 20.7666L18.0787 16.8333ZM17.1453 14.5L14 7.36583L10.8547 14.5H17.1453Z" fill="#52525B"/>
+                            <rect x="3" y="23.5" width="22" height="3" rx="1.5" fill="#2463EB"/>
+                          </svg>
+                        </button>
+                        <button class="flex items-center">
+                          <input type="color" id="backColor" class="adv-option-button opacity-0 absolute  w-8 h-0" />
+                          <svg width="28" height="28" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="23.5" width="22" height="3" rx="1.5" fill="#FDD33F"/>
+                            <path d="M9.43156 16.1767L11.2364 9.97284C11.2421 9.95173 11.2491 9.9309 11.2575 9.91049C11.2885 9.83387 11.3351 9.76936 11.3917 9.71839L16.6449 4.4517C16.8508 4.24527 17.1847 4.24527 17.3906 4.4517C17.5965 4.65813 17.5965 4.99281 17.3906 5.19924L12.4909 10.1115L19.1268 16.7644L24.0264 11.8521C24.2323 11.6457 24.5662 11.6457 24.7721 11.8521C24.978 12.0586 24.978 12.3932 24.7721 12.5997L19.5188 17.8664C19.468 17.9231 19.4037 17.9698 19.3272 18.001C19.3069 18.0093 19.2861 18.0164 19.2651 18.0221L13.0771 19.8316L11.7601 21.1524C11.592 21.3209 11.2348 21.4068 10.9564 21.4068H7.26571C6.96387 21.2339 6.90865 20.8205 7.15448 20.5741L9.43156 16.1767ZM12.9518 18.7669L18.1243 17.2544L12.0021 11.1165L10.4935 16.3023L12.9518 18.7669ZM12.0541 19.362L9.8999 17.2023L8.38824 20.2886H11.13L12.0541 19.362Z" fill="#52525B" stroke="#52525B"/>
+                            </svg>
+                        </button>
+                         
+                            <button id="createLink" class="adv-option-button">
+                                    
+                          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.517 21.0398C16.8728 21.0398 16.3505 20.5175 16.3505 19.8733C16.3505 19.2291 16.8728 18.7068 17.517 18.7068H18.6835C19.2963 18.7068 19.9032 18.5861 20.4694 18.3516C21.0356 18.1171 21.5501 17.7733 21.9834 17.34C22.4168 16.9066 22.7605 16.3921 22.995 15.8259C23.2296 15.2597 23.3503 14.6529 23.3503 14.04C23.3503 13.4272 23.2296 12.8203 22.995 12.2541C22.7605 11.6879 22.4168 11.1735 21.9834 10.7401C21.5501 10.3068 21.0356 9.96302 20.4694 9.72849C19.9032 9.49396 19.2963 9.37325 18.6835 9.37325H17.517C16.8728 9.37325 16.3505 8.851 16.3505 8.20676C16.3505 7.56253 16.8728 7.04027 17.517 7.04027L18.6835 7.04027C20.5301 7.05531 22.2959 7.79941 23.5963 9.11049C24.8968 10.4216 25.6265 12.1934 25.6265 14.04C25.6265 15.8867 24.8968 17.6585 23.5963 18.9696C22.2959 20.2807 20.5301 21.0248 18.6835 21.0398H17.517ZM11.6829 19.8733C11.6829 20.5175 11.1606 21.0398 10.5164 21.0398H9.34991C8.4259 21.0473 7.50953 20.8718 6.65367 20.5234C5.79782 20.175 5.01941 19.6606 4.36336 19.0099C3.7073 18.3592 3.18657 17.585 2.83122 16.732C2.47586 15.879 2.29291 14.9641 2.29291 14.04C2.29291 13.116 2.47586 12.2011 2.83122 11.3481C3.18657 10.4951 3.7073 9.72091 4.36336 9.07018C5.01941 8.41944 5.79782 7.90504 6.65367 7.55664C7.50953 7.20824 8.42589 7.03275 9.34991 7.04027L10.5164 7.04027C11.1606 7.04027 11.6829 7.56253 11.6829 8.20676C11.6829 8.851 11.1606 9.37325 10.5164 9.37325H9.34991C8.73706 9.37325 8.13021 9.49396 7.56401 9.72849C6.99781 9.96302 6.48335 10.3068 6.05 10.7401C5.61665 11.1735 5.27289 11.6879 5.03836 12.2541C4.80384 12.8203 4.68313 13.4272 4.68313 14.04C4.68313 14.6529 4.80384 15.2597 5.03837 15.8259C5.27289 16.3921 5.61665 16.9066 6.05 17.34C6.48335 17.7733 6.99781 18.1171 7.56401 18.3516C8.13021 18.5861 8.73706 18.7068 9.34991 18.7068H10.5164C11.1606 18.7068 11.6829 19.2291 11.6829 19.8733ZM18.6827 12.8727C19.3274 12.8727 19.85 13.3953 19.85 14.04C19.85 14.6847 19.3273 15.2073 18.6826 15.2073L9.3507 15.2066C8.7064 15.2066 8.18406 14.6844 8.18384 14.0401C8.18361 13.3954 8.70613 12.8727 9.35078 12.8727H18.6827Z" fill="#52525B"/>
+                            </svg>
+                            </button> 
+                      
+                            <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.20835 7.50033C5.76286 7.50033 5.25002 7.91923 5.25002 8.63053V15.4365L8.32811 11.3184C8.36154 11.2737 8.39814 11.2314 8.43763 11.1919C9.57666 10.0529 11.4234 10.0529 12.5624 11.1919C12.5867 11.2161 12.6098 11.2414 12.6318 11.2677L16.798 16.2414L18.0626 14.9836L18.064 14.9822C19.2031 13.8445 21.0488 13.845 22.1874 14.9836C22.2155 15.0117 22.2421 15.0412 22.2672 15.072L22.75 15.665V8.63053C22.75 7.91923 22.2372 7.50033 21.7917 7.50033H6.20835ZM25.0834 8.63053C25.0834 6.80478 23.6934 5.16699 21.7917 5.16699H6.20835C4.30663 5.16699 2.91669 6.80478 2.91669 8.63053V21.5003C2.91669 22.789 3.96136 23.8337 5.25002 23.8337H22.75C24.0387 23.8337 25.0834 22.789 25.0834 21.5003V8.63053ZM22.75 19.3609L20.5054 16.6037C20.2762 16.4062 19.9299 16.4161 19.7125 16.6335L19.7103 16.6357L17.5424 18.792C17.3107 19.0224 16.9931 19.1451 16.6667 19.1302C16.3403 19.1154 16.0351 18.9644 15.8253 18.7139L10.8849 12.8159C10.6712 12.6279 10.3528 12.6228 10.1334 12.8005L5.25002 19.3339V20.3701C5.25002 21.0814 5.76286 21.5003 6.20835 21.5003H21.7917C22.2372 21.5003 22.75 21.0814 22.75 20.3701V19.3609Z" fill="#52525B"/>
+                              <path d="M17.5 12.7503C18.466 12.7503 19.25 11.9681 19.25 11.0003C19.25 10.0343 18.466 9.25033 17.5 9.25033C16.534 9.25033 15.75 10.0343 15.75 11.0003C15.75 11.9681 16.534 12.7503 17.5 12.7503Z" fill="#52525B"/>
+                              </svg>        
+                </div>
+        
+                <div class="border-l pl-5 flex flex-row gap-1">
+                  <button id="justifyLeft" class="option-button align">
+                  <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 5.74967C5 5.10534 5.52233 4.58301 6.16667 4.58301H21.8333C22.4777 4.58301 23 5.10534 23 5.74967C23 6.39401 22.4777 6.91634 21.8333 6.91634H6.16667C5.52233 6.91634 5 6.39401 5 5.74967ZM5 23.2497C5 22.6053 5.52233 22.083 6.16667 22.083H15.8333C16.4777 22.083 17 22.6053 17 23.2497C17 23.894 16.4777 24.4163 15.8333 24.4163H6.16667C5.52234 24.4163 5 23.894 5 23.2497ZM5 17.4163C5 16.772 5.52233 16.2497 6.16667 16.2497H21.8333C22.4777 16.2497 23 16.772 23 17.4163C23 18.0607 22.4777 18.583 21.8333 18.583H6.16667C5.52233 18.583 5 18.0607 5 17.4163ZM5 11.583C5 10.9387 5.52233 10.4163 6.16667 10.4163H15.8333C16.4777 10.4163 17 10.9387 17 11.583C17 12.2273 16.4777 12.7497 15.8333 12.7497H6.16667C5.52234 12.7497 5 12.2273 5 11.583Z" fill="#52525B"/>
+                    </svg>
+                  </button>
+                  <button id="justifyCenter" class="option-button align">
+                    <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.66669 5.74967C4.66669 5.10534 5.18902 4.58301 5.83335 4.58301H22.1667C22.811 4.58301 23.3334 5.10534 23.3334 5.74967C23.3334 6.39401 22.811 6.91634 22.1667 6.91634H5.83335C5.18902 6.91634 4.66669 6.39401 4.66669 5.74967ZM8.16669 23.2497C8.16669 22.6053 8.68902 22.083 9.33335 22.083H18.6667C19.311 22.083 19.8334 22.6053 19.8334 23.2497C19.8334 23.894 19.311 24.4163 18.6667 24.4163H9.33336C8.68902 24.4163 8.16669 23.894 8.16669 23.2497ZM8.16669 11.583C8.16669 10.9387 8.68902 10.4163 9.33335 10.4163H18.6667C19.311 10.4163 19.8334 10.9387 19.8334 11.583C19.8334 12.2273 19.311 12.7497 18.6667 12.7497H9.33336C8.68902 12.7497 8.16669 12.2273 8.16669 11.583ZM4.66669 17.4163C4.66669 16.772 5.18902 16.2497 5.83335 16.2497H22.1667C22.811 16.2497 23.3334 16.772 23.3334 17.4163C23.3334 18.0607 22.811 18.583 22.1667 18.583H5.83335C5.18902 18.583 4.66669 18.0607 4.66669 17.4163Z" fill="#52525B"/>
+                      </svg>
+                    </button>
+                    <button id="justifyRight" class="option-button align">
+                  
+                      <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.5 5.74967C3.5 5.10534 4.02233 4.58301 4.66667 4.58301H23.3333C23.9777 4.58301 24.5 5.10534 24.5 5.74967C24.5 6.39401 23.9777 6.91634 23.3333 6.91634H4.66667C4.02233 6.91634 3.5 6.39401 3.5 5.74967ZM8.16667 23.2497C8.16667 22.6053 8.689 22.083 9.33333 22.083H23.3333C23.9777 22.083 24.5 22.6053 24.5 23.2497C24.5 23.894 23.9777 24.4163 23.3333 24.4163H9.33333C8.689 24.4163 8.16667 23.894 8.16667 23.2497ZM3.5 17.4163C3.5 16.772 4.02233 16.2497 4.66667 16.2497H23.3333C23.9777 16.2497 24.5 16.772 24.5 17.4163C24.5 18.0607 23.9777 18.583 23.3333 18.583H4.66667C4.02233 18.583 3.5 18.0607 3.5 17.4163ZM8.16667 11.583C8.16667 10.9387 8.689 10.4163 9.33333 10.4163H23.3333C23.9777 10.4163 24.5 10.9387 24.5 11.583C24.5 12.2273 23.9777 12.7497 23.3333 12.7497H9.33333C8.689 12.7497 8.16667 12.2273 8.16667 11.583Z" fill="#52525B"/>
+                        </svg>
+                      </button>
+                      <button id="justifyFull" class="option-button align">
+                        <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.5 5.74967C3.5 5.10534 4.02233 4.58301 4.66667 4.58301H23.3333C23.9777 4.58301 24.5 5.10534 24.5 5.74967C24.5 6.39401 23.9777 6.91634 23.3333 6.91634H4.66667C4.02233 6.91634 3.5 6.39401 3.5 5.74967ZM3.5 23.2497C3.5 22.6053 4.02233 22.083 4.66667 22.083H23.3333C23.9777 22.083 24.5 22.6053 24.5 23.2497C24.5 23.894 23.9777 24.4163 23.3333 24.4163H4.66667C4.02233 24.4163 3.5 23.894 3.5 23.2497ZM3.5 17.4163C3.5 16.772 4.02233 16.2497 4.66667 16.2497H23.3333C23.9777 16.2497 24.5 16.772 24.5 17.4163C24.5 18.0607 23.9777 18.583 23.3333 18.583H4.66667C4.02233 18.583 3.5 18.0607 3.5 17.4163ZM3.5 11.583C3.5 10.9387 4.02233 10.4163 4.66667 10.4163H23.3333C23.9777 10.4163 24.5 10.9387 24.5 11.583C24.5 12.2273 23.9777 12.7497 23.3333 12.7497H4.66667C4.02233 12.7497 3.5 12.2273 3.5 11.583Z" fill="#52525B"/>
+                          </svg>
+                          </button>
+                          <button id="superscript" class="option-button script h-8">
+                            <i class="fa-solid fa-superscript"></i>
+                          
+                          </button>
+                          <button id="subscript" class="option-button script h-8">
+                            <i class="fa-solid fa-subscript"></i>
+                          </button>
+                                                                        
+                                                                        
+                </div>
+
+                <div class="flex flex-row gap-1">
+                  <button id="insertUnorderedList" class="option-button">
+                  <svg width="28" height="28" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.33333 6.33301C9.33333 5.68868 9.85567 5.16634 10.5 5.16634H23.3333C23.9777 5.16634 24.5 5.68868 24.5 6.33301C24.5 6.97734 23.9777 7.49967 23.3333 7.49967H10.5C9.85567 7.49967 9.33333 6.97734 9.33333 6.33301ZM3.5 6.33301C3.5 5.36651 4.2835 4.58301 5.25 4.58301C6.2165 4.58301 7 5.36651 7 6.33301C7 7.29951 6.2165 8.08301 5.25 8.08301C4.2835 8.08301 3.5 7.29951 3.5 6.33301ZM3.5 14.4997C3.5 13.5332 4.2835 12.7497 5.25 12.7497C6.2165 12.7497 7 13.5332 7 14.4997C7 15.4662 6.2165 16.2497 5.25 16.2497C4.2835 16.2497 3.5 15.4662 3.5 14.4997ZM3.5 22.6663C3.5 21.6998 4.2835 20.9163 5.25 20.9163C6.2165 20.9163 7 21.6998 7 22.6663C7 23.6328 6.2165 24.4163 5.25 24.4163C4.2835 24.4163 3.5 23.6328 3.5 22.6663ZM9.33333 14.4997C9.33333 13.8553 9.85567 13.333 10.5 13.333H23.3333C23.9777 13.333 24.5 13.8553 24.5 14.4997C24.5 15.144 23.9777 15.6663 23.3333 15.6663H10.5C9.85567 15.6663 9.33333 15.144 9.33333 14.4997ZM9.33333 22.6663C9.33333 22.022 9.85567 21.4997 10.5 21.4997H23.3333C23.9777 21.4997 24.5 22.022 24.5 22.6663C24.5 23.3107 23.9777 23.833 23.3333 23.833H10.5C9.85567 23.833 9.33333 23.3107 9.33333 22.6663Z" fill="#52525B"/>
+                    </svg>
+                    </button>
+                    <button id="insertOrderedList" class="option-button">
+                    <svg width="28" height="28" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.61361 4.75725C7.95756 4.96982 8.16692 5.34534 8.16692 5.74968L8.16667 10.9997C8.16667 11.644 7.64433 12.1663 7 12.1663C6.35567 12.1663 5.83333 11.644 5.83333 10.9997L5.83359 7.63738L5.18867 7.95984C4.61236 8.248 3.91158 8.0144 3.62342 7.43809C3.33527 6.86178 3.56886 6.161 4.14517 5.87284L6.47851 4.70618C6.84016 4.52535 7.26966 4.54468 7.61361 4.75725ZM14.0003 7.49967C13.356 7.49967 12.8336 8.02201 12.8336 8.66634C12.8336 9.31067 13.356 9.83301 14.0003 9.83301H23.3336C23.9779 9.83301 24.5003 9.31067 24.5003 8.66634C24.5003 8.02201 23.9779 7.49967 23.3336 7.49967H14.0003ZM14 18.583C13.3557 18.583 12.8333 19.1053 12.8333 19.7497C12.8333 20.394 13.3557 20.9163 14 20.9163H23.3333C23.9777 20.9163 24.5 20.394 24.5 19.7497C24.5 19.1053 23.9777 18.583 23.3333 18.583H14Z" fill="#52525B"/>
+                      <path d="M5.66919 18.3414L5.66788 18.3424L5.66635 18.3436L5.66404 18.3454L5.66287 18.3463C5.15248 18.7331 4.42472 18.6361 4.03361 18.1277C3.64075 17.617 3.73629 16.8845 4.247 16.4916L4.31493 16.4416C4.34961 16.4168 4.39628 16.3845 4.45354 16.3473C4.56721 16.2733 4.72719 16.1768 4.92173 16.08C5.29255 15.8956 5.87642 15.6663 6.54619 15.6663C8.08548 15.6663 9.33333 16.9142 9.33333 18.4535C9.33333 19.3464 8.81013 20.0321 8.34167 20.5413C7.98463 20.9293 7.55355 21.2454 7.175 21.4997H8.45833C9.10267 21.4997 9.625 22.022 9.625 22.6663C9.625 23.3107 9.10267 23.833 8.45833 23.833H4.66667C4.02233 23.833 3.5 23.3107 3.5 22.6663C3.5 21.7863 3.98237 21.1509 4.43333 20.7208C4.81543 20.3564 5.27422 20.0421 5.65458 19.795L5.77827 19.7144C6.22708 19.421 6.5452 19.1962 6.76122 18.9614C6.949 18.7573 7 18.6103 7 18.4535C7 18.2029 6.79682 17.9997 6.54619 17.9997C6.38643 17.9997 6.17637 18.062 5.96065 18.1693C5.86192 18.2184 5.78047 18.2677 5.72603 18.3031C5.69923 18.3205 5.67923 18.3343 5.66919 18.3414Z" fill="#52525B"/>
+                      </svg>
+                    </button>
+                      
+                               
+                </div>
+                <div class=" border-l pl-5 flex flex-row gap-1">
+                  <button id="undo" class="option-button">
+                  <svg width="28" height="28" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.33331 9.83301V13.1119C9.33331 13.663 8.69056 13.964 8.26719 13.6112L2.93252 9.16568C2.62068 8.90582 2.62069 8.42686 2.93253 8.167L8.26719 3.72144C8.69056 3.36864 9.33331 3.66969 9.33331 4.22078V7.49967H14C16.4753 7.49967 18.8493 8.48301 20.5996 10.2333C22.35 11.9837 23.3333 14.3577 23.3333 16.833C23.3333 19.3084 22.35 21.6823 20.5996 23.4327C18.8493 25.183 16.4753 26.1663 14 26.1663H10.3333C9.78103 26.1663 9.33331 25.7186 9.33331 25.1663V24.833C9.33331 24.2807 9.78103 23.833 10.3333 23.833H14C15.8565 23.833 17.637 23.0955 18.9497 21.7828C20.2625 20.47 21 18.6895 21 16.833C21 14.9765 20.2625 13.196 18.9497 11.8833C17.637 10.5705 15.8565 9.83301 14 9.83301H9.33331Z" fill="#52525B"/>
+                    </svg>
+                  </button>
+                  <button id="redo" class="option-button">
+                    <svg width="28" height="28" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.6666 9.83301H14C12.1434 9.83301 10.363 10.5705 9.05021 11.8833C7.73746 13.196 6.99996 14.9765 6.99996 16.833C6.99996 18.6895 7.73746 20.47 9.05021 21.7828C10.363 23.0955 12.1434 23.833 14 23.833H17.5C18.1443 23.833 18.6666 24.3553 18.6666 24.9997C18.6666 25.644 18.1443 26.1663 17.5 26.1663H14C11.5246 26.1663 9.15064 25.183 7.4003 23.4327C5.64996 21.6823 4.66663 19.3084 4.66663 16.833C4.66663 14.3577 5.64996 11.9837 7.4003 10.2333C9.15064 8.48301 11.5246 7.49967 14 7.49967H18.6666V4.22078C18.6666 3.66969 19.3094 3.36864 19.7327 3.72144L25.0674 8.167C25.3793 8.42686 25.3793 8.90582 25.0674 9.16568L19.7327 13.6112C19.3094 13.964 18.6666 13.663 18.6666 13.1119V9.83301Z" fill="#52525B"/>
+                      </svg>
+                      </button>
+                                            
+                </div>
+              </div>
+             
+              <div class=" flex flex-row  justify-end items-center gap-0 ">
+                <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7.5 1.949C6.42099 1.94858 5.35892 2.21842 4.41 2.73407L4.572 1.57152C4.59024 1.43973 4.55562 1.30607 4.47574 1.1999C4.39586 1.09372 4.27726 1.02374 4.146 1.00531C4.08093 0.995692 4.0146 0.999165 3.95087 1.01553C3.88715 1.03189 3.8273 1.06081 3.77481 1.10061C3.72233 1.14041 3.67825 1.19029 3.64515 1.24735C3.61205 1.30441 3.59058 1.36751 3.582 1.43298L3.252 3.81228C3.2424 3.87784 3.24582 3.94466 3.26207 4.00888C3.27832 4.07311 3.30708 4.13347 3.34668 4.18648C3.38628 4.23949 3.43595 4.28411 3.49282 4.31775C3.54968 4.3514 3.61262 4.3734 3.678 4.38251L6.054 4.7138H6.124C6.25661 4.72285 6.38737 4.67865 6.48751 4.59092C6.58765 4.50318 6.64898 4.3791 6.658 4.24597C6.66702 4.11284 6.62299 3.98157 6.53559 3.88104C6.4482 3.7805 6.32461 3.71893 6.192 3.70988L5.016 3.54524C6.0842 3.00269 7.29961 2.82498 8.47758 3.03911C9.65555 3.25324 10.7317 3.84751 11.5426 4.73163C12.3535 5.61576 12.8548 6.74143 12.9703 7.93764C13.0859 9.13386 12.8093 10.3352 12.1828 11.3593C11.5562 12.3834 10.6138 13.1741 9.49875 13.6115C8.3837 14.0488 7.15693 14.1089 6.0048 13.7825C4.85267 13.4561 3.83813 12.7611 3.11532 11.803C2.3925 10.845 2.0009 9.67632 2 8.4745C2 8.34137 1.94732 8.21369 1.85355 8.11956C1.75979 8.02542 1.63261 7.97254 1.5 7.97254C1.36739 7.97254 1.24021 8.02542 1.14645 8.11956C1.05268 8.21369 1 8.34137 1 8.4745C1 9.76512 1.38122 11.0268 2.09545 12.0999C2.80968 13.173 3.82484 14.0094 5.01256 14.5033C6.20028 14.9972 7.50721 15.1264 8.76809 14.8746C10.029 14.6228 11.1872 14.0013 12.0962 13.0887C13.0052 12.1761 13.6243 11.0134 13.8751 9.74756C14.1259 8.48174 13.9972 7.16968 13.5052 5.9773C13.0132 4.78492 12.1801 3.76577 11.1112 3.04874C10.0423 2.33171 8.78558 1.949 7.5 1.949Z" fill="#3689F5" stroke="#3689F5"/>
+                  </svg>
+                <button id="v2tov1" type="button" class=" text-dodger-blue-500 bg-white  font-medium rounded-full text-sm px-3  text-center  ">
+                 
+                    Revert Back</button>
+
+                                          
+              </div>
+            </div>
+           <div class="flex flex-row"> 
+            <div class="bg-white m-4 rounded-lg  shadow-lg mt-2 mb-2 p-2 w-full"> 
+            <div id="container-content-1" contenteditable="true">
+              <div id ="docx-wrapper-1" class="docx-wrapper"></div>
+            </div>
+          </div>
+            <div class="bg-white m-4 rounded-lg  shadow-lg mt-2 mb-2 p-2 w-full">
+          
+              <div class="font-roboto font-medium text-base leading-6 border-b p-3 ">Version History</div>
+              <div>
+                <ol id="version-table" class="relative border-s border-gray-200 mt-6 ">                  
+                 
+                  
+                  </ol>
+              </div>
+          </div>
+        </div>
+
+         
+    
+            </div>
+       
+          </div>
+      
+          
+      </div>
+
+      <!-- MODAL-->      
+      <div id="modalcontainer"></div>
+<!-- EDITOR COMPLETED -->
+<div id="loading"  style="display:block;">
+  <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+  <div class="flex gap-2 justify-center items-center h-screen">
+      <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+      <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+      <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+  </div>
+  </div>  
+    </div>
+    <!-- HIDDEN ELEMENT FOR UPLOADING POLICY -->
+    <div id="container-html1" class="hidden"></div>
+  </main>
+
+
+
+</div>
+
+</div>
+    <script defer type="module" src="/scripts/document.js"></script>
+    <script defer type="module" src="/scripts/uploadpolicy1.js"></script>
+    <script defer type="module" src="/scripts/uploadpolicymodal.js"></script>
+    
+
+
+
+    
+
+    
+
+  </body>
+</html>

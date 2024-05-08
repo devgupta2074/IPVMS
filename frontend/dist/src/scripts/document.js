@@ -48,7 +48,6 @@
 import { fetchCategories } from "../components/Categories.js";
 import {
   InsertNavbar,
-  NavbarHoverFunctionality,
 } from "../components/Navbar.js";
 import { fetchTable } from "../components/Table.js";
 
@@ -221,11 +220,11 @@ document.onkeydown = function (event) {
 //   const paginationElement = document.getElementById("pagination-controller");
 //   paginationElement.innerHTML = "";
 // };
-document.getElementById("search").addEventListener("keydown", function (event) {
-  if (event.keyCode === 13) {
-    search();
-  }
-});
+// document.getElementById("search").addEventListener("keydown", function (event) {
+//   if (event.keyCode === 13) {
+//     search();
+//   }
+// });
 
 const tableType = {
   name: '',

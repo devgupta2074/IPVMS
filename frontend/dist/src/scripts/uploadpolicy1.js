@@ -720,6 +720,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   //   categoryElement.innerHTML += `<option id=${item.id}>${item.category}</option>`;
   // });
 
+  console.log("is it working");
   document.getElementById("uploadbtn").addEventListener("click", () => {
     console.log("upload");
     if (filesUploaded.length === 0) {
@@ -765,4 +766,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
+
 //error on not choosing category

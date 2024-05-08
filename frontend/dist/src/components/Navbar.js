@@ -3,8 +3,6 @@ import { VIEWS_CONSTANTS } from "../utils/constants.js";
 
 const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950">
-
-
 <div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
 
 <div id="dashboard" class="relative ">
@@ -88,7 +86,7 @@ const NavBar = `
  
 </div>
 </aside>
-<header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full">
+<header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
   <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">

@@ -9,6 +9,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
   </head>
+  <link rel="stylesheet" href="tailwind.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../scripts/docxtohtml.js"></script>
+  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+  <script src="../scripts/docx-preview.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+    integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
   <body class="grid grid-cols-[104px_1fr] col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
    
 
@@ -20,7 +31,7 @@
           <div class="flex flex-row justify-between">
             <div class="font-semibold text-mineshaft-900 text-2xl inline-block">Policies</div>
             <div class="flex gap-3">
-              <button class="flex text-[#1F2DE3] p-2" >  
+              <button id="uploadpolicy"      class="flex text-[#1F2DE3] p-2" >  
                 <svg id="upload" class="h-4 w-4 m-1">
                   <use
                     xlink:href="/assets/icons/icon.svg#upload"
@@ -367,6 +378,9 @@
       
           
       </div>
+      div>
+      <!-- MODAL-->      
+      <div id="modalcontainer"></div>
 <!-- EDITOR COMPLETED -->
 <div id="loading"  style="display:block;">
   <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
@@ -384,10 +398,15 @@
 </div>
 
 </div>
+    <script defer type="module" src="/scripts/document.js"></script>
+    <script defer type="module" src="/scripts/uploadpolicy1.js"></script>
+    <script defer type="module" src="/scripts/uploadpolicymodal.js"></script>
+    
 
 
 
-    <script type="module" src="/scripts/document.js"></script>
+    
+
     
 
   </body>

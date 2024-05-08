@@ -1,6 +1,5 @@
 import { GetAllCategory } from "../api/getAllCategories.js";
 
-
 class BulkUpload {
   constructor(
     concurrency,
@@ -200,7 +199,7 @@ class BulkUpload {
         const htmlJson = extractHtmlToJson(
           document.getElementsByClassName("docx-wrapper")[0]
         );
-        console.log(htmlData, htmlJson,  title);
+        console.log(htmlData, htmlJson, title);
 
         // console.log("html data is", htmlData);
         if (htmlData) {
@@ -215,7 +214,7 @@ class BulkUpload {
           const data = { htmlText: htmlData, htmlJson, categoryId, title };
           const axiosRequestArgs = {
             method: "post",
-            url: "http://localhost:5001/api/file/createPolicy",
+            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
             },
@@ -567,7 +566,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("file data is", fileData);
       const updateDocDetails = async () => {
         const result = await axios.post(
-          "http://localhost:5001/api/file/setPolicyDetail",
+          "http://ipvms-api.exitest.com/api/file/setPolicyDetail",
           {
             docDetail: fileData,
           }

@@ -193,10 +193,11 @@ export const fetchTable = async (tableType) => {
   category = tableType.category;
 
   if (tableType.name == "recent") {
-    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
+    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
-      }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${
+      currentPage - 1
+    }&size=${pageSize}&title=&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -327,7 +328,7 @@ function addEditorOpenCloseFeature() {
     let htmljson;
     document.getElementById("extralarge-modal").classList.remove("hidden");
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getFile/${modalId}`,
+      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -381,7 +382,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -450,9 +451,9 @@ const handlePagination = async (item) => {
   addPagination(currentPage);
 
   const tableType = {
-    name: '',
+    name: "",
     category: category,
-    pagination: true
+    pagination: true,
   };
   await fetchTable(tableType);
 };
@@ -550,9 +551,10 @@ export const resetVariables = () => {
   category = "";
 };
 
-
 function handlePaginationOnClick() {
-  const paginationButtons = document.querySelectorAll('div#pagination_controller > button');
+  const paginationButtons = document.querySelectorAll(
+    "div#pagination_controller > button"
+  );
 
   window.handlePagination = async function (Id) {
     handlePagination(Id);

@@ -75,7 +75,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -138,7 +138,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://localhost:5001/api/user/getUserInfo/${userId}`,
+    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }

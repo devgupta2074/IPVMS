@@ -418,7 +418,7 @@ const fetchDoc = async (currentPage, pageSize) => {
 document.getElementById("loading").style = "display:block";
 
 const response = await fetch(
-`http://localhost:5001/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+`http://ipvms-api.exitest.com/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
 {
   method: "GET",
   headers: {
@@ -491,7 +491,7 @@ window.location.href = "http://localhost:5555" + url;
 
 const fetchAndRenderDoc = async (modalId) => {
 const response = await fetch(
-`http://localhost:5001/api/file/getTemplateById/${modalId}`,
+`http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
 {
   method: "GET",
   headers: {
@@ -514,7 +514,7 @@ const fetchCategory = async () => {
 console.log("fetching catehory");
 document.getElementById("loading").style = "display:block";
 const response = await fetch(
-`http://localhost:5001/api/categories/getAllCategories`,
+`http://ipvms-api.exitest.com/api/categories/getAllCategories`,
 {
   method: "GET",
   headers: {

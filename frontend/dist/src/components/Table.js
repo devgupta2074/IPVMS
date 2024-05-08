@@ -186,6 +186,7 @@ let siblingCount = 1;
 
 
 export const fetchTable = async (tableType) => {
+  document.getElementById("loading").style = "display:block";
   console.log(tableType);
   let apiLink = '';
 
@@ -235,11 +236,13 @@ export const fetchTable = async (tableType) => {
           document.getElementById("main-body").innerHTML += docxModal(item.id);
           document.getElementById(item.id).style.display = "none";
         });
-        addPagination(currentPage);
+        if (tableType?.pagination) {
+          addPagination(currentPage);
+        }
       }
     });
 
-  // document.getElementById("loading").style = "display:none";
+  document.getElementById("loading").style = "display:none";
 };
 
 function getdate(dateString) {
@@ -457,7 +460,8 @@ const handlePagination = async (item) => {
 
   const tableType = {
     name: '',
-    category: category
+    category: category,
+    pagination: true
   };
   await fetchTable(tableType);
 };

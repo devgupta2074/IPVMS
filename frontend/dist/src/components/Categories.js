@@ -58,7 +58,8 @@ function addSelectHighlight() {
             }
             const tableType = {
                 name: "policies",
-                category: category
+                category: category,
+                pagination: true
             };
             resetVariables();
             fetchTable(tableType);

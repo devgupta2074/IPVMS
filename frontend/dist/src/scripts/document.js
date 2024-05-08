@@ -31,7 +31,8 @@ document.onkeydown = function (event) {
 
 const tableType = {
   name: '',
-  category: ''
+  category: '',
+  pagination: true
 };
 
 document.addEventListener("DOMContentLoaded", async () => {

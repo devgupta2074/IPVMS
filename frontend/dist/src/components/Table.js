@@ -43,6 +43,7 @@ const docCard = (title, created_by, created_at, id, index) => {
   return `
     
     <tr
+    onclick="openModal(${id})"
     
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
@@ -54,7 +55,7 @@ const docCard = (title, created_by, created_at, id, index) => {
     <td class="w-28">${date}</td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">
-      <div class="flex gap-1">
+      <div class="flex gap-6 justify-center">
         <button onclick="openEditor(${id})">
           <svg id="edit" class="h-6 w-4">
             <use
@@ -62,17 +63,9 @@ const docCard = (title, created_by, created_at, id, index) => {
             ></use>
           </svg>
         </button>
-  
-        <button onclick="openModal(${id})">
-          <svg id="view" class="h-6 w-6">
-            <use
-              xlink:href="/assets/icons/icon.svg#view"
-            ></use>
-          </svg>
-        </button>
-  
+    
         <a href="/policydownload/${id}" target="_blank" >
-          <svg id="download" class="h-6 w-6">
+          <svg id="download" class="h-6 w-4">
             <use
               xlink:href="/assets/icons/icon.svg#download"
             ></use>
@@ -168,7 +161,7 @@ function addTable() {
             </a>
           </div>
         </th>
-        <th scope="col" class="w-28 font-normal">Action</th>
+        <th scope="col" class="w-28 font-normal text-center">Action</th>
       </tr>
     </thead>
     <tbody id="tbody">

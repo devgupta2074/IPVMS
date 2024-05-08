@@ -5,7 +5,7 @@ const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950">
 <div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
 
-<div id="dashboard" class="relative ">
+<button id="dashboard" class="relative ">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -19,25 +19,25 @@ const NavBar = `
 </svg>
 
 
-</div>
-<div id="document" class="relative">
+</button>
+<button id="document" class="relative">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
   <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
-    Document</div>
+    Policies</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
 </svg>
 
 
-</div>
+</button>
 
 
-<div id="letters" class="relative">
+<button id="letters" class="relative">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -51,8 +51,8 @@ const NavBar = `
 </svg>
 
 
-</div>
-<div id="editor" class="relative">
+</button>
+<button id="editor" class="relative">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -66,8 +66,8 @@ const NavBar = `
 </svg>
 
 
-</div>
-<div id="inviteButton" class="relative">
+</button>
+<button id="inviteButton" class="relative">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -81,7 +81,7 @@ const NavBar = `
 </svg>
 
 
-</div>
+</button>
   
  
 </div>
@@ -89,15 +89,17 @@ const NavBar = `
 <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
-  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
   <svg class="h-6 w-6 z-50 -ml-12 mt-1">
     <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
   </svg>
 </div>
 <div class="flex items-center justify-center gap-5 pr-10">
+<button>
   <svg class="h-6 w-6 ">
     <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
   </svg>
+</button> 
   <figure class=" ">
     <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
   </figure>

@@ -46,6 +46,7 @@ const docCard = (title, created_by, created_at, id, index) => {
   return `
     
     <tr
+    onclick="openModal(${id})"
     
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
@@ -57,7 +58,7 @@ const docCard = (title, created_by, created_at, id, index) => {
     <td class="w-28">${date}</td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">
-      <div class="flex gap-1">
+      <div class="flex gap-6 justify-center">
         <button onclick="openEditor(${id})">
           <svg id="edit" class="h-6 w-4">
             <use
@@ -65,17 +66,9 @@ const docCard = (title, created_by, created_at, id, index) => {
             ></use>
           </svg>
         </button>
-  
-        <button onclick="openModal(${id})">
-          <svg id="view" class="h-6 w-6">
-            <use
-              xlink:href="/assets/icons/icon.svg#view"
-            ></use>
-          </svg>
-        </button>
-  
+    
         <a href="/policydownload/${id}" target="_blank" >
-          <svg id="download" class="h-6 w-6">
+          <svg id="download" class="h-6 w-4">
             <use
               xlink:href="/assets/icons/icon.svg#download"
             ></use>
@@ -171,7 +164,7 @@ function addTable() {
             </a>
           </div>
         </th>
-        <th scope="col" class="w-28 font-normal">Action</th>
+        <th scope="col" class="w-28 font-normal text-center">Action</th>
       </tr>
     </thead>
     <tbody id="tbody">
@@ -186,7 +179,7 @@ function addTable() {
 }
 
 let maxPages = 10;
-let pageSize = 6;
+let pageSize = 7;
 let currentPage = 1;
 let totalItems;
 let title = "";
@@ -240,7 +233,7 @@ export const fetchTable = async (tableType) => {
           document.getElementById("main-body").innerHTML += docxModal(item.id);
           document.getElementById(item.id).style.display = "none";
         });
-        addPagination();
+        addPagination(currentPage);
       }
     });
 
@@ -410,15 +403,16 @@ const fetchAndRenderDoc = async (modalId) => {
 
 // Pagination
 
-function addPagination() {
+function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
-  document.getElementById(1 + "pagination").className =
+  document.getElementById(item + "pagination").className =
     "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
   addPrevAndNextfeature();
+  handlePaginationOnClick();
 }
 
 const handleNextPage = async () => {
@@ -452,12 +446,8 @@ const range = (start, end) => {
 
 const handlePagination = async (item) => {
   currentPage = item;
-  const paginationElement = document.getElementById("pagination-controller");
-  const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
-  paginationElement.innerHTML = "";
-  addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+  addPagination(currentPage);
+
   const tableType = {
     name: "",
     category: category,
@@ -551,10 +541,9 @@ function addPrevAndNextfeature() {
 
 export const resetVariables = () => {
   maxPages = 10;
-  pageSize = 6;
+  pageSize = 7;
   currentPage = 1;
   totalItems;
   title = "";
   category = "";
-  siblingCount = 1;
 };

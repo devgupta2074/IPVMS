@@ -1,7 +1,7 @@
-import * as versioncontrol from "../../services/versioncontrol.services.js";
 import path from "path";
 import dotenv from "dotenv";
 import { pool } from "../../core/database/db.js";
+import { VersionfileuploadService } from "../../services/versioncontrol.services.js";
 import { getPaginatedDocumentDetailsWithSearchService } from "../../services/file.services.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
@@ -10,7 +10,7 @@ export const createDocumentVersion = async (req, res, next) => {
   try {
     // middleware apply user
     const { version_number, doc_id, delta, created_by } = req.body;
-    const result = await versioncontrol.fileuploadService(
+    const result = await VersionfileuploadService(
       version_number,
       doc_id,
       delta,

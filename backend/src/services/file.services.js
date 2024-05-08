@@ -4,7 +4,12 @@ import {
   getTemplate,
   updateDocument,
   uploadTemplate,
-} from "../query/document.js";
+  getDocumentById,
+  getPaginatedDocumentDetailsWithSearch
+} from "../query/file.js";
+import { getPagination } from "../utils/getPagination.js";
+
+
 export const fileuploadService = async (htmlText, docId, res) => {
   try {
     const document = await updateDocument({ htmlText, docId });
@@ -99,12 +104,46 @@ export const createPolicy = async (body) => {
 
   try {
     const document = await pool.query(
-      "INSERT INTO  document   (htmldata,category_id,title) VALUES($1,$2,$3) RETURNING id",
-      [htmlData, categoryId, title]
+      "INSERT INTO  document   (htmldata,category_id,title,htmljson) VALUES($1,$2,$3,$4) RETURNING *",
+      [htmlData, categoryId, title, htmlJson]
     );
     return document.rows[0];
   } catch (error) {
     console.log(error.message);
     throw new DatabaseError("cant create policy");
   }
+};
+
+
+export const getPaginatedDocumentDetailsWithSearchService = async (req) => {
+  const query = req.query;
+  const title = req.query.title;
+  const category = req.query.category;
+  console.log(title);
+  //  /document?page=1&size=2
+  const page = parseInt(query.page);
+  const size = parseInt(query.size);
+  const { limit, offset } = getPagination(page, size);
+  console.log(category);
+  //order by
+  const orderByColumn = query?.orderByColumn || "created_at";
+  const orderByDirection = query?.orderByDirection?.toUpperCase() || "ASC";
+
+  try {
+    const response = await getPaginatedDocumentDetailsWithSearch([limit, offset, title, category], orderByColumn, orderByDirection);
+
+    if ((response.rowCount != 0) || null) {
+      const data = {
+        length: response.rowCount,
+        rows: response.rows
+      };
+      return data;
+
+    } else {
+      throw new NotFoundError('No documents found.');
+    }
+  } catch (error) {
+    throw error;
+  }
+
 };

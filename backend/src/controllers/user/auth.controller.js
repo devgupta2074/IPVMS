@@ -122,8 +122,7 @@ export const getUserInfo = async (req, res, next) => {
     const userId = req.user.id;
     console.log(userId, "user Id");
     const user = await pool.query(
-      `SELECT u.first_name,u.last_name,u.email,u.created_at,u.updated_at,u.updated_by,u.is_active,u.employee_code,u.mobile_number,b.business_unit,b.department,b.department,b.subdepartment,b.designation FROM user_table AS u 
-      JOIN user_position AS b ON u.id=b.user_id WHERE u.id=$1`,
+      `SELECT * FROM user_table as u WHERE u.id=$1`,
       [userId]
     );
 

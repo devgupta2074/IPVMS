@@ -37,7 +37,8 @@ async function SignIn() {
     siginbutton.setAttribute("disabled", "");
     siginbutton.innerHTML = `  <svg  class="h-4 w-5  ">
   <use  xlink:href="/assets/icons/icon.svg#loader-white"></use>
-</svg>`;
+</svg> Sign
+In`;
 
     console.log(API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.LOGIN);
     // const response = await LoginApiRequest(email, password);

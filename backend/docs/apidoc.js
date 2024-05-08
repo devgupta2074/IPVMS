@@ -11,6 +11,29 @@ import {
   resetAuthUserBody,
   resetPasswordAuth,
 } from "./user.js";
+
+import {
+  createNewCategory,
+  editCategory,
+  getAllCategories,
+  // getDocumentCategories,
+  registerCategoryBody,
+} from "./category.js";
+
+import {
+  createDocumentVersion,
+  createDocumentVersionBody,
+  getDocumentVersionById,
+  getDocumentVersionsDatewise,
+} from "./documents.js";
+
+import {
+  createTemplateVersion,
+  createTemplateVersionBody,
+  getTemplateVersionById,
+  getTemplateVersionsDatewise,
+} from "./templates.js";
+
 const apiDocumentation = {
   openapi: "3.0.1",
   info: {
@@ -34,7 +57,7 @@ const apiDocumentation = {
       description: "Local Server",
     },
     {
-      url: "http://ipvms-api.exitest.com",
+      url: "http://127.0.0.1:5001",
       description: "Production Server",
     },
   ],
@@ -44,6 +67,15 @@ const apiDocumentation = {
     },
     {
       name: "Users",
+    },
+    {
+      name: "Category",
+    },
+    {
+      name: "Documents",
+    },
+    {
+      name: "Templates",
     },
   ],
   paths: {
@@ -65,6 +97,39 @@ const apiDocumentation = {
     "/api/user/resetPassword": {
       post: resetPasswordAuth,
     },
+    "/api/categories/createNewCategory": {
+      post: createNewCategory,
+    },
+    "/api/categories/getAllCategories": {
+      get: getAllCategories,
+    },
+    "/api/categories/editCategory": {
+      patch: editCategory,
+    },
+    // "/api/categories/deleteCategory": {
+    //   patch: deleteCategory,
+    // },
+    // "/documents/count/category": {
+    //   get: getDocumentCategories,
+    // },
+    "/api/versioncontrol/createDocumentVersion": {
+      post: createDocumentVersion,
+    },
+    "/api/versioncontrol/getDocumentVersionsDatewise?docId=": {
+      get: getDocumentVersionsDatewise,
+    },
+    "/api/versioncontrol/getDocumentVersionById?id=": {
+      get: getDocumentVersionById,
+    },
+    "/api/versioncontrol/createTemplateVersion": {
+      post: createTemplateVersion,
+    },
+    "/api/versioncontrol/getTemplateVersionsDatewise?docId=": {
+      get: getTemplateVersionsDatewise,
+    },
+    "/api/versioncontrol/getTemplateVersionById?id=": {
+      get: getTemplateVersionById,
+    },
   },
   components: {
     securitySchemes: {
@@ -80,6 +145,11 @@ const apiDocumentation = {
       forgotUserBody,
       resetUserBody,
       resetAuthUserBody,
+      registerCategoryBody,
+      // editCategoryBody,
+      // deleteCategoryBody,
+      createDocumentVersionBody,
+      createTemplateVersionBody,
     },
   },
 };

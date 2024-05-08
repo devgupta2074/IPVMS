@@ -2,23 +2,26 @@ import * as versioncontrolService from "../../services/versioncontrol.services.j
 import path from "path";
 import dotenv from "dotenv";
 import { pool } from "../../core/database/db.js";
+import { DatabaseError } from "../../Error/customError.js";
 const __dirname = path.resolve();
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 
-export const createDocumentVersion = async (req, res) => {
+export const createDocumentVersion = async (req, res, next) => {
   try {
     // middleware apply user
-    const { version_number, doc_id, delta } = req.body;
+    const { version_number, doc_id, delta, created_by } = req.body;
     await versioncontrolService.fileuploadService(
       version_number,
       doc_id,
       delta,
-      res
+      created_by
     );
+    return res.status(200).json({
+      status: "success",
+      message: "Document Version Created",
+    });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: error, success: false, message: "Internal Server Error" });
+    next(error);
   }
 };
 

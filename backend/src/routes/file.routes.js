@@ -12,6 +12,7 @@ import {
   createPolicy,
   setPolicyDetail,
   getAllTemplates,
+  getLetters,
 } from "../controllers/file/file.Controller.js";
 
 import {
@@ -27,6 +28,7 @@ fileRouter.post("/uploadFile", fileuploadMiddleware, uploadFile);
 fileRouter.post("/createPolicy", createPolicy);
 fileRouter.post("/setPolicyDetail", setPolicyDetail);
 fileRouter.get("/getFile/:docId", getFile);
+fileRouter.get("/getLetters", getLetters);
 fileRouter.post("/uploadTemplate", uploadTemplateMiddleware, uploadTemplate);
 fileRouter.get("/getTemplateById/:id", getTemplateById);
 fileRouter.post("/updateDocument/:id", editDocument);

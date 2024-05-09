@@ -3,7 +3,7 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${docid}`,
+    `http://localhost:5001/api/file/getFile/${docid}`,
     {
       method: "GET",
       headers: {
@@ -21,7 +21,7 @@ async function ChangeVersion(docid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${docid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -35,15 +35,12 @@ async function ChangeVersion(docid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -68,7 +65,7 @@ export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
   const response = fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsDatewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -81,7 +78,7 @@ export const fetchVersionsDateWise = async (id) => {
       console.log("data datewise", data);
 
       // Parse each element into an array
-      data.data.forEach((element) => {
+      data.forEach((element) => {
         const arrayOfArrays = element.grouped_values
           .slice(1, -1)
           .split("], [")
@@ -172,15 +169,18 @@ export const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${version.id
-            }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          <li id=${
+            version.id
+          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
+              version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${
+              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0)}
              </p>

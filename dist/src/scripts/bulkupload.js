@@ -214,7 +214,7 @@ class BulkUpload {
           const data = { htmlText: htmlData, htmlJson, categoryId, title };
           const axiosRequestArgs = {
             method: "post",
-            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
+            url: "http://localhost:5001/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
             },
@@ -406,8 +406,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         "h-2.5",
         "dark:bg-gray-700"
       );
-      progressBar.innerHTML = `<div class="bg-blue-600 h-2.5 rounded-full" style="width:${file.uploadCount || 0
-        }%"></div>`;
+      progressBar.innerHTML = `<div class="bg-blue-600 h-2.5 rounded-full" style="width:${
+        file.uploadCount || 0
+      }%"></div>`;
 
       fileItem.appendChild(progressBar);
 
@@ -423,8 +424,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         file.status === "FAILED"
           ? "Failed"
           : file.status === "SUCCESS"
-            ? "Completed"
-            : "In Progress";
+          ? "Completed"
+          : "In Progress";
       status.classList.add(file.status);
       fileItem.appendChild(status);
 
@@ -565,7 +566,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("file data is", fileData);
       const updateDocDetails = async () => {
         const result = await axios.post(
-          "http://ipvms-api.exitest.com/api/file/setPolicyDetail",
+          "http://localhost:5001/api/file/setPolicyDetail",
           {
             docDetail: fileData,
           }
@@ -607,14 +608,16 @@ const fileDetailHtml = (files, category) => {
     html += `<tr id=${item.uploadId}>
 <td class="px-6 py-4 whitespace-nowrap">${item.file.name || item.name}</td>
 <td class="px-6 py-4 whitespace-nowrap">
-<select id="${item.uploadId
-      }category"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+<select id="${
+      item.uploadId
+    }category"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 ${categoryElement}
 </select>
 </td>
 <td class="px-6 py-4 whitespace-nowrap">
-  <input type="text" id="${item.uploadId
-      }title" class="border w-full rounded-md px-2 py-1 focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter title">
+  <input type="text" id="${
+    item.uploadId
+  }title" class="border w-full rounded-md px-2 py-1 focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter title">
 </td>
 </tr>`;
   });

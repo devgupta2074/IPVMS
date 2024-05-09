@@ -123,7 +123,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 
 const fetchCategoryCount = async (item) => {
   await fetch(
-    `http://ipvms-api.exitest.com/documents/count/category?category=${item.id}`,
+    `http://localhost:5001/documents/count/category?category=${item.id}`,
     {
       method: "GET",
       headers: {
@@ -141,21 +141,18 @@ const fetchCategoryCount = async (item) => {
 export const fetchCategory = async () => {
   const y = [];
 
-  const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/documents/count/category`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log("data", data);
       // Handle the response from the backend
       let x = "";
-      data.data.forEach((item, index) => {
+      data.forEach((item, index) => {
         // console.log("item", item, index);
 
         if (item.category !== "Total") {
@@ -240,21 +237,18 @@ export const fetchCategory = async () => {
 export const fetchCategoryZero = async () => {
   const y = [];
 
-  const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/documents/count/category`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log("data", data);
       // Handle the response from the backend
       let x = "";
-      data.data.forEach((item, index) => {
+      data.forEach((item, index) => {
         console.log("item", item, index);
 
         if (item.category !== "Total") {

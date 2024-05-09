@@ -1,6 +1,6 @@
 export const fetchTable = async () => {
   const apiLink =
-    "http://ipvms-api.exitest.com/api/file/getLetters?page=0&size=5&name=&template=";
+    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=";
 
   const response = await fetch(apiLink, {
     method: "GET",

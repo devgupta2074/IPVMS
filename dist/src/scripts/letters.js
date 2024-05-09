@@ -75,7 +75,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -138,7 +138,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    `http://localhost:5001/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -158,15 +158,13 @@ async function getUserInfoToDisplay(userId) {
         <div
           class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
         >
-         ${
-           result.first_name.charAt(0).toUpperCase() +
-           result.last_name.charAt(0).toUpperCase()
-         }
+         ${result.first_name.charAt(0).toUpperCase() +
+        result.last_name.charAt(0).toUpperCase()
+        }
         </div>
         <div class="font-roboto font-normal text-base leading-6">
-          <div class="text-mineshaft-900">${
-            result.first_name + " " + result.last_name
-          }</div>
+          <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
+        }</div>
           <div class="text-mineshaft-600">${result.designation}</div>
         </div>
       </div>
@@ -175,9 +173,8 @@ async function getUserInfoToDisplay(userId) {
       >
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Employee ID</p>
-          <p class="text-mineshaft-600 leading-6 text-base">${
-            result.employee_code
-          }</p>
+          <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
+        }</p>
         </div>
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -643,9 +640,9 @@ function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
-      window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => {});
+    document.addEventListener("DOMContentLoaded", async () => { });
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 

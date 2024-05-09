@@ -5,11 +5,11 @@ const API_CONSTANTS = {
   PATCH: "PATCH",
   DELETE: "DELETE",
   BACKEND_BASE_URL: "http://127.0.0.1:5001",
-  BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
+  BACKEND_BASE_URL_PROD: "http://localhost:5001",
   TOKEN: "token",
 };
 const URL_CONSTANTS = {
-  FRONTEND_BASE_URL: "http://ipvms.exitest.com",
+  FRONTEND_BASE_URL: "http://localhost:5555",
 };
 
 const HEADERS_CONSTANTS = {

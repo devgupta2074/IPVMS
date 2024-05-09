@@ -32,7 +32,7 @@ function addCategoryElements(arr) {
 
     const categoryRow = document.getElementById('category-row');
 
-    arr.forEach(element => {
+    arr.data.forEach(element => {
 
         if (element.id != null)
             categoryRow.innerHTML += `

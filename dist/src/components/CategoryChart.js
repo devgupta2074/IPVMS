@@ -123,7 +123,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 
 const fetchCategoryCount = async (item) => {
   await fetch(
-    `http://ipvms-api.exitest.com/documents/count/category?category=${item.id}`,
+    `http://localhost:5001/documents/count/category?category=${item.id}`,
     {
       method: "GET",
       headers: {
@@ -142,7 +142,7 @@ export const fetchCategory = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    `http://localhost:5001/documents/count/category`,
     {
       method: "GET",
       headers: {
@@ -155,7 +155,7 @@ export const fetchCategory = async () => {
       console.log("data", data);
       // Handle the response from the backend
       let x = "";
-      data.forEach((item, index) => {
+      data.data.forEach((item, index) => {
         // console.log("item", item, index);
 
         if (item.category !== "Total") {
@@ -241,7 +241,7 @@ export const fetchCategoryZero = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    `http://localhost:5001/documents/count/category`,
     {
       method: "GET",
       headers: {
@@ -254,7 +254,7 @@ export const fetchCategoryZero = async () => {
       console.log("data", data);
       // Handle the response from the backend
       let x = "";
-      data.forEach((item, index) => {
+      data.data.forEach((item, index) => {
         console.log("item", item, index);
 
         if (item.category !== "Total") {

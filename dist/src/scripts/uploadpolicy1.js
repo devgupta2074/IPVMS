@@ -89,9 +89,8 @@ const afterinputhtml = (files, categoryElement) => {
                   <div class="flex   flex-row" id="${item.name}status">
                     <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                       ${Math.round(item.size / 1024)}KB
-                      <span class="hover:cursor-pointer" id="${
-                        item.name
-                      }removebtn"
+                      <span class="hover:cursor-pointer" id="${item.name
+      }removebtn"
                       
                       >
                         <svg
@@ -686,7 +685,7 @@ class BulkUpload {
             "docx-wrapper";
           const axiosRequestArgs = {
             method: "post",
-            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
+            url: "http://localhost:5001/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + token,
@@ -825,13 +824,13 @@ document.addEventListener("DOMContentLoaded", async () => {
               </svg>  
           </div>`
           : file.status === "SUCCESS"
-          ? `<div class="flex gap-2">
+            ? `<div class="flex gap-2">
           <p class="text-black text-xs font-light">Success</p>
           <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
           <span class="sr-only">Success</span>
           </div>
           `
-          : `
+            : `
           <div role="status">
               <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>

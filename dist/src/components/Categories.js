@@ -2,7 +2,7 @@ import { fetchTable, resetVariables } from "./Table.js";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://ipvms-api.exitest.com/documents/count/category",
+    "http://localhost:5001/documents/count/category",
     {
       method: "GET",
       headers: {

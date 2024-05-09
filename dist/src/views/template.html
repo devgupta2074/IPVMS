@@ -52,7 +52,7 @@
         const getUserDetails = async (userId) => {
           console.log("in user deatil user id is", userId);
           const response = await fetch(
-            `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+            `http://localhost:5001/api/user/getUserInfo/${userId}`,
             {
               method: "GET",
             }

@@ -1,9 +1,12 @@
-import { applyChangesFromV1toV2 } from "../scripts/versioncontrol.js";
+import {
+  applyChangesFromV1toV2,
+  createversion,
+} from "../scripts/versioncontrol.js";
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${docid}`,
+    `http://localhost:5001/api/file/getFile/${docid}`,
     {
       method: "GET",
       headers: {
@@ -21,7 +24,7 @@ async function ChangeVersion(docid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${docid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -35,15 +38,12 @@ async function ChangeVersion(docid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -68,7 +68,7 @@ export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -79,6 +79,10 @@ export const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
+      if (data.length == 0) {
+        console.log("first verion already there");
+        createversion();
+      }
 
       // Parse each element into an array
       data.forEach((element) => {

@@ -197,7 +197,7 @@ page-break-before: always;
 >
     <main class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
 
-      <section class="flex flex-col gap-8">
+      <section id="policy-detail" class="flex flex-col gap-8">
        
 
           <div class="flex flex-row justify-between">
@@ -226,7 +226,7 @@ page-break-before: always;
 
       </section>
 
-      <section>
+      <section id="policy-table">
 
         <!-- Table -->
         
@@ -239,7 +239,7 @@ page-break-before: always;
      
 
  
-  <section class="w-full flex flex-col justify-center items-center">
+  <section id="pagination-area" class="w-full flex flex-col justify-center items-center">
     <div class="h-full w-full"   id="main-body">
 
     </div>
@@ -299,15 +299,22 @@ page-break-before: always;
   </section>
   
   <!-- EDITOR -->
-<div id="extralarge-modal" tabindex="-1" class="fixed hidden  top-0 left-0 right-0 z-50  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+<div id="extralarge-modal" tabindex="-1" class="hidden  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div onclick="closeEditor()" class="m-5  flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
+    <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
+      </svg>
+      
+Back
+  </div>
   <div class="relative w-full max-h-full">
 
-      <div class="relative bg-white rounded-lg shadow ">
+      <div class="relative bg-white rounded-md shadow ">
       
           <div class="flex items-center justify-between p-3 border-b rounded-t ">
-              <h3 class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
+              <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
                 Statement of work
-                <button
+                <!-- <button
                 id="modalname"
                   type="button"
                 data-dropdown-toggle="dropdown" >
@@ -337,7 +344,7 @@ page-break-before: always;
                     >
                   </li>
                 </ul>
-              </div>
+              </div> -->
                   
               </h3>
               <div class="flex flex-row gap-5">
@@ -345,12 +352,12 @@ page-break-before: always;
 
                 <button id="json" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save a Version as Draft</button>
 
-                <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
+                <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                   </svg>
                   <span class="sr-only">Close modal</span>
-              </button>
+              </button> -->
               </div>
         
           </div>
@@ -490,12 +497,12 @@ page-break-before: always;
               </div>
             </div>
            <div class="flex flex-row"> 
-            <div class="bg-white m-4 rounded-lg  shadow-lg mt-2 mb-2 p-2 w-full"> 
+            <div class="bg-white m-4 rounded-lg flex-1  shadow-lg mt-2 mb-2 p-2 w-full"> 
             <div id="container-content-1" contenteditable="true">
               <div id ="docx-wrapper-1" class="docx-wrapper"></div>
             </div>
           </div>
-            <div class="bg-white m-4 rounded-lg  shadow-lg mt-2 mb-2 p-2 w-full">
+            <div class="bg-white m-4 rounded-lg  shadow-lg mt-2 mb-2 p-2 w-1/4">
           
               <div class="font-roboto font-medium text-base leading-6 border-b p-3 ">Version History</div>
               <div>

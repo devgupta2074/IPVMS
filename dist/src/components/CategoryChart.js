@@ -123,7 +123,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 
 const fetchCategoryCount = async (item) => {
   await fetch(
-    `http://localhost:5001/documents/count/category?category=${item.id}`,
+    `http://ipvms-api.exitest.com/documents/count/category?category=${item.id}`,
     {
       method: "GET",
       headers: {
@@ -142,7 +142,7 @@ export const fetchCategory = async () => {
   const y = [];
 
   const response = fetch(
-    `http://localhost:5001/documents/count/category`,
+    `http://ipvms-api.exitest.com/documents/count/category`,
     {
       method: "GET",
       headers: {
@@ -241,7 +241,7 @@ export const fetchCategoryZero = async () => {
   const y = [];
 
   const response = fetch(
-    `http://localhost:5001/documents/count/category`,
+    `http://ipvms-api.exitest.com/documents/count/category`,
     {
       method: "GET",
       headers: {

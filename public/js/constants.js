@@ -4,7 +4,7 @@ const API_CONSTANTS = {
   PUT: "PUT",
   PATCH: "PATCH",
   DELETE: "DELETE",
-  BACKEND_BASE_URL: "http://127.0.0.1:5001",
+  BACKEND_BASE_URL: "http://ipvms-api.exitest.com",
   BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
   TOKEN: "token",
 };

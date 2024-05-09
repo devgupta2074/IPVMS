@@ -1120,13 +1120,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Example usage:
   // Assuming you have divElement, v1, and v2 from previous steps
   // Applying changes from v1 to v2
-  // const v2tov1 = document.getElementById("v2tov1");
-  // v2tov1.addEventListener("click", function () {
-  //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-  //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
-  //   applyChangesFromV2toV1();
-  //   removeemptyimage();
-  // });
+  const v2tov1 = document.getElementById("v2tov1");
+  v2tov1.addEventListener("click", function () {
+    const modalid = localStorage.getItem("modalId");
+    applyChangesFromV2toV1(modalid, function () {
+      console.log("revert back");
+    });
+    removeemptyimage();
+  });
   // const v1tov2 = document.getElementById("v1tov2");
   // // v1tov2.addEventListener("click", function () {
   // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));

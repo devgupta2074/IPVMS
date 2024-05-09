@@ -190,13 +190,16 @@ export const fetchCategory = async () => {
                 borderColor: y.map((item) => item.color),
                 data: y.map((item) => item.count),
                 borderWidth: 0,
-                hoverBorderWidth: 4,
+                hoverBorderWidth: 12,
                 borderAlign: "center",
                 borderColor: y.map((item) => item.color),
               },
             ],
           },
           options: {
+            layout: {
+              padding: 10,
+            },
             responsive: false,
             cutoutPercentage: 65,
             plugins: {
@@ -224,6 +227,9 @@ export const fetchCategory = async () => {
             ],
           },
           options: {
+            layout: {
+              padding: 10,
+            },
             responsive: false,
             cutoutPercentage: 65,
             plugins: {
@@ -283,13 +289,16 @@ export const fetchCategoryZero = async () => {
                 borderColor: y.map((item) => item.color),
                 data: y.map((item) => item.count),
                 borderWidth: 0,
-                hoverBorderWidth: 3,
+                hoverBorderWidth: 12,
                 borderAlign: "center",
                 borderColor: y.map((item) => item.color),
               },
             ],
           },
           options: {
+            layout: {
+              padding: 10,
+            },
             responsive: false,
             cutoutPercentage: 65,
             plugins: {
@@ -318,6 +327,9 @@ export const fetchCategoryZero = async () => {
           },
           options: {
             responsive: false,
+            layout: {
+              padding: 10,
+            },
             cutoutPercentage: 65,
             plugins: {
               legend: {

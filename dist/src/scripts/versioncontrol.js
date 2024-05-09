@@ -1124,6 +1124,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   v2tov1.addEventListener("click", function () {
     const modalid = localStorage.getItem("modalId");
     applyChangesFromV2toV1(modalid, function () {
+      imageLoaded();
       console.log("revert back");
     });
     removeemptyimage();

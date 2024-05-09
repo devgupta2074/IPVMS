@@ -103,12 +103,12 @@ const NavBar = `
   <figure class=" ">
     <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
   </figure>
-
+<div class="relative">
   <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 </svg></button>
   <!-- Dropdown menu -->
-  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 20px auto auto -150px; margin: 0px; transform: translate3d(1496px, 53.6px, 0px);" data-popper-placement="bottom">
+  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 0 auto auto 0; margin: 0px; transform: translate3d(-30px, 40.6px, 0px);" data-popper-placement="bottom">
     <div class="px-4 py-3">
       <span id="dropdownname" class=" hidden text-sm"></span>
       <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
@@ -125,6 +125,7 @@ const NavBar = `
     </ul>
   </div>
   <!-- Dropdown menu -->
+  </div>
 </div>
 </header>
 

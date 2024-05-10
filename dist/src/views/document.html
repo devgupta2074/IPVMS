@@ -14,7 +14,7 @@
   <script src="../scripts/docxtohtml.js"></script>
   <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
   <script src="../scripts/docx-preview.min.js"></script>
-  <script src = "docxhtml.css"></script>
+  <script src = "preview.css"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
     integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
@@ -211,13 +211,13 @@ page-break-before: always;
                 </svg>
                 Upload Policy
               </button>
-              <button class="flex bg-[#1F2DE3] text-white rounded-md px-2 pt-2">
+              <button id="blankpolicy" onclick="openEditor(0)" class="flex bg-[#1F2DE3] text-white rounded-md px-2 pt-2">
                 <svg id="plusSymbol" class="h-6 w-4 m-1">
                 <use
                   xlink:href="/assets/icons/icon.svg#plusSymbol"
                 ></use>
               </svg>
-               Add  New Policy</button>
+               Add New Policy</button>
             </div>
           </div>
   
@@ -300,12 +300,54 @@ page-break-before: always;
   
   <!-- EDITOR -->
 <div id="extralarge-modal" tabindex="-1" class="hidden  w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-  <div onclick="closeEditor()" class="m-5  flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
+  <button onclick="closeEditor()" class="m-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
     <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
       </svg>
       
 Back
+  </button>
+  <div id="onlyforblank" class="hidden w-full bg-white shadow-lg rounded-lg mt-5 mb-5 p-3  ">
+
+   <div class="font-roboto font-medium text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
+    Add Policy
+   </div>
+   <div class="grid grid-cols-3 w-full gap-5 mt-3 mb-3">
+    <div>
+      <label for="small-input" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy  Name</label>
+      <input type="text" id="small-input" class="block w-full p-2 font-normal text-chicago-600 leading-5 border text-xs  ">
+  </div>
+  <div>
+    <label for="small-input" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Policy Description</label>
+    <input type="text" id="small-input" class="block w-full p-2 font-normal text-chicago-600 leading-5 border  text-xs  ">
+</div>
+<!-- <div>
+  <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Policy Type</label>
+  <input type="text" id="small-input" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs  ">
+</div> -->
+<div class="">
+  <label for="countries" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy Type</label>
+  <select id="countries" class="block w-full p-2 font-normal text-chicago-600 leading-5  border  text-sm ">
+    <option selected>Choose a category</option>
+    <option value="US">Helper Policy</option>
+    <option value="CA">Agreement</option>
+    <option value="FR">Transportation Policy</option>
+    <option value="DE">Performance Review</option>
+  </select>
+</div>
+<!-- <div class="max-w-sm mx-auto">
+  <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Send For Approval</label>
+  <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option selected>Choose a country</option>
+    <option value="US">United States</option>
+    <option value="CA">Canada</option>
+    <option value="FR">France</option>
+    <option value="DE">Germany</option>
+  </select>
+</div>
+   -->
+   </div>
+
   </div>
   <div class="relative w-full max-h-full">
 

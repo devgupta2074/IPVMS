@@ -37,28 +37,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   fetchCategories();
 });
 
-const signoutbutton = document.getElementById("signout");
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = "http://localhost:5555/login";
-});
-const todashboard = document.getElementById("dashboard");
-todashboard.addEventListener("click", () => {
-  window.location.href = "/dashboard";
-});
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
-const todocument = document.getElementById("document");
-todocument.addEventListener("click", () => {
-  window.location.href = "/document";
-});
-const toletters = document.getElementById("letters");
-toletters.addEventListener("click", () => {
-  window.location.href = "/letters";
-});
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = VIEWS_CONSTANTS.LOGIN;
-});
+// const signoutbutton = document.getElementById("signout");
+// signoutbutton.addEventListener("click", () => {
+//   localStorage.removeItem("token");
+//   window.location.href = "http://localhost:5555/login";
+// });
+// const todashboard = document.getElementById("dashboard");
+// todashboard.addEventListener("click", () => {
+//   window.location.href = "/dashboard";
+// });
+// const toeditor = document.getElementById("editor");
+// toeditor.addEventListener("click", () => {
+//   window.location.href = "/editor";
+// });
+// const todocument = document.getElementById("document");
+// todocument.addEventListener("click", () => {
+//   window.location.href = "/document";
+// });
+// const toletters = document.getElementById("letters");
+// toletters.addEventListener("click", () => {
+//   window.location.href = "/letters";
+// });
+// signoutbutton.addEventListener("click", () => {
+//   localStorage.removeItem("token");
+//   window.location.href = VIEWS_CONSTANTS.LOGIN;
+// });

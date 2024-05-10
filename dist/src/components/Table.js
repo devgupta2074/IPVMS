@@ -323,9 +323,14 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    if (modalId == 0) {
+      document.getElementById("onlyforblank").classList.remove("hidden");
+      modalId = 236;
+    }
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
     let htmljson;
+
     document.getElementById("policy-detail").classList.add("hidden");
     document.getElementById("policy-table").classList.add("hidden");
     document.getElementById("pagination-area").classList.add("hidden");
@@ -342,6 +347,7 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        document.getElementById("doc_title").textContent = data.data.title;
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
@@ -357,6 +363,9 @@ function addEditorOpenCloseFeature() {
   window.closeEditor = function () {
     console.log("fniefniefnir");
     document.getElementById("extralarge-modal").classList.add("hidden");
+    if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
+      document.getElementById("onlyforblank").classList.add("hidden");
+    }
     document.getElementById("policy-detail").classList.remove("hidden");
     document.getElementById("policy-table").classList.remove("hidden");
     document.getElementById("pagination-area").classList.remove("hidden");

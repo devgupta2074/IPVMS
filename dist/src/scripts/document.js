@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 const signoutbutton = document.getElementById("signout");
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = "http://localhost:5555/login";
+  window.location.href = "http://ipvms.exitest.com/login";
 });
 const todashboard = document.getElementById("dashboard");
 todashboard.addEventListener("click", () => {

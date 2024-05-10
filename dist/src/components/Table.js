@@ -193,9 +193,9 @@ export const fetchTable = async (tableType) => {
   category = tableType.category;
 
   if (tableType.name == "recent") {
-    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
+    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
+    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${
       currentPage - 1
     }&size=${pageSize}&title=&category=${category}`;
   }
@@ -331,7 +331,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("pagination-area").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getFile/${modalId}`,
+      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -388,7 +388,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

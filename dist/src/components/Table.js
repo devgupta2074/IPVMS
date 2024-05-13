@@ -154,7 +154,7 @@ function addTable() {
         <th scope="col" class="w-28">
           <div class="flex items-center font-normal">
             Published by
-            <a href="#" >
+            <a href="#" class="sort" name="true">
               <svg id="sorticon" class="px-2 h-4 w-6">
                 <use
                   xlink:href="/assets/icons/icon.svg#sorticon"
@@ -195,9 +195,8 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -418,7 +417,7 @@ function addPagination(item) {
   console.log(arr);
   addPaginationElement(arr);
   document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+    `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }
@@ -537,7 +536,7 @@ const addPaginationElement = (arr) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {
-      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">${item}</a>`;
+      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative bg-white h-8 font-bold rounded-md border-[1px] z-10 inline-flex items-center px-3 text-sm hover:bg-gray-50">${item}</a>`;
     }
   });
   addDocPageStatus();

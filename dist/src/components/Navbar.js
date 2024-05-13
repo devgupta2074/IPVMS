@@ -2,16 +2,16 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { VIEWS_CONSTANTS } from "../utils/constants.js";
 
 const NavBar = `
-<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950">
+<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 font-roboto">
 <div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
 
 <button id="dashboard" class="relative ">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" absolute  ml-2  flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-semibold text-white text-sm rounded font-roboto">
     Dashboard</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
@@ -21,12 +21,12 @@ const NavBar = `
 
 </button>
 <button id="document" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
     Policies</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
@@ -38,12 +38,12 @@ const NavBar = `
 
 
 <button id="letters" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" absolute ml-2   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
   Letters</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
@@ -53,12 +53,12 @@ const NavBar = `
 
 </button>
 <button id="editor" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24  bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
   Editor</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
@@ -68,12 +68,12 @@ const NavBar = `
 
 </button>
 <button id="inviteButton" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
   Invite Memeber</div>
 </div>
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
@@ -153,23 +153,6 @@ export async function InsertNavbar() {
   navcomp.innerHTML = NavBar;
 
   body.insertBefore(navcomp, body.firstChild);
-  // const parentElement = document.getElementsByTagName("body")[0];
-  // const toBeDeletedElement = document.getElementById("navbar-removed");
-  // console.log(toBeDeletedElement, parentElement, "gggh");
-  // // Check if both the parent and to-be-deleted elements exist
-  // if (parentElement && toBeDeletedElement) {
-  //   // Move children of the to-be-deleted element to the parent element
-
-  //   while (toBeDeletedElement.firstChild) {
-  //     parentElement.insertBefore(
-  //       toBeDeletedElement.firstChild,
-  //       parentElement.firstChild
-  //     );
-  //   }
-
-  //   // Remove the to-be-deleted element
-  //   parentElement.removeChild(toBeDeletedElement);
-  // }
   const parentElement = document.getElementsByTagName("body")[0];
   const toBeDeletedElement = document.getElementById("navbar-removed");
   console.log(toBeDeletedElement, parentElement, "gggh");
@@ -381,7 +364,7 @@ export async function InsertNavbar() {
 //     </svg>
 
 //     <div
-//       class="tooltip order-2 bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2"
+//       class="tooltip order-2 bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-sm rounded p-2"
 //     >
 //       Dashboard
 //     </div>

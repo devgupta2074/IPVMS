@@ -1,5 +1,8 @@
 import { fetchTable, resetVariables } from "./Table.js";
 
+
+var amount = '';
+
 export async function fetchCategories() {
   const response = await fetch(
     "http://localhost:5001/documents/count/category",
@@ -15,15 +18,42 @@ export async function fetchCategories() {
 
   addCategoryElements(arr);
   addSelectHighlight();
+  moveLeft();
+  moveRight();
 }
 
 function addCategoryElements(arr) {
   const categoryBar = document.getElementById("insert-categories");
   console.log("buisnsidbi", arr);
   categoryBar.innerHTML += `
-      <div id="category-row" class="flex flex-row gap-4 border-b-[1px] border-b-[#D4D9E2] overflow-x-auto scrollbar">
+  <div class="flex justify-between gap-4 bg-white rounded-md">
+  <button id="move-left"  class='px-3 py-5'>
+  <svg  class="h-4 w-4 m-1">
+  <use
+    xlink:href="/assets/icons/icon.svg#leftarrow-black"
+  ></use>
+</svg>
+</button>
+      <div id="category-row" class="flex flex-row gap-4 overflow-x-auto no-scrollbar">
 
-<button id='' class ='min-w-36 py-2 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3]'>All</button>      
+<button id='' class ='min-w-36 py-5 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3]'>All</button>      
+</div>
+<div class="py-5">
+<button class=" rounded-full bg-ship-cove-200 h-8 p-1">
+<svg id="plus" class="h-4 w-4 m-1">
+<use
+  xlink:href="/assets/icons/icon.svg#plusSymbol-black"
+></use>
+</svg>
+</button>
+</div>
+<button id="move-right" class='px-3 py-5'>
+<svg  class="h-4 w-4 m-1">
+<use
+  xlink:href="/assets/icons/icon.svg#rightarrow-black"
+></use>
+</svg>
+</button>
 </div>
       `;
 
@@ -36,6 +66,7 @@ function addCategoryElements(arr) {
     `;
   });
 }
+
 
 function addSelectHighlight() {
   const category_buttons = document.querySelectorAll(
@@ -78,3 +109,37 @@ function removeClr(elements) {
 function addClr(e) {
   e.classList.add("text-[#1F2DE3]", "border-b-[3px]", "border-b-[#1F2DE3]");
 }
+
+
+var scrollInterval;
+
+function moveRight() {
+  // document.getElementById('move-right').addEventListener('mouseover', () => {
+  //   amount = -100;
+  //   scroll(amount);
+  // });
+
+  document.getElementById('move-right').addEventListener('mouseenter', function () {
+    var scrollContent = document.getElementById('category-row');
+    scrollInterval = setInterval(function () {
+      scrollContent.scrollLeft += 3; // Adjust scrolling speed by changing the increment value
+    }, 20); // Adjust scrolling speed by changing the interval value
+  });
+  document.getElementById('move-right').addEventListener('mouseleave', function () {
+    clearInterval(scrollInterval);
+  });
+
+}
+
+function moveLeft() {
+  document.getElementById('move-left').addEventListener('mouseenter', function () {
+    var scrollContent = document.getElementById('category-row');
+    scrollInterval = setInterval(function () {
+      scrollContent.scrollLeft -= 3; // Adjust scrolling speed by changing the increment value
+    }, 20); // Adjust scrolling speed by changing the interval value
+  });
+  document.getElementById('move-left').addEventListener('mouseleave', function () {
+    clearInterval(scrollInterval);
+  });
+}
+

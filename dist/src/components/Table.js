@@ -323,13 +323,21 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    if (modalId == 0) {
+      document.getElementById("onlyforblank").classList.remove("hidden");
+      document.getElementById("version-area").classList.add("hidden");
+      document.getElementById("json").textContent = "Create Policy";
+      modalId = 236;
+    }
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
     let htmljson;
+
     document.getElementById("policy-detail").classList.add("hidden");
     document.getElementById("policy-table").classList.add("hidden");
     document.getElementById("pagination-area").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
+
     const response2 = await fetch(
       `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
       {
@@ -342,6 +350,7 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        document.getElementById("doc_title").textContent = data.data.title;
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
@@ -357,6 +366,11 @@ function addEditorOpenCloseFeature() {
   window.closeEditor = function () {
     console.log("fniefniefnir");
     document.getElementById("extralarge-modal").classList.add("hidden");
+    if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
+      document.getElementById("onlyforblank").classList.add("hidden");
+      document.getElementById("json").textContent = "Save a Version as Draft";
+      document.getElementById("version-area").classList.remove("hidden");
+    }
     document.getElementById("policy-detail").classList.remove("hidden");
     document.getElementById("policy-table").classList.remove("hidden");
     document.getElementById("pagination-area").classList.remove("hidden");

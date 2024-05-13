@@ -644,10 +644,11 @@ class BulkUpload {
           const sections = document.getElementsByClassName("docx");
           console.log(sections);
           for (var i = 0; i < sections.length; i++) {
+            const width = sections[i].clientWidth;
             console.log("section height chages");
             sections[i].setAttribute(
               "style",
-              "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+              `padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;`
             );
           }
           const containerdocx = document

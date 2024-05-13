@@ -112,7 +112,8 @@ var totalItems;
 //     });
 
 //   // document.getElementById("loading").style = "display:none";
-// };
+// }
+
 async function getTemplateInfo(templateId) {
   document.getElementById("selectedtemplate").innerHTML = `
   <div>
@@ -328,7 +329,7 @@ function displayArea() {
   <button
     id="generateLetter"
     type="button"
-    class="text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
+    class="text-link-water-600 text-base bg-link-water-100 hover:bg-link-water-300 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
   >
     Generate Letter
   </button>`;
@@ -557,6 +558,10 @@ function displayArea() {
       </svg>`;
           event.target.appendChild(checkSymbol);
           getTemplateInfo(templateId);
+          if (userId && templateId) {
+            document.getElementById("generateLetter").className =
+              "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+          }
 
           const selectedusersearchmodal =
             document.getElementById("dropdownUser");
@@ -605,6 +610,10 @@ function displayArea() {
       </svg>`;
           event.target.appendChild(checkSymbol);
           getUserInfoToDisplay(userId);
+          if (userId && templateId) {
+            document.getElementById("generateLetter").className =
+              "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+          }
           const selectedusersearchmodal =
             document.getElementById("dropdownSearchx");
           if (selectedusersearchmodal.classList.contains("hidden")) {

@@ -325,6 +325,8 @@ function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
     if (modalId == 0) {
       document.getElementById("onlyforblank").classList.remove("hidden");
+      document.getElementById("version-area").classList.add("hidden");
+      document.getElementById("json").textContent = "Create Policy";
       modalId = 236;
     }
     localStorage.setItem("modalId", modalId);
@@ -335,6 +337,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("policy-table").classList.add("hidden");
     document.getElementById("pagination-area").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
+
     const response2 = await fetch(
       `http://localhost:5001/api/file/getFile/${modalId}`,
       {
@@ -365,6 +368,8 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.add("hidden");
     if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
       document.getElementById("onlyforblank").classList.add("hidden");
+      document.getElementById("json").textContent = "Save a Version as Draft";
+      document.getElementById("version-area").classList.remove("hidden");
     }
     document.getElementById("policy-detail").classList.remove("hidden");
     document.getElementById("policy-table").classList.remove("hidden");

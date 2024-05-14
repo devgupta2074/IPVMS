@@ -195,7 +195,7 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${currentPage - 1
       }&size=${pageSize}&title=&category=${category}`;
   }
 

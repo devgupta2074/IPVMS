@@ -521,13 +521,13 @@ const addDocPageStatus = () => {
   document.getElementById("doc-status").innerHTML = "";
   document.getElementById(
     "doc-status"
-  ).innerHTML += `<p class="text-sm text-gray-700">
+  ).innerHTML += `<p class="text-sm text-gray-700 font-roboto">
                 Showing
-                <span class="font-medium">${startItemIndex}</span>
+                <span class="font-medium font-roboto">${startItemIndex}</span>
                 to
-                <span class="font-medium">${endItemIndex}</span>
+                <span class="font-medium font-roboto">${endItemIndex}</span>
                 of
-                <span class="font-medium">${totalResults}</span> results
+                <span class="font-medium font-roboto">${totalResults}</span> results
   </p>`;
 };
 const addPaginationElement = (arr) => {

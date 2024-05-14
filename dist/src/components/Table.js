@@ -47,7 +47,7 @@ const docCard = (title, created_by, created_at, id, index) => {
     
     <tr
  
-    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
     <td class="w-14">${index + 1}</td>
     <td class="w-52"     onclick="openModal(${id})">${title}</2td>
@@ -88,8 +88,8 @@ function addTable() {
   console.log(tableDiv);
 
   tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
-    <thead class="bg-ship-cove-200 py-3 text-xs capitalize text-[#333333] flex rounded-t-md">
-      <tr class="flex justify-around w-full">
+    <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
+      <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
         <th scope="col" class="w-52">
           <div class="flex items-center font-normal">
@@ -154,7 +154,7 @@ function addTable() {
         <th scope="col" class="w-28">
           <div class="flex items-center font-normal">
             Published by
-            <a href="#" >
+            <a href="#" class="sort" name="true">
               <svg id="sorticon" class="px-2 h-4 w-6">
                 <use
                   xlink:href="/assets/icons/icon.svg#sorticon"
@@ -195,9 +195,8 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -432,7 +431,7 @@ function addPagination(item) {
   console.log(arr);
   addPaginationElement(arr);
   document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+    `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }
@@ -536,13 +535,13 @@ const addDocPageStatus = () => {
   document.getElementById("doc-status").innerHTML = "";
   document.getElementById(
     "doc-status"
-  ).innerHTML += `<p class="text-sm text-gray-700">
+  ).innerHTML += `<p class="text-sm text-gray-700 font-roboto">
                 Showing
-                <span class="font-medium">${startItemIndex}</span>
+                <span class="font-medium font-roboto">${startItemIndex}</span>
                 to
-                <span class="font-medium">${endItemIndex}</span>
+                <span class="font-medium font-roboto">${endItemIndex}</span>
                 of
-                <span class="font-medium">${totalResults}</span> results
+                <span class="font-medium font-roboto">${totalResults}</span> results
   </p>`;
 };
 const addPaginationElement = (arr) => {
@@ -551,7 +550,7 @@ const addPaginationElement = (arr) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {
-      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">${item}</a>`;
+      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative bg-white h-8 font-bold rounded-md border-[1px] z-10 inline-flex items-center px-3 text-sm hover:bg-gray-50">${item}</a>`;
     }
   });
   addDocPageStatus();

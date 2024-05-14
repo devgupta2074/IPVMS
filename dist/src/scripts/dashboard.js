@@ -50,31 +50,12 @@ const inviteButton = document.getElementById("inviteButton");
 // console.log("inviteButton");
 const modal = document.getElementById("modal");
 const closeButton = document.getElementById("closeButton");
-// const inviteSubmit = document.getElementById("inviteSubmit");
 
-// todashboard.addEventListener("click", () => {
-//   console.log("inviteButton dash");
-//   window.location.href = "/dashboard";
-// });
-// const toeditor = document.getElementById("editor");
-// toeditor.addEventListener("click", () => {
-//   window.location.href = "/editor";
-// });
-// const todocument = document.getElementById("document");
-// todocument.addEventListener("click", () => {
-//   console.log("inviteButton dash");
-//   window.location.href = "/document";
-// });
-// const toletters = document.getElementById("letters");
-// toletters.addEventListener("click", () => {
-//   window.location.href = "/letters";
-// });
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
   window.location.href = VIEWS_CONSTANTS.LOGIN;
 });
-// let btn = document.querySelector(".logo");
-// let sidebar = document.querySelector(".sidebar");
+
 console.log(userdata);
 let name = document.getElementById("name");
 let modalname = document.getElementById("modalname");

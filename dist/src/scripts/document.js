@@ -37,11 +37,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   fetchCategories();
 });
 
-const signoutbutton = document.getElementById("signout");
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = "http://localhost:5555/login";
-});
+// const signoutbutton = document.getElementById("signout");
+// signoutbutton.addEventListener("click", () => {
+//   localStorage.removeItem("token");
+//   window.location.href = "http://localhost:5555/login";
+// });
 // const todashboard = document.getElementById("dashboard");
 // todashboard.addEventListener("click", () => {
 //   window.location.href = "/dashboard";
@@ -58,7 +58,7 @@ signoutbutton.addEventListener("click", () => {
 // toletters.addEventListener("click", () => {
 //   window.location.href = "/letters";
 // });
-signoutbutton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  window.location.href = VIEWS_CONSTANTS.LOGIN;
-});
+// signoutbutton.addEventListener("click", () => {
+//   localStorage.removeItem("token");
+//   window.location.href = VIEWS_CONSTANTS.LOGIN;
+// });

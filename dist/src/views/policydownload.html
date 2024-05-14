@@ -673,8 +673,18 @@
           margin-bottom: 0;
         }
 
-        section:not(:first-of-type) {
+        /* section:not(:first-of-type) {
           page-break-before: always;
+        } */
+        article {
+          page-break-inside: avoid;
+          page-break-after: avoid;
+          page-break-before: avoid;
+        }
+        footer {
+          page-break-inside: avoid;
+          page-break-after: avoid;
+          page-break-before: avoid;
         }
         @page {
           size: "A4";

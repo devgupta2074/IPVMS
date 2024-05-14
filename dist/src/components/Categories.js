@@ -27,7 +27,7 @@ function addCategoryElements(arr) {
   console.log("buisnsidbi", arr);
   categoryBar.innerHTML += `
   <div class="flex justify-between gap-4 bg-white rounded-md">
-  <button id="move-left"  class='px-3 py-5'>
+  <button id="move-left"  class='px-3 py-4'>
   <svg  class="h-4 w-4 m-1">
   <use
     xlink:href="/assets/icons/icon.svg#leftarrow-black"
@@ -36,9 +36,9 @@ function addCategoryElements(arr) {
 </button>
       <div id="category-row" class="flex flex-row gap-4 overflow-x-auto no-scrollbar">
 
-<button id='' class ='min-w-36 py-5 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3]'>All</button>      
+<button id='' class ='min-w-36 py-4 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3] hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500'>All</button>      
 </div>
-<div class="py-5">
+<div class="py-4">
 <button class=" rounded-full bg-ship-cove-200 h-8 p-1">
 <svg id="plus" class="h-4 w-4 m-1">
 <use
@@ -47,7 +47,7 @@ function addCategoryElements(arr) {
 </svg>
 </button>
 </div>
-<button id="move-right" class='px-3 py-5'>
+<button id="move-right" class='px-3 py-4'>
 <svg  class="h-4 w-4 m-1">
 <use
   xlink:href="/assets/icons/icon.svg#rightarrow-black"
@@ -62,7 +62,7 @@ function addCategoryElements(arr) {
   arr.forEach((element) => {
     if (element.id != null)
       categoryRow.innerHTML += `
-    <button class =' min-w-36 py-2  text-sm font-medium' >${element.category}</button>
+    <button class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
     `;
   });
 }

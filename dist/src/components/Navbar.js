@@ -5,82 +5,73 @@ const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 font-roboto">
 <div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
 
-<button id="dashboard" class="relative ">
-<div class=" absolute  ml-2  flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
+<button id="dashboard" class=" h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="dash-svg" class=" peer/dash-svg">
+<svg class=" h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+</svg>
+</span>
+<div class="my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/dash-svg:visible peer-hover/dash-svg:opacity-100 transition-opacity duration-300 ">
+  <svg class=" order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-semibold text-white text-sm rounded font-roboto">
+  <div class=" order-2 p-2 w-24 bg-ship-cove-500 font-semibold text-white text-sm rounded font-roboto">
     Dashboard</div>
 </div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
-</svg>
-
 
 </button>
-<button id="document" class="relative">
-<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1 ">
+
+
+<button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#shield"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
   <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
     Policies</div>
 </div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#shield"></use>
-</svg>
-
-
 </button>
 
 
-<button id="letters" class="relative">
-<div class=" absolute ml-2   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
+<button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<span id="letter-svg" class=" peer/letter-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#policy"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
   <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
   Letters</div>
 </div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#policy"></use>
-</svg>
-
-
 </button>
-<button id="editor" class="relative">
-<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1">
-    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-  </svg>
- 
-  <div class="  order-2 p-2 w-24  bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
-  Editor</div>
-</div>
+
+<button id="inviteButton" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<span id="invite-svg" class=" peer/invite-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#document"></use>
 </svg>
+</span>
 
-
-</button>
-<button id="inviteButton" class="relative">
-<div class=" absolute  ml-2 flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 -mr-1 ">
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2 p-2 w-24  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
+  <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
   Invite Memeber</div>
 </div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
-</svg>
-
-
 </button>
   
  
@@ -191,10 +182,6 @@ export async function InsertNavbar() {
   todashboard.addEventListener("click", () => {
     console.log("inviteButton dash");
     window.location.href = "/dashboard";
-  });
-  const toeditor = document.getElementById("editor");
-  toeditor.addEventListener("click", () => {
-    window.location.href = "/editor";
   });
   const todocument = document.getElementById("document");
   todocument.addEventListener("click", () => {

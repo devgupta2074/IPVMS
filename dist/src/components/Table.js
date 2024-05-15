@@ -202,11 +202,11 @@ export const fetchTable = async (tableType) => {
 <<<<<<< HEAD
     apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
       }&size=${pageSize}&title=&category=${category}`;
-=======
+
     apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${
       currentPage - 1
     }&size=${pageSize}&title=&category=${category}`;
->>>>>>> 017cbc7f9b7ecc40d37de2def1e0182e7a2626e4
+
   }
 
   const response = await fetch(apiLink, {

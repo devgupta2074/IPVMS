@@ -199,14 +199,9 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-<<<<<<< HEAD
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
-      }&size=${pageSize}&title=&category=${category}`;
-
-    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${
+    apiLink = `http://localhost:5001/api/file/document?page=${
       currentPage - 1
     }&size=${pageSize}&title=&category=${category}`;
-
   }
 
   const response = await fetch(apiLink, {
@@ -562,8 +557,9 @@ function addPagination(item) {
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
+  document.getElementById(
+    item + "pagination"
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }

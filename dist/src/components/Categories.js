@@ -5,7 +5,7 @@ var amount = '';
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://localhost:5001/documents/count/category",
+    "http://ipvms-api.exitest.com/documents/count/category",
     {
       method: "GET",
       headers: {

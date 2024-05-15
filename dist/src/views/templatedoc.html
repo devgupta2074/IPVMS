@@ -412,13 +412,13 @@ return `<tr class="bg-white">
 };
 const handleroute=(id)=>{
 console.log("routing");
-window.location.href =`http://localhost:5555/template/${id}`;
+window.location.href =`http://ipvms.exitest.com/template/${id}`;
 }
 const fetchDoc = async (currentPage, pageSize) => {
 document.getElementById("loading").style = "display:block";
 
 const response = await fetch(
-`http://localhost:5001/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
+`http://ipvms-api.exitest.com/api/file/getTemplate?page=${currentPage}&size=${pageSize}&title=${title}&category=${category}`,
 {
   method: "GET",
   headers: {
@@ -482,7 +482,7 @@ console.log("currentUrl: " + currentUrl, url);
 
 //   console.log("f", URL_CONSTANTS.FRONTEND_BASE_URL + url);
 //   console.log(window.history);
-window.location.href = "http://localhost:5555" + url;
+window.location.href = "http://ipvms.exitest.com" + url;
 
 // Start from the current page and move backwards in history
 }
@@ -491,7 +491,7 @@ window.location.href = "http://localhost:5555" + url;
 
 const fetchAndRenderDoc = async (modalId) => {
 const response = await fetch(
-`http://localhost:5001/api/file/getTemplateById/${modalId}`,
+`http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
 {
   method: "GET",
   headers: {
@@ -514,7 +514,7 @@ const fetchCategory = async () => {
 console.log("fetching catehory");
 document.getElementById("loading").style = "display:block";
 const response = await fetch(
-`http://localhost:5001/api/categories/getAllCategories`,
+`http://ipvms-api.exitest.com/api/categories/getAllCategories`,
 {
   method: "GET",
   headers: {

@@ -3,16 +3,21 @@ import { VIEWS_CONSTANTS } from "../utils/constants.js";
 
 const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
-<button id="dashboard" class="relative ">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class=" order-2 p-2 w-24 bg-ship-cove-500 font-semibold text-white text-sm rounded font-roboto">
-    Dashboard</div>
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+    Policies</div>
 </div>
-
 </button>
 
 

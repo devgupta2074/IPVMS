@@ -2,17 +2,10 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { VIEWS_CONSTANTS } from "../utils/constants.js";
 
 const NavBar = `
-<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 font-roboto">
-<div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
-
-<button id="dashboard" class=" h-[2.5rem] w-[2.5rem] flex flex-row ">
-<span id="dash-svg" class=" peer/dash-svg">
-<svg class=" h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
-</svg>
-</span>
-<div class="my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/dash-svg:visible peer-hover/dash-svg:opacity-100 transition-opacity duration-300 ">
-  <svg class=" order-1 w-[9px] h-[13px] ml-3 -mr-1">
+<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
+<button id="dashboard" class="relative ">
+<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
@@ -244,10 +237,10 @@ export async function InsertNavbar() {
     invitemodal.id = "removemodal";
     invitemodal.innerHTML = `      <div
     id="modal"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40"
+    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
   >
     <div
-      class="modal-content mx-auto my-20 p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
+      class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
     >
       <div class="modal-header flex items-center justify-between mb-4">
         <h1 class="modal-title text-xl font-medium text-gray-800">
@@ -323,7 +316,7 @@ export async function InsertNavbar() {
     console.log("clicked");
     modal = document.getElementById("modal");
     if (modal) {
-      modal.style.display = "block";
+      modal.style.display = "flex";
     }
     closeButton = document.getElementById("closeButton");
     if (closeButton) {

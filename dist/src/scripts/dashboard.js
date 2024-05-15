@@ -21,7 +21,6 @@ var title = "";
 // var category = "";
 var siblingCount = 1;
 
-
 fetchTable({ name: "recent" });
 
 InsertNavbar();
@@ -56,10 +55,7 @@ todashboard.addEventListener("click", () => {
   console.log("inviteButton dash");
   window.location.href = "/dashboard";
 });
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
+
 const todocument = document.getElementById("document");
 todocument.addEventListener("click", () => {
   console.log("inviteButton dash");

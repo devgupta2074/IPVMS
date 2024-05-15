@@ -1372,6 +1372,9 @@ video {
     var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate)
     var(--tw-sepia) var(--tw-drop-shadow);
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .bg-zircon-950 {
   --tw-bg-opacity: 1;
   background-color: rgb(32 38 75 / var(--tw-bg-opacity));

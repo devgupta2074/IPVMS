@@ -1,5 +1,5 @@
 export const docsstyle = ` <style>
-.docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 
+.docx-wrapper {  padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 
 .docx-wrapper>section.docx { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
 .docx { color: black; hyphens: auto; text-underline-position: from-font; }
 section.docx { box-sizing: border-box; display: flex; flex-flow: column nowrap; position: relative; overflow: hidden; }

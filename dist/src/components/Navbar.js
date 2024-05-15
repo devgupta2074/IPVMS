@@ -52,21 +52,7 @@ const NavBar = `
 
 
 </button>
-<button id="editor" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
-    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-  </svg>
- 
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
-  Editor</div>
-</div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
-</svg>
 
-
-</button>
 <button id="inviteButton" class="relative">
 <div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
@@ -209,10 +195,10 @@ export async function InsertNavbar() {
     console.log("inviteButton dash");
     window.location.href = "/dashboard";
   });
-  const toeditor = document.getElementById("editor");
-  toeditor.addEventListener("click", () => {
-    window.location.href = "/editor";
-  });
+  // const toeditor = document.getElementById("editor");
+  // toeditor.addEventListener("click", () => {
+  //   window.location.href = "/editor";
+  // });
   const todocument = document.getElementById("document");
   todocument.addEventListener("click", () => {
     console.log("inviteButton dash");

@@ -5,6 +5,16 @@ import {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (localStorage.getItem("versionid")) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  document.getElementById(id).classList.add("bg-zircon-100");
+  document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
     `http://localhost:5001/api/file/getFile/${docid}`,
     {
@@ -178,7 +188,7 @@ export const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${

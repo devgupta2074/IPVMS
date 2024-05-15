@@ -1,4 +1,4 @@
-const modalHtml = `<div id="container-html1" class="hidden">
+export const modalHtml = `<div id="container-html1" class="hidden">
 <!--  this will be hidden for rendering docx  -->
 </div>
 
@@ -155,7 +155,11 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
 </div>
 </body>`;
 
-const dropDownBtn = document.getElementById("uploadpolicy");
+let dropDownBtn = document.getElementById("uploadpolicy");
+console.log("Drop Down Btn", dropDownBtn);
+if (!dropDownBtn) {
+  dropDownBtn = document.getElementById("uploadletter");
+}
 
 console.log("upload policy modal", dropDownBtn);
 const makeModal = () => {

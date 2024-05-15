@@ -1151,6 +1151,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+    document.getElementById("container-content-1").contentEditable = true;
     const modalid = localStorage.getItem("modalId");
     applyChangesFromV2toV1(modalid, function () {
       imageLoaded();
@@ -1171,6 +1175,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(modalid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version", modalid);
+  document.getElementById(id).classList.add("bg-zicron-100");
+  document.getElementById("container-content-1").contentEditable = false;
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
@@ -1607,7 +1615,7 @@ const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
@@ -1822,65 +1830,69 @@ function checkDivSize() {
   console.log("Checking container size");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
-  for (let i = 0; i < pages.length; i++) {
-    console.log(pages[i].id, "dev");
-    const element = pages[i];
-    var containerHeight = pages[i].clientHeight;
-    var contentHeight = pages[i].scrollHeight;
-    console.log("print");
-    console.log(containerHeight, contentHeight, "first");
+  if (pages.length > 1) {
+    for (let i = 0; i < pages.length; i++) {
+      console.log(pages[i].id, "dev");
+      const element = pages[i];
+      var containerHeight = pages[i].clientHeight;
+      var contentHeight = pages[i].scrollHeight;
+      console.log("print");
+      console.log(containerHeight, contentHeight, "first");
 
-    console.log(pages[i].id, "dev yes");
-    if (i + 1 < pages.length) {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      console.log("removearticlewhileloop first");
-      removearticlewhileloop(articleHeight, article, i);
-      // // article.style.height = "842pt";
-      // article.clientHeight = 842;
-      // article.scrollHeight = 842;
-    } else {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      while (842 < articleHeight) {
-        console.log("removearticlewhileloop add page");
-        const newpage = document.createElement("section");
-
-        newpage.classList.add("docx");
-        newpage.setAttribute(
-          "style",
-          "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-        );
-        newpage.id = "new_page_" + Math.random() * 1000;
-        const newheader = document.createElement("header");
-        newheader.setAttribute(
-          "style",
-          "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
-        );
-        const newfooter = document.createElement("footer");
-        newfooter.setAttribute(
-          "style",
-          "margin-bottom: calc(-96px); min-height: calc(96px);"
-        );
-
-        const newarticle = document.createElement("article");
-        newpage.appendChild(newheader);
-        newpage.appendChild(newarticle);
-        newpage.appendChild(newfooter);
-        editableDiv.appendChild(newpage);
-        newarticle.appendChild(article.lastChild);
-        article.lastChild.remove();
-        articleHeight = article.scrollHeight;
-        removearticlewhileloop(article, articleHeight, i);
+      console.log(pages[i].id, "dev yes");
+      if (i + 1 < pages.length) {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("removearticlewhileloop first");
+        removearticlewhileloop(articleHeight, article, i);
+        // // article.style.height = "842pt";
         // article.clientHeight = 842;
         // article.scrollHeight = 842;
-      }
-    }
+      } else {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("adding a new page dev dev ");
+        console.log(articleHeight);
+        while (792 < articleHeight) {
+          console.log("removearticlewhileloop add page");
+          const newpage = document.createElement("section");
 
-    // editableDiv.appendChild(newpage);
+          newpage.classList.add("docx");
+          newpage.setAttribute(
+            "style",
+            "padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;"
+          );
+          newpage.id = "new_page_" + Math.random() * 1000;
+          const newheader = document.createElement("header");
+          newheader.setAttribute(
+            "style",
+            "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
+          );
+          const newfooter = document.createElement("footer");
+          newfooter.setAttribute(
+            "style",
+            "margin-bottom: calc(-96px); min-height: calc(96px);"
+          );
+
+          const newarticle = document.createElement("article");
+          newpage.appendChild(newheader);
+          newpage.appendChild(newarticle);
+          newpage.appendChild(newfooter);
+          editableDiv.appendChild(newpage);
+          newarticle.appendChild(article.lastChild);
+          article.lastChild.remove();
+          articleHeight = article.scrollHeight;
+          removearticlewhileloop(article, articleHeight, i);
+          // article.clientHeight = 842;
+          // article.scrollHeight = 842;
+        }
+      }
+
+      // editableDiv.appendChild(newpage);
+    }
+    // checkclientheightofarticles();
+    removeEmptyPages();
   }
-  // checkclientheightofarticles();
-  removeEmptyPages();
 }
 
 export function imageLoaded() {
@@ -2068,7 +2080,9 @@ function checkDivSizeBack() {
   // const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {
-  removeEmptyPages();
+  if (pages.length > 1) {
+    removeEmptyPages();
+  }
 
   // checkclientheightofarticles();
 }

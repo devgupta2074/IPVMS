@@ -555,6 +555,7 @@ function displayArea() {
   <button
     id="generateLetter"
     type="button"
+    disabled
     class="text-link-water-600 text-base bg-link-water-100 hover:bg-link-water-300 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
   >
     Generate Letter
@@ -793,6 +794,7 @@ function displayArea() {
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+            document.getElementById("generateLetter").disabled = false;
           }
 
           const selectedusersearchmodal =

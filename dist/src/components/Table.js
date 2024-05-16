@@ -367,6 +367,7 @@ function addEditorOpenCloseFeature() {
       document.getElementById("version-area").classList.add("hidden");
       document.getElementById("create-policy").classList.remove("hidden");
       document.getElementById("json").classList.add("hidden");
+      document.getElementById("container-content-1").contentEditable = true;
       modalId = 236;
       const res = await GetAllCategory();
 
@@ -542,6 +543,7 @@ function addEditorOpenCloseFeature() {
           token
         );
         console.log("results");
+        window.closeEditor();
       });
   }
 }

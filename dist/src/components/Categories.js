@@ -1,3 +1,4 @@
+import { removeLoading, showLoading } from "../scripts/loading.js";
 import { fetchTable, resetVariables } from "./Table.js";
 
 var amount = "";

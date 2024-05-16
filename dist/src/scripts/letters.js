@@ -89,7 +89,7 @@ export const modalHtml = `<div id="container-html1" class="hidden">
 
 
 <div
-id="modal"
+id="modalupload"
 class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50"
 >
 <!-- Modal Content -->
@@ -1336,8 +1336,8 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     const makeModal = () => {
       document.getElementById("modalcontainer").innerHTML += modalHtml;
       const closeModalBtn = document.getElementById("closeModalBtn");
-      const modal = document.getElementById("modal");
-      const showModal = () => {
+      const modal = document.getElementById("modalupload");
+      const showModalUpload = () => {
         modal.classList.remove("hidden");
       };
 
@@ -1346,7 +1346,7 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
       };
 
       dropDownBtn.addEventListener("click", () => {
-        showModal();
+        showModalUpload();
         console.log("modal opened");
       });
 

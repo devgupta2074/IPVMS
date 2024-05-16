@@ -167,10 +167,7 @@ const inviteSubmit = document.getElementById("inviteSubmit");
 todashboard.addEventListener("click", () => {
   window.location.href = "/dashboard";
 });
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
+
 const todocument = document.getElementById("document");
 todocument.addEventListener("click", () => {
   window.location.href = "/document";
@@ -399,7 +396,7 @@ function sortTable(col) {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

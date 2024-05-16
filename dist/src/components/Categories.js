@@ -1,11 +1,10 @@
 import { fetchTable, resetVariables } from "./Table.js";
 
-
-var amount = '';
+var amount = "";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://ipvms-api.exitest.com/documents/count/category",
+    "http://localhost:5001/documents/count/category",
     {
       method: "GET",
       headers: {
@@ -70,7 +69,6 @@ function addCategoryElements(arr) {
   });
 }
 
-
 function addSelectHighlight() {
   const category_buttons = document.querySelectorAll(
     "div#category-row > button"
@@ -113,7 +111,6 @@ function addClr(e) {
   e.classList.add("text-[#1F2DE3]", "border-b-[3px]", "border-b-[#1F2DE3]");
 }
 
-
 var scrollInterval;
 
 function moveRight() {
@@ -122,30 +119,36 @@ function moveRight() {
   //   scroll(amount);
   // });
 
-  document.getElementById('move-right').addEventListener('mouseenter', function () {
-    var scrollContent = document.getElementById('category-row');
-    scrollInterval = setInterval(function () {
-      scrollContent.scrollLeft += 3; // Adjust scrolling speed by changing the increment value
-    }, 20); // Adjust scrolling speed by changing the interval value
-  });
-  document.getElementById('move-right').addEventListener('mouseleave', function () {
-    clearInterval(scrollInterval);
-  });
-
+  document
+    .getElementById("move-right")
+    .addEventListener("mouseenter", function () {
+      var scrollContent = document.getElementById("category-row");
+      scrollInterval = setInterval(function () {
+        scrollContent.scrollLeft += 3; // Adjust scrolling speed by changing the increment value
+      }, 20); // Adjust scrolling speed by changing the interval value
+    });
+  document
+    .getElementById("move-right")
+    .addEventListener("mouseleave", function () {
+      clearInterval(scrollInterval);
+    });
 }
 
 function moveLeft() {
-  document.getElementById('move-left').addEventListener('mouseenter', function () {
-    var scrollContent = document.getElementById('category-row');
-    scrollInterval = setInterval(function () {
-      scrollContent.scrollLeft -= 3; // Adjust scrolling speed by changing the increment value
-    }, 20); // Adjust scrolling speed by changing the interval value
-  });
-  document.getElementById('move-left').addEventListener('mouseleave', function () {
-    clearInterval(scrollInterval);
-  });
+  document
+    .getElementById("move-left")
+    .addEventListener("mouseenter", function () {
+      var scrollContent = document.getElementById("category-row");
+      scrollInterval = setInterval(function () {
+        scrollContent.scrollLeft -= 3; // Adjust scrolling speed by changing the increment value
+      }, 20); // Adjust scrolling speed by changing the interval value
+    });
+  document
+    .getElementById("move-left")
+    .addEventListener("mouseleave", function () {
+      clearInterval(scrollInterval);
+    });
 }
-
 
 // ADD new category
 function addNewCategoryModal() {
@@ -244,52 +247,48 @@ function addNewCategoryModal() {
     `;
   document.getElementsByTagName("main")[0].appendChild(categoryModal);
   // console.log("clicked");
-
 }
 function addNewCategoryOpenClose() {
-
   let modal;
 
-  const category_btn = document.getElementById('addCategory-btn');
+  const category_btn = document.getElementById("addCategory-btn");
 
-  category_btn.addEventListener('click', () => {
-    modal = document.getElementById('Categorymodal');
-    modal.classList.remove('hidden');
+  category_btn.addEventListener("click", () => {
+    modal = document.getElementById("Categorymodal");
+    modal.classList.remove("hidden");
   });
   let closeButton = document.getElementById("closeButton");
-  const inputfield = document.getElementById('categoryForm');
+  const inputfield = document.getElementById("categoryForm");
 
   closeButton.addEventListener("click", function () {
-    modal.classList.add('hidden');
+    modal.classList.add("hidden");
     inputfield.reset();
   });
 }
 
 function addCategorySubmit() {
-  const submitBtn = document.getElementById('categorySubmit');
+  const submitBtn = document.getElementById("categorySubmit");
 
-  submitBtn.addEventListener('click', async () => {
-
-    const categoryName = document.getElementById('categoryName').value;
+  submitBtn.addEventListener("click", async () => {
+    const categoryName = document.getElementById("categoryName").value;
 
     console.log(categoryName);
 
     const response = await fetch(
-      "http://ipvms-api.exitest.com/api/categories/createNewCategory",
+      "http://localhost:5001/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          category: categoryName
-        })
+          category: categoryName,
+        }),
       }
     );
 
     console.log(response);
     if (response.ok === true) {
-
       document.getElementById("status").innerHTML = `
       <p id="success" class=" text-green-300" >Category created successfully.</p>
       `;
@@ -299,20 +298,14 @@ function addCategorySubmit() {
        `;
       }, 2000);
     } else {
-
-      document.getElementById("status").innerHTML =
-        `<p id="failed" class=" text-red-300">Failed to create new category.</p>
+      document.getElementById(
+        "status"
+      ).innerHTML = `<p id="failed" class=" text-red-300">Failed to create new category.</p>
       `;
       setTimeout(() => {
-        document.getElementById("status").innerHTML =
-          `
+        document.getElementById("status").innerHTML = `
         `;
       }, 2000);
     }
-
-
   });
-
-
-
 }

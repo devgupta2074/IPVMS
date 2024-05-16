@@ -5,8 +5,18 @@ import {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (localStorage.getItem("versionid")) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  document.getElementById(id).classList.add("bg-zircon-100");
+  document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${docid}`,
+    `http://localhost:5001/api/file/getFile/${docid}`,
     {
       method: "GET",
       headers: {
@@ -24,7 +34,7 @@ async function ChangeVersion(docid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${docid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -38,15 +48,12 @@ async function ChangeVersion(docid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -67,11 +74,13 @@ function openDash(id) {
     dash.classList.add("hidden");
   }
 }
+let runonetimeonly = true;
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
+  console.log(id, docid);
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -84,10 +93,11 @@ export const fetchVersionsDateWise = async (id) => {
       let runonetimeonly = true;
       console.log("data datewise", data);
       if (data.length == 0 && runonetimeonly) {
-        console.log("first verion already there");
+        console.log("first verion not  there");
         runonetimeonly = false;
 
         createversion();
+        fetchVersionsDateWise(id);
       }
 
       // Parse each element into an array
@@ -184,7 +194,7 @@ export const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${

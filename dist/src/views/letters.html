@@ -17,6 +17,16 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="tailwind.css" />
 
+    <script src="../scripts/docxtohtml.js"></script>
+    <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <script src="../scripts/docx-preview.min.js"></script>
+    <script src = "preview.css"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+    integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
     <!-- <script type="module" src="/scripts/versioncontrol.js"></script>
   <script type="module" src="/scripts/editor.js"></script> -->
   </head>
@@ -50,6 +60,11 @@
         </div>
         <div id="sectiondetails" class="flex gap-4"></div>
       </div>
+      <div id="modalcontainer"></div>
+      
+          <!-- HIDDEN ELEMENT FOR UPLOADING POLICY -->
+          <div id="container-html1" class="hidden"></div>
+        </main>
     </main>
   </body>
   <script src="https://cdn.tailwindcss.com"></script>

@@ -21,7 +21,6 @@ var title = "";
 // var category = "";
 var siblingCount = 1;
 
-
 fetchTable({ name: "recent" });
 
 InsertNavbar();

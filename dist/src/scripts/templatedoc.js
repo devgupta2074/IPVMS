@@ -59,10 +59,7 @@ const todashboard = document.getElementById("dashboard");
 todashboard.addEventListener("click", () => {
   window.location.href = "/dashboard";
 });
-const toeditor = document.getElementById("editor");
-toeditor.addEventListener("click", () => {
-  window.location.href = "/editor";
-});
+
 const todocument = document.getElementById("document");
 todocument.addEventListener("click", () => {
   window.location.href = "/document";
@@ -73,5 +70,5 @@ toletters.addEventListener("click", () => {
 });
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = "http://ipvms.exitest.com/login";
+  window.location.href = "http://localhost:5555/login";
 });

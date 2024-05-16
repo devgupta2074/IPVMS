@@ -39,6 +39,7 @@ function extractParentText(parentId) {
 }
 export function createversion() {
   console.log("ffff create version");
+
   const modalid = localStorage.getItem("modalId");
   document.getElementById("loading").style = "display:block";
   async function detectChanges(divElement) {
@@ -251,7 +252,7 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -390,7 +391,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
+    `http://localhost:5001/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -752,7 +753,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1079,7 +1080,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
+  //       "http://localhost:5001/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1103,7 +1104,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
+  //       "http://localhost:5001/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -1151,6 +1152,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+    document.getElementById("container-content-1").contentEditable = true;
     const modalid = localStorage.getItem("modalId");
     applyChangesFromV2toV1(modalid, function () {
       imageLoaded();
@@ -1171,10 +1176,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(modalid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version", modalid);
+  document.getElementById(id).classList.add("bg-zicron-100");
+  document.getElementById("container-content-1").contentEditable = false;
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
+    `http://localhost:5001/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1193,7 +1202,7 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1422,7 +1431,7 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1451,7 +1460,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1466,15 +1475,12 @@ async function ChangeVersion(modalid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1500,7 +1506,7 @@ function openDash(id) {
 const fetchVersionsDateWise = async (id) => {
   const y = [];
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -1607,7 +1613,7 @@ const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
@@ -1822,65 +1828,69 @@ function checkDivSize() {
   console.log("Checking container size");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
-  for (let i = 0; i < pages.length; i++) {
-    console.log(pages[i].id, "dev");
-    const element = pages[i];
-    var containerHeight = pages[i].clientHeight;
-    var contentHeight = pages[i].scrollHeight;
-    console.log("print");
-    console.log(containerHeight, contentHeight, "first");
+  if (pages.length > 1) {
+    for (let i = 0; i < pages.length; i++) {
+      console.log(pages[i].id, "dev");
+      const element = pages[i];
+      var containerHeight = pages[i].clientHeight;
+      var contentHeight = pages[i].scrollHeight;
+      console.log("print");
+      console.log(containerHeight, contentHeight, "first");
 
-    console.log(pages[i].id, "dev yes");
-    if (i + 1 < pages.length) {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      console.log("removearticlewhileloop first");
-      removearticlewhileloop(articleHeight, article, i);
-      // // article.style.height = "842pt";
-      // article.clientHeight = 842;
-      // article.scrollHeight = 842;
-    } else {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      while (842 < articleHeight) {
-        console.log("removearticlewhileloop add page");
-        const newpage = document.createElement("section");
-
-        newpage.classList.add("docx");
-        newpage.setAttribute(
-          "style",
-          "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-        );
-        newpage.id = "new_page_" + Math.random() * 1000;
-        const newheader = document.createElement("header");
-        newheader.setAttribute(
-          "style",
-          "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
-        );
-        const newfooter = document.createElement("footer");
-        newfooter.setAttribute(
-          "style",
-          "margin-bottom: calc(-96px); min-height: calc(96px);"
-        );
-
-        const newarticle = document.createElement("article");
-        newpage.appendChild(newheader);
-        newpage.appendChild(newarticle);
-        newpage.appendChild(newfooter);
-        editableDiv.appendChild(newpage);
-        newarticle.appendChild(article.lastChild);
-        article.lastChild.remove();
-        articleHeight = article.scrollHeight;
-        removearticlewhileloop(article, articleHeight, i);
+      console.log(pages[i].id, "dev yes");
+      if (i + 1 < pages.length) {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("removearticlewhileloop first");
+        removearticlewhileloop(articleHeight, article, i);
+        // // article.style.height = "842pt";
         // article.clientHeight = 842;
         // article.scrollHeight = 842;
-      }
-    }
+      } else {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("adding a new page dev dev ");
+        console.log(articleHeight);
+        while (792 < articleHeight) {
+          console.log("removearticlewhileloop add page");
+          const newpage = document.createElement("section");
 
-    // editableDiv.appendChild(newpage);
+          newpage.classList.add("docx");
+          newpage.setAttribute(
+            "style",
+            "padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;"
+          );
+          newpage.id = "new_page_" + Math.random() * 1000;
+          const newheader = document.createElement("header");
+          newheader.setAttribute(
+            "style",
+            "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
+          );
+          const newfooter = document.createElement("footer");
+          newfooter.setAttribute(
+            "style",
+            "margin-bottom: calc(-96px); min-height: calc(96px);"
+          );
+
+          const newarticle = document.createElement("article");
+          newpage.appendChild(newheader);
+          newpage.appendChild(newarticle);
+          newpage.appendChild(newfooter);
+          editableDiv.appendChild(newpage);
+          newarticle.appendChild(article.lastChild);
+          article.lastChild.remove();
+          articleHeight = article.scrollHeight;
+          removearticlewhileloop(article, articleHeight, i);
+          // article.clientHeight = 842;
+          // article.scrollHeight = 842;
+        }
+      }
+
+      // editableDiv.appendChild(newpage);
+    }
+    // checkclientheightofarticles();
+    removeEmptyPages();
   }
-  // checkclientheightofarticles();
-  removeEmptyPages();
 }
 
 export function imageLoaded() {
@@ -2068,7 +2078,9 @@ function checkDivSizeBack() {
   // const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {
-  removeEmptyPages();
+  if (pages.length > 1) {
+    removeEmptyPages();
+  }
 
   // checkclientheightofarticles();
 }

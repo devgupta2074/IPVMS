@@ -1,3 +1,7 @@
+import { CreatePolicy } from "../api/createpolicy.js";
+import { GetAllCategory } from "../api/getAllCategories.js";
+import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
+
 import { imageLoaded } from "../scripts/versioncontrol.js";
 import { style } from "../utils/constants.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
@@ -193,10 +197,11 @@ export const fetchTable = async (tableType) => {
   category = tableType.category;
 
   if (tableType.name == "recent") {
-    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
+    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://ipvms-api.exitest.com/api/file/document?page=${currentPage - 1
-      }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${
+      currentPage - 1
+    }&size=${pageSize}&title=&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -325,8 +330,25 @@ function addEditorOpenCloseFeature() {
     if (modalId == 0) {
       document.getElementById("onlyforblank").classList.remove("hidden");
       document.getElementById("version-area").classList.add("hidden");
-      document.getElementById("json").textContent = "Create Policy";
+      document.getElementById("create-policy").classList.remove("hidden");
+      document.getElementById("json").classList.add("hidden");
       modalId = 236;
+      const res = await GetAllCategory();
+
+      category = res?.data;
+      let categoryElement = ``;
+      // let categoryElement = `
+      //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+      //     <option  class="flex justify-center items-center" selected>Choose Category</option>
+      //   `;
+
+      category?.map((item) => {
+        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+      });
+      document.getElementById("category").innerHTML = categoryElement;
+      categoryElement += `
+      <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+      `;
     }
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
@@ -338,7 +360,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.remove("hidden");
 
     const response2 = await fetch(
-      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+      `http://localhost:5001/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -349,6 +371,7 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        localStorage.setItem("modalId", modalId);
         document.getElementById("doc_title").textContent = data.data.title;
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
@@ -369,11 +392,118 @@ function addEditorOpenCloseFeature() {
       document.getElementById("onlyforblank").classList.add("hidden");
       document.getElementById("json").textContent = "Save a Version as Draft";
       document.getElementById("version-area").classList.remove("hidden");
+      document.getElementById("create-policy").classList.add("hidden");
+      document.getElementById("json").classList.remove("hidden");
     }
     document.getElementById("policy-detail").classList.remove("hidden");
     document.getElementById("policy-table").classList.remove("hidden");
     document.getElementById("pagination-area").classList.remove("hidden");
   };
+  if (document.getElementById("create-policy")) {
+    document
+      .getElementById("create-policy")
+      .addEventListener("click", async function () {
+        let policyname = document.getElementById("policy-name").value;
+        let policydescription =
+          document.getElementById("policy-description").value;
+        let policycategory = document.getElementById("category").value;
+        console.log(policycategory, policydescription, policyname);
+
+        const blobToBase64 = (blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          return new Promise((resolve) => {
+            reader.onloadend = () => {
+              resolve(reader.result);
+            };
+          });
+        };
+
+        async function convertImagesToBase64(divId) {
+          // Find the div element
+          var div = document.getElementById(divId);
+
+          // Find all images within the div
+          var images = div.getElementsByTagName("img");
+
+          // Iterate over each image
+          if (images.length > 0) {
+            for (var i = 0; i < images.length; i++) {
+              var img = images[i];
+
+              // Create a blob URL for the image
+              var blob = await fetch(img.src).then((response) =>
+                response.blob()
+              );
+
+              // Convert blob to base64
+              var base64 = await blobToBase64(blob);
+
+              img.src = base64;
+            }
+          }
+        }
+
+        await convertImagesToBase64("container-content-1");
+        const container = document.getElementById("container-content-1");
+        var tags = container.querySelectorAll(".docx-wrapper *");
+        // console.log(tags);
+        var idCounter = 1;
+        tags.forEach(function (tag) {
+          if (!tag.id) {
+            tag.id = "id_" + idCounter;
+            idCounter++;
+          }
+        });
+        const sections = container.getElementsByClassName("docx");
+        console.log(sections);
+        for (var i = 0; i < sections.length; i++) {
+          console.log("section height chages");
+          sections[i].setAttribute(
+            "style",
+            "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+          );
+        }
+        const containerdocx =
+          container.getElementsByClassName("docx-wrapper")[0];
+        const headers = containerdocx.getElementsByTagName("header");
+        console.log(headers);
+        // for (var i = 0; i < headers.length; i++) {
+        //   console.log("section height chages");
+        //   headers[i].setAttribute(
+        //     "style",
+        //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+        //   );
+        // }
+        const articles = containerdocx.getElementsByTagName("article");
+        console.log(articles);
+        // for (var i = 0; i < articles.length; i++) {
+        //   console.log("section height chages");
+        //   articles[i].setAttribute("style", "margin-top: 48px; ");
+        // }
+        var containerContent = document.getElementById("container-content-1");
+
+        let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
+
+        console.log("ggg", resHtml);
+        // dummy value
+        //   const categoryId = 1;
+        const htmlJson = extractHtmlToJson(
+          containerContent.getElementsByClassName("docx-wrapper")[0]
+        );
+        console.log(resHtml, htmlJson);
+        const token = localStorage.getItem("token");
+        console.log("token is ", token);
+        await CreatePolicy(
+          resHtml,
+          htmlJson,
+          policycategory,
+          policyname,
+          token
+        );
+        console.log("results");
+      });
+  }
 }
 
 function addModalOpenCloseFeature() {
@@ -401,7 +531,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -430,8 +560,9 @@ function addPagination(item) {
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
+  document.getElementById(
+    item + "pagination"
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }

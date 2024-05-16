@@ -421,7 +421,7 @@ function extractParentText(parentId) {
 
   return textContent;
 }
-function extractHtmlToJson(divElement) {
+export function extractHtmlToJson(divElement) {
   const jsonOutput = {};
   // console.log(document.getElementsByClassName("docx-wrapper-1"));
   const htmlTags = divElement.getElementsByTagName("*");
@@ -467,7 +467,7 @@ function extractHtmlToJson(divElement) {
   return jsonOutput;
 }
 
-class BulkUpload {
+export class BulkUpload {
   constructor(
     concurrency,
     onUpdateEvent,
@@ -592,6 +592,7 @@ class BulkUpload {
         .querySelector("select").value;
       const getFile = async () => {
         htmlData = await renderDocx(file.file, "container-html1");
+        console.log(htmlData, "DDD");
         // console.log("html data is", htmlData);
         if (htmlData) {
           const blobToBase64 = (blob) => {
@@ -673,10 +674,10 @@ class BulkUpload {
           var containerContent = document.getElementById("container-html1");
 
           // Get the div element with the class "dev" inside container-content
-          var devDiv = containerContent.lastChild;
-          htmlData = devDiv.innerHTML;
 
-          console.log(devDiv, "ggg");
+          htmlData = containerContent.innerHTML;
+          console.log(htmlData, containerContent);
+          // console.log(devDiv, "ggg");
           // dummy value
           //   const categoryId = 1;
           const htmlJson = extractHtmlToJson(
@@ -692,7 +693,7 @@ class BulkUpload {
             .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
           const axiosRequestArgs = {
             method: "post",
-            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
+            url: "http://localhost:5001/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + token,

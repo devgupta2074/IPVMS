@@ -421,8 +421,9 @@ function extractParentText(parentId) {
 
   return textContent;
 }
-function extractHtmlToJson(divElement) {
+export function extractHtmlToJson(divElement) {
   const jsonOutput = {};
+  // console.log(document.getElementsByClassName("docx-wrapper-1"));
   const htmlTags = divElement.getElementsByTagName("*");
   console.log(htmlTags, "html");
 
@@ -466,7 +467,7 @@ function extractHtmlToJson(divElement) {
   return jsonOutput;
 }
 
-class BulkUpload {
+export class BulkUpload {
   constructor(
     concurrency,
     onUpdateEvent,
@@ -591,6 +592,7 @@ class BulkUpload {
         .querySelector("select").value;
       const getFile = async () => {
         htmlData = await renderDocx(file.file, "container-html1");
+        console.log(htmlData, "DDD");
         // console.log("html data is", htmlData);
         if (htmlData) {
           const blobToBase64 = (blob) => {
@@ -629,7 +631,9 @@ class BulkUpload {
           }
 
           await convertImagesToBase64("container-html1");
-          var tags = document.querySelectorAll(".docx-wrapper *");
+          var tags = document
+            .getElementById("container-html1")
+            .querySelectorAll(".docx-wrapper *");
           // console.log(tags);
           var idCounter = 1;
           tags.forEach(function (tag) {
@@ -641,14 +645,16 @@ class BulkUpload {
           const sections = document.getElementsByClassName("docx");
           console.log(sections);
           for (var i = 0; i < sections.length; i++) {
+            const width = sections[i].clientWidth;
             console.log("section height chages");
             sections[i].setAttribute(
               "style",
-              "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+              `padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;`
             );
           }
-          const containerdocx =
-            document.getElementsByClassName("docx-wrapper")[0];
+          const containerdocx = document
+            .getElementById("container-html1")
+            .getElementsByClassName("docx-wrapper")[0];
           const headers = containerdocx.getElementsByTagName("header");
           console.log(headers);
           // for (var i = 0; i < headers.length; i++) {
@@ -668,22 +674,23 @@ class BulkUpload {
           var containerContent = document.getElementById("container-html1");
 
           // Get the div element with the class "dev" inside container-content
-          var devDiv = containerContent.lastChild;
-          htmlData = devDiv.innerHTML;
 
-          console.log(devDiv, "ggg");
+          htmlData = containerContent.innerHTML;
+          console.log(htmlData, containerContent);
+          // console.log(devDiv, "ggg");
           // dummy value
           //   const categoryId = 1;
           const htmlJson = extractHtmlToJson(
-            document.getElementsByClassName("docx-wrapper")[0]
+            containerContent.getElementsByClassName("docx-wrapper")[0]
           );
           console.log("title,htmlJson,categoryId", title, htmlJson, categoryId);
 
           const data = { htmlText: htmlData, htmlJson, categoryId, title };
           const token = localStorage.getItem("token");
           console.log("token is ", token);
-          document.getElementsByClassName("docx-wrapper")[0].id =
-            "docx-wrapper";
+          document
+            .getElementById("container-html1")
+            .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
           const axiosRequestArgs = {
             method: "post",
             url: "http://localhost:5001/api/file/createPolicy",

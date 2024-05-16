@@ -12,6 +12,287 @@ let imagesposition = [];
 let userdata;
 
 let htmljson;
+function extractParentText(parentId) {
+  console.log("Extracting parent", parentId);
+  const parentElement = document.getElementById(parentId);
+  // console.log(parentId);
+  let textContent = "";
+  if (parentElement) {
+    if (parentElement !== null && parentElement.childNodes.length > 0) {
+      for (let i = 0; i < parentElement.childNodes.length; i++) {
+        const childNode = parentElement.childNodes[i];
+        // Check if the node is a text node
+        if (childNode.nodeType === Node.TEXT_NODE) {
+          textContent += childNode.textContent;
+        }
+      }
+    } else {
+      textContent = parentElement.textContent;
+    }
+  } else {
+    textContent = "";
+  }
+
+  // Iterate over child nodes
+
+  return textContent;
+}
+export function createversion() {
+  console.log("ffff create version");
+
+  const modalid = localStorage.getItem("modalId");
+  document.getElementById("loading").style = "display:block";
+  async function detectChanges(divElement) {
+    const jsonResult = JSON.parse(localStorage.getItem("htmljson"));
+    console.log(divElement, "ffff", jsonResult);
+    const articles = divElement.querySelectorAll("article");
+    console.log(articles.length, "articcle length");
+    if (articles.length > 1) {
+      // checkDivSizeBack();
+      removeEmptyPages();
+    }
+    handleChanges();
+    assignIDsToElements();
+    const changes = {
+      changedTags: [],
+      newTags: [],
+      removedTags: [],
+      imageTags: [],
+    };
+
+    const dynamicImages = document
+      .getElementById("docx-wrapper-1")
+      .getElementsByTagName("img");
+    const blobToBase64 = (blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      return new Promise((resolve) => {
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+      });
+    };
+    for (let h = 0; h < dynamicImages.length; h++) {
+      const image = dynamicImages[h];
+      var blob = await fetch(image.src).then((response) => response.blob());
+
+      // Convert blob to base64
+      var base64 = await blobToBase64(blob);
+
+      const gh = {
+        x2: image.offsetLeft,
+        y2: image.offsetTop,
+        width: image.offsetWidth,
+        height: image.offsetHeight,
+        style: image.style.cssText,
+        src: base64,
+        id: image.id,
+        parent: image.parentElement.parentElement.id,
+      };
+      changes.imageTags.push(gh);
+    }
+
+    console.log(document.getElementById("docx-wrapper-1"));
+    const htmlTags = document
+      .getElementById("docx-wrapper-1")
+      .getElementsByTagName("*");
+    console.log(htmlTags, "rr");
+
+    for (let i = 0; i < htmlTags.length; i++) {
+      const tag = htmlTags[i];
+      const tagId = tag.id;
+      const isImgTag = tag.tagName.toLowerCase() === "img";
+      const isLinkTag = tag.tagName.toLowerCase() === "a";
+      const tagInfo = jsonResult[tagId];
+
+      if (!tagInfo) {
+        // if (tag.children.length === 0) {
+        console.log("here");
+        console.log(tag);
+        // New tag found
+        const parentId = tag.parentElement.id || "docx-wrapper-1";
+        const parenttag = document.getElementById(tag.parentElement.id);
+        console.log(tag.parentElement);
+        let position = -1;
+        let childnodeposition = -1;
+        if (tag.parentElement != null) {
+          const childrens = tag.parentElement.children;
+          const childnodes = tag.parentElement.childNodes;
+          // Default position if tag is not found in its parent's children list
+
+          // Find the position of the tag within its parent's children
+          if (childrens) {
+            for (let j = 0; j < childrens.length; j++) {
+              if (childrens[j] === tag) {
+                position = j;
+                break;
+              }
+            }
+          }
+          if (childnodes) {
+            for (let j = 0; j < childnodes.length; j++) {
+              if (childnodes[j] === tag) {
+                childnodeposition = j;
+                break;
+              }
+            }
+          }
+        }
+        let textbefore;
+        let textafter;
+        console.log(tag.parentElement, "hello world!");
+        if (tag.parentElement && tag.parentElement.childNodes) {
+          console.log("hello world!");
+          textbefore =
+            childnodeposition - 1 >= 0
+              ? tag.parentElement.childNodes[childnodeposition - 1].nodeValue
+              : null;
+          textafter =
+            childnodeposition + 1 < tag.parentElement.childNodes.length
+              ? tag.parentElement.childNodes[childnodeposition + 1].nodeValue
+              : null;
+        }
+        console.log(tag.children, "hello hello");
+        const childElements = tag.children;
+        const childIds = [];
+
+        for (let i = 0; i < childElements.length; i++) {
+          const childId = childElements[i].id;
+          if (childId) {
+            childIds.push(childId);
+          }
+        }
+
+        const newTag = {
+          id: tagId,
+          parentId: parentId,
+          tagName: tag.tagName.toLowerCase(),
+          textContent: extractParentText(tagId),
+          class: tag.getAttribute("class") || "",
+          style: tag.getAttribute("style") || "",
+          isTagImg: isImgTag,
+          position: position,
+          textafter: textafter || "",
+          textbefore: textbefore || "",
+          className: tag.className || "",
+          isTagLink: isLinkTag,
+          src: isImgTag ? tag.getAttribute("src") : "",
+          children: childIds,
+          color: tag.getAttribute("color") || "",
+          size: tag.getAttribute("size") || "",
+          face: tag.getAttribute("face") || "",
+          // childArray: childNodesMap,
+          // parentchildNodes: tag.parentNode.childNodes,
+          childnodeposition: childnodeposition,
+        };
+        changes.newTags.push(newTag);
+        // console.log(jsonResult[parenttag.id], "parent");
+        // if (jsonResult[parenttag.id] !== undefined) {
+        //   // changes.changedTags.push({
+        //   //   id: parenttag.id,
+        //   //   textContent: newTag.textContent,
+        //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
+        //   //   style: jsonResult[parenttag.id].style,
+        //   //   src: jsonResult[parenttag.id].isImgTag
+        //   //     ? jsonResult[parenttag.id].isImgTag
+        //   //     : "",
+        //   //   isParentToNewTag: true,
+        //   // });
+        //   // }
+        // }
+      } else {
+        // Check for changes in text style or image source
+        if (
+          tag.children.length === 0 &&
+          tag.tagName.toLowerCase() !== "style"
+        ) {
+          if (tagInfo.textContent !== extractParentText(tag.id)) {
+            changes.changedTags.push({
+              id: tagId,
+              textContent: extractParentText(tag.id),
+            });
+          }
+          if (tagInfo.style !== tag.getAttribute("style")) {
+            changes.changedTags.push({
+              id: tagId,
+              style: tag.getAttribute("style") || "",
+            });
+          }
+          if (tagInfo.isTagImg && tagInfo.src !== tag.getAttribute("src")) {
+            changes.changedTags.push({
+              id: tagId,
+              src: isImgTag ? tag.getAttribute("src") : "",
+            });
+          }
+        }
+      }
+    }
+    var keys = Object.keys(jsonResult);
+    console.log(jsonResult);
+    console.log(keys);
+    keys.forEach(function (key) {
+      if (jsonResult.hasOwnProperty(key)) {
+        console.log(key, "fff");
+        if (!divElement.querySelector(`#${key}`)) {
+          changes.removedTags.push(key);
+        }
+      }
+    });
+    // for (var tagId in jsonResult) {
+    //   console.log(tagId);
+    //   if (jsonResult.hasOwnProperty(tagId)) {
+    //     console.log(tagId, "fff");
+    //     if (!divElement.querySelector(`#${tagId}`)) {
+    //       changes.removedTags.push(tagId);
+    //     }
+    //   }
+    // }
+    console.log(changes, "changes");
+
+    localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
+
+    const response = fetch(
+      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          version_number: version,
+          doc_id: modalid,
+          delta: changes,
+          created_by: userdata.id,
+        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        console.log(data);
+        localStorage.setItem("version", version);
+        fetchVersionsDateWise(modalid);
+        document.getElementById("loading").style = "display:none";
+        // window.location.reload();
+      });
+
+    return changes;
+  }
+
+  const divElement = document.getElementById("docx-wrapper-1");
+  let version = parseInt(localStorage.getItem("version"));
+  console.log("divElement: " + divElement);
+  const changes = detectChanges(divElement);
+
+  console.log("version: " + version);
+  if (version == NaN) {
+    version = 1;
+  }
+  version = version + 0.1;
+  console.log(changes, version, 1);
+
+  console.log(changes);
+}
 function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
     if (tagName == "tbody") {
@@ -472,7 +753,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
+  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -799,7 +1080,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
+  //       "http://localhost:5001/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -823,7 +1104,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
+  //       "http://localhost:5001/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -859,259 +1140,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   //   // testDocuments.selectedIndex = 0;
   // });
   const buttondd = document.getElementById("json");
-  buttondd.addEventListener("click", function () {
-    const modalid = localStorage.getItem("modalId");
-    document.getElementById("loading").style = "display:block";
-    async function detectChanges(divElement) {
-      const jsonResult = JSON.parse(localStorage.getItem("htmljson"));
-      console.log(divElement, "ffff", jsonResult);
-      const articles = divElement.querySelectorAll("article");
-      console.log(articles.length, "articcle length");
-      if (articles.length > 1) {
-        // checkDivSizeBack();
-        removeEmptyPages();
-      }
-      handleChanges();
-      assignIDsToElements();
-      const changes = {
-        changedTags: [],
-        newTags: [],
-        removedTags: [],
-        imageTags: [],
-      };
 
-      const dynamicImages = document
-        .getElementById("docx-wrapper-1")
-        .getElementsByTagName("img");
-      const blobToBase64 = (blob) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        return new Promise((resolve) => {
-          reader.onloadend = () => {
-            resolve(reader.result);
-          };
-        });
-      };
-      for (let h = 0; h < dynamicImages.length; h++) {
-        const image = dynamicImages[h];
-        var blob = await fetch(image.src).then((response) => response.blob());
-
-        // Convert blob to base64
-        var base64 = await blobToBase64(blob);
-
-        const gh = {
-          x2: image.offsetLeft,
-          y2: image.offsetTop,
-          width: image.offsetWidth,
-          height: image.offsetHeight,
-          style: image.style.cssText,
-          src: base64,
-          id: image.id,
-          parent: image.parentElement.parentElement.id,
-        };
-        changes.imageTags.push(gh);
-      }
-
-      console.log(document.getElementById("docx-wrapper-1"));
-      const htmlTags = document
-        .getElementById("docx-wrapper-1")
-        .getElementsByTagName("*");
-      console.log(htmlTags, "rr");
-
-      for (let i = 0; i < htmlTags.length; i++) {
-        const tag = htmlTags[i];
-        const tagId = tag.id;
-        const isImgTag = tag.tagName.toLowerCase() === "img";
-        const isLinkTag = tag.tagName.toLowerCase() === "a";
-        const tagInfo = jsonResult[tagId];
-
-        if (!tagInfo) {
-          // if (tag.children.length === 0) {
-          console.log("here");
-          console.log(tag);
-          // New tag found
-          const parentId = tag.parentElement.id || "docx-wrapper-1";
-          const parenttag = document.getElementById(tag.parentElement.id);
-          console.log(tag.parentElement);
-          let position = -1;
-          let childnodeposition = -1;
-          if (tag.parentElement != null) {
-            const childrens = tag.parentElement.children;
-            const childnodes = tag.parentElement.childNodes;
-            // Default position if tag is not found in its parent's children list
-
-            // Find the position of the tag within its parent's children
-            if (childrens) {
-              for (let j = 0; j < childrens.length; j++) {
-                if (childrens[j] === tag) {
-                  position = j;
-                  break;
-                }
-              }
-            }
-            if (childnodes) {
-              for (let j = 0; j < childnodes.length; j++) {
-                if (childnodes[j] === tag) {
-                  childnodeposition = j;
-                  break;
-                }
-              }
-            }
-          }
-          let textbefore;
-          let textafter;
-          console.log(tag.parentElement, "hello world!");
-          if (tag.parentElement && tag.parentElement.childNodes) {
-            console.log("hello world!");
-            textbefore =
-              childnodeposition - 1 >= 0
-                ? tag.parentElement.childNodes[childnodeposition - 1].nodeValue
-                : null;
-            textafter =
-              childnodeposition + 1 < tag.parentElement.childNodes.length
-                ? tag.parentElement.childNodes[childnodeposition + 1].nodeValue
-                : null;
-          }
-          console.log(tag.children, "hello hello");
-          const childElements = tag.children;
-          const childIds = [];
-
-          for (let i = 0; i < childElements.length; i++) {
-            const childId = childElements[i].id;
-            if (childId) {
-              childIds.push(childId);
-            }
-          }
-
-          const newTag = {
-            id: tagId,
-            parentId: parentId,
-            tagName: tag.tagName.toLowerCase(),
-            textContent: extractParentText(tagId),
-            class: tag.getAttribute("class") || "",
-            style: tag.getAttribute("style") || "",
-            isTagImg: isImgTag,
-            position: position,
-            textafter: textafter || "",
-            textbefore: textbefore || "",
-            className: tag.className || "",
-            isTagLink: isLinkTag,
-            src: isImgTag ? tag.getAttribute("src") : "",
-            children: childIds,
-            color: tag.getAttribute("color") || "",
-            size: tag.getAttribute("size") || "",
-            face: tag.getAttribute("face") || "",
-            // childArray: childNodesMap,
-            // parentchildNodes: tag.parentNode.childNodes,
-            childnodeposition: childnodeposition,
-          };
-          changes.newTags.push(newTag);
-          // console.log(jsonResult[parenttag.id], "parent");
-          // if (jsonResult[parenttag.id] !== undefined) {
-          //   // changes.changedTags.push({
-          //   //   id: parenttag.id,
-          //   //   textContent: newTag.textContent,
-          //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
-          //   //   style: jsonResult[parenttag.id].style,
-          //   //   src: jsonResult[parenttag.id].isImgTag
-          //   //     ? jsonResult[parenttag.id].isImgTag
-          //   //     : "",
-          //   //   isParentToNewTag: true,
-          //   // });
-          //   // }
-          // }
-        } else {
-          // Check for changes in text style or image source
-          if (
-            tag.children.length === 0 &&
-            tag.tagName.toLowerCase() !== "style"
-          ) {
-            if (tagInfo.textContent !== extractParentText(tag.id)) {
-              changes.changedTags.push({
-                id: tagId,
-                textContent: extractParentText(tag.id),
-              });
-            }
-            if (tagInfo.style !== tag.getAttribute("style")) {
-              changes.changedTags.push({
-                id: tagId,
-                style: tag.getAttribute("style") || "",
-              });
-            }
-            if (tagInfo.isTagImg && tagInfo.src !== tag.getAttribute("src")) {
-              changes.changedTags.push({
-                id: tagId,
-                src: isImgTag ? tag.getAttribute("src") : "",
-              });
-            }
-          }
-        }
-      }
-      var keys = Object.keys(jsonResult);
-      console.log(jsonResult);
-      console.log(keys);
-      keys.forEach(function (key) {
-        if (jsonResult.hasOwnProperty(key)) {
-          console.log(key, "fff");
-          if (!divElement.querySelector(`#${key}`)) {
-            changes.removedTags.push(key);
-          }
-        }
-      });
-      // for (var tagId in jsonResult) {
-      //   console.log(tagId);
-      //   if (jsonResult.hasOwnProperty(tagId)) {
-      //     console.log(tagId, "fff");
-      //     if (!divElement.querySelector(`#${tagId}`)) {
-      //       changes.removedTags.push(tagId);
-      //     }
-      //   }
-      // }
-      console.log(changes, "changes");
-
-      localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
-
-      const response = fetch(
-        "http://localhost:5001/api/versioncontrol/createDocumentVersion",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            version_number: version,
-            doc_id: modalid,
-            delta: changes,
-            created_by: userdata.id,
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Handle the response from the backend
-          console.log(data);
-          localStorage.setItem("version", version);
-          fetchVersionsDateWise(modalid);
-          document.getElementById("loading").style = "display:none";
-          // window.location.reload();
-        });
-
-      return changes;
-    }
-
-    const divElement = document.getElementById("docx-wrapper-1");
-    let version = parseInt(localStorage.getItem("version"));
-    const changes = detectChanges(divElement);
-
-    console.log("version: " + version);
-    if (version == NaN) {
-      version = 1;
-    }
-    version = version + 0.1;
-    console.log(changes, version, 1);
-
-    console.log(changes);
-  });
+  buttondd.addEventListener("click", createversion);
 
   // Function to apply changes from v1 to v2
 
@@ -1120,13 +1150,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Example usage:
   // Assuming you have divElement, v1, and v2 from previous steps
   // Applying changes from v1 to v2
-  // const v2tov1 = document.getElementById("v2tov1");
-  // v2tov1.addEventListener("click", function () {
-  //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-  //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
-  //   applyChangesFromV2toV1();
-  //   removeemptyimage();
-  // });
+  const v2tov1 = document.getElementById("v2tov1");
+  v2tov1.addEventListener("click", function () {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+    document.getElementById("container-content-1").contentEditable = true;
+    const modalid = localStorage.getItem("modalId");
+    applyChangesFromV2toV1(modalid, function () {
+      imageLoaded();
+      console.log("revert back");
+    });
+    removeemptyimage();
+  });
   // const v1tov2 = document.getElementById("v1tov2");
   // // v1tov2.addEventListener("click", function () {
   // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
@@ -1140,6 +1176,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(modalid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version", modalid);
+  document.getElementById(id).classList.add("bg-zicron-100");
+  document.getElementById("container-content-1").contentEditable = false;
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
@@ -1420,7 +1460,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
+          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1573,7 +1613,7 @@ const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
@@ -1788,65 +1828,69 @@ function checkDivSize() {
   console.log("Checking container size");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
-  for (let i = 0; i < pages.length; i++) {
-    console.log(pages[i].id, "dev");
-    const element = pages[i];
-    var containerHeight = pages[i].clientHeight;
-    var contentHeight = pages[i].scrollHeight;
-    console.log("print");
-    console.log(containerHeight, contentHeight, "first");
+  if (pages.length > 1) {
+    for (let i = 0; i < pages.length; i++) {
+      console.log(pages[i].id, "dev");
+      const element = pages[i];
+      var containerHeight = pages[i].clientHeight;
+      var contentHeight = pages[i].scrollHeight;
+      console.log("print");
+      console.log(containerHeight, contentHeight, "first");
 
-    console.log(pages[i].id, "dev yes");
-    if (i + 1 < pages.length) {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      console.log("removearticlewhileloop first");
-      removearticlewhileloop(articleHeight, article, i);
-      // // article.style.height = "842pt";
-      // article.clientHeight = 842;
-      // article.scrollHeight = 842;
-    } else {
-      let article = document.getElementsByTagName("article")[i];
-      let articleHeight = article.scrollHeight;
-      while (842 < articleHeight) {
-        console.log("removearticlewhileloop add page");
-        const newpage = document.createElement("section");
-
-        newpage.classList.add("docx");
-        newpage.setAttribute(
-          "style",
-          "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-        );
-        newpage.id = "new_page_" + Math.random() * 1000;
-        const newheader = document.createElement("header");
-        newheader.setAttribute(
-          "style",
-          "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
-        );
-        const newfooter = document.createElement("footer");
-        newfooter.setAttribute(
-          "style",
-          "margin-bottom: calc(-96px); min-height: calc(96px);"
-        );
-
-        const newarticle = document.createElement("article");
-        newpage.appendChild(newheader);
-        newpage.appendChild(newarticle);
-        newpage.appendChild(newfooter);
-        editableDiv.appendChild(newpage);
-        newarticle.appendChild(article.lastChild);
-        article.lastChild.remove();
-        articleHeight = article.scrollHeight;
-        removearticlewhileloop(article, articleHeight, i);
+      console.log(pages[i].id, "dev yes");
+      if (i + 1 < pages.length) {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("removearticlewhileloop first");
+        removearticlewhileloop(articleHeight, article, i);
+        // // article.style.height = "842pt";
         // article.clientHeight = 842;
         // article.scrollHeight = 842;
-      }
-    }
+      } else {
+        let article = document.getElementsByTagName("article")[i];
+        let articleHeight = article.scrollHeight;
+        console.log("adding a new page dev dev ");
+        console.log(articleHeight);
+        while (792 < articleHeight) {
+          console.log("removearticlewhileloop add page");
+          const newpage = document.createElement("section");
 
-    // editableDiv.appendChild(newpage);
+          newpage.classList.add("docx");
+          newpage.setAttribute(
+            "style",
+            "padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;"
+          );
+          newpage.id = "new_page_" + Math.random() * 1000;
+          const newheader = document.createElement("header");
+          newheader.setAttribute(
+            "style",
+            "margin-top: calc(-19.3333px); min-height: calc(19.3333px);"
+          );
+          const newfooter = document.createElement("footer");
+          newfooter.setAttribute(
+            "style",
+            "margin-bottom: calc(-96px); min-height: calc(96px);"
+          );
+
+          const newarticle = document.createElement("article");
+          newpage.appendChild(newheader);
+          newpage.appendChild(newarticle);
+          newpage.appendChild(newfooter);
+          editableDiv.appendChild(newpage);
+          newarticle.appendChild(article.lastChild);
+          article.lastChild.remove();
+          articleHeight = article.scrollHeight;
+          removearticlewhileloop(article, articleHeight, i);
+          // article.clientHeight = 842;
+          // article.scrollHeight = 842;
+        }
+      }
+
+      // editableDiv.appendChild(newpage);
+    }
+    // checkclientheightofarticles();
+    removeEmptyPages();
   }
-  // checkclientheightofarticles();
-  removeEmptyPages();
 }
 
 export function imageLoaded() {
@@ -2034,7 +2078,9 @@ function checkDivSizeBack() {
   // const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {
-  removeEmptyPages();
+  if (pages.length > 1) {
+    removeEmptyPages();
+  }
 
   // checkclientheightofarticles();
 }

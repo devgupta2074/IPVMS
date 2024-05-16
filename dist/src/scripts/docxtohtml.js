@@ -6,8 +6,13 @@ async function renderDocx(file, elementId) {
       const docxOptions = Object.assign(docx.defaultOptions, {
         debug: true,
         experimental: true,
-
+        breakPages: true, //enables page breaking on page breaks
         ignoreLastRenderedPageBreak: false,
+        renderHeaders: true, //enables headers rendering
+        renderFooters: true, //enables footers rendering
+        renderFootnotes: true, //enables footnotes rendering
+        renderEndnotes: true, //enables endnotes rendering
+        trimXmlDeclaration: true, //if true, xml declaration will be removed from xml documents before parsing
       });
       var docData = await convertDocxToBlob();
       await docx.renderAsync(

@@ -1273,6 +1273,19 @@ video {
   background-color: rgb(31 72 174 / var(--tw-bg-opacity));
 }
 
+.hover\:text-ship-cove-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(113 139 211 / var(--tw-text-opacity));
+}
+.hover\:border-b-ship-cove-500:hover {
+  --tw-border-opacity: 1;
+  border-bottom-color: rgb(113 139 211 / var(--tw-border-opacity));
+}
+
+.peer\/dash-svg:hover ~ .peer-hover\/dash-svg\:opacity-100 {
+  opacity: 1;
+}
+
 .text-boulder-400 {
   --tw-text-opacity: 1;
   color: rgb(124 124 124 / var(--tw-text-opacity));
@@ -1371,6 +1384,9 @@ video {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast)
     var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate)
     var(--tw-sepia) var(--tw-drop-shadow);
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 .bg-zircon-950 {
   --tw-bg-opacity: 1;

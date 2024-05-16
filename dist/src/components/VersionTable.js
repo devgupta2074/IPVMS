@@ -1,7 +1,20 @@
-import { applyChangesFromV1toV2 } from "../scripts/versioncontrol.js";
+import {
+  applyChangesFromV1toV2,
+  createversion,
+} from "../scripts/versioncontrol.js";
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (localStorage.getItem("versionid")) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  document.getElementById(id).classList.add("bg-zircon-100");
+  document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
     `http://localhost:5001/api/file/getFile/${docid}`,
     {
@@ -31,6 +44,7 @@ async function ChangeVersion(docid, id) {
   )
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
@@ -60,9 +74,11 @@ function openDash(id) {
     dash.classList.add("hidden");
   }
 }
+let runonetimeonly = true;
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
+  console.log(id, docid);
   const response = fetch(
     `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
@@ -75,6 +91,13 @@ export const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
+      if (data.length == 0 && runonetimeonly) {
+        console.log("first verion not  there");
+        runonetimeonly = false;
+
+        createversion();
+        fetchVersionsDateWise(id);
+      }
 
       // Parse each element into an array
       data.forEach((element) => {
@@ -170,7 +193,7 @@ export const fetchVersionsDateWise = async (id) => {
           dayversions.innerHTML += `
           <li id=${
             version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button">
+          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
          
             
             <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${

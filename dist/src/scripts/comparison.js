@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   const response = await fetch(
-    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
+    "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
     {
       method: "GET",
       headers: {

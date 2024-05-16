@@ -3,7 +3,21 @@ import { makeRequest } from "./apiRequest.js";
 
 const apiUrl =
   API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.CREATE_POLICY;
-export async function CreatePolicy(htmlText, htmlJson, categoryId, title) {
+export async function CreatePolicy(
+  htmlText,
+  htmlJson,
+  categoryId,
+  title,
+  token
+) {
+  console.log(
+    htmlText,
+    htmlJson,
+    categoryId,
+    title,
+    token,
+    "inside create policy"
+  );
   const requestData = {
     htmlText,
     htmlJson,
@@ -14,7 +28,7 @@ export async function CreatePolicy(htmlText, htmlJson, categoryId, title) {
   const requestOptions = {
     method: API_CONSTANTS.POST,
     headers: {
-      //   'Authorization': 'Bearer <token>'
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: requestData,

@@ -2,85 +2,74 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { VIEWS_CONSTANTS } from "../utils/constants.js";
 
 const NavBar = `
-<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950">
-<div class="flex flex-col items-center mt-20 gap-y-8 m-0 w-full p-0  sidebar-icon">
-
-<button id="dashboard" class="relative ">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
-    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-  </svg>
- 
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
-    Dashboard</div>
-</div>
+<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
+<button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
 </svg>
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
-
-</button>
-<button id="document" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
     Policies</div>
 </div>
+</button>
+
+
+<button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
 </svg>
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
-
-</button>
-
-
-<button id="letters" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
-  Letters</div>
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+    Policies</div>
 </div>
+</button>
+
+
+<button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<span id="letter-svg" class=" peer/letter-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#policy"></use>
 </svg>
-
-
-</button>
-<button id="editor" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+</span>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
-  Editor</div>
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+  Letters</div>
 </div>
+</button>
+
+<button id="inviteButton" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<span id="invite-svg" class=" peer/invite-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#document"></use>
 </svg>
+</span>
 
-
-</button>
-<button id="inviteButton" class="relative">
-<div class=" absolute   flex flex-row gap-0 items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 ">
-  <svg class="  order-1 w-[9px] h-[13px] ml-10 ">
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
-  <div class="  order-2  w-24  bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2 ">
+  <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
   Invite Memeber</div>
 </div>
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
-</svg>
-
-
 </button>
   
  
@@ -103,12 +92,12 @@ const NavBar = `
   <figure class=" ">
     <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
   </figure>
-
+<div class="relative">
   <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 </svg></button>
   <!-- Dropdown menu -->
-  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 20px auto auto -150px; margin: 0px; transform: translate3d(1496px, 53.6px, 0px);" data-popper-placement="bottom">
+  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 0 auto auto 0; margin: 0px; transform: translate3d(-30px, 40.6px, 0px);" data-popper-placement="bottom">
     <div class="px-4 py-3">
       <span id="dropdownname" class=" hidden text-sm"></span>
       <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
@@ -125,6 +114,7 @@ const NavBar = `
     </ul>
   </div>
   <!-- Dropdown menu -->
+  </div>
 </div>
 </header>
 
@@ -152,23 +142,6 @@ export async function InsertNavbar() {
   navcomp.innerHTML = NavBar;
 
   body.insertBefore(navcomp, body.firstChild);
-  // const parentElement = document.getElementsByTagName("body")[0];
-  // const toBeDeletedElement = document.getElementById("navbar-removed");
-  // console.log(toBeDeletedElement, parentElement, "gggh");
-  // // Check if both the parent and to-be-deleted elements exist
-  // if (parentElement && toBeDeletedElement) {
-  //   // Move children of the to-be-deleted element to the parent element
-
-  //   while (toBeDeletedElement.firstChild) {
-  //     parentElement.insertBefore(
-  //       toBeDeletedElement.firstChild,
-  //       parentElement.firstChild
-  //     );
-  //   }
-
-  //   // Remove the to-be-deleted element
-  //   parentElement.removeChild(toBeDeletedElement);
-  // }
   const parentElement = document.getElementsByTagName("body")[0];
   const toBeDeletedElement = document.getElementById("navbar-removed");
   console.log(toBeDeletedElement, parentElement, "gggh");
@@ -207,10 +180,6 @@ export async function InsertNavbar() {
   todashboard.addEventListener("click", () => {
     console.log("inviteButton dash");
     window.location.href = "/dashboard";
-  });
-  const toeditor = document.getElementById("editor");
-  toeditor.addEventListener("click", () => {
-    window.location.href = "/editor";
   });
   const todocument = document.getElementById("document");
   todocument.addEventListener("click", () => {
@@ -273,10 +242,10 @@ export async function InsertNavbar() {
     invitemodal.id = "removemodal";
     invitemodal.innerHTML = `      <div
     id="modal"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40"
+    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
   >
     <div
-      class="modal-content mx-auto my-20 p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
+      class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
     >
       <div class="modal-header flex items-center justify-between mb-4">
         <h1 class="modal-title text-xl font-medium text-gray-800">
@@ -352,7 +321,7 @@ export async function InsertNavbar() {
     console.log("clicked");
     modal = document.getElementById("modal");
     if (modal) {
-      modal.style.display = "block";
+      modal.style.display = "flex";
     }
     closeButton = document.getElementById("closeButton");
     if (closeButton) {
@@ -380,7 +349,7 @@ export async function InsertNavbar() {
 //     </svg>
 
 //     <div
-//       class="tooltip order-2 bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-xs rounded p-2"
+//       class="tooltip order-2 bg-[#eaeeff] font-sfprodisplay font-medium text-deep-cove-950 text-sm rounded p-2"
 //     >
 //       Dashboard
 //     </div>

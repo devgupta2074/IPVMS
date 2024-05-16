@@ -1,3 +1,7 @@
+import { CreatePolicy } from "../api/createpolicy.js";
+import { GetAllCategory } from "../api/getAllCategories.js";
+import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
+
 import { imageLoaded } from "../scripts/versioncontrol.js";
 import { style } from "../utils/constants.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
@@ -47,7 +51,7 @@ const docCard = (title, created_by, created_at, id, index) => {
     
     <tr
  
-    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
     <td class="w-14">${index + 1}</td>
     <td class="w-52"     onclick="openModal(${id})">${title}</2td>
@@ -88,8 +92,8 @@ function addTable() {
   console.log(tableDiv);
 
   tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
-    <thead class="bg-ship-cove-200 py-3 text-xs capitalize text-[#333333] flex rounded-t-md">
-      <tr class="flex justify-around w-full">
+    <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
+      <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
         <th scope="col" class="w-52">
           <div class="flex items-center font-normal">
@@ -154,7 +158,7 @@ function addTable() {
         <th scope="col" class="w-28">
           <div class="flex items-center font-normal">
             Published by
-            <a href="#" >
+            <a href="#" class="sort" name="true">
               <svg id="sorticon" class="px-2 h-4 w-6">
                 <use
                   xlink:href="/assets/icons/icon.svg#sorticon"
@@ -323,10 +327,38 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    if (modalId == 0) {
+      document.getElementById("onlyforblank").classList.remove("hidden");
+      document.getElementById("version-area").classList.add("hidden");
+      document.getElementById("create-policy").classList.remove("hidden");
+      document.getElementById("json").classList.add("hidden");
+      modalId = 236;
+      const res = await GetAllCategory();
+
+      category = res?.data;
+      let categoryElement = ``;
+      // let categoryElement = `
+      //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+      //     <option  class="flex justify-center items-center" selected>Choose Category</option>
+      //   `;
+
+      category?.map((item) => {
+        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+      });
+      document.getElementById("category").innerHTML = categoryElement;
+      categoryElement += `
+      <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+      `;
+    }
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
     let htmljson;
+
+    document.getElementById("policy-detail").classList.add("hidden");
+    document.getElementById("policy-table").classList.add("hidden");
+    document.getElementById("pagination-area").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
+
     const response2 = await fetch(
       `http://localhost:5001/api/file/getFile/${modalId}`,
       {
@@ -339,6 +371,8 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        localStorage.setItem("modalId", modalId);
+        document.getElementById("doc_title").textContent = data.data.title;
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
@@ -354,7 +388,122 @@ function addEditorOpenCloseFeature() {
   window.closeEditor = function () {
     console.log("fniefniefnir");
     document.getElementById("extralarge-modal").classList.add("hidden");
+    if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
+      document.getElementById("onlyforblank").classList.add("hidden");
+      document.getElementById("json").textContent = "Save a Version as Draft";
+      document.getElementById("version-area").classList.remove("hidden");
+      document.getElementById("create-policy").classList.add("hidden");
+      document.getElementById("json").classList.remove("hidden");
+    }
+    document.getElementById("policy-detail").classList.remove("hidden");
+    document.getElementById("policy-table").classList.remove("hidden");
+    document.getElementById("pagination-area").classList.remove("hidden");
   };
+  if (document.getElementById("create-policy")) {
+    document
+      .getElementById("create-policy")
+      .addEventListener("click", async function () {
+        let policyname = document.getElementById("policy-name").value;
+        let policydescription =
+          document.getElementById("policy-description").value;
+        let policycategory = document.getElementById("category").value;
+        console.log(policycategory, policydescription, policyname);
+
+        const blobToBase64 = (blob) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          return new Promise((resolve) => {
+            reader.onloadend = () => {
+              resolve(reader.result);
+            };
+          });
+        };
+
+        async function convertImagesToBase64(divId) {
+          // Find the div element
+          var div = document.getElementById(divId);
+
+          // Find all images within the div
+          var images = div.getElementsByTagName("img");
+
+          // Iterate over each image
+          if (images.length > 0) {
+            for (var i = 0; i < images.length; i++) {
+              var img = images[i];
+
+              // Create a blob URL for the image
+              var blob = await fetch(img.src).then((response) =>
+                response.blob()
+              );
+
+              // Convert blob to base64
+              var base64 = await blobToBase64(blob);
+
+              img.src = base64;
+            }
+          }
+        }
+
+        await convertImagesToBase64("container-content-1");
+        const container = document.getElementById("container-content-1");
+        var tags = container.querySelectorAll(".docx-wrapper *");
+        // console.log(tags);
+        var idCounter = 1;
+        tags.forEach(function (tag) {
+          if (!tag.id) {
+            tag.id = "id_" + idCounter;
+            idCounter++;
+          }
+        });
+        const sections = container.getElementsByClassName("docx");
+        console.log(sections);
+        for (var i = 0; i < sections.length; i++) {
+          console.log("section height chages");
+          sections[i].setAttribute(
+            "style",
+            "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+          );
+        }
+        const containerdocx =
+          container.getElementsByClassName("docx-wrapper")[0];
+        const headers = containerdocx.getElementsByTagName("header");
+        console.log(headers);
+        // for (var i = 0; i < headers.length; i++) {
+        //   console.log("section height chages");
+        //   headers[i].setAttribute(
+        //     "style",
+        //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+        //   );
+        // }
+        const articles = containerdocx.getElementsByTagName("article");
+        console.log(articles);
+        // for (var i = 0; i < articles.length; i++) {
+        //   console.log("section height chages");
+        //   articles[i].setAttribute("style", "margin-top: 48px; ");
+        // }
+        var containerContent = document.getElementById("container-content-1");
+
+        let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
+
+        console.log("ggg", resHtml);
+        // dummy value
+        //   const categoryId = 1;
+        const htmlJson = extractHtmlToJson(
+          containerContent.getElementsByClassName("docx-wrapper")[0]
+        );
+        console.log(resHtml, htmlJson);
+        const token = localStorage.getItem("token");
+        console.log("token is ", token);
+        await CreatePolicy(
+          resHtml,
+          htmlJson,
+          policycategory,
+          policyname,
+          token
+        );
+        console.log("results");
+      });
+  }
 }
 
 function addModalOpenCloseFeature() {
@@ -411,8 +560,9 @@ function addPagination(item) {
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+  document.getElementById(
+    item + "pagination"
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }
@@ -516,13 +666,13 @@ const addDocPageStatus = () => {
   document.getElementById("doc-status").innerHTML = "";
   document.getElementById(
     "doc-status"
-  ).innerHTML += `<p class="text-sm text-gray-700">
+  ).innerHTML += `<p class="text-sm text-gray-700 font-roboto">
                 Showing
-                <span class="font-medium">${startItemIndex}</span>
+                <span class="font-medium font-roboto">${startItemIndex}</span>
                 to
-                <span class="font-medium">${endItemIndex}</span>
+                <span class="font-medium font-roboto">${endItemIndex}</span>
                 of
-                <span class="font-medium">${totalResults}</span> results
+                <span class="font-medium font-roboto">${totalResults}</span> results
   </p>`;
 };
 const addPaginationElement = (arr) => {
@@ -531,7 +681,7 @@ const addPaginationElement = (arr) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {
-      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">${item}</a>`;
+      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative bg-white h-8 font-bold rounded-md border-[1px] z-10 inline-flex items-center px-3 text-sm hover:bg-gray-50">${item}</a>`;
     }
   });
   addDocPageStatus();

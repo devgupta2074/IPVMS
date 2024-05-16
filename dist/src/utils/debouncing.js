@@ -4,11 +4,11 @@ export const debounce = (callback, timeout) => {
   // if already a timer just clear the timer so that new evnt is registered
 
   return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => {
       // if using this apply
       console.log("called");
-      callback.apply(this, args);
+      callback(...args);
     }, timeout);
   };
 };

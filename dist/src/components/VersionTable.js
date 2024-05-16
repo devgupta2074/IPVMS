@@ -7,12 +7,16 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 async function ChangeVersion(docid, id) {
   console.log("hello world dev");
   console.log(id, "change version");
-  if (localStorage.getItem("versionid")) {
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
     document
       .getElementById(localStorage.getItem("versionid"))
       .classList.remove("bg-zircon-100");
   }
   localStorage.setItem("versionid", id);
+  console.log(document.getElementById(id), id);
   document.getElementById(id).classList.add("bg-zircon-100");
   document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
@@ -100,7 +104,7 @@ export const fetchVersionsDateWise = async (id) => {
         runonetimeonly = false;
 
         createversion();
-        fetchVersionsDateWise(id);
+        // fetchVersionsDateWise(id);
       }
 
       // Parse each element into an array

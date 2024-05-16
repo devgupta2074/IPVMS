@@ -272,6 +272,7 @@ export function createversion() {
         console.log(data);
         localStorage.setItem("version", version);
         fetchVersionsDateWise(modalid);
+
         document.getElementById("loading").style = "display:none";
         // window.location.reload();
       });
@@ -292,6 +293,7 @@ export function createversion() {
   console.log(changes, version, 1);
 
   console.log(changes);
+  fetchVersionsDateWise(modalid);
 }
 function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
@@ -1152,9 +1154,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
-    document
-      .getElementById(localStorage.getItem("versionid"))
-      .classList.remove("bg-zircon-100");
+    if (document.getElementById(localStorage.getItem("versionid"))) {
+      document
+        .getElementById(localStorage.getItem("versionid"))
+        .classList.remove("bg-zircon-100");
+    }
+
     document.getElementById("container-content-1").contentEditable = true;
     const modalid = localStorage.getItem("modalId");
     applyChangesFromV2toV1(modalid, function () {
@@ -1178,7 +1183,19 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 async function ChangeVersion(modalid, id) {
   console.log("hello world dev");
   console.log(id, "change version", modalid);
-  document.getElementById(id).classList.add("bg-zicron-100");
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  console.log(document.getElementById(id), id);
+  document.getElementById(id).classList.add("bg-zircon-100");
   document.getElementById("container-content-1").contentEditable = false;
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
@@ -1508,6 +1525,7 @@ function openDash(id) {
 }
 const fetchVersionsDateWise = async (id) => {
   const y = [];
+  console.log(id, "sss");
   const response = fetch(
     `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
@@ -1520,6 +1538,9 @@ const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
+      if (data.length === 0) {
+        fetchVersionsDateWise(id);
+      }
 
       // Parse each element into an array
       data.forEach((element) => {

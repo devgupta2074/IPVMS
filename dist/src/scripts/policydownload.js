@@ -22,8 +22,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
       .then((data) => {
         console.log(data, "response issss");
         const docData = data.data.data;
+        console.log(docData);
+        console.log(docData);
         document.getElementById("docx-wrapper").innerHTML = "";
         document.getElementById("docx-wrapper").innerHTML = docData;
+        document.getElementById("docx-wrapper").querySelectorAll("section");
+        console.log();
         setTimeout(() => {
           window.print();
         }, 1000);

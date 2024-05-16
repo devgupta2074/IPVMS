@@ -11,7 +11,7 @@ const docxModal = (id) => {
     <div id=${id}  >
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
       <!-- Background overlay -->
-      <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+      <div id="backdrop" class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop-dev " aria-hidden="true"></div>
   
       <!-- Modal content -->
       <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
@@ -43,45 +43,76 @@ const docxModal = (id) => {
     `;
 };
 
-const docCard = (title, created_by, created_at, id, index) => {
+const docCard = (title, created_by, created_at, id, index, type) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
-  return `
-    
-    <tr
- 
-    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
-  >
-    <td class="w-14">${index + 1}</td>
-    <td class="w-52"     onclick="openModal(${id})">${title}</2td>
-    <td class="w-28">${created_by}</td>
-    <td class="w-28">${date}</td>
-    <td class="w-28">Admin</td>
-    <td class="w-28">${date}</td>
-    <td class="w-28">${created_by}</td>
-    <td class="w-28">
-      <div class="flex gap-6 justify-center">
-        <button onclick="openEditor(${id})">
-          <svg id="edit" class="h-6 w-4">
-            <use
-              xlink:href="/assets/icons/icon.svg#edit"
-            ></use>
-          </svg>
-        </button>
-    
-        <a href="/policydownload/${id}" target="_blank" >
-          <svg id="download" class="h-6 w-4">
-            <use
-              xlink:href="/assets/icons/icon.svg#download"
-            ></use>
-          </svg>
-        </a>
-      </div>
-    </td>
-  </tr>
-        
-        `;
+  if (type === "recent") {
+    return `
+      
+      <tr
+   
+      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    >
+      <td class="w-14">${index}</td>
+      <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">Admin</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">
+        <div class="flex gap-6 justify-center">
+      
+          <a href="/policydownload/${id}" target="_blank" >
+            <svg id="download" class="h-6 w-4">
+              <use
+                xlink:href="/assets/icons/icon.svg#download"
+              ></use>
+            </svg>
+          </a>
+        </div>
+      </td>
+    </tr>
+          
+          `;
+  } else {
+    return `
+      
+      <tr
+   
+      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    >
+      <td class="w-14">${index}</td>
+      <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">Admin</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">
+        <div class="flex gap-6 justify-center">
+          <button onclick="openEditor(${id})">
+            <svg id="edit" class="h-6 w-4">
+              <use
+                xlink:href="/assets/icons/icon.svg#edit"
+              ></use>
+            </svg>
+          </button>
+      
+          <a href="/policydownload/${id}" target="_blank" >
+            <svg id="download" class="h-6 w-4">
+              <use
+                xlink:href="/assets/icons/icon.svg#download"
+              ></use>
+            </svg>
+          </a>
+        </div>
+      </td>
+    </tr>
+          
+          `;
+  }
   //   .toLocaleDateString('en-GB')
 };
 
@@ -224,14 +255,18 @@ export const fetchTable = async (tableType) => {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
+        const startItemIndex = (currentPage - 1) * pageSize + 1;
+
         data.data.map((item, index) => {
           console.log(item);
+          index = index + startItemIndex;
           parentElement.innerHTML += docCard(
             item.title || "demo",
             item.first_name,
             item.created_at,
             item.id,
-            index
+            index,
+            tableType?.name
           );
 
           document.getElementById("main-body").innerHTML += docxModal(item.id);
@@ -372,7 +407,12 @@ function addEditorOpenCloseFeature() {
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("modalId", modalId);
-        document.getElementById("doc_title").textContent = data.data.title;
+        if (data.data.title !== "emptydocx.docx") {
+          document.getElementById("doc_title").textContent = data.data.title;
+        } else {
+          document.getElementById("doc_title").textContent = "New Document";
+        }
+
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
@@ -519,8 +559,19 @@ function addModalOpenCloseFeature() {
       document.getElementById(modalId).innerHTML = contents;
     });
     await fetchAndRenderDoc(modalId);
-  };
 
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      var modal = document.getElementsByClassName("backdrop-dev");
+
+      console.log(event.target, "dd", modal, modalId);
+      for (var i = 0; i < modal.length; i++) {
+        if (event.target == modal[i]) {
+          document.getElementById(modalId).style.display = "none";
+        }
+      }
+    };
+  };
   window.closeModal = function (modalId) {
     document.getElementById(modalId).style.display = "none";
     document

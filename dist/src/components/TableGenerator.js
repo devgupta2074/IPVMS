@@ -27,8 +27,31 @@ export const fetchTable = async () => {
             item.template_name,
             item.category,
             item.created_at,
-            item.created_by
+            item.created_by,
+            item.filepath
           );
+          console.log("id is", item.id);
+          console.log("path is", item.filepath);
+        });
+        data.data.forEach((item) => {
+          const pdfButton = parentElement.querySelector(`#pdf${item.id}`);
+          const downloadButton = parentElement.querySelector(`#url${item.id}`);
+          if (pdfButton) {
+            pdfButton.addEventListener("click", () => {
+              console.log("clicked path is", item.filepath);
+              window.location.href = `/pdfViewer?:url=${item.filepath}`;
+            });
+          }
+
+          if (downloadButton) {
+            downloadButton.addEventListener("click", async () => {
+              const result = await axios.get(
+                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
+              );
+              console.log("url", result.data.url);
+              window.location.href = result.data.url;
+            });
+          }
         });
         //addPagination()
       }
@@ -37,11 +60,20 @@ export const fetchTable = async () => {
   // document.getElementById("loading").style = "display:none";
 };
 
-const docCard = (id, ename, tname, category, created_at, created_by) => {
+const docCard = (
+  id,
+  ename,
+  tname,
+  category,
+  created_at,
+  created_by,
+  filepath
+) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
   // console.log(created_at);
+
   return `
     
     <tr
@@ -56,14 +88,14 @@ const docCard = (id, ename, tname, category, created_at, created_by) => {
     <td class="w-28">${created_at}</td>
     <td class="w-28">
       <div class="flex gap-1">
-        <button >
+        <button type="button" id="pdf${id}" >
           <svg id="view" class="h-6 w-6">
             <use
               xlink:href="/assets/icons/icon.svg#view"
             ></use>
           </svg>
         </button>
-        <a  >
+        <a class="hover:cursor-pointer" blank="#" id="url${id}" >
           <svg id="download" class="h-6 w-6">
             <use
               xlink:href="/assets/icons/icon.svg#download"

@@ -74,9 +74,11 @@ function openDash(id) {
     dash.classList.add("hidden");
   }
 }
+let runonetimeonly = true;
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
+  console.log(id, docid);
   const response = fetch(
     `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
@@ -88,13 +90,13 @@ export const fetchVersionsDateWise = async (id) => {
   )
     .then((response) => response.json())
     .then((data) => {
-      let runonetimeonly = true;
       console.log("data datewise", data);
       if (data.length == 0 && runonetimeonly) {
         console.log("first verion not  there");
         runonetimeonly = false;
 
         createversion();
+        fetchVersionsDateWise(id);
       }
 
       // Parse each element into an array

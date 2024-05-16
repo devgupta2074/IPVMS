@@ -331,6 +331,7 @@ function addEditorOpenCloseFeature() {
       document.getElementById("onlyforblank").classList.remove("hidden");
       document.getElementById("version-area").classList.add("hidden");
       document.getElementById("create-policy").classList.remove("hidden");
+      document.getElementById("json").classList.add("hidden");
       modalId = 236;
       const res = await GetAllCategory();
 
@@ -370,6 +371,7 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        localStorage.setItem("modalId", modalId);
         document.getElementById("doc_title").textContent = data.data.title;
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
@@ -391,6 +393,7 @@ function addEditorOpenCloseFeature() {
       document.getElementById("json").textContent = "Save a Version as Draft";
       document.getElementById("version-area").classList.remove("hidden");
       document.getElementById("create-policy").classList.add("hidden");
+      document.getElementById("json").classList.remove("hidden");
     }
     document.getElementById("policy-detail").classList.remove("hidden");
     document.getElementById("policy-table").classList.remove("hidden");

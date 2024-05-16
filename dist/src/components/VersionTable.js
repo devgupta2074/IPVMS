@@ -95,7 +95,7 @@ export const fetchVersionsDateWise = async (id) => {
     .then((data) => {
       let runonetimeonly = true;
       console.log("data datewise", data);
-      if (data.length == 0 && runonetimeonly) {
+      if (data.length == 0 && runonetimeonly && id !== 236) {
         console.log("first verion not  there");
         runonetimeonly = false;
 

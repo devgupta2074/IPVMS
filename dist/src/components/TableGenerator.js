@@ -56,8 +56,6 @@ export const fetchTable = async () => {
         //addPagination()
       }
     });
-
-  // document.getElementById("loading").style = "display:none";
 };
 
 const docCard = (
@@ -72,7 +70,6 @@ const docCard = (
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
-  // console.log(created_at);
 
   return `
     
@@ -88,7 +85,7 @@ const docCard = (
     <td class="w-28">${created_at}</td>
     <td class="w-28">
       <div class="flex gap-1">
-        <button type="button" id="pdf${id}" >
+        <button type="buttonF" id="pdf${id}" >
           <svg id="view" class="h-6 w-6">
             <use
               xlink:href="/assets/icons/icon.svg#view"

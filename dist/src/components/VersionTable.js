@@ -81,9 +81,12 @@ export const fetchVersionsDateWise = async (id) => {
   )
     .then((response) => response.json())
     .then((data) => {
+      let runonetimeonly = true;
       console.log("data datewise", data);
-      if (data.length == 0) {
+      if (data.length == 0 && runonetimeonly) {
         console.log("first verion already there");
+        runonetimeonly = false;
+
         createversion();
       }
 

@@ -43,17 +43,46 @@ const docxModal = (id) => {
     `;
 };
 
-const docCard = (title, created_by, created_at, id, index) => {
+const docCard = (title, created_by, created_at, id, index, type) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
-  return `
-    
+  if (type === 'recent') {
+    return `
+      
+      <tr
+   
+      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    >
+      <td class="w-14">${index}</td>
+      <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">Admin</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">
+        <div class="flex gap-6 justify-center">      
+          <a href="/policydownload/${id}" target="_blank" >
+            <svg id="download" class="h-6 w-4">
+              <use
+                xlink:href="/assets/icons/icon.svg#download"
+              ></use>
+            </svg>
+          </a>
+        </div>
+      </td>
+    </tr>
+          
+          `;
+  } else {
+    return `
+      
     <tr
  
     class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${index + 1}</td>
+    <td class="w-14">${index}</td>
     <td class="w-52"     onclick="openModal(${id})">${title}</2td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${date}</td>
@@ -82,7 +111,8 @@ const docCard = (title, created_by, created_at, id, index) => {
   </tr>
         
         `;
-  //   .toLocaleDateString('en-GB')
+  }
+
 };
 
 function addTable() {
@@ -199,9 +229,8 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -224,14 +253,17 @@ export const fetchTable = async (tableType) => {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
+        const startItemIndex = (currentPage - 1) * pageSize + 1;
         data.data.map((item, index) => {
           console.log(item);
+          index = index + startItemIndex;
           parentElement.innerHTML += docCard(
             item.title || "demo",
             item.first_name,
             item.created_at,
             item.id,
-            index
+            index,
+            tableType?.name
           );
 
           document.getElementById("main-body").innerHTML += docxModal(item.id);

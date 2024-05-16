@@ -19,7 +19,8 @@ var maxPages = 10;
 var pageSize = 5;
 var currentPage = 1;
 var totalItems;
-// const docCard = (title, category, created_by, created_at, id) => {
+// const
+//Employee Name = (title, category, created_by, created_at, id) => {
 //   let date = new Date(created_at);
 //   date = date.toLocaleDateString("en-GB");
 //   // console.log(created_at);
@@ -97,7 +98,8 @@ var totalItems;
 //         // document.getElementById("main-body").innerHTML = "";
 //         data.data.map((item) => {
 //           console.log(item);
-//           parentElement.innerHTML += docCard(
+//           parentElement.innerHTML +=
+//Employee Name(
 //             item.title || "demo",
 //             item.category_name,
 //             item.created_by,
@@ -138,7 +140,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    `http://localhost:5001/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -407,6 +409,7 @@ function displayArea() {
           class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
           id="search-user"
         ></ul>
+        <div id="user_list"></div>
       </div>
     </div>
     <div class="w-full flex flex-col">
@@ -484,9 +487,9 @@ function displayArea() {
       const name = document.getElementById("search").value;
       console.log(name, "name is");
       document.getElementById("search-user").innerHTML = "";
-
       const result = await GetAllUsers(name);
       if (result.data) {
+        document.getElementById("search-user").innerHTML = "";
         result.data.map((item) => {
           console.log("name", item.first_name + item.last_name);
           document.getElementById("search-user").innerHTML += make_user(
@@ -511,11 +514,16 @@ function displayArea() {
         );
       });
     }
-    getAllUsers();
+
     getAllTemplates();
+    const getAllUserui = () => {
+      document.getElementById("search-user").innerHTML = "";
+      getAllUsers();
+    };
     console.log(document.getElementById("template_option"));
     document.getElementById("search").addEventListener("input", () => {
-      debounce(getAllUsers(), 250);
+      document.getElementById("search-user").innerHTML = "";
+      debounce(getAllUserui(), 100);
     });
 
     document
@@ -1070,3 +1078,4 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     document.getElementsByTagName("main")[0].appendChild(area);
   }
 }
+//Employee Name

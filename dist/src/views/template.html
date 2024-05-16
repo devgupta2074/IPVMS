@@ -14,14 +14,25 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
     <script>
       var title;
       var htmlData;
       var category;
+      var userId;
+      var templateId;
       var description;
+      var loading = false;
       const getTemplate = (id, userId) => {
         console.log("in get temo id is", id);
 
@@ -52,7 +63,7 @@
         const getUserDetails = async (userId) => {
           console.log("in user deatil user id is", userId);
           const response = await fetch(
-            `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+            `http://localhost:5001/api/user/getUserInfo/${userId}`,
             {
               method: "GET",
             }
@@ -76,6 +87,15 @@
     <style>
       .container {
         scrollbar-width: none;
+        min-height: "100%";
+        min-width: "100%";
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        height: auto;
       }
       .container2 {
         scrollbar-width: none;
@@ -83,14 +103,14 @@
     </style>
   </head>
   <body>
-    <div class="flex flex-col gap-5 p-2 h-screen overflow-y-hidden">
+    <div class="flex flex-col gap-5 p-2 h-full overflow-y-hidden">
       <div class="flex flex-row items-center justify-center text-2xl">
         Template
       </div>
-      <div class="flex flex-row gap-1 overflow-y-scroll">
+      <div class="h-full">
         <div
           id="container"
-          class="container w-4/5 border-2 border-gray-100 p-10 pt-5 h-full rounded-md"
+          class="container border-2 border-gray-100 p-10 pt-5 rounded-md"
         ></div>
 
         <div
@@ -107,6 +127,13 @@
           >
             Submit
           </button>
+          <button
+            type="button"
+            id="generate"
+            class="mt-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Generate pdf
+          </button>
           <!-- <button
             type="submit"
             id="print_to_pdf"
@@ -117,110 +144,6 @@
         </div>
       </div>
     </div>
-
-    <script src="../scripts/template.js"></script>
-
-    <script>
-      const main = document.getElementById("main");
-      if (main) {
-        main.addEventListener("click", function (event) {
-          const input = document
-            .getElementById("main")
-            .getElementsByTagName("input")[0]
-            .click();
-        });
-        const elem = document
-          .getElementById("main")
-          .getElementsByTagName("input")[0];
-        if (elem) {
-          elem.addEventListener("change", function (event) {
-            const file = event.target.files[0];
-
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function (event) {
-                const imageElement = document.getElementById(elem.id + "image");
-                console.log(imageElement);
-                if (imageElement) {
-                  imageElement.src = event.target.result;
-                }
-              };
-              reader.readAsDataURL(file);
-            }
-          });
-        }
-      }
-
-      const handleSubmit = () => {
-        const inputs = document.querySelectorAll(".container2 input");
-        const values = {};
-        console.log(inputs);
-        inputs.forEach((input) => {
-          values[input.id] = input.value;
-        });
-
-        var template = Handlebars.compile(htmlData);
-        Handlebars.registerHelper("image", function (context) {
-          var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
-          return new Handlebars.SafeString(result);
-        });
-        Handlebars.registerHelper("number", function (astring) {
-          return astring;
-        });
-
-        Handlebars.registerHelper("link", function (context) {
-          var result = `<a href="${context}" class="text-blue-500">${context}</a>`;
-          return new Handlebars.SafeString(result);
-        });
-
-        Handlebars.registerHelper("date", function (astring) {
-          return astring;
-        });
-
-        Handlebars.registerHelper("email", function (context) {
-          var result = `<a href="mailto:${context}" class="text-blue-500">${context}</a>`;
-          return new Handlebars.SafeString(result);
-        });
-
-        // const element=document.createElement('div');
-        // element.innerHTML=template({...values});
-        // console.log(template({...values}));
-        console.log({ ...values });
-        const newValues = {};
-
-        Object.keys(values).forEach((key) => {
-          if (values[key] === "") {
-            newValues[key] = `{{${key}}}`;
-          } else {
-            newValues[key] = values[key];
-          }
-        });
-        console.log(newValues);
-        document.getElementById("container").innerHTML = template({
-          ...newValues,
-        });
-        // document.querySelector('.container').appendChild(element);
-
-        Object.keys(values).forEach((key) => {
-          document.getElementById(key).value = values[key];
-        });
-      };
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function (event) {
-        const url = window.location.href;
-        console.log("URL:", url);
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        console.log(urlParams);
-        const id = urlParams.get("templateId");
-        const userId = urlParams.get("userId");
-        console.log("user id is", userId);
-
-        getTemplate(id, userId);
-      });
-    </script>
-    <script></script>
 
     <!-- <script>
       // window.jsPDF = window.jspdf.jsPDF;
@@ -248,4 +171,182 @@
       };
     </script> -->
   </body>
+  <script>
+    const showLoading = () => {
+      const loading = document.createElement("div");
+      loading.id = "loadingicon";
+      loading.innerHTML = `<div id="loading"  >
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+<div class="flex gap-2 justify-center items-center h-screen">
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+</div>
+</div>  
+</div>`;
+      document.body.appendChild(loading);
+    };
+    const removeLoading = () => {
+      const loadingElement = document.getElementById("loadingicon");
+      if (loadingElement) {
+        loadingElement.remove();
+      }
+    };
+  </script>
+  <script src="../scripts/template.js"></script>
+
+  <script>
+    const main = document.getElementById("main");
+    if (main) {
+      main.addEventListener("click", function (event) {
+        const input = document
+          .getElementById("main")
+          .getElementsByTagName("input")[0]
+          .click();
+      });
+      const elem = document
+        .getElementById("main")
+        .getElementsByTagName("input")[0];
+      if (elem) {
+        elem.addEventListener("change", function (event) {
+          const file = event.target.files[0];
+
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              const imageElement = document.getElementById(elem.id + "image");
+              console.log(imageElement);
+              if (imageElement) {
+                imageElement.src = event.target.result;
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    }
+
+    const handleSubmit = () => {
+      const inputs = document.querySelectorAll(".container2 input");
+      const values = {};
+      console.log(inputs);
+      inputs.forEach((input) => {
+        values[input.id] = input.value;
+      });
+
+      var template = Handlebars.compile(htmlData);
+      Handlebars.registerHelper("image", function (context) {
+        var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
+        return new Handlebars.SafeString(result);
+      });
+      Handlebars.registerHelper("number", function (astring) {
+        return astring;
+      });
+
+      Handlebars.registerHelper("link", function (context) {
+        var result = `<a href="${context}" class="text-blue-500">${context}</a>`;
+        return new Handlebars.SafeString(result);
+      });
+
+      Handlebars.registerHelper("date", function (astring) {
+        return astring;
+      });
+
+      Handlebars.registerHelper("email", function (context) {
+        var result = `<a href="mailto:${context}" class="text-blue-500">${context}</a>`;
+        return new Handlebars.SafeString(result);
+      });
+
+      // const element=document.createElement('div');
+      // element.innerHTML=template({...values});
+      // console.log(template({...values}));
+      console.log({ ...values });
+      const newValues = {};
+
+      Object.keys(values).forEach((key) => {
+        if (values[key] === "") {
+          newValues[key] = `{{${key}}}`;
+        } else {
+          newValues[key] = values[key];
+        }
+      });
+      console.log(newValues);
+      document.getElementById("container").innerHTML = template({
+        ...newValues,
+      });
+      // document.querySelector('.container').appendChild(element);
+
+      Object.keys(values).forEach((key) => {
+        document.getElementById(key).value = values[key];
+      });
+    };
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      const url = window.location.href;
+      console.log("URL:", url);
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      console.log(urlParams);
+      const id = urlParams.get("templateId");
+      templateId = id;
+      userId = urlParams.get("userId");
+      console.log("user id is", userId);
+      getTemplate(id, userId);
+      document
+        .getElementById("generate")
+        .addEventListener("click", async () => {
+          showLoading();
+          await handleGeneratePdf();
+          removeLoading();
+        });
+      const handleGeneratePdf = async () => {
+        var element = document.getElementById("container");
+
+        var opt = {
+          margin: 0,
+          filename: "Contrato.pdf",
+          image: {
+            type: "",
+            quality: 0.98,
+          },
+          html2canvas: {
+            scale: 2,
+            letterRendering: true,
+          },
+          jsPDF: {
+            unit: "in",
+            format: "a4",
+            orientation: "portrait",
+          },
+          pagebreak: { mode: "avoid-all", after: "section" },
+        };
+        const pdfBlob = await html2pdf()
+          .from(element)
+          .set(opt)
+          .outputPdf()
+          .then((pdf) => {
+            return new Blob([pdf], { type: "application/pdf" });
+          });
+        const formData = new FormData();
+        formData.append("file", pdfBlob, "Contrato.pdf");
+        formData.append("userId", 17);
+        formData.append("templateId", 21);
+        try {
+          const response = await axios.post(
+            "http://localhost:5001/api/file/uploadtest",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      };
+    });
+  </script>
 </html>

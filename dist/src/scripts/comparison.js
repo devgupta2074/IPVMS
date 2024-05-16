@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   const response = await fetch(
-    "http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=4",
+    "http://localhost:5001/api/versioncontrol/getVersions?docId=4",
     {
       method: "GET",
       headers: {
@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       // console.log(contentdocument);
 
       const response = await fetch(
-        "http://ipvms-api.exitest.com/api/file/uploadFile",
+        "http://localhost:5001/api/file/uploadFile",
         {
           method: "POST",
           headers: {
@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
       const response2 = await fetch(
-        "http://ipvms-api.exitest.com/api/file/getFile/4",
+        "http://localhost:5001/api/file/getFile/4",
         {
           method: "GET",
           headers: {
@@ -562,7 +562,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
       const response = fetch(
-        "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+        "http://localhost:5001/api/versioncontrol/createDocumentVersion",
         {
           method: "POST",
           headers: {
@@ -918,16 +918,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Function to apply changes from v2 to v1
   async function applyChangesFromV2toV1() {
-    const response2 = await fetch(
-      "http://ipvms-api.exitest.com/api/file/getFile/4",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: "Bearer " + token,
-        },
-      }
-    )
+    const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend

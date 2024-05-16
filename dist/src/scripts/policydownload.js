@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   const fetchAndRenderDoc = async (modalId) => {
     const response = await fetch(
-      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+      `http://localhost:5001/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -22,8 +22,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
       .then((data) => {
         console.log(data, "response issss");
         const docData = data.data.data;
+        console.log(docData);
+        console.log(docData);
         document.getElementById("docx-wrapper").innerHTML = "";
         document.getElementById("docx-wrapper").innerHTML = docData;
+        document.getElementById("docx-wrapper").querySelectorAll("section");
+        console.log();
         setTimeout(() => {
           window.print();
         }, 1000);

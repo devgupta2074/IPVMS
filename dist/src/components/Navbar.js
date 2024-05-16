@@ -78,8 +78,8 @@ const NavBar = `
 <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
-  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
-  <svg class="h-6 w-6 z-50 -ml-12 mt-1">
+  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+  <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
     <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
   </svg>
 </div>

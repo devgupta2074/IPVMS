@@ -39,6 +39,7 @@ function extractParentText(parentId) {
 }
 export function createversion() {
   console.log("ffff create version");
+
   const modalid = localStorage.getItem("modalId");
   document.getElementById("loading").style = "display:block";
   async function detectChanges(divElement) {
@@ -1516,9 +1517,6 @@ const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
-      if (data.length == 0) {
-        createversion();
-      }
 
       // Parse each element into an array
       data.forEach((element) => {

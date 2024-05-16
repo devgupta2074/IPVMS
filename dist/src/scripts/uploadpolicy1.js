@@ -693,7 +693,7 @@ export class BulkUpload {
             .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
           const axiosRequestArgs = {
             method: "post",
-            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
+            url: "http://localhost:5001/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + token,

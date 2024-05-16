@@ -1511,9 +1511,6 @@ const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
-      if (data.length == 0) {
-        createversion();
-      }
 
       // Parse each element into an array
       data.forEach((element) => {

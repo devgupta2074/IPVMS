@@ -1541,7 +1541,7 @@ const fetchVersionsDateWise = async (id) => {
           };
         });
         console.log("data datewise", result);
-        y.push({ date: element.date, version: result });
+        y.push({ date: element.datew, version: result });
       });
 
       console.log("data datewise", y);

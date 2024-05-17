@@ -55,7 +55,7 @@ const docCard = (title, created_by, created_at, id, index, type) => {
       class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
     >
       <td class="w-14">${index}</td>
-      <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-52 hover:text-ship-cove-900 "     onclick="openModal(${id})">${title}</2td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${date}</td>
       <td class="w-28">Admin</td>
@@ -112,7 +112,7 @@ const docCard = (title, created_by, created_at, id, index, type) => {
         
         `;
   }
-
+  //   .toLocaleDateString('en-GB')
 };
 
 function addTable() {
@@ -211,13 +211,14 @@ function addTable() {
   addModalOpenCloseFeature();
 }
 
-let maxPages = 10;
+let maxPages = 1;
 let pageSize = 7;
 let currentPage = 1;
 let totalItems;
 let title = "";
 let category = "";
 let siblingCount = 1;
+let totalPageCount;
 
 export const fetchTable = async (tableType) => {
   document.getElementById("loading").style = "display:block";
@@ -603,7 +604,9 @@ const handleNextPage = async () => {
     currentPage = maxPages;
     return;
   }
-  handlePagination(currentPage);
+  if (currentPage < totalPageCount) {
+    handlePagination(currentPage);
+  }
 };
 const handlePrevPage = async () => {
   currentPage--;
@@ -646,9 +649,11 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
     "pagesize",
     pageSize,
     "sibc",
-    siblingCount
+    siblingCount,
+    'totalpage',
+    totalPageCount
   );
-  const totalPageCount = Math.ceil(totalItems / pageSize);
+  totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
   //first last current page  2 dots
@@ -728,6 +733,7 @@ export const resetVariables = () => {
   totalItems;
   title = "";
   category = "";
+  totalPageCount = 0;
 };
 
 function handlePaginationOnClick() {

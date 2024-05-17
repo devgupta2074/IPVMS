@@ -24,12 +24,8 @@ const tableType = {
 };
 document.addEventListener("DOMContentLoaded", async () => {
 
-  fetchCategories();
   fetchTable(tableType);
-  // console.log("f");
-  // window.addEventListener('load', () => {
-  //   removeHoverButttons();
-  // });
-
+  await fetchCategories();
+  // removeHoverButttons();
 });
 

@@ -16,16 +16,22 @@ export async function fetchCategories() {
 
   const arr = await response.json();
 
-  addCategoryElements(arr);
+  await addCategoryElements(arr);
   addSelectHighlight();
-  moveLeft();
-  moveRight();
+  addHoverScroll();
   addNewCategoryModal();
   addNewCategoryOpenClose();
   addCategorySubmit();
+
+
+  // window.addEventListener('load', () => {
+  //   removeHoverButttons();
+  // });
+  removeHoverButttons();
+
 }
 
-function addCategoryElements(arr) {
+async function addCategoryElements(arr) {
   const categoryBar = document.getElementById("insert-categories");
   console.log("buisnsidbi", arr);
   categoryBar.innerHTML += `
@@ -62,12 +68,19 @@ function addCategoryElements(arr) {
 
   const categoryRow = document.getElementById("category-row");
 
-  arr.forEach((element) => {
+  await arr.forEach((element) => {
     if (element.id != null)
       categoryRow.innerHTML += `
     <button class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
     `;
   });
+
+  const categoryScroll = document.getElementById('category-row');
+  const sectionWidth = document.getElementById('policy-detail');
+  // console.log('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG');
+  // console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm', categoryScroll.scrollWidth, sectionWidth.offsetWidth);
+
+  return true;
 }
 
 function addSelectHighlight() {
@@ -114,41 +127,101 @@ function addClr(e) {
 
 var scrollInterval;
 
-function moveRight() {
-  // document.getElementById('move-right').addEventListener('mouseover', () => {
-  //   amount = -100;
-  //   scroll(amount);
-  // });
+function addHoverScroll() {
+  moveLeft();
+  moveRight();
+}
 
-  document
-    .getElementById("move-right")
-    .addEventListener("mouseenter", function () {
-      var scrollContent = document.getElementById("category-row");
-      scrollInterval = setInterval(function () {
-        scrollContent.scrollLeft += 3; // Adjust scrolling speed by changing the increment value
-      }, 20); // Adjust scrolling speed by changing the interval value
-    });
-  document
-    .getElementById("move-right")
-    .addEventListener("mouseleave", function () {
-      clearInterval(scrollInterval);
-    });
+function moveRight() {
+  const left = document.getElementById('move-left');
+  const right = document.getElementById("move-right");
+  var scrollContent = document.getElementById("category-row");
+
+  // console.log(scrollContent.scrollWidth, scrollContent.offsetWidth);
+
+
+  right.addEventListener("mouseenter", function () {
+    const canScroll = scrollContent.scrollWidth - scrollContent.offsetWidth;
+    scrollInterval = setInterval(function () {
+      scrollContent.scrollLeft += 3; // Adjust scrolling speed by changing the increment value
+      if (scrollContent.scrollLeft != 0) {
+        left.classList.remove('invisible');
+      }
+
+      if (canScroll === Math.ceil(scrollContent.scrollLeft)) {
+        right.classList.add('invisible');
+      }
+
+      // console.log(canScroll, Math.ceil(scrollContent.scrollLeft));
+    }, 20); // Adjust scrolling speed by changing the interval value
+  });
+
+  right.addEventListener("mouseleave", function () {
+    clearInterval(scrollInterval);
+  });
 }
 
 function moveLeft() {
-  document
-    .getElementById("move-left")
-    .addEventListener("mouseenter", function () {
-      var scrollContent = document.getElementById("category-row");
-      scrollInterval = setInterval(function () {
-        scrollContent.scrollLeft -= 3; // Adjust scrolling speed by changing the increment value
-      }, 20); // Adjust scrolling speed by changing the interval value
-    });
-  document
-    .getElementById("move-left")
-    .addEventListener("mouseleave", function () {
-      clearInterval(scrollInterval);
-    });
+  var scrollContent = document.getElementById("category-row");
+  const left = document.getElementById('move-left');
+  const right = document.getElementById('move-right');
+
+  left.addEventListener("mouseenter", function () {
+    scrollInterval = setInterval(function () {
+      scrollContent.scrollLeft -= 3; // Adjust scrolling speed by changing the increment value
+      if (scrollContent.scrollLeft === 0) {
+        left.classList.add('invisible');
+      } else {
+        right.classList.remove('invisible');
+      }
+    }, 20); // Adjust scrolling speed by changing the interval value
+
+    // console.log('999999999999999999999', scrollContent.scrollLeft);
+
+  });
+
+  left.addEventListener("mouseleave", function () {
+    // console.log('kikikkkikikiki', scrollContent.scrollLeft);
+
+    clearInterval(scrollInterval);
+  });
+
+
+}
+
+export function removeHoverButttons() {
+  const categoryScroll = document.getElementById('category-row');
+  const sectionWidth = document.getElementById('policy-detail');
+  // const insertCategory = document.getElementById('insert-categories');
+  const left = document.getElementById('move-left');
+
+  window.addEventListener('resize', () => {
+    // console.log('oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+    console.log('qqqqqqqqqqqqqqqqqqqqqqq', categoryScroll.scrollWidth, sectionWidth.offsetWidth, categoryScroll.scrollLeft);
+    if (categoryScroll.scrollWidth < sectionWidth.offsetWidth) {
+      document.getElementById('move-right').classList.add('hidden');
+      document.getElementById('move-left').classList.add('hidden');
+    }
+
+  });
+  setTimeout(() => {
+    console.log('qqqqqqqqqqqqqqqqqqqqqqq', categoryScroll.scrollWidth, sectionWidth.offsetWidth, categoryScroll.scrollLeft);
+
+    if (categoryScroll.scrollLeft === 0) {
+      left.classList.add('invisible');
+    }
+
+    if (categoryScroll.scrollWidth < sectionWidth.offsetWidth) {
+      document.getElementById('move-right').classList.add('hidden');
+      document.getElementById('move-left').classList.add('hidden');
+    }
+  }, 500);
+
+  // insertCategory.addEventListener('mouseover', () => {
+  //   console.log('lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+
+
+  // });
 }
 
 // ADD new category

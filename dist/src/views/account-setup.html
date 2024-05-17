@@ -1,154 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Put your description here.">
+  <title>Account Setup | IPVMS</title>
+
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="stylesheet" href="tailwind.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module" src="/scripts/accountsetup.js"></script>
-  <body>
-    <section class="bg-white dark:bg-gray-900">
-      <div class="flex justify-center min-h-screen">
-        <div
-          class="hidden bg-cover lg:block lg:w-1/2"
-          style="
-            background-image: url('https://images.unsplash.com/photo-1494621930069-4fd4b2e24a11?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80');
-          "
-        ></div>
+</head>
 
-        <div
-          class="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-1/2"
-        >
-          <div class="w-full">
-            <h1
-              class="text-2xl font-semibold tracking-wider text-gray-800 capitalize dark:text-white"
-            >
-              Set up your Account
-            </h1>
+<body>
+  <main class="grid grid-cols-2   min-h-screen font-sfprodisplay text-steel-gray-950 overflow-y-hidden">
+    <section>
 
-            <p class="mt-4 text-gray-500 dark:text-gray-400">
-              Let’s get you all set up so you can verify your personal account
-              and begin setting up your profile.
-            </p>
+    <div class="bg-gulf-blue-950  min-h-screen ">
+      <figure class="mix-blend-lighten opacity-10 -scale-x-100">
+        <img class="absolute top-0 left-[20rem] scale-150" src="/assets/images/gradient.png" alt="Designer Life" />
+      </figure>
+      <div class="pl-[39px] pt-[27px] flex text-white gap-3">
+        <img src="/assets/images/exsquared.png" class="h-[50px] w-[50px]" alt="Designer Life">
+        <span class="text-[24px] mt-6 font-axiforma">Policy</span>
+      </div>
+      <div class="flex  items-center justify-center mt-20 ">
+        <div id="policy1"
+          class=" flex-col gap-0 items-center justify-center hidden opacity-0 transition-opacity duration-500 ease-in-out">
+          <div class="flex flex-col justify-center items-center flex-1 ">
+            <figure>
+              <img class="" src="/assets/images/policy1.svg" alt="Policy Paper and Pen" />
 
-            <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >First Name</label
-                >
-                <input
-                  type="text"
-                  id="fname"
-                  placeholder="John"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >Last name</label
-                >
-                <input
-                  id="lname"
-                  type="text"
-                  placeholder="Snow"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >Phone number</label
-                >
-                <input
-                  id="pnumber"
-                  type="text"
-                  placeholder="XXX-XX-XXXX-XXX"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >Email address</label
-                >
-                <input
-                  type="email"
-                  id="email"
-                  value="johnsnow@ex2india.com"
-                  disabled
-                  placeholder="johnsnow@example.com"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-
-                <div
-                  id="emailerror"
-                  class="opacity-0 font-normal text-sm text-red-600 mt-1"
-                >
-                  Please enter the valid email address
+              <figcaption>
+                <div class="text-white font-axiforma flex flex-col  gap-2">
+                  <div class="font-bold text-[1.875rem]  leading-10">
+                    <p>
+                      Streamlined Policy
+                    <p>
+                      Management
+                    </p>
+                    </p>
+                  </div>
+                  <div class="flex flex-row gap-1 items-center ">
+                    <svg class="h-4 w-5  ">
+                      <use xlink:href="/assets/icons/icon.svg#check"></use>
+                    </svg>
+                    <div class="font-normal leading-[2.0625rem] ">
+                      Control Policies with Ease
+                    </div>
+                  </div>
+                  <div class="flex pt-5">
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc-fill"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                  </div>
                 </div>
-              </div>
+              </figcaption>
+            </figure>
 
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-                <div
-                  id="passworderror"
-                  class="opacity-0 font-normal text-sm text-red-600 mt-1"
-                >
-                  Please enter the valid password
-                </div>
-              </div>
-
-              <div>
-                <label
-                  class="block mb-2 text-sm text-gray-600 dark:text-gray-200"
-                  >Confirm password</label
-                >
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"
-                />
-              </div>
-
-              <button
-                id="setup-account"
-                type="button"
-                class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-              >
-                <span>Setup Account</span>
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5 rtl:-scale-x-100"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </button>
-            </form>
           </div>
+
+        </div>
+        <div id="policy2"
+          class=" flex-col gap-0 items-center justify-center hidden opacity-0 transition-opacity duration-500 ease-in-out">
+          <div class="flex justify-center items-center flex-1 ">
+            <figure>
+              <img class="" src="/assets/images/policy2.svg" alt="Policy Paper and Check Figure" />
+              <figcaption>
+                <div class="text-white font-axiforma flex flex-col  gap-2">
+                  <div class="font-bold text-[1.875rem]  leading-10">
+                    <p>
+                      Manage, Govern,
+                    <p>
+                      and Assure.
+                    </p>
+                    </p>
+                  </div>
+                  <div class="flex flex-row gap-1 items-center ">
+                    <svg class="h-4 w-5  ">
+                      <use xlink:href="/assets/icons/icon.svg#check"></use>
+                    </svg>
+                    <div class="font-normal leading-[2.0625rem] ">
+                      Data Security, Privacy Assured
+                    </div>
+                  </div>
+                  <div class="flex pt-5">
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc-fill"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                  </div>
+                </div>
+              </figcaption>
+            </figure>
+
+          </div>
+
+        </div>
+        <div id="policy3"
+          class=" flex-col gap-0 items-center justify-center hidden opacity-0 transition-opacity duration-500 ease-in-out">
+          <div class="flex justify-center items-center flex-1 ">
+            <figure>
+              <img class="" src="/assets/images/policy3.svg" alt="Policy on Phone" />
+              <figcaption>
+                <div class="text-white font-axiforma flex flex-col  gap-2">
+                  <div class="font-bold text-[1.875rem]  leading-10">
+                    <p>
+                      Policy at your
+                    <p>
+                      Fingertips
+                    </p>
+                    </p>
+                  </div>
+                  <div class="flex flex-row gap-1 items-center ">
+                    <svg class="h-4 w-5  ">
+                      <use xlink:href="/assets/icons/icon.svg#check"></use>
+                    </svg>
+                    <div class="font-normal leading-[2.0625rem] ">
+                      Accessable Anywhere, Anytime
+                    </div>
+                  </div>
+                  <div class="flex pt-5">
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc"></use>
+                    </svg>
+                    <svg class=" w-[24px] h-[24px] ">
+                      <use xlink:href="/assets/icons/icon.svg#disc-fill"></use>
+                    </svg>
+                  </div>
+
+                </div>
+              </figcaption>
+            </figure>
+          </div>
+
         </div>
       </div>
-    </section>
-  </body>
+
+
+    </div>
+</section>
+    <section>
+    <div class=" w-full flex justify-center flex-col gap-6">
+
+      <div class="flex flex-col items-center justify-center mt-16">
+        <h1 class="font-axiforma font-bold text-3xl text-steel-gray-950 leading-10">Set up your Account</h1>
+        <p class="text-aluminium-500 font-sfprodisplay text-center">
+            Get started now! Verify your account and set up your profile in no time.
+        </p>
+      </div>
+
+      <div class="w-[80%] mx-auto">
+      <form class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2 place-content-between">
+        <div>
+          <label
+            class="block mb-2 text-sm  "
+            >First Name</label
+          >
+          <input
+          required
+            type="text"
+            id="fname"
+            placeholder="John"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block mb-2 text-sm  "
+            >Last name</label
+          >
+          <input
+          required
+            id="lname"
+            type="text"
+            placeholder="Snow"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block mb-2 text-sm   "
+            >Phone number</label
+          >
+          <input
+            id="pnumber"
+            type="text"
+            placeholder="XXX-XX-XXXX-XXX"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block mb-2 text-sm   "
+            >Email address</label
+          >
+          <input
+            type="email"
+            id="email"
+            value=""
+            disabled
+            placeholder="johnsnow@example.com"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block mb-2 text-sm  "
+            >New Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+          <div
+            id="passworderror"
+            class="opacity-0 font-normal text-sm text-red-600 mt-1"
+          >
+            Please enter the valid password
+          </div>
+        </div>
+
+        <div>
+          <label
+            class="block text-sm   "
+            >Confirm password</label
+          >
+          <input
+          id="cnf-password"
+            type="password"
+            placeholder="Enter your password"
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          />
+        </div>
+
+        <button
+          id="setup-account"
+          type="button"
+          class=" tracking-wide font-semibold bg-sunset-orange-500 text-gray-100  py-3 rounded-lg hover:bg-orange-700 transition-all duration-300 ease-in-out flex items-center justify-center"
+        >
+          <span>Setup Account</span>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 rtl:-scale-x-100"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </form>
+    </div>
+      <!-- <div class="flex flex-col mx-24 mt-12 justify-center gap-1">
+        <div class="flex flex-col">
+          <label class="mb-2"> Email Address </label>
+          <input
+            class="w-full py-[15px] px-[20px] rounded-[0.25rem] font-normal bg-white border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            type="email" placeholder="Enter your email" id="email" />
+          <div id="emailerror" class="opacity-0 font-normal text-sm text-red-600 mt-1 ">
+            Please enter the valid email address
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <label class="mb-2"> Password </label>
+          <div class="relative">
+            <input
+              class="w-full py-[15px] px-[20px] rounded-[0.25rem]  font-normal bg-white border border-gray-200 placeholder-aluminium-500 text-sm focus:outline-none focus:border-aluminium-400 focus:bg-white"
+              type="password" placeholder="*********" id="password" />
+            <div id="passworderror" class=" opacity-0 font-normal text-sm text-red-600 mt-1 ">
+              Please enter the valid password
+            </div>
+            <div>
+              <svg to id="eye" class="absolute   right-5 top-4 w-[24px] h-[24px] ">
+                <use id="eyesvg" xlink:href="./assets/icons/icon.svg#eye"></use>
+              </svg>
+              <div id="tooltip" class="hidden">
+                <div class="  absolute top-3 -right-20 flex flex-row justify-center items-center gap-0 ">
+                  <svg class=" z-10 order-1 w-[9px] h-[13px] ">
+                    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+                  </svg>
+
+                  <div id="password-tooltip"
+                    class="  order-2  bg-[#eaeeff] font-sfprodisplay font-medium text-gulf-blue-950 text-xs rounded p-2 ">
+                    Hide Password
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="flex flex-col  justify-center gap-8 mx-24 ">
+        <div class="  my-2 flex items-end justify-end">
+          <button name="forgetpassword" type="button" id="forgetpassword"
+          class=" text-dodger-blue-500   ">Forgot Password?</button>
+        </div>
+    
+        <button name="sigin" id="signin"
+          class=" tracking-wide font-semibold bg-sunset-orange-500 text-gray-100  py-4 rounded-lg hover:bg-orange-700 transition-all duration-300 ease-in-out flex items-center justify-center ">Sign
+          In</button>
+      </div> -->
+
+    </div>
+
+</section>
+  </main>
+
+</body>
+<script type="module" src="/scripts/accountsetup.js"></script>
 </html>

@@ -7,7 +7,10 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 async function ChangeVersion(docid, id) {
   console.log("hello world dev");
   console.log(id, "change version");
-  if (localStorage.getItem("versionid")) {
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
     document
       .getElementById(localStorage.getItem("versionid"))
       .classList.remove("bg-zircon-100");
@@ -122,7 +125,7 @@ export const fetchVersionsDateWise = async (id) => {
           };
         });
         console.log("data datewise", result);
-        y.push({ date: element.date, version: result });
+        y.push({ date: element.datew, version: result });
       });
 
       console.log("data datewise", y);

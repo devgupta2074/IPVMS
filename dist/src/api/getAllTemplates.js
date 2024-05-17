@@ -32,3 +32,38 @@ export async function GetAllTemplates() {
   //     return error;
   //   });
 }
+
+export async function GetAllTemplatesByStatus(status) {
+  const requestOptions = {
+    method: API_CONSTANTS.GET,
+    headers: {
+      //   'Authorization': 'Bearer <token>'
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await makeRequest(
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+        "/api/file/getTemplateByStatus/" +
+        status,
+      requestOptions
+    );
+    console.log(response, "makerequest");
+
+    return response.json();
+  } catch (error) {
+    console.log(error, "error");
+    return error;
+  }
+  // await makeRequest(apiUrl, requestOptions)
+  //   .then((data) => {
+  //     console.log(data, "makerequest");
+  //     return data;
+  //   })
+  //   .catch((error) => {
+  //     // Handle errors
+  //     console.error(error);
+  //     return error;
+  //   });
+}

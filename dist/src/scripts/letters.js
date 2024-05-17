@@ -1,5 +1,8 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
-import { GetAllTemplates } from "../api/getAllTemplates.js";
+import {
+  GetAllTemplates,
+  GetAllTemplatesByStatus,
+} from "../api/getAllTemplates.js";
 import { GetAllUsers } from "../api/getAllUsers.js";
 import { addTable, sortTable, getdate } from "../components/TableGenerator.js";
 import { addTable1 } from "../components/TableGenerator1.js";
@@ -568,6 +571,7 @@ function displayArea() {
   <button
     id="generateLetter"
     type="button"
+    disabled
     class="text-link-water-600 text-base bg-link-water-100 hover:bg-link-water-300 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
   >
     Generate Letter
@@ -646,8 +650,16 @@ function displayArea() {
         <ul
           class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
           id="search-user"
-        ></ul>
-        <div id="user_list"></div>
+        >
+       <li >
+        <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+        
+          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+        </div>
+      </li>
+        </ul>
+        <div id="user_list">
+        </div>
       </div>
     </div>
     <div class="w-full flex flex-col">
@@ -739,12 +751,20 @@ function displayArea() {
             item.id
           );
         });
+      } else {
+        document.getElementById("search-user").innerHTML = "";
+        document.getElementById("search-user").innerHTML += ` <li >
+        <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+        
+          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+        </div>
+      </li>`;
       }
     }
     async function getAllTemplates() {
-      const tempresult = await GetAllTemplates();
+      const tempresult = await GetAllTemplatesByStatus("STANDARD");
       document.getElementById("template_option").innerHTML = "";
-      console.log(tempresult);
+      console.log(tempresult, "STANDARD TEMPLATES");
       tempresult.data.map((item) => {
         document.getElementById("template_option").innerHTML += make_template(
           item.title,
@@ -755,12 +775,22 @@ function displayArea() {
 
     getAllTemplates();
     const getAllUserui = () => {
-      document.getElementById("search-user").innerHTML = "";
+      document.getElementById("search-user").innerHTML += ` <li >
+      <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+      
+        <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+      </div>
+    </li>`;
       getAllUsers();
     };
     console.log(document.getElementById("template_option"));
     document.getElementById("search").addEventListener("input", () => {
-      document.getElementById("search-user").innerHTML = "";
+      document.getElementById("search-user").innerHTML += ` <li >
+      <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+      
+        <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+      </div>
+    </li>`;
       debounce(getAllUserui(), 100);
     });
 
@@ -806,6 +836,7 @@ function displayArea() {
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+            document.getElementById("generateLetter").disabled = false;
           }
 
           const selectedusersearchmodal =
@@ -1011,357 +1042,162 @@ function displayArea() {
     const area = document.createElement("div");
     area.id = "area";
     area.innerHTML = `<div class="mt-5 ">
-    <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4">Draft Template
-    </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-    <div>
-    <div
-      class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-    >
-      <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-        <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-      </svg>
+    <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4">Default Template
+    </div><div id="insert-default" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
+    
   
-      <svg class="w-[260px] h-[150px]">
-        <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-      </svg>
-    </div>
-    <div
-      class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-    >
-      <div class="text-base">Increment Letter</div>
-      <div class="text-sm">Mar 26, 2023</div>
-    </div>
-  </div>
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
 
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
- <div>
-    <div
-      class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-    >
-      <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-        <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-      </svg>
-  
-      <svg class="w-[260px] h-[150px]">
-        <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-      </svg>
-    </div>
-    <div
-      class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-    >
-      <div class="text-base">Increment Letter</div>
-      <div class="text-sm">Mar 26, 2023</div>
-    </div>
-  </div>
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
-
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
    </div>
-   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Draft Template
-   </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-   <div>
-   <div
-     class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-   >
-     <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-     </svg>
- 
-     <svg class="w-[260px] h-[150px]">
-       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-     </svg>
-   </div>
-   <div
-     class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-   >
-     <div class="text-base">Increment Letter</div>
-     <div class="text-sm">Mar 26, 2023</div>
-   </div>
- </div>
- <div>
- <div
-   class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
- >
-   <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-     <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-   </svg>
+   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Custom Template
+   </div><div id="insert-custom" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
 
-   <svg class="w-[260px] h-[150px]">
-     <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-   </svg>
- </div>
- <div
-   class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
- >
-   <div class="text-base">Increment Letter</div>
-   <div class="text-sm">Mar 26, 2023</div>
- </div>
-</div>
-<div>
-   <div
-     class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-   >
-     <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-     </svg>
- 
-     <svg class="w-[260px] h-[150px]">
-       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-     </svg>
-   </div>
-   <div
-     class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-   >
-     <div class="text-base">Increment Letter</div>
-     <div class="text-sm">Mar 26, 2023</div>
-   </div>
- </div>
- <div>
- <div
-   class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
- >
-   <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-     <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-   </svg>
-
-   <svg class="w-[260px] h-[150px]">
-     <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-   </svg>
- </div>
- <div
-   class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
- >
-   <div class="text-base">Increment Letter</div>
-   <div class="text-sm">Mar 26, 2023</div>
- </div>
-</div>
-<div>
-<div
- class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
- <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
- </svg>
-
- <svg class="w-[260px] h-[150px]">
-   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
- </svg>
-</div>
-<div
- class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
- <div class="text-base">Increment Letter</div>
- <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
- class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
- <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
- </svg>
-
- <svg class="w-[260px] h-[150px]">
-   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
- </svg>
-</div>
-<div
- class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
- <div class="text-base">Increment Letter</div>
- <div class="text-sm">Mar 26, 2023</div>
-</div>
 </div>
   </div>
   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Draft Template
-  </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
+  </div><div id="insert-draft" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll ">
 
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
 
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
-
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-<svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-</svg>
-
-<svg class="w-[260px] h-[150px]">
-  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-</svg>
-</div>
-<div
-class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-<div class="text-base">Increment Letter</div>
-<div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-<svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-</svg>
-
-<svg class="w-[260px] h-[150px]">
-  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-</svg>
-</div>
-<div
-class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-<div class="text-base">Increment Letter</div>
-<div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
  </div> </div>`;
+    let drafttemplates = [];
+    let customtemplates = [];
+    let defaulttemplates = [];
+
+    async function getAllTemplates() {
+      const tempresult = await GetAllTemplates();
+
+      console.log(tempresult, "get all templates");
+
+      tempresult.data.map((template) => {
+        if (template.mode === "STANDARD") {
+          defaulttemplates.push(template);
+        } else if (template.mode === "DRAFT") {
+          drafttemplates.push(template);
+        } else if (template.mode === "CUSTOM") {
+          customtemplates.push(template);
+        }
+      });
+
+      const insertdefault = document.getElementById("insert-default");
+      defaulttemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        insertdefault.innerHTML += `
+        <div>
+<div
+ class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
+>
+ <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+ </svg>
+
+ <svg class="w-[260px] h-[150px]">
+   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+ </svg>
+</div>
+<div
+ class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+>
+ <div class="text-base overflow-hidden text-ellipsis text-nowrap  ">${template.title}</div>
+ <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+</div>
+</div>
+
+        `;
+      });
+      const customdefault = document.getElementById("insert-custom");
+      customtemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        customdefault.innerHTML += `
+        <div>
+<div
+ class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
+>
+ <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+ </svg>
+
+ <svg class="w-[260px] h-[150px]">
+   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+ </svg>
+</div>
+<div
+ class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+>
+ <div class="text-base overflow-hidden text-ellipsis text-nowrap  ">${template.title}</div>
+ <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+</div>
+</div>
+
+        `;
+      });
+      const insertdraft = document.getElementById("insert-draft");
+      drafttemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        insertdraft.innerHTML += `
+        <div>
+<div
+ class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
+>
+ <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+ </svg>
+
+ <svg class="w-[260px] h-[150px]">
+   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+ </svg>
+</div>
+<div
+ class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+>
+ <div class="text-base overflow-hidden text-ellipsis text-nowrap  ">${template.title}</div>
+ <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+</div>
+</div>
+
+        `;
+      });
+    }
+
+    getAllTemplates();
+
     document.getElementsByTagName("main")[0].appendChild(area);
 
     let dropDownBtn = document.getElementById("uploadpolicy");

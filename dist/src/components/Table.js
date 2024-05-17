@@ -43,18 +43,47 @@ const docxModal = (id) => {
     `;
 };
 
-const docCard = (title, created_by, created_at, id, index) => {
+const docCard = (title, created_by, created_at, id, index, type) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
-  return `
-    
+  if (type === 'recent') {
+    return `
+      
+      <tr
+   
+      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
+    >
+      <td class="w-14">${index}</td>
+      <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">Admin</td>
+      <td class="w-28">${date}</td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">
+        <div class="flex gap-6 justify-center">      
+          <a href="/policydownload/${id}" target="_blank" >
+            <svg id="download" class="h-6 w-4">
+              <use
+                xlink:href="/assets/icons/icon.svg#download"
+              ></use>
+            </svg>
+          </a>
+        </div>
+      </td>
+    </tr>
+          
+          `;
+  } else {
+    return `
+      
     <tr
  
-    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${index + 1}</td>
-    <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+    <td class="w-14">${index}</td>
+    <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${date}</td>
     <td class="w-28">Admin</td>
@@ -82,6 +111,7 @@ const docCard = (title, created_by, created_at, id, index) => {
   </tr>
         
         `;
+  }
   //   .toLocaleDateString('en-GB')
 };
 
@@ -91,7 +121,7 @@ function addTable() {
 
   console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
+  tableDiv.innerHTML = `<table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
     <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
@@ -179,29 +209,36 @@ function addTable() {
   addSortFeature();
   addEditorOpenCloseFeature();
   addModalOpenCloseFeature();
+
+  if (searchcheck) {
+    addSearchbar();
+  }
 }
 
 let maxPages = 10;
 let pageSize = 7;
 let currentPage = 1;
-let totalItems;
+let totalItems = 0;
 let title = "";
 let category = "";
 let siblingCount = 1;
+let totalPageCount;
+let searchcheck = false;
 
 export const fetchTable = async (tableType) => {
   document.getElementById("loading").style = "display:block";
   console.log(tableType);
   let apiLink = "";
+  searchcheck = tableType.pagination;
 
   category = tableType.category;
+  const title = tableType.title ? tableType.title : '';
 
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -213,32 +250,55 @@ export const fetchTable = async (tableType) => {
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
-      // console.log(data, "heelo");
-      addTable();
+
+      const tablecheck = document.getElementById('table');
+
+      if (!tablecheck) {
+        console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj', searchcheck);
+        addTable();
+      }
+      console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
+        if (tableType?.pagination) {
+          maxPages = 10;
+          pageSize = 7;
+          currentPage = 1;
+          totalItems = 0;
+          siblingCount = 1;
+
+          addPagination(currentPage);
+          // addSearchbar();
+
+        }
       } else {
         console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
+        const startItemIndex = (currentPage - 1) * pageSize + 1;
         data.data.map((item, index) => {
           console.log(item);
+          index = index + startItemIndex;
           parentElement.innerHTML += docCard(
             item.title || "demo",
             item.first_name,
             item.created_at,
             item.id,
-            index
+            index,
+            tableType?.name
           );
 
           document.getElementById("main-body").innerHTML += docxModal(item.id);
           document.getElementById(item.id).style.display = "none";
         });
         if (tableType?.pagination) {
+          console.log(currentPage);
           addPagination(currentPage);
+          // addSearchbar();
+
         }
       }
     });
@@ -332,11 +392,12 @@ function addEditorOpenCloseFeature() {
       document.getElementById("version-area").classList.add("hidden");
       document.getElementById("create-policy").classList.remove("hidden");
       document.getElementById("json").classList.add("hidden");
+      document.getElementById("container-content-1").contentEditable = true;
       modalId = 236;
       const res = await GetAllCategory();
 
       category = res?.data;
-      let categoryElement = ``;
+      let categoryElement = `  <option selected>Select a category</option>`;
       // let categoryElement = `
       //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
       //     <option  class="flex justify-center items-center" selected>Choose Category</option>
@@ -372,7 +433,10 @@ function addEditorOpenCloseFeature() {
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("modalId", modalId);
-        document.getElementById("doc_title").textContent = data.data.title;
+        if (data.data.title !== "emptydocx.docx") {
+          document.getElementById("doc_title").textContent = data.data.title;
+        }
+
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
@@ -502,6 +566,7 @@ function addEditorOpenCloseFeature() {
           token
         );
         console.log("results");
+        window.closeEditor();
       });
   }
 }
@@ -583,7 +648,9 @@ const handleNextPage = async () => {
     currentPage = maxPages;
     return;
   }
-  handlePagination(currentPage);
+  if (currentPage < totalPageCount) {
+    handlePagination(currentPage);
+  }
 };
 const handlePrevPage = async () => {
   currentPage--;
@@ -601,8 +668,11 @@ const removepagination = () => {
 
 const range = (start, end) => {
   let length = end - start + 1;
+  console.log(length);
   let pages = Array.from({ length }, (_, i) => start + i);
+  console.log(pages);
   return pages;
+
 };
 
 const handlePagination = async (item) => {
@@ -626,9 +696,14 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
     "pagesize",
     pageSize,
     "sibc",
-    siblingCount
+    siblingCount,
+    'totalpage',
+    totalPageCount
   );
-  const totalPageCount = Math.ceil(totalItems / pageSize);
+  if (totalItems === 0) {
+    return [1];
+  }
+  totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
   //first last current page  2 dots
@@ -705,9 +780,10 @@ export const resetVariables = () => {
   maxPages = 10;
   pageSize = 7;
   currentPage = 1;
-  totalItems;
+  totalItems = 0;
   title = "";
   category = "";
+  totalPageCount = 0;
 };
 
 function handlePaginationOnClick() {
@@ -718,4 +794,29 @@ function handlePaginationOnClick() {
   window.handlePagination = async function (Id) {
     handlePagination(Id);
   };
+}
+
+////////  Search bar
+
+function addSearchbar() {
+
+  const sbar = document.getElementById('document-search-bar');
+
+  sbar.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const tableType = {
+        name: '',
+        title: `${sbar.value}`,
+        category: `${category}`,
+        pagination: true
+      };
+      // console.log(tableType);
+      // resetVariables();
+      fetchTable(tableType);
+      sbar.value = '';
+      // addPagination(currentPage);
+    }
+  });
+
+
 }

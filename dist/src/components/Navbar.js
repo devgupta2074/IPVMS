@@ -55,10 +55,10 @@ const NavBar = `
 </div>
 </button>
 
-<button id="inviteButton" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<button id="inviteButton1111" class="h-[2.5rem] w-[2.5rem] flex flex-row">
 <span id="invite-svg" class=" peer/invite-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
+<use xlink:href="/assets/icons/icon.svg#invite-employee"></use>
 </svg>
 </span>
 
@@ -68,7 +68,7 @@ const NavBar = `
   </svg>
  
   <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
-  Invite Memeber</div>
+  Invite Member</div>
 </div>
 </button>
   
@@ -171,10 +171,10 @@ export async function InsertNavbar() {
   const signoutbutton = document.getElementById("signout");
   const todashboard = document.getElementById("dashboard");
   console.log("inviteButton dashboard", todashboard);
-  const inviteButton = document.getElementById("inviteButton");
+  const inviteButton1111 = document.getElementById("inviteButton1111");
   console.log("inviteButton");
   let modal = document.getElementById("modal");
-  let closeButton = document.getElementById("closeButton");
+  let closeButton = document.getElementById("closeButton1111");
   const inviteSubmit = document.getElementById("inviteSubmit");
 
   todashboard.addEventListener("click", () => {
@@ -237,11 +237,12 @@ export async function InsertNavbar() {
     d="M19 9l-7 7-7-7"
   ></path>
 </svg>`;
-  inviteButton.addEventListener("click", function () {
+  inviteButton1111.addEventListener("click", function () {
+    console.log("invite member clicked");
     const invitemodal = document.createElement("div");
-    invitemodal.id = "removemodal";
-    invitemodal.innerHTML = `      <div
-    id="modal"
+    invitemodal.id = "removemodal1111";
+    invitemodal.innerHTML = `<div
+    id="modalinvite"
     class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
   >
     <div
@@ -252,7 +253,7 @@ export async function InsertNavbar() {
           Invite member
         </h1>
         <button
-          id="closeButton"
+          id="closeButton1111"
           class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
         >
           <svg
@@ -307,7 +308,6 @@ export async function InsertNavbar() {
           <button
             id="inviteSubmit"
             type="button"
-        
             class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
           >
             Invite Member
@@ -317,13 +317,16 @@ export async function InsertNavbar() {
      
       </form>
     </div>`;
+    // document.getElementById("inviteSubmit").addEventListener("click",()=>{
+
+    // })
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
-    modal = document.getElementById("modal");
+    modal = document.getElementById("modalinvite");
     if (modal) {
       modal.style.display = "flex";
     }
-    closeButton = document.getElementById("closeButton");
+    closeButton = document.getElementById("closeButton1111");
     if (closeButton) {
       closeButton.addEventListener("click", function () {
         modal.style.display = "none";
@@ -333,8 +336,8 @@ export async function InsertNavbar() {
 
   if (closeButton) {
     closeButton.addEventListener("click", function () {
-      const removemodal = document.getElementById("removemodal");
-      removemodal.remove();
+      const removemodal1111 = document.getElementById("removemodal1111");
+      removemodal1111.remove();
       modal.style.display = "none";
     });
   }

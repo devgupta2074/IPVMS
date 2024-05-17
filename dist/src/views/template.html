@@ -7,6 +7,45 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <link  rel="stylesheet"   href="styles.css"></link>
+    <link  rel="stylesheet"   href="tailwind.css"></link>
+    
+    
+    <style>
+         .drawer-open {
+      transform: translateX(0);
+    }
+    .drawer-close {
+      transform: translateX(100%);
+    }
+    .drawer-transition {
+      transition: transform 0.3s ease-in-out;
+    }
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+      display: none;
+    }
+    .backdrop.show {
+      display: block;
+    }
+    </style>
+    <style>
+
+
+#writeIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    transition: top 0.3s, left 0.3s;
+}
+    </style>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -14,6 +53,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
@@ -24,66 +64,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-
-    <script>
-      var title;
-      var htmlData;
-      var category;
-      var userId;
-      var templateId;
-      var description;
-      var loading = false;
-      const getTemplate = (id, userId) => {
-        console.log("in get temo id is", id);
-
-        const getTemplatedoc = async (id, userId, result2) => {
-          console.log("in get temo id in getTempdox is", id);
-          const response = await fetch(
-            `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
-            {
-              method: "GET",
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const result = data.data[0];
-              // Handle the response from the backend
-              console.log(result);
-              category = result.category;
-              description = result.description;
-              htmlData = result.htmldata;
-              title = result.title;
-              document.getElementById("container").innerHTML = htmlData;
-              makeForm(result2);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        };
-        const getUserDetails = async (userId) => {
-          console.log("in user deatil user id is", userId);
-          const response = await fetch(
-            `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
-            {
-              method: "GET",
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const result = data.data;
-              // Handle the response from the backend
-              console.log(result);
-              console.log(document.getElementById("firstname"));
-              console.log(document.getElementById("lastname"));
-              getTemplatedoc(id, userId, result);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        };
-        getUserDetails(userId);
-      };
-    </script>
+  
+    <script type="module" defer src="/scripts/template.js"></script>
     <style>
       .container {
         scrollbar-width: none;
@@ -102,18 +84,76 @@
       }
     </style>
   </head>
-  <body>
-    <div class="flex flex-col gap-5 p-2 h-full overflow-y-hidden">
-      <div class="flex flex-row items-center justify-center text-2xl">
-        Template
-      </div>
-      <div class="h-full">
-        <div
-          id="container"
-          class="container border-2 border-gray-100 p-10 pt-5 rounded-md"
-        ></div>
+  <body class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden vsc-initialized">
+    <main class="bg-zircon-50 w-[auto] p-12 overflow-y-auto rounded-lg col-start-2  col-end-3 h-calc(100vh - 87px)">
+      <div class="flex w-full flex-row gap-0 ">
+    <div class="flex flex-col gap-5 p-2 h-full overflow-y-auto w-2/3 ">
 
-        <div
+          <div class="relative w-full max-h-full">
+            <div class="relative bg-white rounded-md shadow">
+              <div
+                class="flex items-center justify-between p-3 border-b rounded-t"
+              >
+              <button
+            onclick=""
+            class="mt-5 mb-5 flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900"
+          >
+            <svg
+              width="19"
+              height="16"
+              viewBox="0 0 19 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z"
+                fill="#333333"
+              />
+            </svg>
+
+            Back
+          </button>
+                <h3
+                  id="doc_title"
+                  class="text-xl font-medium text-gray-900 "
+                >
+                  Template name
+
+                </h3>
+                <div class="flex flex-row gap-5">
+                  <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
+                  <button
+                    id="saveasdraft"
+                    type="button"
+                    
+                    class=" text-white bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  >
+                    Save as Draft
+                  </button>
+                  
+
+                  <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button> -->
+
+                </div>
+              </div>
+            <div
+            id="container"
+            contenteditable="true"
+            class="container w-full items-center flex justify-start   overflow-y-auto     rounded-md">
+        
+        
+          </div>
+         
+        </div>
+        </div>
+       
+
+        <!-- <div
           class="relative flex h-[calc(85vh-2rem)] ml-5 mr-5 w-full max-w-[25rem] flex-col rounded-xl bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5"
         >
           <h1 class="text-gray-800 text-2xl">Form</h1>
@@ -133,7 +173,7 @@
             class="mt-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Generate pdf
-          </button>
+          </button> -->
           <!-- <button
             type="submit"
             id="print_to_pdf"
@@ -142,8 +182,34 @@
             get Pdf
           </button> -->
         </div>
+        <div class="w-1/3 0 sticky top-0 right-0  p-4 mt-2  bg-white rounded-md shadow-md ">
+          <form class="mb-6 pb-6 sticky top-0 right-0 overflow-y-scroll h-96">
+            <h5 id="drawer-label" class="mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+              <svg class="w-4 h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+              </svg>Fill Form
+            </h5>
+            <div  id="container2"   class="container2 mb-6">
+              </div>
+          </form>
+          
+        </div>
       </div>
+
     </div>
+<!--SLIDE PANEL -->
+
+
+<!-- drawer component -->
+
+
+
+
+<!--  -->
+
+
+
 
     <!-- <script>
       // window.jsPDF = window.jspdf.jsPDF;
@@ -170,6 +236,47 @@
         saveAsPdf();
       };
     </script> -->
+    <script>
+   
+  
+  function openDrawer(drawerId, backdropId) {
+      const drawer = document.getElementById(drawerId);
+      const backdrop = document.getElementById(backdropId);
+      drawer.classList.remove('drawer-close');
+      drawer.classList.add('drawer-open');
+      backdrop.classList.add('show');
+      backdrop.addEventListener('click', () => closeDrawer(drawerId, backdropId));
+    }
+
+    function closeDrawer(drawerId, backdropId) {
+      const drawer = document.getElementById(drawerId);
+      const backdrop = document.getElementById(backdropId);
+      drawer.classList.remove('drawer-open');
+      drawer.classList.add('drawer-close');
+      backdrop.classList.remove('show');
+    }
+    </script>
+</main>
+<script>
+document.getElementById('container').addEventListener('click', function(event) {
+        // Get the clicked line number
+        var clickedLine = Array.from(this.childNodes).indexOf(event.target);
+        
+        // If clicked outside of any specific line, return
+        if (clickedLine === -1) {
+            return;
+        }
+        
+        // Create a range and select the clicked line
+        var range = document.createRange();
+        range.setStart(this.childNodes[clickedLine], 0);
+        range.collapse(true); // Move cursor to the start of the line
+        
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    });
+  </script>
   </body>
   <script>
     const showLoading = () => {
@@ -193,160 +300,14 @@
       }
     };
   </script>
-  <script src="../scripts/template.js"></script>
 
-  <script>
+  
+
+   <script>
     const main = document.getElementById("main");
-    if (main) {
-      main.addEventListener("click", function (event) {
-        const input = document
-          .getElementById("main")
-          .getElementsByTagName("input")[0]
-          .click();
-      });
-      const elem = document
-        .getElementById("main")
-        .getElementsByTagName("input")[0];
-      if (elem) {
-        elem.addEventListener("change", function (event) {
-          const file = event.target.files[0];
-
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-              const imageElement = document.getElementById(elem.id + "image");
-              console.log(imageElement);
-              if (imageElement) {
-                imageElement.src = event.target.result;
-              }
-            };
-            reader.readAsDataURL(file);
-          }
-        });
-      }
-    }
-
-    const handleSubmit = () => {
-      const inputs = document.querySelectorAll(".container2 input");
-      const values = {};
-      console.log(inputs);
-      inputs.forEach((input) => {
-        values[input.id] = input.value;
-      });
-
-      var template = Handlebars.compile(htmlData);
-      Handlebars.registerHelper("image", function (context) {
-        var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
-        return new Handlebars.SafeString(result);
-      });
-      Handlebars.registerHelper("number", function (astring) {
-        return astring;
-      });
-
-      Handlebars.registerHelper("link", function (context) {
-        var result = `<a href="${context}" class="text-blue-500">${context}</a>`;
-        return new Handlebars.SafeString(result);
-      });
-
-      Handlebars.registerHelper("date", function (astring) {
-        return astring;
-      });
-
-      Handlebars.registerHelper("email", function (context) {
-        var result = `<a href="mailto:${context}" class="text-blue-500">${context}</a>`;
-        return new Handlebars.SafeString(result);
-      });
-
-      // const element=document.createElement('div');
-      // element.innerHTML=template({...values});
-      // console.log(template({...values}));
-      console.log({ ...values });
-      const newValues = {};
-
-      Object.keys(values).forEach((key) => {
-        if (values[key] === "") {
-          newValues[key] = `{{${key}}}`;
-        } else {
-          newValues[key] = values[key];
-        }
-      });
-      console.log(newValues);
-      document.getElementById("container").innerHTML = template({
-        ...newValues,
-      });
-      // document.querySelector('.container').appendChild(element);
-
-      Object.keys(values).forEach((key) => {
-        document.getElementById(key).value = values[key];
-      });
-    };
+    
+    
   </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-      const url = window.location.href;
-      console.log("URL:", url);
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      console.log(urlParams);
-      const id = urlParams.get("templateId");
-      templateId = id;
-      userId = urlParams.get("userId");
-      console.log("user id is", userId);
-      getTemplate(id, userId);
-      document
-        .getElementById("generate")
-        .addEventListener("click", async () => {
-          showLoading();
-          await handleGeneratePdf();
-          removeLoading();
-        });
-      const handleGeneratePdf = async () => {
-        var element = document.getElementById("container");
-
-        var opt = {
-          margin: 0,
-          filename: "Contrato.pdf",
-          image: {
-            type: "",
-            quality: 0.98,
-          },
-          html2canvas: {
-            scale: 2,
-            letterRendering: true,
-          },
-          jsPDF: {
-            unit: "in",
-            format: "a4",
-            orientation: "portrait",
-          },
-          pagebreak: { mode: "avoid-all", after: "section" },
-        };
-        const pdfBlob = await html2pdf()
-          .from(element)
-          .set(opt)
-          .outputPdf()
-          .then((pdf) => {
-            return new Blob([pdf], { type: "application/pdf" });
-          });
-        const formData = new FormData();
-        formData.append("file", pdfBlob, "Contrato.pdf");
-        formData.append("userId", 17);
-        formData.append("templateId", 21);
-        try {
-          const response = await axios.post(
-            "http://localhost:5001/api/file/uploadtest",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
-        } catch (error) {
-          console.error("Error uploading file:", error);
-        }
-      };
-    });
-  </script>
+  
 </html>

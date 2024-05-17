@@ -11,24 +11,43 @@ import {
 } from "../utils/constants.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";
 
+showNextPolicy();
+setInterval(showNextPolicy, 3000);
+
+
 async function SetupAccount() {
   const setupButton = document.getElementById("setup-account");
 
+  const phone = document.getElementById("pnumber").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const cnfPassword = document.getElementById("cnf-password").value;
   const firstName = document.getElementById("fname").value;
   const lastName = document.getElementById("lname").value;
-  console.log("first name", firstName, lastName, email, password);
 
-  console.log("from webpage", email, password);
-  if (email.length == 0) {
-    emailerror.innerHTML = "Please enter your email address";
-    emailerror.classList.remove("opacity-0");
+  console.log("lololololololoolol", firstName, lastName, email, password, cnfPassword, phone);
+
+  // console.log("from webpage", email, password);
+  if (!phone || !firstName || !lastName) {
+    passworderror.innerHTML = "Enter All the fields";
+    passworderror.classList.remove("opacity-0");
     setTimeout(() => {
-      emailerror.classList.add("opacity-1");
+      passworderror.classList.add("opacity-0");
+    }, 3000);
+  } else if (email.length == 0) {
+    passworderror.innerHTML = "Please enter your email address";
+    passworderror.classList.remove("opacity-0");
+    setTimeout(() => {
+      passworderror.classList.add("opacity-0");
     }, 3000);
   } else if (password.length == 0) {
     passworderror.innerHTML = "Please enter your password";
+    passworderror.classList.remove("opacity-0");
+    setTimeout(() => {
+      passworderror.classList.add("opacity-0");
+    }, 3000);
+  } else if (cnfPassword != password) {
+    passworderror.innerHTML = "Passwords dont match try again.";
     passworderror.classList.remove("opacity-0");
     setTimeout(() => {
       passworderror.classList.add("opacity-0");

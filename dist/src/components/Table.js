@@ -52,10 +52,10 @@ const docCard = (title, created_by, created_at, id, index, type) => {
       
       <tr
    
-      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
     >
       <td class="w-14">${index}</td>
-      <td class="w-52 hover:text-ship-cove-900 "     onclick="openModal(${id})">${title}</2td>
+      <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${date}</td>
       <td class="w-28">Admin</td>
@@ -80,10 +80,10 @@ const docCard = (title, created_by, created_at, id, index, type) => {
       
     <tr
  
-    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
   >
     <td class="w-14">${index}</td>
-    <td class="w-52"     onclick="openModal(${id})">${title}</2td>
+    <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${date}</td>
     <td class="w-28">Admin</td>
@@ -121,7 +121,7 @@ function addTable() {
 
   console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
+  tableDiv.innerHTML = `<table class="w-full mt-5 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
     <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>

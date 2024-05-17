@@ -209,11 +209,13 @@ function addTable() {
   addSortFeature();
   addEditorOpenCloseFeature();
   addModalOpenCloseFeature();
-  addSearchbar();
 
+  if (searchcheck) {
+    addSearchbar();
+  }
 }
 
-let maxPages = 100;
+let maxPages = 10;
 let pageSize = 7;
 let currentPage = 1;
 let totalItems = 0;
@@ -221,11 +223,13 @@ let title = "";
 let category = "";
 let siblingCount = 1;
 let totalPageCount;
+let searchcheck = false;
 
 export const fetchTable = async (tableType) => {
   document.getElementById("loading").style = "display:block";
   console.log(tableType);
   let apiLink = "";
+  searchcheck = tableType.pagination;
 
   category = tableType.category;
   const title = tableType.title ? tableType.title : '';
@@ -250,6 +254,7 @@ export const fetchTable = async (tableType) => {
       const tablecheck = document.getElementById('table');
 
       if (!tablecheck) {
+        console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj', searchcheck);
         addTable();
       }
       console.log(data);
@@ -257,13 +262,15 @@ export const fetchTable = async (tableType) => {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
         if (tableType?.pagination) {
-          maxPages = 100;
+          maxPages = 10;
           pageSize = 7;
           currentPage = 1;
           totalItems = 0;
           siblingCount = 1;
 
           addPagination(currentPage);
+          // addSearchbar();
+
         }
       } else {
         console.log("jhishi", data.data);
@@ -290,6 +297,8 @@ export const fetchTable = async (tableType) => {
         if (tableType?.pagination) {
           console.log(currentPage);
           addPagination(currentPage);
+          // addSearchbar();
+
         }
       }
     });
@@ -768,7 +777,7 @@ function addPrevAndNextfeature() {
 }
 
 export const resetVariables = () => {
-  maxPages = 100;
+  maxPages = 10;
   pageSize = 7;
   currentPage = 1;
   totalItems = 0;

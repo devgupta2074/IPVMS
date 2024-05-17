@@ -89,7 +89,7 @@ export const modalHtml = `<div id="container-html1" class="hidden">
 
 
 <div
-id="modal"
+id="modalupload"
 class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50"
 >
 <!-- Modal Content -->
@@ -243,7 +243,8 @@ var maxPages = 10;
 var pageSize = 5;
 var currentPage = 1;
 var totalItems;
-// const docCard = (title, category, created_by, created_at, id) => {
+// const
+//Employee Name = (title, category, created_by, created_at, id) => {
 //   let date = new Date(created_at);
 //   date = date.toLocaleDateString("en-GB");
 //   // console.log(created_at);
@@ -321,7 +322,8 @@ var totalItems;
 //         // document.getElementById("main-body").innerHTML = "";
 //         data.data.map((item) => {
 //           console.log(item);
-//           parentElement.innerHTML += docCard(
+//           parentElement.innerHTML +=
+//Employee Name(
 //             item.title || "demo",
 //             item.category_name,
 //             item.created_by,
@@ -553,6 +555,7 @@ function displayArea() {
   <button
     id="generateLetter"
     type="button"
+    disabled
     class="text-link-water-600 text-base bg-link-water-100 hover:bg-link-water-300 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
   >
     Generate Letter
@@ -632,6 +635,7 @@ function displayArea() {
           class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
           id="search-user"
         ></ul>
+        <div id="user_list"></div>
       </div>
     </div>
     <div class="w-full flex flex-col">
@@ -709,9 +713,9 @@ function displayArea() {
       const name = document.getElementById("search").value;
       console.log(name, "name is");
       document.getElementById("search-user").innerHTML = "";
-
       const result = await GetAllUsers(name);
       if (result.data) {
+        document.getElementById("search-user").innerHTML = "";
         result.data.map((item) => {
           console.log("name", item.first_name + item.last_name);
           document.getElementById("search-user").innerHTML += make_user(
@@ -736,11 +740,16 @@ function displayArea() {
         );
       });
     }
-    getAllUsers();
+
     getAllTemplates();
+    const getAllUserui = () => {
+      document.getElementById("search-user").innerHTML = "";
+      getAllUsers();
+    };
     console.log(document.getElementById("template_option"));
     document.getElementById("search").addEventListener("input", () => {
-      debounce(getAllUsers(), 250);
+      document.getElementById("search-user").innerHTML = "";
+      debounce(getAllUserui(), 100);
     });
 
     document
@@ -785,6 +794,7 @@ function displayArea() {
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+            document.getElementById("generateLetter").disabled = false;
           }
 
           const selectedusersearchmodal =
@@ -1328,8 +1338,8 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     const makeModal = () => {
       document.getElementById("modalcontainer").innerHTML += modalHtml;
       const closeModalBtn = document.getElementById("closeModalBtn");
-      const modal = document.getElementById("modal");
-      const showModal = () => {
+      const modal = document.getElementById("modalupload");
+      const showModalUpload = () => {
         modal.classList.remove("hidden");
       };
 
@@ -1338,7 +1348,7 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
       };
 
       dropDownBtn.addEventListener("click", () => {
-        showModal();
+        showModalUpload();
         console.log("modal opened");
       });
 
@@ -2222,3 +2232,4 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     });
   }
 }
+//Employee Name

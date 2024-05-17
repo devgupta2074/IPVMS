@@ -7,7 +7,10 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 async function ChangeVersion(docid, id) {
   console.log("hello world dev");
   console.log(id, "change version");
-  if (localStorage.getItem("versionid")) {
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
     document
       .getElementById(localStorage.getItem("versionid"))
       .classList.remove("bg-zircon-100");
@@ -74,9 +77,11 @@ function openDash(id) {
     dash.classList.add("hidden");
   }
 }
+let runonetimeonly = true;
 export const fetchVersionsDateWise = async (id) => {
   const y = [];
   const docid = id;
+  console.log(id, docid);
   const response = fetch(
     `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
@@ -89,9 +94,12 @@ export const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
-      if (data.length == 0) {
-        console.log("first verion already there");
+      if (data.length == 0 && runonetimeonly) {
+        console.log("first verion not  there");
+        runonetimeonly = false;
+
         createversion();
+        fetchVersionsDateWise(id);
       }
 
       // Parse each element into an array
@@ -117,7 +125,7 @@ export const fetchVersionsDateWise = async (id) => {
           };
         });
         console.log("data datewise", result);
-        y.push({ date: element.date, version: result });
+        y.push({ date: element.datew, version: result });
       });
 
       console.log("data datewise", y);

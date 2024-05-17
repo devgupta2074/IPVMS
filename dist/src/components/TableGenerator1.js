@@ -1,6 +1,5 @@
 export const fetchTable = async () => {
-  const apiLink =
-    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING";
+  const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -27,32 +26,34 @@ export const fetchTable = async () => {
             item.template_name,
             item.category,
             item.created_at,
-            item.created_by,
-            item.filepath
+            item.created_by
           );
-          console.log("id is", item.id);
-          console.log("path is", item.filepath);
         });
-        data.data.forEach((item) => {
-          const pdfButton = parentElement.querySelector(`#pdf${item.id}`);
-          const downloadButton = parentElement.querySelector(`#url${item.id}`);
-          if (pdfButton) {
-            pdfButton.addEventListener("click", () => {
-              console.log("clicked path is", item.filepath);
-              window.location.href = `/pdfViewer?:url=${item.filepath}`;
+        data.data.map((item, index) => {
+          document
+            .getElementById(`edit${item.id}`)
+            .addEventListener("click", async () => {
+              //id->Api call
+              const response = await fetch(
+                `http://localhost:5001/api/file/getLetter/${item.id}`,
+                {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }
+              )
+                .then((response) => {
+                  console.log(response);
+                  response.json();
+                })
+                .then((data) => {
+                  console.log(data.data);
+                  console.log(data[0]);
+                });
             });
-          }
+        });
 
-          if (downloadButton) {
-            downloadButton.addEventListener("click", async () => {
-              const result = await axios.get(
-                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
-              );
-              console.log("url", result.data.url);
-              window.location.href = result.data.url;
-            });
-          }
-        });
         //addPagination()
       }
     });
@@ -65,45 +66,40 @@ const docCard = (
   category,
   created_at,
   created_by,
-  filepath
+  html_data
 ) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
 
   return `
-    
-    <tr
-    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
-  >
-    <td class="w-14">${id}</td>
-    <td class="w-52">${ename}</2td>
-    <td class="w-28">${tname}</td>
-    <td class="w-28">${category}</td>
-    <td class="w-28">${created_at}</td>
-    <td class="w-28">${created_by}</td>
-    <td class="w-28">${created_at}</td>
-    <td class="w-28">
-      <div class="flex gap-1">
-        <button type="buttonF" id="pdf${id}" >
-          <svg id="view" class="h-6 w-6">
-            <use
-              xlink:href="/assets/icons/icon.svg#view"
-            ></use>
-          </svg>
-        </button>
-        <a class="hover:cursor-pointer" blank="#" id="url${id}" >
-          <svg id="download" class="h-6 w-6">
-            <use
-              xlink:href="/assets/icons/icon.svg#download"
-            ></use>
-          </svg>
-        </a>
-      </div>
-    </td>
-  </tr>
-        
-        `;
+      
+      <tr
+      class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+    >
+      <td class="w-14">${id}</td>
+      <td class="w-52">${ename}</2td>
+      <td class="w-28">${tname}</td>
+      <td class="w-28">${category}</td>
+      <td class="w-28">${created_at}</td>
+      <td class="w-28">${created_by}</td>
+      <td class="w-28">${created_at}</td>
+      <td class="w-28">
+        <div class="flex gap-1">
+          <button type="button" id="edit${id}">
+            <svg id="view" class="h-6 w-6">
+              <use
+                xlink:href="/assets/icons/icon.svg#view"
+              ></use>
+            </svg>
+          </button>
+          
+        </div>
+      </td>
+    </tr>
+
+          
+          `;
   //   .toLocaleDateString('en-GB')
 };
 
@@ -268,13 +264,13 @@ const addDocPageStatus = () => {
   document.getElementById(
     "doc-status"
   ).innerHTML += `<p class="text-sm text-gray-700">
-                Showing
-                <span class="font-medium">${startItemIndex}</span>
-                to
-                <span class="font-medium">${endItemIndex}</span>
-                of
-                <span class="font-medium">${totalResults}</span> results
-  </p>`;
+                  Showing
+                  <span class="font-medium">${startItemIndex}</span>
+                  to
+                  <span class="font-medium">${endItemIndex}</span>
+                  of
+                  <span class="font-medium">${totalResults}</span> results
+    </p>`;
 };
 const addPaginationElement = (arr) => {
   const paginationElement = document.getElementById("pagination-controller");
@@ -302,96 +298,96 @@ export const resetVariables = () => {
   siblingCount = 1;
 };
 
-export function addTable() {
+export function addTable1() {
   const tableDiv = document.getElementById("insert-table");
   tableDiv.innerHTML = "";
 
   // console.log(tableDiv);
 
   tableDiv.innerHTML = `<table class="w-full mt-10 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
-  <thead class="bg-ship-cove-200 py-3 text-xs capitalize text-[#333333] flex rounded-t-md">
-    <tr class="flex justify-around w-full">
-      <th scope="col" class="w-14 font-normal">ID</th>
-      <th scope="col" class="w-52">
-        <div class="flex items-center font-normal">
-         Employee Name
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="pl-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center font-normal">
-          Template
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="pl-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center font-normal">
-          Category
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center font-normal">
-          Created At
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center font-normal">
-          Generated By
-          <a href="#" class="sort" name="true">
-            <svg id="sorticon" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28">
-        <div class="flex items-center font-normal">
-          Generated On
-          <a href="#" >
-            <svg id="sorticon" class="px-2 h-4 w-6">
-              <use
-                xlink:href="/assets/icons/icon.svg#sorticon"
-              ></use>
-            </svg>
-          </a>
-        </div>
-      </th>
-      <th scope="col" class="w-28 font-normal">Action</th>
-    </tr>
-  </thead>  
-  <tbody id="tbody">
-  
-  </tbody>
-</table>
-      `;
+    <thead class="bg-ship-cove-200 py-3 text-xs capitalize text-[#333333] flex rounded-t-md">
+      <tr class="flex justify-around w-full">
+        <th scope="col" class="w-14 font-normal">ID</th>
+        <th scope="col" class="w-52">
+          <div class="flex items-center font-normal">
+           Employee Name
+            <a href="#" class="sort" name="true">
+              <svg id="sorticon" class="pl-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28">
+          <div class="flex items-center font-normal">
+            Template
+            <a href="#" class="sort" name="true">
+              <svg id="sorticon" class="pl-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28">
+          <div class="flex items-center font-normal">
+            Category
+            <a href="#" class="sort" name="true">
+              <svg id="sorticon" class="px-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28">
+          <div class="flex items-center font-normal">
+            Created At
+            <a href="#" class="sort" name="true">
+              <svg id="sorticon" class="px-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28">
+          <div class="flex items-center font-normal">
+            Generated By
+            <a href="#" class="sort" name="true">
+              <svg id="sorticon" class="px-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28">
+          <div class="flex items-center font-normal">
+            Generated On
+            <a href="#" >
+              <svg id="sorticon" class="px-2 h-4 w-6">
+                <use
+                  xlink:href="/assets/icons/icon.svg#sorticon"
+                ></use>
+              </svg>
+            </a>
+          </div>
+        </th>
+        <th scope="col" class="w-28 font-normal">Action</th>
+      </tr>
+    </thead>  
+    <tbody id="tbody">
+    
+    </tbody>
+  </table>
+        `;
   fetchTable();
   addSortFeature();
   addModalOpenCloseFeature();

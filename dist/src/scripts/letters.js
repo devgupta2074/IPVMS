@@ -2,6 +2,7 @@ import { UserInfoApiRequest } from "../api/dashboard.js";
 import { GetAllTemplates } from "../api/getAllTemplates.js";
 import { GetAllUsers } from "../api/getAllUsers.js";
 import { addTable, sortTable, getdate } from "../components/TableGenerator.js";
+import { addTable1 } from "../components/TableGenerator1.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
@@ -502,10 +503,12 @@ if (localStorage.getItem("token") === null) {
 InsertNavbar();
 const sendletters = document.getElementById("sendletters");
 const recentsendletters = document.getElementById("recentsentletters");
+const draftLetters = document.getElementById("draftLetters");
 const lettertemplates = document.getElementById("lettertemplates");
 displayArea();
 sendletters.addEventListener("click", function () {
   recentsendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
 
   lettertemplates.classList = "cursor-pointer p-3 px-6";
   sendletters.classList =
@@ -519,15 +522,25 @@ recentsendletters.addEventListener("click", function () {
 
   lettertemplates.classList = "cursor-pointer p-3 px-6";
   sendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
+  displayArea();
+});
+draftLetters.addEventListener("click", function () {
+  draftLetters.classList =
+    "cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6";
+  recentsendletters.classList = "cursor-pointer p-3 px-6";
+  lettertemplates.classList = "cursor-pointer p-3 px-6";
+  sendletters.classList = "cursor-pointer p-3 px-6";
+
   displayArea();
 });
 
 lettertemplates.addEventListener("click", function () {
   recentsendletters.classList = "cursor-pointer p-3 px-6";
-
   lettertemplates.classList =
     "cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6";
   sendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
   displayArea();
 });
 function displayArea() {
@@ -915,6 +928,31 @@ function displayArea() {
 
     document.getElementsByTagName("main")[0].appendChild(area);
     addTable();
+    // fetchDoc(currentPage - 1, pageSize);
+
+    // const sortButtons = document.querySelectorAll(".sort");
+    // sortButtons.forEach((e, index) => {
+    //   e.addEventListener("click", () => {
+    //     console.log(index);
+    //     window.event.preventDefault();
+    //     sortTable(index, 0);
+    //   });
+    // });
+  }
+  if (draftLetters.classList.contains("active")) {
+    if (document.getElementById("area")) {
+      document.getElementById("area").remove();
+    }
+
+    document.getElementById("sectiondetails").innerHTML = "";
+
+    console.log(document.getElementsByTagName("main"));
+    const area = document.createElement("div");
+    area.id = "area";
+    area.innerHTML = `<div id="insert-table"></div>`;
+
+    document.getElementsByTagName("main")[0].appendChild(area);
+    addTable1();
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");

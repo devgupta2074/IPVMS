@@ -317,6 +317,9 @@ export async function InsertNavbar() {
      
       </form>
     </div>`;
+    // document.getElementById("inviteSubmit").addEventListener("click",()=>{
+
+    // })
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
     modal = document.getElementById("modalinvite");

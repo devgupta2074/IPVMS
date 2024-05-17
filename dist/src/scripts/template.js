@@ -1,13 +1,148 @@
-const makeForm = (result) => {
+import { InsertNavbar } from "../components/Navbar.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+  InsertNavbar();
+});
+
+var title;
+var htmlData;
+var category;
+var userId;
+var templateId;
+var description;
+var result2;
+var loading = false;
+
+const getTemplate = (id, userId) => {
+  console.log("in get temo id is", id);
+
+  const getTemplatedoc = async (id) => {
+    console.log("in get temo id in getTempdox is", id);
+    const response = await fetch(
+      `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const result = data.data[0];
+        // Handle the response from the backend
+        console.log(result);
+        category = result.category;
+        description = result.description;
+        htmlData = result.htmldata;
+        title = result.title;
+        document.getElementById("container").innerHTML = htmlData;
+        makeForm(result2);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const getUserDetails = async (userId) => {
+    console.log("in user deatil user id is", userId);
+    const response = await fetch(
+      `http://localhost:5001/api/user/getUserInfo/${userId}`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const result = data.data;
+        result2 = result;
+        // Handle the response from the backend
+        console.log(result, "user details are");
+        getTemplatedoc(id);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  getUserDetails(userId);
+};
+
+document.addEventListener("DOMContentLoaded", function (event) {
+  const url = window.location.href;
+  console.log("URL:", url);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  console.log(urlParams);
+  const id = urlParams.get("templateId");
+  templateId = id;
+  userId = urlParams.get("userId");
+  console.log("user id is", userId);
+  getTemplate(id, userId);
+  // document
+  //   .getElementById("generate")
+  //   .addEventListener("click", async () => {
+  //     showLoading();
+  //     await handleGeneratePdf();
+  //     removeLoading();
+  //   });
+  const handleGeneratePdf = async () => {
+    var element = document.getElementById("container");
+
+    var opt = {
+      margin: 0,
+      filename: "Contrato.pdf",
+      image: {
+        type: "",
+        quality: 0.98,
+      },
+      html2canvas: {
+        scale: 2,
+        letterRendering: true,
+      },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+      },
+      pagebreak: { mode: "avoid-all", after: "section" },
+    };
+    const pdfBlob = await html2pdf()
+      .from(element)
+      .set(opt)
+      .outputPdf()
+      .then((pdf) => {
+        return new Blob([pdf], { type: "application/pdf" });
+      });
+    const formData = new FormData();
+    formData.append("file", pdfBlob, "Contrato.pdf");
+    formData.append("userId", 17);
+    formData.append("templateId", 21);
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/api/file/uploadtest",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+});
+
+export const makeForm = (result) => {
   const htmlContent = document.getElementById("container").innerHTML;
+  console.log("html content is", htmlContent);
   const handlebarsRegex = /\{\{([^{}]+)\}\}/g;
   //extarction logic
 
   const selectElement = (title) => {
-    return `<div  class="inline-block relative w-96 px-2">
-            <h1>${title}</h1>
-            <input onchange="handleSubmit()" id=${title} class="appearance-none block w-full bg-white  rounded-md    border-2 border-gray-200 text-gray-700   py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
-    </div>`;
+    if (title === "employee_code" || title === "mobile_number") {
+      return numberElement(title);
+    }
+    return `<div class="mb-6">
+    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
+    <input type="text"  id=${title} id="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${title}" required />
+ </div>`;
   };
   const emailElement = (title) => {
     return `<div>
@@ -57,7 +192,7 @@ const makeForm = (result) => {
         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
             ${title}
           </label>
-          <input onchange="handleSubmit()" id="${title}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
+          <input onchange="handleSubmit()" id="${title}" class="appearance-none block w-full bg-gray-200 text-gray-700  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane">
           </div>`;
   };
   const loopElement = (name, head) => {
@@ -160,8 +295,8 @@ const makeForm = (result) => {
   const container = document.querySelector(".container2");
   container.innerHTML = "";
   const el = container.appendChild(document.createElement("div"));
-  el.style.border = "1px solid red";
-  console.log(variableNames);
+
+  console.log(variableNames, "variable are ");
 
   variableNames.map((item) => {
     if (item.type === "image") {
@@ -194,7 +329,107 @@ const makeForm = (result) => {
       el.innerHTML += dateElement(item.name);
     }
   });
+
   console.log(result.first_name, "first name is");
-  document.getElementById("firstname").value = result.first_name;
-  document.getElementById("lastname").value = result.last_name;
+  if (document.getElementById("firstname")) {
+    document.getElementById("firstname").value = result.first_name || "";
+  }
+  if (document.getElementById("last_name")) {
+    document.getElementById("last_name").value = result.last_name || "";
+  }
+  if (document.getElementById("employee_code")) {
+    document.getElementById("employee_code").value = result.employee_code || "";
+  }
+  if (document.getElementById("mobile_number")) {
+    document.getElementById("mobile_number").value = result.mobile_number || "";
+  }
+  if (document.getElementById("employment_type")) {
+    document.getElementById("employment_type").value =
+      result.employment_type || "";
+  }
+  if (document.getElementById("business_unit")) {
+    document.getElementById("business_unit").value = result.business_unit || "";
+  }
+  if (document.getElementById("department")) {
+    document.getElementById("department").value = result.department || "";
+  }
+  if (document.getElementById("subdepartment")) {
+    document.getElementById("subdepartment").value = result.subdepartment || "";
+  }
+  if (document.getElementById("region")) {
+    document.getElementById("region").value = result.region || "";
+  }
+  if (document.getElementById("branch")) {
+    document.getElementById("branch").value = result.branch || "";
+  }
+  if (document.getElementById("designation")) {
+    document.getElementById("designation").value = result.designation || "";
+  }
+  document.querySelectorAll(".container2 input").forEach((item) => {
+    item.addEventListener("change", () => {
+      console.log("changes");
+      const inputs = document.querySelectorAll(".container2 input");
+      const values = {};
+      console.log(inputs);
+      inputs.forEach((input) => {
+        values[input.id] = input.value;
+      });
+      var template = Handlebars.compile(htmlData);
+      // Handlebars.registerHelper("image", function (context) {
+      //   var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
+      //   return new Handlebars.SafeString(result);
+      // });
+
+      // const element=document.createElement('div');
+      // element.innerHTML=template({...values});
+      // console.log(template({...values}));
+      console.log({ ...values });
+      const newValues = {};
+
+      Object.keys(values).forEach((key) => {
+        if (values[key] === "") {
+          newValues[key] = `{{${key}}}`;
+        } else {
+          newValues[key] = values[key];
+        }
+      });
+      console.log(newValues);
+      document.getElementById("container").innerHTML = template({
+        ...newValues,
+      });
+      // document.querySelector('.container').appendChild(element);
+
+      // Object.keys(values).forEach((key) => {
+      //   document.getElementById(key).value = values[key];
+      // });
+    });
+  });
+
+  //manager??
+};
+Handlebars.registerHelper("number", function (astring) {
+  return astring;
+});
+Handlebars.registerHelper("link", function (context) {
+  var result = `<a href="${context}" class="text-blue-500">${context}</a>`;
+  return new Handlebars.SafeString(result);
+});
+Handlebars.registerHelper("date", function (astring) {
+  return astring;
+});
+Handlebars.registerHelper("email", function (context) {
+  var result = `<a href="mailto:${context}" class="text-blue-500">${context}</a>`;
+  return new Handlebars.SafeString(result);
+});
+document.getElementById("saveasdraft").addEventListener("click", () => {
+  saveAsDraft();
+});
+const saveAsDraft = () => {
+  const htmlData1 = document.querySelector(".container").innerHTML;
+  // console.log("html data is", htmlData1);
+  axios.post("http://localhost:5001/api/file/saveLetter", {
+    html_data: htmlData1,
+    templateId: templateId,
+    userId: userId,
+  });
 };

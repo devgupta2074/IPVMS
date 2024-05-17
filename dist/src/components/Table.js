@@ -121,7 +121,7 @@ function addTable() {
 
   console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table class="w-full mt-5 mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
+  tableDiv.innerHTML = `<table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
     <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
@@ -209,12 +209,14 @@ function addTable() {
   addSortFeature();
   addEditorOpenCloseFeature();
   addModalOpenCloseFeature();
+  addSearchbar();
+
 }
 
-let maxPages = 1;
+let maxPages = 100;
 let pageSize = 7;
 let currentPage = 1;
-let totalItems;
+let totalItems = 0;
 let title = "";
 let category = "";
 let siblingCount = 1;
@@ -226,12 +228,13 @@ export const fetchTable = async (tableType) => {
   let apiLink = "";
 
   category = tableType.category;
+  const title = tableType.title ? tableType.title : '';
 
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
     apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
-      }&size=${pageSize}&title=&category=${category}`;
+      }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -243,11 +246,25 @@ export const fetchTable = async (tableType) => {
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the backend
-      // console.log(data, "heelo");
-      addTable();
+
+      const tablecheck = document.getElementById('table');
+
+      if (!tablecheck) {
+        addTable();
+      }
+      console.log(data);
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
+        if (tableType?.pagination) {
+          maxPages = 100;
+          pageSize = 7;
+          currentPage = 1;
+          totalItems = 0;
+          siblingCount = 1;
+
+          addPagination(currentPage);
+        }
       } else {
         console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
@@ -271,6 +288,7 @@ export const fetchTable = async (tableType) => {
           document.getElementById(item.id).style.display = "none";
         });
         if (tableType?.pagination) {
+          console.log(currentPage);
           addPagination(currentPage);
         }
       }
@@ -641,8 +659,11 @@ const removepagination = () => {
 
 const range = (start, end) => {
   let length = end - start + 1;
+  console.log(length);
   let pages = Array.from({ length }, (_, i) => start + i);
+  console.log(pages);
   return pages;
+
 };
 
 const handlePagination = async (item) => {
@@ -670,6 +691,9 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
     'totalpage',
     totalPageCount
   );
+  if (totalItems === 0) {
+    return [1];
+  }
   totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
@@ -744,10 +768,10 @@ function addPrevAndNextfeature() {
 }
 
 export const resetVariables = () => {
-  maxPages = 10;
+  maxPages = 100;
   pageSize = 7;
   currentPage = 1;
-  totalItems;
+  totalItems = 0;
   title = "";
   category = "";
   totalPageCount = 0;
@@ -761,4 +785,29 @@ function handlePaginationOnClick() {
   window.handlePagination = async function (Id) {
     handlePagination(Id);
   };
+}
+
+////////  Search bar
+
+function addSearchbar() {
+
+  const sbar = document.getElementById('document-search-bar');
+
+  sbar.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const tableType = {
+        name: '',
+        title: `${sbar.value}`,
+        category: `${category}`,
+        pagination: true
+      };
+      // console.log(tableType);
+      // resetVariables();
+      fetchTable(tableType);
+      sbar.value = '';
+      // addPagination(currentPage);
+    }
+  });
+
+
 }

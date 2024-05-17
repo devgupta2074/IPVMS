@@ -252,7 +252,7 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -272,6 +272,7 @@ export function createversion() {
         console.log(data);
         localStorage.setItem("version", version);
         fetchVersionsDateWise(modalid);
+
         document.getElementById("loading").style = "display:none";
         // window.location.reload();
       });
@@ -292,6 +293,7 @@ export function createversion() {
   console.log(changes, version, 1);
 
   console.log(changes);
+  fetchVersionsDateWise(modalid);
 }
 function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
@@ -391,7 +393,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://localhost:5001/api/file/getFile/${id}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -753,7 +755,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1080,7 +1082,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://localhost:5001/api/file/uploadFile",
+  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1104,7 +1106,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://localhost:5001/api/file/getFile/4",
+  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -1152,9 +1154,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
-    document
-      .getElementById(localStorage.getItem("versionid"))
-      .classList.remove("bg-zircon-100");
+    if (document.getElementById(localStorage.getItem("versionid"))) {
+      document
+        .getElementById(localStorage.getItem("versionid"))
+        .classList.remove("bg-zircon-100");
+    }
+
     document.getElementById("container-content-1").contentEditable = true;
     const modalid = localStorage.getItem("modalId");
     applyChangesFromV2toV1(modalid, function () {
@@ -1178,12 +1183,24 @@ import { letterColorMapping } from "../utils/letterstyle.js";
 async function ChangeVersion(modalid, id) {
   console.log("hello world dev");
   console.log(id, "change version", modalid);
-  document.getElementById(id).classList.add("bg-zicron-100");
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  console.log(document.getElementById(id), id);
+  document.getElementById(id).classList.add("bg-zircon-100");
   document.getElementById("container-content-1").contentEditable = false;
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalid}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1202,7 +1219,7 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
+    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1431,7 +1448,7 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1460,7 +1477,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1475,12 +1492,15 @@ async function ChangeVersion(modalid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1505,8 +1525,9 @@ function openDash(id) {
 }
 const fetchVersionsDateWise = async (id) => {
   const y = [];
+  console.log(id, "sss");
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -1517,6 +1538,9 @@ const fetchVersionsDateWise = async (id) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("data datewise", data);
+      if (data.length === 0) {
+        fetchVersionsDateWise(id);
+      }
 
       // Parse each element into an array
       data.forEach((element) => {

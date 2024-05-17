@@ -47,7 +47,7 @@ const docCard = (title, created_by, created_at, id, index, type) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   // console.log(created_at);
-  if (type === 'recent') {
+  if (type === "recent") {
     return `
       
       <tr
@@ -232,13 +232,14 @@ export const fetchTable = async (tableType) => {
   searchcheck = tableType.pagination;
 
   category = tableType.category;
-  const title = tableType.title ? tableType.title : '';
+  const title = tableType.title ? tableType.title : "";
 
   if (tableType.name == "recent") {
-    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
+    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
-      }&size=${pageSize}&title=${title}&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${
+      currentPage - 1
+    }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -251,10 +252,13 @@ export const fetchTable = async (tableType) => {
     .then((data) => {
       // Handle the response from the backend
 
-      const tablecheck = document.getElementById('table');
+      const tablecheck = document.getElementById("table");
 
       if (!tablecheck) {
-        console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj', searchcheck);
+        console.log(
+          "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
+          searchcheck
+        );
         addTable();
       }
       console.log(data);
@@ -270,7 +274,6 @@ export const fetchTable = async (tableType) => {
 
           addPagination(currentPage);
           // addSearchbar();
-
         }
       } else {
         console.log("jhishi", data.data);
@@ -298,7 +301,6 @@ export const fetchTable = async (tableType) => {
           console.log(currentPage);
           addPagination(currentPage);
           // addSearchbar();
-
         }
       }
     });
@@ -421,7 +423,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.remove("hidden");
 
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getFile/${modalId}`,
+      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -604,7 +606,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -672,7 +674,6 @@ const range = (start, end) => {
   let pages = Array.from({ length }, (_, i) => start + i);
   console.log(pages);
   return pages;
-
 };
 
 const handlePagination = async (item) => {
@@ -697,7 +698,7 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
     pageSize,
     "sibc",
     siblingCount,
-    'totalpage',
+    "totalpage",
     totalPageCount
   );
   if (totalItems === 0) {
@@ -799,24 +800,21 @@ function handlePaginationOnClick() {
 ////////  Search bar
 
 function addSearchbar() {
+  const sbar = document.getElementById("document-search-bar");
 
-  const sbar = document.getElementById('document-search-bar');
-
-  sbar.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
+  sbar.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
       const tableType = {
-        name: '',
+        name: "",
         title: `${sbar.value}`,
         category: `${category}`,
-        pagination: true
+        pagination: true,
       };
       // console.log(tableType);
       // resetVariables();
       fetchTable(tableType);
-      sbar.value = '';
+      sbar.value = "";
       // addPagination(currentPage);
     }
   });
-
-
 }

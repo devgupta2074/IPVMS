@@ -16,10 +16,11 @@ async function ChangeVersion(docid, id) {
       .classList.remove("bg-zircon-100");
   }
   localStorage.setItem("versionid", id);
+  console.log(document.getElementById(id), id);
   document.getElementById(id).classList.add("bg-zircon-100");
   document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
-    `http://localhost:5001/api/file/getFile/${docid}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${docid}`,
     {
       method: "GET",
       headers: {
@@ -37,7 +38,7 @@ async function ChangeVersion(docid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${docid}`,
+    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -51,12 +52,15 @@ async function ChangeVersion(docid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -83,7 +87,7 @@ export const fetchVersionsDateWise = async (id) => {
   const docid = id;
   console.log(id, docid);
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -93,13 +97,14 @@ export const fetchVersionsDateWise = async (id) => {
   )
     .then((response) => response.json())
     .then((data) => {
+      let runonetimeonly = true;
       console.log("data datewise", data);
-      if (data.length == 0 && runonetimeonly) {
+      if (data.length == 0 && runonetimeonly && id !== 236) {
         console.log("first verion not  there");
         runonetimeonly = false;
 
         createversion();
-        fetchVersionsDateWise(id);
+        // fetchVersionsDateWise(id);
       }
 
       // Parse each element into an array

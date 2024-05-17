@@ -1,4 +1,7 @@
-import { fetchCategories, removeHoverButttons } from "../components/Categories.js";
+import {
+  fetchCategories,
+  removeHoverButttons,
+} from "../components/Categories.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import { fetchTable } from "../components/Table.js";
 
@@ -23,9 +26,7 @@ const tableType = {
   pagination: true,
 };
 document.addEventListener("DOMContentLoaded", async () => {
-
   fetchTable(tableType);
   await fetchCategories();
   // removeHoverButttons();
 });
-

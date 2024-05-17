@@ -58,7 +58,7 @@ const NavBar = `
 <button id="inviteButton1111" class="h-[2.5rem] w-[2.5rem] flex flex-row">
 <span id="invite-svg" class=" peer/invite-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
+<use xlink:href="/assets/icons/icon.svg#invite-employee"></use>
 </svg>
 </span>
 
@@ -68,7 +68,7 @@ const NavBar = `
   </svg>
  
   <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
-  Invite Memeber</div>
+  Invite Member</div>
 </div>
 </button>
   

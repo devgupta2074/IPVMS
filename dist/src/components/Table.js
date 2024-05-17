@@ -337,7 +337,7 @@ function addEditorOpenCloseFeature() {
       const res = await GetAllCategory();
 
       category = res?.data;
-      let categoryElement = ``;
+      let categoryElement = `  <option selected>Select a category</option>`;
       // let categoryElement = `
       //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
       //     <option  class="flex justify-center items-center" selected>Choose Category</option>
@@ -373,7 +373,10 @@ function addEditorOpenCloseFeature() {
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("modalId", modalId);
-        document.getElementById("doc_title").textContent = data.data.title;
+        if (data.data.title !== "emptydocx.docx") {
+          document.getElementById("doc_title").textContent = data.data.title;
+        }
+
         fetchVersionsDateWise(modalId);
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");

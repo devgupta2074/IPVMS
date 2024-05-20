@@ -233,7 +233,7 @@ export function createversion() {
     keys.forEach(function (key) {
       if (jsonResult.hasOwnProperty(key)) {
         console.log(key, "fff");
-        if (!divElement.querySelector(`#${key}`)) {
+        if (key !== "" && !divElement.querySelector(`#${key}`)) {
           changes.removedTags.push(key);
         }
       }
@@ -252,7 +252,7 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -393,7 +393,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
+    `http://localhost:5001/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -413,6 +413,332 @@ async function applyChangesFromV2toV1(id, callback) {
   callback();
 }
 
+export function applyChangesFromV1toV2withouthighlight(
+  divElement,
+  v1,
+  v2,
+  firstv
+) {
+  for (const tagid in v2.newTags) {
+    console.log(tagid, "newtags");
+    console.log(v2.newTags[tagid], "tapasvai");
+    console.log(
+      !isIdInJson(
+        v2.newTags[tagid].id,
+        firstv.newTags,
+        v2.newTags[tagid].tagName
+      ),
+      "isid"
+    );
+
+    if (v2.newTags[tagid]) {
+      // console.log(`#${v2.newTags[tagid].parentId}`);
+      const tag = document.getElementById(v2.newTags[tagid].parentId);
+      var childElement = document.createElement(v2.newTags[tagid].tagName);
+      childElement.textContent = v2.newTags[tagid].textContent;
+      console.log(childElement.textContent);
+      childElement.style = v2.newTags[tagid].style;
+      childElement.className = v2.newTags[tagid].class;
+      console.log(v2.newTags[tagid].textContent, "textContent");
+
+      childElement.id = v2.newTags[tagid].id;
+      childElement.color = v2.newTags[tagid].color;
+      childElement.size = v2.newTags[tagid].size;
+      childElement.face = v2.newTags[tagid].face;
+      // childElement.children = v2.newTags[tagid].children;
+      console.log("eye", v2.newTags[tagid].children);
+      if (v2.newTags[tagid].children.length > 0) {
+        for (var i = 0; i < v2.newTags[tagid].children.length; i++) {
+          const child = document.getElementById(v2.newTags[tagid].children[i]);
+          if (child) {
+            const x = child;
+            child.remove();
+            childElement.appendChild(x);
+            console.log("eye", child);
+          }
+        }
+      }
+      console.log(tag);
+      console.log(v2.newTags[tagid].parentId);
+      const children = tag.childNodes;
+      const position = v2.newTags[tagid].childnodeposition;
+      console.log(tag);
+      console.log(childElement);
+      console.log(
+        "position",
+        position,
+        children,
+        children.length,
+        position >= 0 && position <= children.length,
+        childElement,
+        "ipvms"
+      );
+      if (position == 0 && children.length == 1 && children[0].nodeType == 3) {
+        const newtext = children[0].textContent
+          .replace(childElement.textContent, "")
+          .replace(v2.newTags[tagid].textbefore, "");
+        const newchildbefore = document.createTextNode(
+          v2.newTags[tagid].textbefore
+        );
+        tag.insertBefore(newchildbefore, children[0]);
+        tag.removeChild(children[1]);
+        children[0].nodeValue = newtext;
+        console.log(children, "exsq");
+      } else {
+        if (position > children.length) {
+          console.log("archit");
+          if (
+            tag.childNodes.length > 0 &&
+            tag.childNodes[children.length - 2] &&
+            tag.childNodes[children.length - 2].nodeName === "#text"
+          ) {
+            console.log(v2.newTags[tagid]);
+            let newtext = children[children.length - 2].nodeValue.replace(
+              childElement.textContent,
+              ""
+            );
+
+            newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
+            console.log(newtext, "vvv");
+            const newchildbefore = document.createTextNode(
+              v2.newTags[tagid].textbefore
+            );
+            const newchildafter = document.createTextNode(
+              v2.newTags[tagid].textafter
+            );
+            console.log(newchildafter, newchildbefore);
+            tag.insertBefore(newchildbefore, children[children.length - 1]);
+            tag.insertBefore(newchildafter, children[children.length - 1]);
+
+            // children[0].nodeValue = newtext;
+            tag.removeChild(children[position - 1]);
+            console.log(children, "exsq");
+          } else {
+            tag.appendChild(childElement);
+          }
+        } else if (position - 1 > 0 && position + 1 < children.length) {
+          if (
+            tag.childNodes[position - 1].nodeName === "#text" &&
+            tag.childNodes[position + 1].nodeName === "#text"
+          ) {
+            tag.removeChild(tag.childNodes[position]);
+            console.log("yeeeeeee");
+          }
+        } else if (position + 1 <= children.length - 1) {
+          if (tag.childNodes[position + 1].nodeName === "#text") {
+            tag.removeChild(tag.childNodes[position]);
+            console.log("yeeeeeee");
+          }
+        } else if (position - 1 > 0 || position == children.length) {
+          console.log("vishal", tag.childNodes, "position", position);
+          if (
+            tag.childNodes.length > 0 &&
+            tag.childNodes[position - 1].nodeName === "#text"
+          ) {
+            console.log(v2.newTags[tagid]);
+            let newtext = children[position - 1].nodeValue.replace(
+              childElement.textContent,
+              ""
+            );
+
+            newtext = newtext.replace(v2.newTags[tagid].textbefore, "");
+            console.log(newtext, "vvv");
+            const newchildbefore = document.createTextNode(
+              v2.newTags[tagid].textbefore
+            );
+            const newchildafter = document.createTextNode(
+              v2.newTags[tagid].textafter
+            );
+            console.log(newchildafter, newchildbefore);
+            tag.insertBefore(newchildbefore, children[position]);
+            tag.insertBefore(newchildafter, children[position + 1]);
+
+            // children[0].nodeValue = newtext;
+            tag.removeChild(children[position - 1]);
+            console.log(children, "exsq");
+          } else {
+            tag.appendChild(childElement);
+          }
+        } else if (position === children.length - 1) {
+          tag.removeChild(tag.childNodes[position]);
+          console.log("ye3");
+        }
+      }
+
+      if (position >= 0 && position <= children.length) {
+        console.log(position, children.length, tag.childNodes);
+        if (position === children.length) {
+          // If position is at the end, simply append the child
+          tag.appendChild(childElement);
+        } else {
+          // Otherwise, insert the child before the element at the specified position
+          // let sp2 = document.getElementById(children[childnodeposition].id);
+          console.log("Inserting");
+          tag.insertBefore(childElement, tag.childNodes[position]);
+        }
+      } else {
+        tag.appendChild(childElement);
+      }
+    }
+    console.log(
+      childElement.childNodes,
+      "childelement",
+      isIdInJson(
+        v2.newTags[tagid].id,
+        firstv.newTags,
+        v2.newTags[tagid].tagName
+      ),
+      childElement.childNodes,
+      childElement.childNodes.length
+    );
+    if (
+      isIdInJson(
+        v2.newTags[tagid].id,
+        firstv.newTags,
+        v2.newTags[tagid].tagName
+      ) == false &&
+      childElement.childNodes &&
+      childElement.childNodes.length > 0
+    ) {
+      // childElement.classList.add("greenhighlight");
+    }
+  }
+  console.log(v1);
+
+  for (const tagId in v2.changedTags) {
+    console.log(tagId, "d");
+    if (v2.changedTags[tagId].id) {
+      const tagInfo = v2.changedTags[tagId];
+      console.log(v2.changedTags[tagId].id);
+
+      const tag = document.getElementById(v2.changedTags[tagId].id);
+
+      console.log("tag: " + tag);
+      if (!tag) continue;
+
+      // Apply cges to text content and style
+      if (tag) {
+        if (
+          isIdInJson(v2.changedTags[tagId].id, firstv.changedTags, "a") == false
+        ) {
+          console.log(v2.changedTags[tagId].textContent, "text text text");
+          // tag.classList.add("bluehighlight");
+        }
+        if (v2.changedTags[tagId].style) {
+          tag.style.cssText = v2.changedTags[tagId].style;
+          // tag.classList.add("bluehighlight");
+        }
+        if (v2.changedTags[tagId].textContent) {
+          console.log(
+            v1[v2.changedTags[tagId].id].textContent.split(" ").length,
+            v2.changedTags[tagId].textContent.split(" ").length,
+            "hello tap"
+          );
+
+          tag.textContent = v2.changedTags[tagId].textContent;
+          console.log(tag.style.cssText);
+          const style = tag.style.cssText;
+
+          const difference = findWordDifference(
+            v1[v2.changedTags[tagId].id].textContent,
+            tag.textContent,
+            style
+          );
+          console.log(
+            "hello archit",
+            tag,
+            v1[v2.changedTags[tagId].id].textContent,
+            tag.textContent,
+            difference
+          );
+
+          // Highlight the differing part
+
+          // tag.innerHTML = difference;
+          tag.style = style;
+        }
+
+        // tag.style = tag.style + "border : 1px  red solid;";
+
+        // //
+        //           tag.textContent = v2.changedTags[tagId].textContent;
+        // if (tag.textContent !== "") {
+        //   tag.style =
+        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
+        // } else {
+        //   tag.style = v2.changedTags[tagId].style;
+        // }
+
+        tag.className = tag.className;
+        console.log(tag);
+      }
+
+      // Apply changes to image source
+      if (tagInfo.isTagImg && v2[tagId]) {
+        tag.src = v2[tagId].src;
+      }
+    }
+  }
+
+  for (const tagid in v2.removedTags) {
+    console.log(tagid, "removedtags");
+    console.log(v1[v2.removedTags[tagid]]);
+
+    if (v2.removedTags[tagid]) {
+      const tag = document.getElementById(v1[v2.removedTags[tagid]].id);
+
+      //  tag.parentElement.classList.add("redhighlight");
+      console.log("tag: " + tag);
+      if (tag) {
+        if (
+          isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
+            false &&
+          tag.textContent !== ""
+        ) {
+          const removedelement = document.createElement("p");
+          removedelement.classList.add("redhighlight");
+          tag.parentElement.insertBefore(removedelement, tag);
+          console.log(tag.id, "removed");
+          console.log(tag.parentElement, "remove remove remove");
+          console.log(v2.removedTags[tagid].textContent, "text text text");
+          if (tag.parentElement.tagName.toLowerCase() !== "article") {
+            tag.parentElement.classList.add("redhighlight");
+          }
+        }
+        if (tag != null) {
+          tag.remove();
+        }
+      } else {
+        continue;
+      }
+    }
+  }
+  for (const image in v2.imageTags) {
+    console.log(v2.imageTags[image]);
+    const tag = document.getElementById(v2.imageTags[image].id);
+    if (!tag) {
+      const parent = document.getElementById(v2.imageTags[image].parent);
+      const img = document.createElement("img");
+      img.src = v2.imageTags[image].src;
+      img.style = v2.imageTags[image].style;
+      img.id = v2.imageTags[image].id;
+      img.width = v2.imageTags[image].width;
+      img.height = v2.imageTags[image].height;
+      img.style.left = v2.imageTags[image].x + "px";
+      img.style.top = v2.imageTags[image].y + "px";
+      parent.appendChild(img);
+    } else {
+      tag.src = v2.imageTags[image].src;
+      tag.style = v2.imageTags[image].style;
+      tag.id = v2.imageTags[image].id;
+      tag.width = v2.imageTags[image].width;
+      tag.height = v2.imageTags[image].height;
+      tag.style.left = v2.imageTags[image].x + "px";
+      tag.style.top = v2.imageTags[image].y + "px";
+    }
+  }
+  // imageLoaded();
+}
 export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
   for (const tagid in v2.newTags) {
     console.log(tagid, "newtags");
@@ -755,7 +1081,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1082,7 +1408,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
+  //       "http://localhost:5001/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1106,7 +1432,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
+  //       "http://localhost:5001/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -1200,7 +1526,7 @@ async function ChangeVersion(modalid, id) {
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
+    `http://localhost:5001/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1219,7 +1545,7 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1448,7 +1774,7 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1477,7 +1803,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1492,15 +1818,12 @@ async function ChangeVersion(modalid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1527,7 +1850,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {

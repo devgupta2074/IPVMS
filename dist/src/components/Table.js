@@ -1,5 +1,7 @@
 import { CreatePolicy } from "../api/createpolicy.js";
+import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
+import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
@@ -235,7 +237,7 @@ export const fetchTable = async (tableType) => {
   const title = tableType.title ? tableType.title : "";
 
   if (tableType.name == "recent") {
-    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
+    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
     apiLink = `http://localhost:5001/api/file/document?page=${
       currentPage - 1
@@ -389,14 +391,16 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    const res = await GetAllCategory();
+    document.getElementById("onlyforblank").classList.remove("hidden");
+
     if (modalId == 0) {
-      document.getElementById("onlyforblank").classList.remove("hidden");
-      document.getElementById("version-area").classList.add("hidden");
+      // document.getElementById("onlyforblank").classList.remove("hidden");
+      // document.getElementById("version-area").classList.add("hidden");
       document.getElementById("create-policy").classList.remove("hidden");
       document.getElementById("json").classList.add("hidden");
       document.getElementById("container-content-1").contentEditable = true;
       modalId = 236;
-      const res = await GetAllCategory();
 
       category = res?.data;
       let categoryElement = `  <option selected>Select a category</option>`;
@@ -423,7 +427,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.remove("hidden");
 
     const response2 = await fetch(
-      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+      `http://localhost:5001/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -571,6 +575,53 @@ function addEditorOpenCloseFeature() {
         window.closeEditor();
       });
   }
+  function closereviewmodal() {
+    document.getElementById("sendforreview").classList.add("hidden");
+  }
+  if (document.getElementById("review")) {
+    document
+      .getElementById("review")
+      .addEventListener("click", async function () {
+        document.getElementById("adminlist").innerHTML =
+          "  <option selected>Select an Admin</option>";
+        document.getElementById("sendforreview").classList.remove("hidden");
+        const adminlist = await GetAdminList();
+        console.log(adminlist, "Admin list");
+        adminlist.map((item) => {
+          console.log(item.email, "email");
+          document.getElementById("adminlist").innerHTML += `<option value=${
+            item.id
+          }>${item.first_name + " " + item.last_name}</option>`;
+        });
+      });
+    document
+      .getElementById("closereview")
+      .addEventListener("click", closereviewmodal);
+    document
+      .getElementById("sendreview")
+      .addEventListener("click", async function () {
+        console.log(document.getElementById("adminlist").value);
+        if (document.getElementById("adminlist").value !== "Select an Admin") {
+          document.getElementById("admin-error").classList.remove("opacity-1");
+          document.getElementById("admin-error").classList.add("opacity-0");
+          const response = await SetDocumentToApprove(
+            parseInt(document.getElementById("adminlist").value),
+            parseInt(localStorage.getItem("modalId")),
+            parseInt(localStorage.getItem("userid"))
+          ).then(() => {
+            closereviewmodal();
+            document.getElementById("sendforreview").classList.add("hidden");
+          });
+          console.log(response);
+          if (response) {
+            document.getElementById("sendforreview").classList.add("hidden");
+          }
+        } else {
+          document.getElementById("admin-error").classList.add("opacity-1");
+          document.getElementById("admin-error").classList.remove("opacity-0");
+        }
+      });
+  }
 }
 
 function addModalOpenCloseFeature() {
@@ -606,7 +657,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

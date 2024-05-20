@@ -304,7 +304,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -369,7 +369,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    `http://localhost:5001/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -928,7 +928,7 @@ function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
-      window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 
@@ -1464,7 +1464,7 @@ function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url: "http://localhost:5001/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,

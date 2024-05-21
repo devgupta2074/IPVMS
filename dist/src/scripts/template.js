@@ -8,16 +8,18 @@ var title;
 var htmlData;
 var email;
 var category;
-var recepientId;
+var recipientId;
 var templateId;
 var description;
 var result2;
 var shouldBeSigned = false;
 var loading = false;
+var recipientEmail = "tapasviarora2003@gmail.com";
+var recipientName = "tapasvi";
+var ipvmsuserId = "22";
 
-const getTemplate = (id, recepientId) => {
+const getTemplate = (id, recipientId) => {
   console.log("in get temo id is", id);
-
   const getTemplatedoc = async (id) => {
     console.log("in get temo id in getTempdox is", id);
     const response = await fetch(
@@ -43,10 +45,11 @@ const getTemplate = (id, recepientId) => {
         console.error("Error:", error);
       });
   };
-  const getUserDetails = async (recepientId) => {
-    console.log("in user deatil user id is", recepientId);
+  const getUserDetails = async (recipientId) => {
+    console.log("in user deatil user id is", recipientId);
+
     const response = await fetch(
-      `http://localhost:5001/api/user/getUserInfo/${recepientId}`,
+      `http://localhost:5001/api/user/getUserInfo/${recipientId}`,
       {
         method: "GET",
       }
@@ -63,7 +66,7 @@ const getTemplate = (id, recepientId) => {
         console.error("Error:", error);
       });
   };
-  getUserDetails(recepientId);
+  getUserDetails(recipientId);
 };
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -74,9 +77,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
   console.log(urlParams);
   const id = urlParams.get("templateId");
   templateId = id;
-  recepientId = urlParams.get("userId");
-  console.log("user id is", recepientId);
-  getTemplate(id, recepientId);
+  recipientId = urlParams.get("userId");
+  if (recipientId === "newuser") {
+    recipientId = 2;
+  }
+  console.log("user id is", recipientId);
+  getTemplate(id, recipientId);
   // document
   //   .getElementById("generate")
   //   .addEventListener("click", async () => {
@@ -393,10 +399,9 @@ Handlebars.registerHelper("email", function (context) {
 });
 document.getElementById("saveasdraft").addEventListener("click", async () => {
   const res = await saveAsDraft();
-  console.log(res, "save as draft status");
-  if (res) {
+  setTimeout(() => {
     window.location.href = "http://localhost:5555/letters";
-  }
+  }, 3000);
 });
 const saveAsDraft = async () => {
   const htmlData1 = document.querySelector(".container").innerHTML;
@@ -405,7 +410,10 @@ const saveAsDraft = async () => {
     const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
       html_data: htmlData1,
       templateId: templateId,
-      recepientId: recepientId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
     });
     if (res) {
       Toastify({
@@ -438,8 +446,8 @@ const saveAsDraft = async () => {
 };
 
 const handleGeneratePdf = async () => {
+  showLoading();
   var element = document.getElementById("container");
-
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -459,18 +467,11 @@ const handleGeneratePdf = async () => {
     pagebreak: { mode: "avoid-all", after: "section" },
   };
   const pdfBlob = await html2pdf().from(element).output("blob");
-
-  // const pdfBlob = await html2pdf()
-  //   .from(element)
-  //   .set(opt)
-  //   .outputPdf()
-  //   .then((pdf) => {
-  //     return new Blob([pdf], { type: "application/pdf" });
-  //   });
   const formData = new FormData();
   let letterId;
   console.log(email);
-  formData.append("file", pdfBlob);
+  const fileName = "pdfsend" + Date.now() + ".pdf";
+  formData.append("file", pdfBlob, fileName);
   formData.append("userId", 20);
   formData.append("templateId", 23);
   formData.append("email", "tapasviarora2002@gmail.com");
@@ -487,16 +488,68 @@ const handleGeneratePdf = async () => {
         },
       }
     );
+    Toastify({
+      text: "Letter send succesfully",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
     if (response.status == 200) {
-      window.location.href = "http://localhost:5555/letters";
+      setTimeout(() => {
+        window.location.href = "http://localhost:5555/letters";
+      }, 3000);
     }
   } catch (error) {
-    console.error("Error uploading file:", error);
+    Toastify({
+      text: "Some error occured",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 2000);
+  } finally {
+    removeLoading();
   }
 };
 
+//loader
+const showLoading = () => {
+  const loading = document.createElement("div");
+  loading.id = "loadingicon";
+  loading.innerHTML = `<div id="loading"  >
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+<div class="flex gap-2 justify-center items-center h-screen">
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+</div>
+</div>  
+</div>`;
+  document.body.appendChild(loading);
+};
+const removeLoading = () => {
+  const loadingElement = document.getElementById("loadingicon");
+  if (loadingElement) {
+    loadingElement.remove();
+  }
+};
 var shouldBeSigned = false;
 const handleSignSwiftCall = async () => {
+  showLoading();
   var element = document.getElementById("container");
   var opt = {
     margin: 0,
@@ -516,9 +569,10 @@ const handleSignSwiftCall = async () => {
     },
     pagebreak: { mode: "avoid-all", after: "section" },
   };
+  let letterId;
   const pdfBlob = await html2pdf().from(element).output("blob");
   const formData = new FormData();
-  const fileName = "pdfFile";
+  const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
     "http://localhost:5001/api/file/upload/letterpdf",
@@ -536,15 +590,21 @@ const handleSignSwiftCall = async () => {
     await axios.post(
       "http://localhost:5001/api/file/upload/updateLetterStatus",
       {
-        ShareLink: ShareLink,
         letterId: letterId,
         htmlData: element.innerHTML,
-        recepientId: recepientId,
+        recipientId: recipientId,
+        createdBy: ipvmsuserId,
+        templateId: templateId,
+        email: recipientEmail,
+        name: recipientName,
+        fileName: fileName,
       }
     );
   }
   const email = "tarora@ex2india.com";
   const username = "Tapasvi";
+  const userId = "10200";
+
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
@@ -574,6 +634,7 @@ const handleSignSwiftCall = async () => {
           })
             .then((response) => response.json())
             .then((data) => {
+              removeLoading();
               console.log("upload doc  is", data);
               //error upload doc
               if (data.status !== 201) {
@@ -585,6 +646,21 @@ const handleSignSwiftCall = async () => {
                 document
                   .getElementById("uploadSuccess")
                   .classList.remove("hidden");
+                Toastify({
+                  text: "Letter send succesfully",
+                  duration: 3000,
+                  newWindow: true,
+                  className: "text-black",
+                  gravity: "top", // `top` or `bottom`
+                  position: "right", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    background: "white",
+                  },
+                }).showToast();
+                setTimeout(() => {
+                  window.location.href = "http://localhost:5555/letters";
+                }, 2000);
               }
             });
         }
@@ -606,7 +682,7 @@ document
     modal.classList.remove("flex");
     document.getElementById("loginError").classList.add("hidden");
     document.getElementById("uploadError").classList.add("hidden");
-    document.getElementById("successError").classList.add("hidden");
+
     const signMessage = document.getElementById("signMessage");
     signMessage.classList.remove("hidden");
   });
@@ -653,7 +729,7 @@ window.onclick = function (event) {
     modal.classList.remove("flex");
     document.getElementById("loginError").classList.add("hidden");
     document.getElementById("uploadError").classList.add("hidden");
-    document.getElementById("successError").classList.add("hidden");
+
     const signMessage = document.getElementById("signMessage");
     signMessage.classList.remove("hidden");
   }

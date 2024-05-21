@@ -33,28 +33,87 @@ export async function UserInfoApiRequest(token) {
   //   });
 }
 
-const getQueueLetters = () => {
+const getQueueLetters = async () => {
   const email = "tarora@ex2india.com";
-  const userId = "07d873df-f43a-4ddc-bdbe-045fbb589f7f";
-  fetch("http://localhost:3000/api/document/getSendedDocument", {
-    method: "POST",
-    body: JSON.stringify({
-      userId: userId,
-      ShareLink: email,
-    }),
-    mode: "cors",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("upload doc  is", data);
-      //error upload doc
-      //link and render
-    })
-    .catch((error) => {});
+  // this user id is of ipvms
+  const userId = "22";
+  // from local storage
+  const data = await axios.get(
+    `http://localhost:5001/api/file/letter/${userId}`
+  );
+
+  console.log("upload doc is", data);
+  // error upload doc
+  // link and render
+  let queueLetterHtml = `<ul role="list" class="flex flex-col justify-between">`;
+
+  if (data) {
+    data.data.data.forEach((item) => {
+      if (item.status === "PENDING") {
+        if (item.firstname === "New" && item.lastname === "User") {
+          queueLetterHtml += `<li class="mt-4">
+        <div role="button"
+          class="flex items-center gap-3 transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg p-3">
+          <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+            <span class="text-base font-medium text-[#333333] truncate">
+              ${item.name.charAt(0)}
+            </span>
+          </div>
+          <div class="flex-1">
+            <p class="text-base font-medium text-[#333333] truncate">
+              ${item.name}
+            </p>
+          
+            
+          </div>
+          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center">
+  <div class="bg-green-100 border border-green-500 text-green-500 text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-green-500 hover:border-green-500 hover:text-white">
+    New User
+  </div>
+</div>
+
+        </div>
+          `;
+        } else {
+          queueLetterHtml += `<li class="mt-4">
+          <div role="button"
+            class="flex items-center gap-3 transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg p-3">
+            <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
+              <span class="text-base font-medium text-[#333333] truncate">
+                ${item.firstname.charAt(0) + item.lastname.charAt(0)}
+              </span>
+            </div>
+            <div class="flex-1">
+              <p class="text-base font-medium text-[#333333] truncate">
+                ${item.firstname + " " + item.lastname}
+              </p>
+            </div>`;
+        }
+
+        if (item.status === "DRAFT") {
+          queueLetterHtml += `<div class="w-20 flex justify-center items-center">
+          <div class="w-20 flex justify-center items-center box-border bg-[#E0E0E0] border border-[#B2B0B0] text-[#575757] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#B2B0B0] hover:border-[#575757] hover:text-white">
+            DRAFT
+          </div>
+        </div>`;
+        } else if (item.status === "PENDING") {
+          queueLetterHtml += `<div class="flex justify-center items-center">
+          <div class="bg-[#FFF0E1] border border-[#F47960] text-[#F47960] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white">
+            Pending
+          </div>
+        </div>`;
+        }
+
+        queueLetterHtml += `</div></li>`;
+      }
+    });
+
+    queueLetterHtml += `</ul>`;
+    document.getElementById("queueLetter").innerHTML = queueLetterHtml;
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   getQueueLetters();
 });
-
-console.log("running");

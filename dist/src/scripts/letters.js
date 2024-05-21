@@ -778,7 +778,6 @@ function displayArea() {
     const getAllUserui = () => {
       document.getElementById("search-user").innerHTML += ` <li >
       <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
-      
         <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
       </div>
     </li>`;

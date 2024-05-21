@@ -32,7 +32,8 @@ export const fetchTable = async () => {
             item.template_name,
             item.category,
             item.created_at,
-            item.created_by
+            item.created_by,
+            item.rname
           );
         });
         //
@@ -48,13 +49,15 @@ const docCard = (
   category,
   created_at,
   created_by,
+  rname,
   html_data
 ) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
 
-  return `
+  if (ename !== "NewUser") {
+    return `
       
       <tr
       class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
@@ -89,6 +92,39 @@ const docCard = (
 
           
           `;
+  } else {
+    return `
+    <tr
+    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+  >
+    <td class="w-14">${id}</td>
+    <td class="w-52">${rname}</2td>
+    <td class="w-28">${tname}</td>
+    <td class="w-28">${category}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">${created_by}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">
+      <div class="flex gap-2">
+        <button type="button" onclick="openLetterFile(${id})">
+          <svg id="view" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#view"
+            ></use>
+          </svg>
+        </button>
+        <button type="button" onClick="openEditor(${id})">
+        <svg id="view" class="h-6 w-6">
+        <use
+          xlink:href="/assets/icons/icon.svg#edit"
+        ></use>
+      </svg>
+      </button>
+        
+      </div>
+    </td>
+  </tr>`;
+  }
   //   .toLocaleDateString('en-GB')
 };
 
@@ -484,9 +520,7 @@ function addEditorOpenCloseFeature() {
     // document.getElementById("policy-detail").classList.add("hidden");
     // document.getElementById("policy-table").classList.add("hidden");
     // document.getElementById("pagination-area").classList.add("hidden");
-    document
-      .getElementById("extralarge-modal-content")
-      .classList.remove("hidden");
+
     document.getElementById("extralarge-modal").classList.remove("hidden");
     document.getElementById("area").classList.add("hidden");
 
@@ -520,7 +554,6 @@ function addEditorOpenCloseFeature() {
     // container.id = "docx-wrapper";
   };
   window.closeEditor = function () {
-    document.getElementById("extralarge-modal-content").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.add("hidden");
   };
 }

@@ -28,6 +28,7 @@ export const fetchTable = async () => {
             item.category,
             item.created_at,
             item.created_by,
+            item.rname,
             item.filepath
           );
           console.log("id is", item.id);
@@ -65,13 +66,48 @@ const docCard = (
   category,
   created_at,
   created_by,
+  rname,
   filepath
 ) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
-
-  return `
+  if (ename === "NewUser") {
+    return `
+    
+    <tr
+    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+  >
+    <td class="w-14">${id}</td>
+    <td class="w-52">${rname}</2td>
+    <td class="w-28">${tname}</td>
+    <td class="w-28">${category}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">${created_by}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">
+      <div class="flex gap-1">
+        <button type="buttonF" id="pdf${id}" >
+          <svg id="view" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#view"
+            ></use>
+          </svg>
+        </button>
+        <a class="hover:cursor-pointer" blank="#" id="url${id}" >
+          <svg id="download" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#download"
+            ></use>
+          </svg>
+        </a>
+      </div>
+    </td>
+  </tr>
+        
+        `;
+  } else {
+    return `
     
     <tr
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
@@ -104,6 +140,8 @@ const docCard = (
   </tr>
         
         `;
+  }
+
   //   .toLocaleDateString('en-GB')
 };
 

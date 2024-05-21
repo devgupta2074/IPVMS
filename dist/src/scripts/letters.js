@@ -1095,28 +1095,44 @@ function displayArea() {
         // Replace comma for the desired format
         const formattedDateString = formattedDate.replace(",", "");
         insertdefault.innerHTML += `
-        <div>
-<div
-onclick="openLetter(${template.id})"
- class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
->
- <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
- </svg>
-
- <svg class="w-[260px] h-[150px]">
-   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
- </svg>
-</div>
-<div
- class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
- <div class="text-base overflow-hidden text-ellipsis text-nowrap  ">${template.title}</div>
- <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
-</div>
-</div>
+        <div class="relative">
+        <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+            <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+          </svg>
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+            <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+          </svg>
+        </div>
+        <div 
+          class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+          <div class="text-base overflow-hidden text-ellipsis text-nowrap">${template.title}</div>
+          <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+        </div>
+        <div id="dropdown${template.id}" class="z-10 hidden absolute top-0 right-0 mt-12 bg-white divide-gray-100 rounded-lg shadow w-44 h-32">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+            <li>
+              <a onclick= class="block px-4 py-2 hover:bg-gray-100">Edit</a>
+            </li>
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
         `;
+        window.openLetterModal = async function (id) {
+          if (
+            document
+              .getElementById("dropdown" + id)
+              .classList.contains("hidden")
+          ) {
+            document.getElementById("dropdown" + id).classList.remove("hidden");
+          } else {
+            document.getElementById("dropdown" + id).classList.add("hidden");
+          }
+        };
       });
       const customdefault = document.getElementById("insert-custom");
       customtemplates.forEach((template) => {

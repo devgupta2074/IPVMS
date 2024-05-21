@@ -16,7 +16,7 @@ const NavBar = `
   </svg>
  
   <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
-    Policies</div>
+    Dashboard</div>
 </div>
 </button>
 
@@ -133,7 +133,7 @@ export async function InsertNavbar() {
         redirect(VIEWS_CONSTANTS.LOGIN);
       } else {
         userdata = data;
-        //
+        localStorage.setItem("userid", userdata.data.id);
       }
     });
   }

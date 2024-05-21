@@ -9,7 +9,7 @@ const API_CONSTANTS = {
   TOKEN: "token",
 };
 const URL_CONSTANTS = {
-  FRONTEND_BASE_URL: "http://ipvms.exitest.com",
+  FRONTEND_BASE_URL: "http://localhost:5555",
 };
 
 const HEADERS_CONSTANTS = {
@@ -80,6 +80,10 @@ const ROUTES_CONSTANTS = {
   GET_ALL_TEMPLATES: "/api/file/getAllTemplate",
   CREATE_POLICY: "/api/file/createPolicy",
   GET_ALL_CATEGORY: "/api/categories/getAllCategories",
+  GET_ADMIN_LIST: "/getAdminList",
+  SET_TO_APPROVE: "/api/setDocumentToApprove",
+  GET_POLICY_APPROVAL: "/getPolicyApprovalsByUserId",
+  GET_DOCUMENT_BY_ID: "/api/file/getFile/",
 };
 export const style = `<style>
 .docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

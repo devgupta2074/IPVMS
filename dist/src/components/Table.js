@@ -1,5 +1,7 @@
 import { CreatePolicy } from "../api/createpolicy.js";
+import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
+import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
@@ -389,14 +391,17 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    const res = await GetAllCategory();
+    document.getElementById("onlyforblank").classList.remove("hidden");
+
     if (modalId == 0) {
-      document.getElementById("onlyforblank").classList.remove("hidden");
-      document.getElementById("version-area").classList.add("hidden");
+      // document.getElementById("onlyforblank").classList.remove("hidden");
+      // document.getElementById("version-area").classList.add("hidden");
       document.getElementById("create-policy").classList.remove("hidden");
+      document.getElementById("review").classList.add("hidden");
       document.getElementById("json").classList.add("hidden");
       document.getElementById("container-content-1").contentEditable = true;
       modalId = 236;
-      const res = await GetAllCategory();
 
       category = res?.data;
       let categoryElement = `  <option selected>Select a category</option>`;
@@ -469,106 +474,188 @@ function addEditorOpenCloseFeature() {
     document
       .getElementById("create-policy")
       .addEventListener("click", async function () {
+        document.getElementById("policyname-error").classList.add("hidden");
+        document
+          .getElementById("policydescription-error")
+          .classList.add("hidden");
+        document.getElementById("policycategory-error").classList.add("hidden");
         let policyname = document.getElementById("policy-name").value;
         let policydescription =
           document.getElementById("policy-description").value;
         let policycategory = document.getElementById("category").value;
         console.log(policycategory, policydescription, policyname);
 
-        const blobToBase64 = (blob) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(blob);
-          return new Promise((resolve) => {
-            reader.onloadend = () => {
-              resolve(reader.result);
-            };
-          });
-        };
+        if (
+          policyname !== "" &&
+          policydescription !== "" &&
+          policycategory !== "Select a category"
+        ) {
+          // document.getElementById("policyname-error").classList.add("hidden");
+          // document
+          //   .getElementById("policydescription-error")
+          //   .classList.add("hidden");
+          // document
+          //   .getElementById("policycategory-error")
+          //   .classList.add("hidden");
 
-        async function convertImagesToBase64(divId) {
-          // Find the div element
-          var div = document.getElementById(divId);
+          const blobToBase64 = (blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((resolve) => {
+              reader.onloadend = () => {
+                resolve(reader.result);
+              };
+            });
+          };
 
-          // Find all images within the div
-          var images = div.getElementsByTagName("img");
+          async function convertImagesToBase64(divId) {
+            // Find the div element
+            var div = document.getElementById(divId);
 
-          // Iterate over each image
-          if (images.length > 0) {
-            for (var i = 0; i < images.length; i++) {
-              var img = images[i];
+            // Find all images within the div
+            var images = div.getElementsByTagName("img");
 
-              // Create a blob URL for the image
-              var blob = await fetch(img.src).then((response) =>
-                response.blob()
-              );
+            // Iterate over each image
+            if (images.length > 0) {
+              for (var i = 0; i < images.length; i++) {
+                var img = images[i];
 
-              // Convert blob to base64
-              var base64 = await blobToBase64(blob);
+                // Create a blob URL for the image
+                var blob = await fetch(img.src).then((response) =>
+                  response.blob()
+                );
 
-              img.src = base64;
+                // Convert blob to base64
+                var base64 = await blobToBase64(blob);
+
+                img.src = base64;
+              }
             }
           }
-        }
 
-        await convertImagesToBase64("container-content-1");
-        const container = document.getElementById("container-content-1");
-        var tags = container.querySelectorAll(".docx-wrapper *");
-        // console.log(tags);
-        var idCounter = 1;
-        tags.forEach(function (tag) {
-          if (!tag.id) {
-            tag.id = "id_" + idCounter;
-            idCounter++;
+          await convertImagesToBase64("container-content-1");
+          const container = document.getElementById("container-content-1");
+          var tags = container.querySelectorAll(".docx-wrapper *");
+          // console.log(tags);
+          var idCounter = 1;
+          tags.forEach(function (tag) {
+            if (!tag.id) {
+              tag.id = "id_" + idCounter;
+              idCounter++;
+            }
+          });
+          const sections = container.getElementsByClassName("docx");
+          console.log(sections);
+          for (var i = 0; i < sections.length; i++) {
+            console.log("section height chages");
+            sections[i].setAttribute(
+              "style",
+              "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+            );
           }
-        });
-        const sections = container.getElementsByClassName("docx");
-        console.log(sections);
-        for (var i = 0; i < sections.length; i++) {
-          console.log("section height chages");
-          sections[i].setAttribute(
-            "style",
-            "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+          const containerdocx =
+            container.getElementsByClassName("docx-wrapper")[0];
+          const headers = containerdocx.getElementsByTagName("header");
+          console.log(headers);
+          // for (var i = 0; i < headers.length; i++) {
+          //   console.log("section height chages");
+          //   headers[i].setAttribute(
+          //     "style",
+          //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+          //   );
+          // }
+          const articles = containerdocx.getElementsByTagName("article");
+          console.log(articles);
+          // for (var i = 0; i < articles.length; i++) {
+          //   console.log("section height chages");
+          //   articles[i].setAttribute("style", "margin-top: 48px; ");
+          // }
+          var containerContent = document.getElementById("container-content-1");
+
+          let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
+
+          console.log("ggg", resHtml);
+          // dummy value
+          //   const categoryId = 1;
+          const htmlJson = extractHtmlToJson(
+            containerContent.getElementsByClassName("docx-wrapper")[0]
           );
+          console.log(resHtml, htmlJson);
+          const token = localStorage.getItem("token");
+          console.log("token is ", token);
+          await CreatePolicy(
+            resHtml,
+            htmlJson,
+            policycategory,
+            policyname,
+            token
+          );
+          console.log("results");
+          window.closeEditor();
+        } else {
+          if (policyname == "") {
+            document
+              .getElementById("policyname-error")
+              .classList.remove("hidden");
+          }
+          if (policydescription == "") {
+            document
+              .getElementById("policydescription-error")
+              .classList.remove("hidden");
+          }
+          if (policycategory == "Select a category") {
+            document
+              .getElementById("policycategory-error")
+              .classList.remove("hidden");
+          }
         }
-        const containerdocx =
-          container.getElementsByClassName("docx-wrapper")[0];
-        const headers = containerdocx.getElementsByTagName("header");
-        console.log(headers);
-        // for (var i = 0; i < headers.length; i++) {
-        //   console.log("section height chages");
-        //   headers[i].setAttribute(
-        //     "style",
-        //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-        //   );
-        // }
-        const articles = containerdocx.getElementsByTagName("article");
-        console.log(articles);
-        // for (var i = 0; i < articles.length; i++) {
-        //   console.log("section height chages");
-        //   articles[i].setAttribute("style", "margin-top: 48px; ");
-        // }
-        var containerContent = document.getElementById("container-content-1");
-
-        let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
-
-        console.log("ggg", resHtml);
-        // dummy value
-        //   const categoryId = 1;
-        const htmlJson = extractHtmlToJson(
-          containerContent.getElementsByClassName("docx-wrapper")[0]
-        );
-        console.log(resHtml, htmlJson);
-        const token = localStorage.getItem("token");
-        console.log("token is ", token);
-        await CreatePolicy(
-          resHtml,
-          htmlJson,
-          policycategory,
-          policyname,
-          token
-        );
-        console.log("results");
-        window.closeEditor();
+      });
+  }
+  function closereviewmodal() {
+    document.getElementById("sendforreview").classList.add("hidden");
+  }
+  if (document.getElementById("review")) {
+    document
+      .getElementById("review")
+      .addEventListener("click", async function () {
+        document.getElementById("adminlist").innerHTML =
+          "  <option selected>Select an Admin</option>";
+        document.getElementById("sendforreview").classList.remove("hidden");
+        const adminlist = await GetAdminList();
+        console.log(adminlist, "Admin list");
+        adminlist.map((item) => {
+          console.log(item.email, "email");
+          document.getElementById("adminlist").innerHTML += `<option value=${
+            item.id
+          }>${item.first_name + " " + item.last_name}</option>`;
+        });
+      });
+    document
+      .getElementById("closereview")
+      .addEventListener("click", closereviewmodal);
+    document
+      .getElementById("sendreview")
+      .addEventListener("click", async function () {
+        console.log(document.getElementById("adminlist").value);
+        if (document.getElementById("adminlist").value !== "Select an Admin") {
+          document.getElementById("admin-error").classList.remove("opacity-1");
+          document.getElementById("admin-error").classList.add("opacity-0");
+          const response = await SetDocumentToApprove(
+            parseInt(document.getElementById("adminlist").value),
+            parseInt(localStorage.getItem("modalId")),
+            parseInt(localStorage.getItem("userid"))
+          ).then(() => {
+            closereviewmodal();
+            document.getElementById("sendforreview").classList.add("hidden");
+          });
+          console.log(response);
+          if (response) {
+            document.getElementById("sendforreview").classList.add("hidden");
+          }
+        } else {
+          document.getElementById("admin-error").classList.add("opacity-1");
+          document.getElementById("admin-error").classList.remove("opacity-0");
+        }
       });
   }
 }

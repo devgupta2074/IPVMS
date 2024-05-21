@@ -43,7 +43,8 @@ async function addCategoryElements(arr) {
 </button>
       <div id="category-row" class="flex flex-row gap-4 overflow-x-auto no-scrollbar">
 
-<button id='' class ='min-w-36 py-4 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3] hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500'>All</button>      
+<button id='' class ='min-w-36 py-4 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3] hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500'>All</button>  
+<button id='draft' class=" min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ">Draft</button>     
 </div>
 <div id="addCategory-btn" class="py-4">
 <button class=" rounded-full bg-ship-cove-200 h-8 p-1">

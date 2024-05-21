@@ -416,7 +416,9 @@ function extractParentText(parentId) {
       }
     }
   } else {
-    textContent = parentElement.textContent;
+    if (parentElement) {
+      textContent = parentElement.textContent;
+    }
   }
 
   return textContent;

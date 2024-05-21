@@ -11,6 +11,7 @@ import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
   ROUTES_CONSTANTS,
+  style,
   TOAST_COLORS,
   TOAST_ERRORS,
   TOAST_ICONS,
@@ -275,7 +276,7 @@ var totalItems;
 //         </svg>
 //       </button>
 
-//       <button onclick="openModal(${id})">
+//       <button onclick="openLetter(${id})">
 //         <svg id="redeye" class="h-6 w-6">
 //           <use
 //             xlink:href="/assets/icons/icon.svg#redeye"
@@ -928,7 +929,7 @@ function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
-      window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 
@@ -1096,6 +1097,7 @@ function displayArea() {
         insertdefault.innerHTML += `
         <div>
 <div
+onclick="openLetter(${template.id})"
  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
 >
  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
@@ -1133,8 +1135,9 @@ function displayArea() {
         // Replace comma for the desired format
         const formattedDateString = formattedDate.replace(",", "");
         customdefault.innerHTML += `
-        <div>
+        <div >
 <div
+onclick="openLetter(${template.id})"
  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
 >
  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
@@ -1174,6 +1177,7 @@ function displayArea() {
         insertdraft.innerHTML += `
         <div>
 <div
+onclick="openLetter(${template.id})"
  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center"
 >
  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
@@ -2105,3 +2109,91 @@ function displayArea() {
   }
 }
 //Employee Name
+function addModalOpenCloseFeature() {
+  window.openLetter = async function (modalId) {
+    console.log(modalId, "modal id");
+    const newel = document.createElement("div");
+    newel.innerHTML = `  <div id=${modalId}  >
+   <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
+     <!-- Background overlay -->
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+ 
+     <!-- Modal content -->
+     <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+       <div class="absolute top-0 right-0 p-2 ">
+         <button onclick="closeLetter(${modalId})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+           </svg>
+         </button>
+       </div>
+ 
+       <div id="printThis" class="p-6 pt-0  ">
+         <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+         ${style}
+         <div class='docx-wrapper' id='docx-wrapper'>
+         </div>
+         
+           </div>
+         
+       
+      
+       </div>
+     </div>
+   </div>
+ </div>`;
+    document.getElementsByTagName("body")[0].appendChild(newel);
+
+    document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
+    window.addEventListener("beforeprint", (event) => {
+      console.log("Before print");
+      const contents = document
+        .getElementById(modalId)
+        .getElementsByClassName("docx-wrapper")[0].outerHTML;
+      document.getElementById(modalId).innerHTML = contents;
+    });
+    window.addEventListener("click", function (event) {
+      console.log(event.target.id, "clcikde", modalId);
+
+      if (event.target.id === modalId) {
+        window.closeModal(modalId);
+      }
+    });
+
+    await fetchAndRenderDoc(modalId);
+  };
+
+  window.closeLetter = function (modalId) {
+    document.getElementById(modalId).style.display = "none";
+    document
+      .getElementsByTagName("body")[0]
+      .classList.remove("overflow-y-hidden");
+  };
+}
+addModalOpenCloseFeature();
+//
+// letter modal feature
+
+const fetchAndRenderDoc = async (modalId) => {
+  const response = await fetch(
+    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data, "response issss");
+      const docData = data.data[0].htmldata;
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = "";
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = docData;
+      const modal = document.getElementById(modalId);
+    });
+};

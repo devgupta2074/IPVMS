@@ -19,6 +19,7 @@ import {
   applyChangesFromV1toV2withouthighlight,
 } from "./versioncontrol.js";
 import { extractHtmlToJson } from "./uploadpolicy1.js";
+import { Gettest } from "../api/signsiwfttest.js";
 
 var maxPages = 10;
 var pageSize = 5;
@@ -38,7 +39,7 @@ if (localStorage.getItem("token") === null) {
 } else {
   const token = localStorage.getItem("token");
   console.log("token is", token);
-  await UserInfoApiRequest(token).then((data) => {
+  await UserInfoApiRequest(token).then(async (data) => {
     // Handle the response from the backend
     console.log(data, "d");
     if (data.statusCode == 401) {

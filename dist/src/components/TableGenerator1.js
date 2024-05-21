@@ -1,3 +1,9 @@
+import { CreatePolicy } from "../api/createpolicy.js";
+import { GetAdminList } from "../api/getAdminLIst.js";
+import { GetAllCategory } from "../api/getAllCategories.js";
+import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
+
+import { style } from "../utils/constants.js";
 export const fetchTable = async () => {
   const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
 
@@ -93,6 +99,14 @@ const docCard = (
               ></use>
             </svg>
           </button>
+
+          <button type="button" onClick="openEditor(${id})">
+          <svg id="view" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#view"
+            ></use>
+          </svg>
+        </button>
           
         </div>
       </td>
@@ -459,3 +473,277 @@ export const sortTable = (col) => {
     tbody.appendChild(row);
   });
 };
+
+function addEditorOpenCloseFeature() {
+  window.openEditor = async function (modalId) {
+    const res = await GetAllCategory();
+    document.getElementById("onlyforblank").classList.remove("hidden");
+
+    if (modalId == 0) {
+      // document.getElementById("onlyforblank").classList.remove("hidden");
+      // document.getElementById("version-area").classList.add("hidden");
+      document.getElementById("create-policy").classList.remove("hidden");
+      document.getElementById("review").classList.add("hidden");
+      document.getElementById("json").classList.add("hidden");
+      document.getElementById("container-content-1").contentEditable = true;
+      modalId = 236;
+
+      category = res?.data;
+      let categoryElement = `  <option selected>Select a category</option>`;
+      // let categoryElement = `
+      //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+      //     <option  class="flex justify-center items-center" selected>Choose Category</option>
+      //   `;
+
+      category?.map((item) => {
+        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+      });
+      document.getElementById("category").innerHTML = categoryElement;
+      categoryElement += `
+      <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+      `;
+    }
+    localStorage.setItem("modalId", modalId);
+    console.log("fniefniefnir");
+    let htmljson;
+
+    // document.getElementById("policy-detail").classList.add("hidden");
+    // document.getElementById("policy-table").classList.add("hidden");
+    // document.getElementById("pagination-area").classList.add("hidden");
+    document.getElementById("extralarge-modal").classList.remove("hidden");
+
+    const response2 = await fetch(
+      `http://localhost:5001/api/file/getLetter/${modalId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: "Bearer " + token,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("modalId", modalId);
+        if (data.data.title !== "emptydocx.docx") {
+          document.getElementById("doc_title").textContent = data.data.title;
+        }
+
+        // fetchVersionsDateWise(modalId);
+        // Handle the response from the backend
+        console.log(data.data, "fffffkbnjb ");
+        document.getElementById("docx-wrapper-1").innerHTML =
+          data.data.html_data;
+        htmljson = data.data.htmljson;
+        localStorage.setItem("htmljson", JSON.stringify(htmljson));
+        console.log("ddddddddddddddddddddddddd");
+      });
+    // const container = document.getElementsByClassName("docx-wrapper")[0];
+    // container.id = "docx-wrapper";
+    imageLoaded();
+  };
+  window.closeEditor = function () {
+    console.log("fniefniefnir");
+    document.getElementById("extralarge-modal").classList.add("hidden");
+    if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
+      document.getElementById("onlyforblank").classList.add("hidden");
+      document.getElementById("json").textContent = "Save a Version as Draft";
+      document.getElementById("version-area").classList.remove("hidden");
+      document.getElementById("create-policy").classList.add("hidden");
+      document.getElementById("json").classList.remove("hidden");
+    }
+    document.getElementById("policy-detail").classList.remove("hidden");
+    document.getElementById("policy-table").classList.remove("hidden");
+    document.getElementById("pagination-area").classList.remove("hidden");
+  };
+  if (document.getElementById("create-policy")) {
+    document
+      .getElementById("create-policy")
+      .addEventListener("click", async function () {
+        document.getElementById("policyname-error").classList.add("hidden");
+        document
+          .getElementById("policydescription-error")
+          .classList.add("hidden");
+        document.getElementById("policycategory-error").classList.add("hidden");
+        let policyname = document.getElementById("policy-name").value;
+        let policydescription =
+          document.getElementById("policy-description").value;
+        let policycategory = document.getElementById("category").value;
+        console.log(policycategory, policydescription, policyname);
+
+        if (
+          policyname !== "" &&
+          policydescription !== "" &&
+          policycategory !== "Select a category"
+        ) {
+          // document.getElementById("policyname-error").classList.add("hidden");
+          // document
+          //   .getElementById("policydescription-error")
+          //   .classList.add("hidden");
+          // document
+          //   .getElementById("policycategory-error")
+          //   .classList.add("hidden");
+
+          const blobToBase64 = (blob) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            return new Promise((resolve) => {
+              reader.onloadend = () => {
+                resolve(reader.result);
+              };
+            });
+          };
+
+          async function convertImagesToBase64(divId) {
+            // Find the div element
+            var div = document.getElementById(divId);
+
+            // Find all images within the div
+            var images = div.getElementsByTagName("img");
+
+            // Iterate over each image
+            if (images.length > 0) {
+              for (var i = 0; i < images.length; i++) {
+                var img = images[i];
+
+                // Create a blob URL for the image
+                var blob = await fetch(img.src).then((response) =>
+                  response.blob()
+                );
+
+                // Convert blob to base64
+                var base64 = await blobToBase64(blob);
+
+                img.src = base64;
+              }
+            }
+          }
+
+          await convertImagesToBase64("container-content-1");
+          const container = document.getElementById("container-content-1");
+          var tags = container.querySelectorAll(".docx-wrapper *");
+          // console.log(tags);
+          var idCounter = 1;
+          tags.forEach(function (tag) {
+            if (!tag.id) {
+              tag.id = "id_" + idCounter;
+              idCounter++;
+            }
+          });
+          const sections = container.getElementsByClassName("docx");
+          console.log(sections);
+          for (var i = 0; i < sections.length; i++) {
+            console.log("section height chages");
+            sections[i].setAttribute(
+              "style",
+              "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+            );
+          }
+          const containerdocx =
+            container.getElementsByClassName("docx-wrapper")[0];
+          const headers = containerdocx.getElementsByTagName("header");
+          console.log(headers);
+          // for (var i = 0; i < headers.length; i++) {
+          //   console.log("section height chages");
+          //   headers[i].setAttribute(
+          //     "style",
+          //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+          //   );
+          // }
+          const articles = containerdocx.getElementsByTagName("article");
+          console.log(articles);
+          // for (var i = 0; i < articles.length; i++) {
+          //   console.log("section height chages");
+          //   articles[i].setAttribute("style", "margin-top: 48px; ");
+          // }
+          var containerContent = document.getElementById("container-content-1");
+
+          let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
+
+          console.log("ggg", resHtml);
+          // dummy value
+          //   const categoryId = 1;
+          const htmlJson = extractHtmlToJson(
+            containerContent.getElementsByClassName("docx-wrapper")[0]
+          );
+          console.log(resHtml, htmlJson);
+          const token = localStorage.getItem("token");
+          console.log("token is ", token);
+          await CreatePolicy(
+            resHtml,
+            htmlJson,
+            policycategory,
+            policyname,
+            token
+          );
+          console.log("results");
+          window.closeEditor();
+        } else {
+          if (policyname == "") {
+            document
+              .getElementById("policyname-error")
+              .classList.remove("hidden");
+          }
+          if (policydescription == "") {
+            document
+              .getElementById("policydescription-error")
+              .classList.remove("hidden");
+          }
+          if (policycategory == "Select a category") {
+            document
+              .getElementById("policycategory-error")
+              .classList.remove("hidden");
+          }
+        }
+      });
+  }
+  function closereviewmodal() {
+    document.getElementById("sendforreview").classList.add("hidden");
+  }
+  if (document.getElementById("review")) {
+    document
+      .getElementById("review")
+      .addEventListener("click", async function () {
+        document.getElementById("adminlist").innerHTML =
+          "  <option selected>Select an Admin</option>";
+        document.getElementById("sendforreview").classList.remove("hidden");
+        const adminlist = await GetAdminList();
+        console.log(adminlist, "Admin list");
+        adminlist.map((item) => {
+          console.log(item.email, "email");
+          document.getElementById("adminlist").innerHTML += `<option value=${
+            item.id
+          }>${item.first_name + " " + item.last_name}</option>`;
+        });
+      });
+    document
+      .getElementById("closereview")
+      .addEventListener("click", closereviewmodal);
+    document
+      .getElementById("sendreview")
+      .addEventListener("click", async function () {
+        console.log(document.getElementById("adminlist").value);
+        if (document.getElementById("adminlist").value !== "Select an Admin") {
+          document.getElementById("admin-error").classList.remove("opacity-1");
+          document.getElementById("admin-error").classList.add("opacity-0");
+          const response = await SetDocumentToApprove(
+            parseInt(document.getElementById("adminlist").value),
+            parseInt(localStorage.getItem("modalId")),
+            parseInt(localStorage.getItem("userid"))
+          ).then(() => {
+            closereviewmodal();
+            document.getElementById("sendforreview").classList.add("hidden");
+          });
+          console.log(response);
+          if (response) {
+            document.getElementById("sendforreview").classList.add("hidden");
+          }
+        } else {
+          document.getElementById("admin-error").classList.add("opacity-1");
+          document.getElementById("admin-error").classList.remove("opacity-0");
+        }
+      });
+  }
+}
+
+addEditorOpenCloseFeature();

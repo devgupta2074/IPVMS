@@ -10,10 +10,10 @@ import { fetchVersionsDateWise } from "./VersionTable.js";
 
 const docxModal = (id) => {
   return `
-    <div id=${id}  >
+    <div id=${id} class="modal-class"  >
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
       <!-- Background overlay -->
-      <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+      <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
   
       <!-- Modal content -->
       <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
@@ -43,6 +43,8 @@ const docxModal = (id) => {
   </div>
   
     `;
+
+  // Event listener for clicks outside the modal
 };
 
 const docCard = (title, created_by, created_at, id, index, type) => {

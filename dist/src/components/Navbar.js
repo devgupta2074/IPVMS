@@ -133,6 +133,7 @@ export async function InsertNavbar() {
         redirect(VIEWS_CONSTANTS.LOGIN);
       } else {
         userdata = data;
+        //
       }
     });
   }

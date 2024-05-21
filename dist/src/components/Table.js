@@ -235,7 +235,7 @@ export const fetchTable = async (tableType) => {
   const title = tableType.title ? tableType.title : "";
 
   if (tableType.name == "recent") {
-    apiLink = "http://ipvms-api.exitest.com/api/file/getRecentPolicies";
+    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
     apiLink = `http://localhost:5001/api/file/document?page=${
       currentPage - 1
@@ -423,7 +423,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.remove("hidden");
 
     const response2 = await fetch(
-      `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+      `http://localhost:5001/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -606,7 +606,7 @@ function addModalOpenCloseFeature() {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

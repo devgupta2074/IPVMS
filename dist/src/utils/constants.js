@@ -83,6 +83,7 @@ const ROUTES_CONSTANTS = {
   GET_ADMIN_LIST: "/getAdminList",
   SET_TO_APPROVE: "/api/setDocumentToApprove",
   GET_POLICY_APPROVAL: "/getPolicyApprovalsByUserId",
+  GET_POLICY_APPROVAL_USER_SENT: "/getPolicyApprovalsUserSent",
   GET_DOCUMENT_BY_ID: "/api/file/getFile/",
 };
 export const style = `<style>

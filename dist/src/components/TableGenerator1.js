@@ -488,6 +488,7 @@ function addEditorOpenCloseFeature() {
       .getElementById("extralarge-modal-content")
       .classList.remove("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
+    document.getElementById("area").classList.add("hidden");
 
     const response2 = await fetch(
       `http://localhost:5001/api/file/getLetter/${modalId}`,

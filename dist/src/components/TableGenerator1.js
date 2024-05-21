@@ -511,6 +511,7 @@ function addEditorOpenCloseFeature() {
     // document.getElementById("policy-table").classList.add("hidden");
     // document.getElementById("pagination-area").classList.add("hidden");
     document.getElementById("extralarge-modal").classList.remove("hidden");
+    document.getElementById("area").classList.add("hidden");
 
     const response2 = await fetch(
       `http://localhost:5001/api/file/getLetter/${modalId}`,
@@ -545,6 +546,7 @@ function addEditorOpenCloseFeature() {
   window.closeEditor = function () {
     console.log("fniefniefnir");
     document.getElementById("extralarge-modal").classList.add("hidden");
+    document.getElementById("area").classList.remove("hidden");
     if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
       document.getElementById("onlyforblank").classList.add("hidden");
       document.getElementById("json").textContent = "Save a Version as Draft";

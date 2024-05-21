@@ -20,6 +20,7 @@ import {
 } from "./versioncontrol.js";
 import { extractHtmlToJson } from "./uploadpolicy1.js";
 import { Gettest } from "../api/signsiwfttest.js";
+import { GetPolicyApprovalsByUserSent } from "../api/getPolicyApprovalUserSent.js";
 
 var maxPages = 10;
 var pageSize = 5;
@@ -66,39 +67,112 @@ async function getPolicyApprovals() {
   const response = await GetPolicyApprovalsByUserId(
     parseInt(localStorage.getItem("userid"))
   );
+  const response2 = await GetPolicyApprovalsByUserSent(
+    parseInt(localStorage.getItem("userid"))
+  );
   console.log(response, "dev");
   document.getElementById("policyapproval").innerHTML = "";
-  response.map((approve) => {
-    console.log(approve, "hello");
-    document.getElementById("policyapproval").innerHTML += `
-    <li class="mt-4">
-    <div role="button"
-      class="p-3 flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg">
-      <div>
-        <p class="text-base font-medium text-[#333333] truncate">
-          ${approve.title}
-        </p>
-        <span class="text-sm text-gray-500 truncate ">
-          Sent by ${
-            approve.sent_by_first_name + " " + approve.sent_by_last_name
-          }
-        </span>
+  if (response.length == 0 && response2.length == 0) {
+    document.getElementById(
+      "policyapproval"
+    ).innerHTML = `  <div class="flex flex-row p-4 gap-2  ">
+
+    <svg id="boards" class="h-60 w-20">
+        <use
+          xlink:href="/assets/icons/icon.svg#emptyicon"
+        ></use>
+      </svg>
+      <div class="font-roboto font-normal  text-base text-boulder-400 ">
+      Oops! It seems there are no policies awaiting approval at the moment.
       </div>
-      <div class="flex justify-center items-center">
-        <button
-        id=${approve.id}
-        onClick="openPolicyReview(${approve.id}, ${approve.doc_id})"
-          class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
-          ${approve.status}
-        </button>
+  </div>`;
+  } else {
+    response.map((approve) => {
+      console.log(approve, "hello");
+      document.getElementById("policyapproval").innerHTML += `
+      <li class="mt-4">
+      <div role="button"
+        class="p-3 flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg">
+        <div>
+          <p class="text-base font-medium text-[#333333] truncate">
+            ${approve.title}
+          </p>
+          <span class="text-sm text-gray-500 truncate ">
+            Sent by ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
+          </span>
+        </div>
+        <div class="flex justify-center items-center">
+          <button
+          id=${approve.id}
+          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${
+        approve.request_by
+      })"
+            class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
+            ${approve.status}
+          </button>
+        </div>
       </div>
-    </div>
-    </li>`;
-  });
+      </li>`;
+    });
+
+    response2.map((approve) => {
+      console.log(approve, "hello");
+      if (approve.status === "VIEW") {
+        approve.status = "WAITING";
+      }
+      document.getElementById("policyapproval").innerHTML += `
+      <li class="mt-4">
+      <div role="button"
+        class="p-3 flex items-center justify-between transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg">
+        <div>
+          <p class="text-base font-medium text-[#333333] truncate">
+            ${approve.title}
+          </p>
+          <span class="text-sm text-gray-500 truncate ">
+            Sent To ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
+          </span>
+        </div>
+        <div class="flex justify-center items-center">
+          <button
+          id=${approve.id}
+          onClick="openSentToModal('${approve.status}',${approve.id}, ${
+        approve.doc_id
+      },'${approve.reason}')"
+            class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
+            ${approve.status}
+          </button>
+        </div>
+      </div>
+      </li>`;
+    });
+  }
 }
 getPolicyApprovals();
 
-window.openPolicyReview = async function (id, doc_id) {
+window.openSentToModal = async function (status, id, doc_id, reason) {
+  console.log(doc_id, id, status);
+
+  if (status !== "REJECTED") {
+    console.log("do nothing");
+  } else {
+    document.getElementById("reasonmodal").classList.remove("hidden");
+    document.getElementById("reasondetails").innerText = reason;
+    document
+      .getElementById("closereason")
+      .addEventListener("click", function () {
+        document.getElementById("reasonmodal").classList.add("hidden");
+        document.getElementById("reasondetails").innerText = "";
+      });
+  }
+};
+document.getElementById("closereview").addEventListener("click", function () {
+  document.getElementById("rejectionmodal").classList.add("hidden");
+});
+window.openPolicyReview = async function (id, doc_id, sentbyid) {
   console.log(doc_id, id);
   document.getElementById("extralarge-modal").classList.remove("hidden");
   document.getElementById("dashboardarea").classList.add("hidden");
@@ -128,7 +202,7 @@ window.openPolicyReview = async function (id, doc_id) {
 
   const response = await fetch(
     `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-      localStorage.getItem("userid")
+      sentbyid
     )}`,
     {
       method: "GET",
@@ -279,7 +353,7 @@ window.openPolicyReview = async function (id, doc_id) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: doc_id,
+            id: id,
             reason: reason,
           }),
         }

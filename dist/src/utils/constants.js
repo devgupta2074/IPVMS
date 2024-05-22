@@ -85,6 +85,7 @@ const ROUTES_CONSTANTS = {
   GET_POLICY_APPROVAL: "/getPolicyApprovalsByUserId",
   GET_POLICY_APPROVAL_USER_SENT: "/getPolicyApprovalsUserSent",
   GET_DOCUMENT_BY_ID: "/api/file/getFile/",
+  DELETE_TEMPLATE: "/deleteTemplate",
 };
 export const style = `<style>
 .docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

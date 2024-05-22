@@ -161,58 +161,7 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
               <span class="text-[#1F2DE3]">Browse</span>
             </p>
             <p class="text-[#333333] text-xs">Or</p>
-            <p
-              class="text-[#333333] text-base flex items-center justify-center gap-1"
-            >
-              from Google Drive
-              <span>
-                <svg
-                  width="21"
-                  height="18"
-                  viewBox="0 0 21 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_1531_13285)">
-                    <path
-                      d="M2.22423 15.409L3.08421 16.9418C3.26291 17.2645 3.51976 17.5181 3.82133 17.7025C4.68512 16.5711 5.28626 15.7029 5.62508 15.0979C5.96884 14.4839 6.39137 13.5234 6.89265 12.2167C5.54167 12.0331 4.51792 11.9414 3.8214 11.9414C3.15284 11.9414 2.12909 12.0331 0.75 12.2167C0.75 12.5739 0.83935 12.9312 1.01805 13.2539L2.22423 15.409Z"
-                      fill="#0066DA"
-                    />
-                    <path
-                      d="M17.1788 17.7025C17.4805 17.5181 17.7373 17.2645 17.916 16.9419L18.2734 16.308L19.9822 13.2539C20.1576 12.9382 20.25 12.5806 20.2502 12.2167C18.8631 12.0331 17.8412 11.9414 17.1845 11.9414C16.4787 11.9414 15.4567 12.0331 14.1187 12.2167C14.6141 13.5306 15.031 14.491 15.3696 15.0979C15.7111 15.7101 16.3141 16.5783 17.1788 17.7025Z"
-                      fill="#EA4335"
-                    />
-                    <path
-                      d="M10.5001 5.76244C11.4995 4.51698 12.1882 3.55653 12.5663 2.88126C12.8707 2.33748 13.2058 1.46924 13.5714 0.276603C13.2699 0.0922009 12.9237 0 12.5663 0H8.43394C8.07654 0 7.73041 0.103755 7.42877 0.276603C7.89388 1.64445 8.2886 2.61794 8.61279 3.197C8.9711 3.83699 9.6002 4.6921 10.5001 5.76244Z"
-                      fill="#00832D"
-                    />
-                    <path
-                      d="M14.1075 12.2168H6.89266L3.82141 17.7026C4.1229 17.887 4.4691 17.9792 4.8265 17.9792H16.1737C16.5311 17.9792 16.8773 17.8755 17.1788 17.7026L14.1075 12.2168Z"
-                      fill="#2684FC"
-                    />
-                    <path
-                      d="M10.5001 5.76212L7.42883 0.276367C7.12719 0.460769 6.87033 0.714262 6.69163 1.037L1.01805 11.1789C0.842635 11.4946 0.750232 11.8522 0.75 12.2161H6.89265L10.5001 5.76212Z"
-                      fill="#00AC47"
-                    />
-                    <path
-                      d="M17.1454 6.10798L14.3085 1.037C14.1299 0.714262 13.8729 0.460769 13.5714 0.276367L10.5001 5.7622L14.1075 12.2162H20.239C20.239 11.8589 20.1497 11.5017 19.971 11.1789L17.1454 6.10798Z"
-                      fill="#FFBA00"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_1531_13285">
-                      <rect
-                        width="19.5"
-                        height="18"
-                        fill="white"
-                        transform="translate(0.75)"
-                      />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-          </div>
+            </div>
           <div
             class="w-full h-8 p-2 rounded-md bg-[#BED5FF] flex items-center justify-center text-[#5D5D5D] text-xs font-normal"
           >
@@ -1021,7 +970,7 @@ function displayArea() {
       xlink:href="/assets/icons/icon.svg#upload"
     ></use>
   </svg>
-  Upload Policy
+  Upload Template
 </button>
   <button
     id="generateLetter"
@@ -1031,7 +980,7 @@ function displayArea() {
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>
 
-    Add New Letter
+    Add New Template
   </button>
  </div>
  
@@ -1679,7 +1628,7 @@ onclick="openLetter(${template.id})"
                   
     </label>
               
-     <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-scroll    gap-4">`;
+     <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-auto    gap-4">`;
 
       files.map((item) => {
         html += `
@@ -2195,4 +2144,342 @@ const fetchAndRenderDoc = async (modalId) => {
         .querySelector("#docx-wrapper").innerHTML = docData;
       const modal = document.getElementById(modalId);
     });
+};
+
+document.getElementById("saveasdraft").addEventListener("click", async () => {
+  const res = await saveAsDraft();
+  setTimeout(() => {
+    window.location.href = "http://localhost:5555/letters";
+  }, 3000);
+});
+const saveAsDraft = async () => {
+  const htmlData1 = document.querySelector(".container").innerHTML;
+  // console.log("html data is", htmlData1);
+  try {
+    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
+      html_data: htmlData1,
+      templateId: templateId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
+    });
+    if (res) {
+      Toastify({
+        text: "Letter save as draft success",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+    }
+  } catch (error) {
+    Toastify({
+      text: "Some error occured",
+      duration: 3000,
+      newWindow: true,
+      className: "text-red",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+  }
+};
+
+const handleGeneratePdf = async () => {
+  showLoading();
+  var element = document.getElementById("container");
+  var opt = {
+    margin: 0,
+    filename: "Contrato.pdf",
+    image: {
+      type: "",
+      quality: 0.98,
+    },
+    html2canvas: {
+      scale: 2,
+      letterRendering: true,
+    },
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait",
+    },
+    pagebreak: { mode: "avoid-all", after: "section" },
+  };
+  const pdfBlob = await html2pdf().from(element).output("blob");
+  const formData = new FormData();
+  let letterId;
+  console.log(email);
+  const fileName = "pdfsend" + Date.now() + ".pdf";
+  formData.append("file", pdfBlob, fileName);
+  formData.append("userId", 20);
+  formData.append("templateId", 23);
+  formData.append("email", "tapasviarora2002@gmail.com");
+  formData.append("html_data", element.innerHTML.toString());
+  formData.append("letter_id", letterId);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5001/api/file/uploadLetter",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    Toastify({
+      text: "Letter send succesfully",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    if (response.status == 200) {
+      setTimeout(() => {
+        window.location.href = "http://localhost:5555/letters";
+      }, 3000);
+    }
+  } catch (error) {
+    Toastify({
+      text: "Some error occured",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 2000);
+  } finally {
+    removeLoading();
+  }
+};
+
+//loader
+const showLoading = () => {
+  const loading = document.createElement("div");
+  loading.id = "loadingicon";
+  loading.innerHTML = `<div id="loading"  >
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+<div class="flex gap-2 justify-center items-center h-screen">
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+</div>
+</div>  
+</div>`;
+  document.body.appendChild(loading);
+};
+const removeLoading = () => {
+  const loadingElement = document.getElementById("loadingicon");
+  if (loadingElement) {
+    loadingElement.remove();
+  }
+};
+var shouldBeSigned = false;
+const handleSignSwiftCall = async () => {
+  showLoading();
+  var element = document.getElementById("container");
+  var opt = {
+    margin: 0,
+    filename: "Contrato.pdf",
+    image: {
+      type: "",
+      quality: 0.98,
+    },
+    html2canvas: {
+      scale: 2,
+      letterRendering: true,
+    },
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait",
+    },
+    pagebreak: { mode: "avoid-all", after: "section" },
+  };
+  let letterId;
+  const pdfBlob = await html2pdf().from(element).output("blob");
+  const formData = new FormData();
+  const fileName = "pdfFile" + Date.now() + ".pdf";
+  formData.append("file", pdfBlob, fileName);
+  const fileUpload = await axios.post(
+    "http://localhost:5001/api/file/upload/letterpdf",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  const ShareLink = fileUpload.data.url;
+  if (ShareLink) {
+    //draft->pending
+    await axios.post(
+      "http://localhost:5001/api/file/upload/updateLetterStatus",
+      {
+        letterId: letterId,
+        htmlData: element.innerHTML,
+        recipientId: recipientId,
+        createdBy: ipvmsuserId,
+        templateId: templateId,
+        email: recipientEmail,
+        name: recipientName,
+        fileName: fileName,
+      }
+    );
+  }
+  const email = "tarora@ex2india.com";
+  const username = "Tapasvi";
+  const userId = "10200";
+
+  if (fileUpload) {
+    fetch("http://localhost:3000/api/users/findUser", {
+      method: "POST",
+      body: JSON.stringify({
+        name: username,
+        email: email,
+        id: userId,
+      }),
+      mode: "cors",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data is", data);
+        if (data.status == 500) {
+          console.log("first log in sign swift");
+          document.getElementById("loginError").classList.remove("hidden");
+          //error
+        } else {
+          console.log("data", data);
+          fetch("http://localhost:3000/api/document/uploadDocument", {
+            method: "POST",
+            body: JSON.stringify({
+              userId: data.user.customerId,
+              ShareLink: ShareLink,
+            }),
+            mode: "cors",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              removeLoading();
+              console.log("upload doc  is", data);
+              //error upload doc
+              if (data.status !== 201) {
+                document
+                  .getElementById("uploadError")
+                  .classList.remove("hidden");
+              } else {
+                console.log("success");
+                document
+                  .getElementById("uploadSuccess")
+                  .classList.remove("hidden");
+                Toastify({
+                  text: "Letter send succesfully",
+                  duration: 3000,
+                  newWindow: true,
+                  className: "text-black",
+                  gravity: "top", // `top` or `bottom`
+                  position: "right", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    background: "white",
+                  },
+                }).showToast();
+                setTimeout(() => {
+                  window.location.href = "http://localhost:5555/letters";
+                }, 2000);
+              }
+            });
+        }
+      });
+  }
+};
+
+document.getElementById("sendButton").addEventListener("click", function () {
+  const modal = document.getElementById("confirmModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+});
+
+document
+  .getElementsByClassName("close")[0]
+  .addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("uploadError").classList.add("hidden");
+
+    const signMessage = document.getElementById("signMessage");
+    signMessage.classList.remove("hidden");
+  });
+
+document.getElementById("cancelSend").addEventListener("click", function () {
+  const modal = document.getElementById("confirmModal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  document.getElementById("loginError").classList.add("hidden");
+  document.getElementById("uploadError").classList.add("hidden");
+  document.getElementById("successError").classList.add("hidden");
+  const signMessage = document.getElementById("signMessage");
+  signMessage.classList.remove("hidden");
+});
+document.getElementById("sendLetter").addEventListener("click", function () {
+  const modal = document.getElementById("confirmModal");
+
+  if (!shouldBeSigned) {
+    handleGeneratePdf();
+  } else {
+    handleSignSwiftCall();
+  }
+
+  // window.location.href = "http://localhost:5555/letters";
+});
+document.getElementById("signCheckbox").addEventListener("change", function () {
+  const signMessage = document.getElementById("signMessage");
+
+  if (this.checked) {
+    signMessage.classList.remove("hidden");
+    shouldBeSigned = true;
+  } else {
+    signMessage.classList.add("hidden");
+    shouldBeSigned = false;
+  }
+});
+
+// pdf generate function
+
+window.onclick = function (event) {
+  const modal = document.getElementById("confirmModal");
+  if (event.target == modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("uploadError").classList.add("hidden");
+
+    const signMessage = document.getElementById("signMessage");
+    signMessage.classList.remove("hidden");
+  }
 };

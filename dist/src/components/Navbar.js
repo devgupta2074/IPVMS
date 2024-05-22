@@ -334,6 +334,7 @@ export async function InsertNavbar() {
       });
     }
   });
+  //function to close the modal when clicking outside of it
 
   if (closeButton) {
     closeButton.addEventListener("click", function () {

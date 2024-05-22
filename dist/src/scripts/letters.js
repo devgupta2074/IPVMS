@@ -22,6 +22,7 @@ import { docsstyle } from "../utils/docxstyle.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
+import { imageLoaded } from "./versioncontrol.js";
 
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
 function extractParentText(parentId) {
@@ -460,6 +461,7 @@ const recentsendletters = document.getElementById("recentsentletters");
 const draftLetters = document.getElementById("draftLetters");
 const lettertemplates = document.getElementById("lettertemplates");
 displayArea();
+
 sendletters.addEventListener("click", function () {
   recentsendletters.classList = "cursor-pointer p-3 px-6";
   draftLetters.classList = "cursor-pointer p-3 px-6";
@@ -1261,6 +1263,7 @@ function displayArea() {
       window.openlettereditor = async function (modalId) {
         const res = await GetAllCategory();
         document.getElementById("sectiondetails").classList.add("hidden");
+        document.getElementById("version-area").classList.remove("hidden");
 
         if (modalId == 0) {
           document.getElementById("onlyforblank").classList.remove("hidden");
@@ -2571,13 +2574,15 @@ const fetchAndRenderDoc = async (modalId) => {
       const modal = document.getElementById(modalId);
     });
 };
+if (document.getElementById("savesdraft")) {
+  document.getElementById("saveasdraft").addEventListener("click", async () => {
+    const res = await saveAsDraft();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 3000);
+  });
+}
 
-document.getElementById("saveasdraft").addEventListener("click", async () => {
-  const res = await saveAsDraft();
-  setTimeout(() => {
-    window.location.href = "http://localhost:5555/letters";
-  }, 3000);
-});
 const saveAsDraft = async () => {
   const htmlData1 = document.querySelector(".container").innerHTML;
   // console.log("html data is", htmlData1);
@@ -2844,57 +2849,69 @@ const handleSignSwiftCall = async () => {
   }
 };
 
-document.getElementById("sendButton").addEventListener("click", function () {
-  const modal = document.getElementById("confirmModal");
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
-});
+if (document.getElementById("sendButton")) {
+  document.getElementById("sendButton").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+}
 
-document
-  .getElementsByClassName("close")[0]
-  .addEventListener("click", function () {
+if (document.getElementsByClassName("close")[0]) {
+  document
+    .getElementsByClassName("close")[0]
+    .addEventListener("click", function () {
+      const modal = document.getElementById("confirmModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.getElementById("loginError").classList.add("hidden");
+      document.getElementById("uploadError").classList.add("hidden");
+
+      const signMessage = document.getElementById("signMessage");
+      signMessage.classList.remove("hidden");
+    });
+}
+if (document.getElementById("cancelSend")) {
+  document.getElementById("cancelSend").addEventListener("click", function () {
     const modal = document.getElementById("confirmModal");
     modal.classList.add("hidden");
     modal.classList.remove("flex");
     document.getElementById("loginError").classList.add("hidden");
     document.getElementById("uploadError").classList.add("hidden");
-
+    document.getElementById("successError").classList.add("hidden");
     const signMessage = document.getElementById("signMessage");
     signMessage.classList.remove("hidden");
   });
+}
 
-document.getElementById("cancelSend").addEventListener("click", function () {
-  const modal = document.getElementById("confirmModal");
-  modal.classList.add("hidden");
-  modal.classList.remove("flex");
-  document.getElementById("loginError").classList.add("hidden");
-  document.getElementById("uploadError").classList.add("hidden");
-  document.getElementById("successError").classList.add("hidden");
-  const signMessage = document.getElementById("signMessage");
-  signMessage.classList.remove("hidden");
-});
-document.getElementById("sendLetter").addEventListener("click", function () {
-  const modal = document.getElementById("confirmModal");
+if (document.getElementById("sendLetter")) {
+  document.getElementById("sendLetter").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
 
-  if (!shouldBeSigned) {
-    handleGeneratePdf();
-  } else {
-    handleSignSwiftCall();
-  }
+    if (!shouldBeSigned) {
+      handleGeneratePdf();
+    } else {
+      handleSignSwiftCall();
+    }
 
-  // window.location.href = "http://localhost:5555/letters";
-});
-document.getElementById("signCheckbox").addEventListener("change", function () {
-  const signMessage = document.getElementById("signMessage");
+    // window.location.href = "http://localhost:5555/letters";
+  });
+}
+if (document.getElementById("signCheckbox")) {
+  document
+    .getElementById("signCheckbox")
+    .addEventListener("change", function () {
+      const signMessage = document.getElementById("signMessage");
 
-  if (this.checked) {
-    signMessage.classList.remove("hidden");
-    shouldBeSigned = true;
-  } else {
-    signMessage.classList.add("hidden");
-    shouldBeSigned = false;
-  }
-});
+      if (this.checked) {
+        signMessage.classList.remove("hidden");
+        shouldBeSigned = true;
+      } else {
+        signMessage.classList.add("hidden");
+        shouldBeSigned = false;
+      }
+    });
+}
 
 // pdf generate function
 

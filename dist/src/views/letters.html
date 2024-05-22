@@ -81,28 +81,31 @@
         <div id="onlyforblank" class="hidden  rounded-lg shadow-md w-full bg-white mb-5 flex flex-col items-start gap-[24px] self-stretch p-[24px] ">
       
          <div class="font-roboto font-medium w-full text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
-          Add Policy
+          Add Letter Template
          </div>
          <div class="grid grid-cols-3 w-full gap-5 ">
           <div>
-            <label for="policy-name" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy  Name</label>
+            <label for="policy-name" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Letter Template  Name</label>
             <input type="text" id="policy-name" class="block w-full p-2 font-normal text-chicago-600 leading-5 border text-xs  ">
             <div id="policyname-error" class=" hidden font-normal text-sm text-red-600 mt-1 ">
-              Please enter the name of the policy
+              Please enter the name of the letter template
             </div>
         </div>
         <div>
-          <label for="policy-description" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Policy Description</label>
+          <label for="policy-description" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Letter Template Description</label>
           <input type="text" id="policy-description" class="block w-full p-2 font-normal text-chicago-600 leading-5 border  text-xs  ">
           <div id="policydescription-error" class=" hidden font-normal text-sm text-red-600 mt-1 ">
-            Please enter a policy description
+            Please enter a letter template description
           </div>
       </div>
       
       <div id="addcategory" class="">
-        <label for="category" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy Type</label>
+        <label for="category" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Template Type</label>
         <select id="category" class="block w-full p-2 font-normal text-chicago-600 leading-5  border  text-sm ">
           <option selected>Choose a category</option>
+          <option value="DRAFT">DRAFT</option>
+          <option value="STANDARD">DEFAULT</option>
+          <option value="CUSTOM">CUSTOM</option>
         </select>
         <div id="policycategory-error" class=" hidden font-normal text-sm text-red-600 mt-1 ">
           Please select a category

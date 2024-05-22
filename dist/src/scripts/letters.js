@@ -1023,10 +1023,10 @@ function displayArea() {
       xlink:href="/assets/icons/icon.svg#upload"
     ></use>
   </svg>
-  Upload Policy
+  Upload Letter
 </button>
   <button
-    id="generateLetter"
+    onclick="openlettereditor(${0})"
     type="button"
     class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1278,30 +1278,31 @@ function displayArea() {
     function addEditorOpenCloseFeature() {
       window.openlettereditor = async function (modalId) {
         const res = await GetAllCategory();
+        document.getElementById("sectiondetails").classList.add("hidden");
 
         if (modalId == 0) {
-          // document.getElementById("onlyforblank").classList.remove("hidden");
-          // document.getElementById("version-area").classList.add("hidden");
-          document.getElementById("create-policy").classList.remove("hidden");
+          document.getElementById("onlyforblank").classList.remove("hidden");
+          document.getElementById("version-area").classList.add("hidden");
+          document.getElementById("create-template").classList.remove("hidden");
           document.getElementById("review").classList.add("hidden");
           document.getElementById("json").classList.add("hidden");
           document.getElementById("container-content-1").contentEditable = true;
-          modalId = 236;
+          modalId = 37;
 
-          category = res?.data;
-          let categoryElement = `  <option selected>Select a category</option>`;
-          // let categoryElement = `
-          //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
-          //     <option  class="flex justify-center items-center" selected>Choose Category</option>
-          //   `;
+          // category = res?.data;
+          // let categoryElement = `  <option selected>Select a category</option>`;
+          // // let categoryElement = `
+          // //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+          // //     <option  class="flex justify-center items-center" selected>Choose Category</option>
+          // //   `;
 
-          category?.map((item) => {
-            categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
-          });
-          document.getElementById("category").innerHTML = categoryElement;
-          categoryElement += `
-          <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
-          `;
+          // category?.map((item) => {
+          //   categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+          // });
+          // document.getElementById("category").innerHTML = categoryElement;
+          // categoryElement += `
+          // <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+          // `;
         }
         localStorage.setItem("modalId", modalId);
         console.log("fniefniefnir");
@@ -1348,6 +1349,7 @@ function displayArea() {
         console.log("fniefniefnir");
         document.getElementById("extralarge-modal").classList.add("hidden");
         document.getElementById("area").classList.remove("hidden");
+        document.getElementById("sectiondetails").classList.remove("hidden");
         if (
           !document.getElementById("onlyforblank").classList.contains("hidden")
         ) {
@@ -1355,16 +1357,16 @@ function displayArea() {
           document.getElementById("json").textContent =
             "Save a Version as Draft";
           document.getElementById("version-area").classList.remove("hidden");
-          document.getElementById("create-policy").classList.add("hidden");
+          document.getElementById("create-template").classList.add("hidden");
           document.getElementById("json").classList.remove("hidden");
         }
         document.getElementById("policy-detail").classList.remove("hidden");
         document.getElementById("policy-table").classList.remove("hidden");
         document.getElementById("pagination-area").classList.remove("hidden");
       };
-      if (document.getElementById("create-policy")) {
+      if (document.getElementById("create-template")) {
         document
-          .getElementById("create-policy")
+          .getElementById("create-template")
           .addEventListener("click", async function () {
             document.getElementById("policyname-error").classList.add("hidden");
             document
@@ -1477,15 +1479,32 @@ function displayArea() {
                 containerContent.getElementsByClassName("docx-wrapper")[0]
               );
               console.log(resHtml, htmlJson);
+
+              const data = {
+                htmlText: resHtml,
+                htmljson: htmlJson,
+                mode: policycategory,
+                name: policyname,
+              };
               const token = localStorage.getItem("token");
               console.log("token is ", token);
-              await CreatePolicy(
-                resHtml,
-                htmlJson,
-                policycategory,
-                policyname,
-                token
-              );
+              // document
+              //   .getElementById("container-html1")
+              //   .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
+              console.log(data);
+              const axiosRequestArgs = {
+                method: "post",
+                url: "http://localhost:5001/api/file/uploadTemplate",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
+                },
+                data: data,
+              };
+              axios(axiosRequestArgs).then((res) => {
+                console.log(res.data);
+              });
+
               console.log("results");
               window.closeEditor();
             } else {
@@ -1824,11 +1843,13 @@ function displayArea() {
                 htmlJson,
                 categoryId
               );
-
+              if (categoryId == "DEFAULT") {
+                categoryId = "STANDARD";
+              }
               const data = {
                 htmlText: htmlData,
-                htmlJson,
-                categoryId,
+                htmljson: htmlJson,
+                mode: categoryId,
                 name: title,
               };
               const token = localStorage.getItem("token");
@@ -2289,10 +2310,10 @@ function displayArea() {
     `;
     async function insertallcategories() {
       const res = await GetAllCategory();
-      category = res?.data;
+      category = ["DRAFT", "CUSTOM", "DEFAULT"];
 
       category?.map((item) => {
-        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+        categoryElement += `<option value=${item} id=${item}>${item}</option>`;
       });
       categoryElement += `</select>
       <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>

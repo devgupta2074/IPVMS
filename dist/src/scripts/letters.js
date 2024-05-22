@@ -624,7 +624,7 @@ function displayArea() {
           id="dropdownUsersButton"
         >
           <p class="flex-1">Select Template</p>
-  
+
           <svg
             class="w-2.5 h-2.5 ms-3"
             aria-hidden="true"

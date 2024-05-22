@@ -117,8 +117,8 @@ export const makeForm = (result) => {
   };
   const emailElement = (title) => {
     return `<div class="mb-6">
-      <label for="website" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-      <input  type="url" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
+      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
+      <input  type="email" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
       </div>`;
   };
   const numberElement = (title) => {
@@ -356,7 +356,7 @@ export const makeForm = (result) => {
     document.getElementById("designation").value = result.designation || "";
   }
   if (document.getElementById("Email")) {
-    document.getElementById("Email").value = result.email || "";
+    document.getElementById("Email").value = result?.email || "";
   }
 
   console.log(
@@ -379,11 +379,13 @@ export const makeForm = (result) => {
         inputs.forEach((input) => {
           values[input.id] = input.value;
           if (input.id === "Email") {
+            console.log("this is email", input.value);
             email = input.value;
             recipientEmail = email;
           }
           if (input.id === "Name") {
             recipientName = input.value;
+            console.log("recipient name is", recipientName);
           }
         });
         var template = Handlebars.compile(htmlData);
@@ -443,6 +445,7 @@ const saveAsDraft = async () => {
   // console.log("html data is", htmlData1);
   console.log("recipient name is", recipientName);
   console.log("recipient email is", recipientEmail);
+
   try {
     const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
       html_data: htmlData1,

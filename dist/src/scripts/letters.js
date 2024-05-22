@@ -1214,13 +1214,47 @@ function displayArea() {
       });
     }
     window.deletetemplate = async function (id) {
-      console.log("id: " + id);
+      // console.log("id: " + id);
       const response = await DELETETEMPLATE(id);
-
-      document.getElementById("insert-default").innerHTML = "";
-      document.getElementById("insert-custom").innerHTML = "";
-      document.getElementById("insert-draft").innerHTML = "";
-      location.reload();
+      if (response) {
+        Toastify({
+          text: "Template deleted success",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        setTimeout(() => {
+          document.getElementById("insert-default").innerHTML = "";
+          document.getElementById("insert-custom").innerHTML = "";
+          document.getElementById("insert-draft").innerHTML = "";
+          location.reload();
+        }, 2000);
+      } else {
+        Toastify({
+          text: "some error occured",
+          duration: 3000,
+          newWindow: true,
+          className: "text-red-500 font-bold",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        setTimeout(() => {
+          document.getElementById("insert-default").innerHTML = "";
+          document.getElementById("insert-custom").innerHTML = "";
+          document.getElementById("insert-draft").innerHTML = "";
+          location.reload();
+        }, 2000);
+      }
     };
 
     function addEditorOpenCloseFeature() {
@@ -1294,6 +1328,7 @@ function displayArea() {
       };
       window.closeEditor = function () {
         console.log("fniefniefnir");
+
         document.getElementById("extralarge-modal").classList.add("hidden");
         document.getElementById("area").classList.remove("hidden");
         if (
@@ -2526,6 +2561,7 @@ const saveAsDraft = async () => {
   const htmlData1 = document.querySelector(".container").innerHTML;
   // console.log("html data is", htmlData1);
   try {
+    console.log("name", recipientName);
     const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
       html_data: htmlData1,
       templateId: templateId,

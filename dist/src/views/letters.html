@@ -14,6 +14,9 @@
     />
     
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    
 
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="tailwind.css" />
@@ -68,7 +71,7 @@
       </div>
 
       <div id="extralarge-modal" tabindex="-1" class="hidden  w-full  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <button onclick="closeEditor()" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
+        <button onclick="window.location.reload()" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
           <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
             </svg>
@@ -121,8 +124,8 @@
         </div>
         <div class="relative w-full max-h-full">
       
-            <div class="relative sticky top-0 right-0 bg-white rounded-md shadow z-[6999] ">
-            <div class="sticky top-0 bg-white z-[6999]">
+            <div class="relative sticky top-0 right-0 bg-white rounded-md shadow z-[10] ">
+            <div class="sticky top-0 bg-white z-[10]">
               <div class="sticky top-0 right-0 flex items-center justify-between p-3 border-b rounded-t ">
                 <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
                   New Document
@@ -403,7 +406,7 @@
     ></script>
     <script src="/scripts/docx-preview.min.js"></script>
     <script type="module" src="/scripts/letters.js"></script>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
   </body>
 </html>

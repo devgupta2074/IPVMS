@@ -971,7 +971,7 @@ function displayArea() {
       xlink:href="/assets/icons/icon.svg#upload"
     ></use>
   </svg>
-  Upload Template
+  Upload Letter
 </button>
   <button
     onclick="openlettereditor(${0})"

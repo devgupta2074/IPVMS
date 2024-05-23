@@ -2503,7 +2503,7 @@ function addModalOpenCloseFeature() {
        <div id="printThis" class="p-6 pt-0  ">
          <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
          ${style}
-         <div class='docx-wrapper' id='docx-wrapper'>
+         <div class='' id='docx-wrapper'>
          </div>
          
            </div>

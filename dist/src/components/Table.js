@@ -16,7 +16,7 @@ const docxModal = (id) => {
       <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
   
       <!-- Modal content -->
-      <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+      <div class="fixed inset-0  w-3/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
         <div class="absolute top-0 right-0 p-2 ">
           <button onclick="closeModal(${id})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -26,17 +26,15 @@ const docxModal = (id) => {
         </div>
   
         <div id="printThis" class="p-6 pt-0  ">
-          <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+          <div id="render-docs" class="  flex flex-col justify-center items-center ">
           ${style}
-          <div class='docx-wrapper' id='docx-wrapper'>
+          <div class='shadow-2xl' id='docx-wrapper'>
           </div>
           
             </div>
           
         
-          <a href="#" onclick="closeModal(${id})" class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-           Close Modal
-          </a>
+         
         </div>
       </div>
     </div>

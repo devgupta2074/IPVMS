@@ -29,11 +29,10 @@ var totalItems;
 var title = "";
 // var category = "";
 var siblingCount = 1;
-
-fetchTable({ name: "recent" });
+// const loading = document.getElementById('loading');
+// loading.classList.remove('hidden');
 
 InsertNavbar();
-
 let userdata;
 if (localStorage.getItem("token") === null) {
   redirect(VIEWS_CONSTANTS.LOGIN);
@@ -50,18 +49,26 @@ if (localStorage.getItem("token") === null) {
     }
   });
 }
-fetchCategory();
 
 console.log(userdata);
 let name = document.getElementById("name");
-// let dropdownname = document.getElementById("dropdownname");
-// let dropdownemail = document.getElementById("dropdownemail");
 
-// console.log(userdata, "userdata");
-// dropdownemail.textContent = userdata.data?.email;
-// name.textContent = userdata.data.first_name + " " + userdata.data.last_name;
-// dropdownname.textContent =
-//   userdata.data.first_name + " " + userdata.data.last_name;
+console.log('hello from dashboard');
+
+
+async function all_load() {
+  console.log('koooooooooooooooooooooooooooooooooooooooookoooooooo');
+  await fetchTable({ name: "recent" });
+  await fetchCategory();
+  await getPolicyApprovals();
+
+  // loading.classList.add('hidden');
+}
+
+// loading.style = 'display: block;';
+all_load();
+// loading.style = 'display: none;';
+
 
 async function getPolicyApprovals() {
   const response = await GetPolicyApprovalsByUserId(
@@ -98,17 +105,15 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent by ${
-              approve.sent_by_first_name + " " + approve.sent_by_last_name
-            }
+            Sent by ${approve.sent_by_first_name + " " + approve.sent_by_last_name
+        }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${
-        approve.request_by
-      })"
+          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${approve.request_by
+        })"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
@@ -131,27 +136,26 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent To ${
-              approve.sent_by_first_name + " " + approve.sent_by_last_name
-            }
+            Sent To ${approve.sent_by_first_name + " " + approve.sent_by_last_name
+        }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openSentToModal('${approve.status}',${approve.id}, ${
-        approve.doc_id
-      },'${approve.reason}')"
+          onClick="openSentToModal('${approve.status}',${approve.id}, ${approve.doc_id
+        },'${approve.reason}')"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
-        </div>
-      </div>
-      </li>`;
+          </div>
+          </div>
+          </li>`;
     });
   }
+
+  return true;
 }
-getPolicyApprovals();
 
 window.openSentToModal = async function (status, id, doc_id, reason) {
   console.log(doc_id, id, status);
@@ -168,6 +172,7 @@ window.openSentToModal = async function (status, id, doc_id, reason) {
         document.getElementById("reasondetails").innerText = "";
       });
   }
+
 };
 document.getElementById("closereview").addEventListener("click", function () {
   document.getElementById("rejectionmodal").classList.add("hidden");
@@ -320,7 +325,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 }
               )
                 .then((response) => response.json())
-                .then((data) => {});
+                .then((data) => { });
             });
 
           document.getElementById("extralarge-modal").classList.add("hidden");

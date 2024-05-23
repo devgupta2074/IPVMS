@@ -106,7 +106,7 @@ const docCard = (title, category, created_by, created_at, id) => {
 };
 
 const fetchDoc = async (currentPage, pageSize) => {
-  // document.getElementById("loading").style = "display:block";
+  document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
@@ -125,7 +125,7 @@ It seems there are no recent policy updates to display at the moment.
  </div>
         `;
 
-  // document.getElementById("loading").style = "display:none";
+  document.getElementById("loading").style = "display:none";
 };
 
 document.addEventListener("DOMContentLoaded", async () => {

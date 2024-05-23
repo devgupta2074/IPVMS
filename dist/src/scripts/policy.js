@@ -109,7 +109,7 @@ const docCard = (title, category, created_by, created_at, id) => {
 };
 
 const fetchDoc = async (currentPage, pageSize) => {
-  // document.getElementById("loading").style = "display:block";
+  document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
@@ -150,7 +150,7 @@ const fetchDoc = async (currentPage, pageSize) => {
       }
     });
 
-  // document.getElementById("loading").style = "display:none";
+  document.getElementById("loading").style = "display:none";
 };
 
 document.addEventListener("DOMContentLoaded", async () => {

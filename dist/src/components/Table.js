@@ -125,7 +125,8 @@ function addTable() {
 
   console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
+  tableDiv.innerHTML = `
+  <table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
     <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
@@ -241,9 +242,8 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=${title}&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -310,6 +310,7 @@ export const fetchTable = async (tableType) => {
     });
 
   document.getElementById("loading").style = "display:none";
+  return true;
 };
 
 function getdate(dateString) {
@@ -627,9 +628,8 @@ function addEditorOpenCloseFeature() {
         console.log(adminlist, "Admin list");
         adminlist.map((item) => {
           console.log(item.email, "email");
-          document.getElementById("adminlist").innerHTML += `<option value=${
-            item.id
-          }>${item.first_name + " " + item.last_name}</option>`;
+          document.getElementById("adminlist").innerHTML += `<option value=${item.id
+            }>${item.first_name + " " + item.last_name}</option>`;
         });
       });
     document

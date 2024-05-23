@@ -82,6 +82,9 @@ app.get("/uploadpolicy1", (req, res) => {
 app.get("/pdfViewer?:url", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "pdfViewer.html"));
 });
+app.get("/skeliton-test", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/views", "trash.html"));
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

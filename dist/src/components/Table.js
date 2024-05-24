@@ -888,7 +888,7 @@ function handlePaginationOnClick() {
 
 function addSearchbar() {
   const sbar = document.getElementById("document-search-bar");
-
+  const cross_mark = document.getElementById('x');
   sbar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const tableType = {
@@ -900,8 +900,23 @@ function addSearchbar() {
       // console.log(tableType);
       // resetVariables();
       fetchTable(tableType);
-      sbar.value = "";
+      // sbar.value = "";
+      cross_mark.classList.remove('hidden');
       // addPagination(currentPage);
     }
+  });
+
+  cross_mark.addEventListener('click', () => {
+    sbar.value = '';
+    const tableType = {
+      name: "",
+      title: `${sbar.value}`,
+      category: `${category}`,
+      pagination: true,
+    };
+
+    fetchTable(tableType);
+    cross_mark.classList.add('hidden');
+
   });
 }

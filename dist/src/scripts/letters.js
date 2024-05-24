@@ -927,6 +927,8 @@ async function displayArea() {
     // });
   }
   if (draftLetters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -939,7 +941,9 @@ async function displayArea() {
     area.innerHTML = `<div id="insert-table"></div>`;
 
     document.getElementsByTagName("main")[0].appendChild(area);
-    addTable1();
+    await addTable1();
+    document.getElementById("loading").style = "display:none";
+
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");

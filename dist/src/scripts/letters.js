@@ -432,6 +432,9 @@ async function getUserInfoToDisplay(userId) {
         </div>
       </div>
     </div>`;
+      console.log('lololololollololol');
+      // document.getElementById("loading").style = "display:none";
+
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -445,6 +448,7 @@ if (localStorage.getItem("token") === null) {
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
     console.log(data, "d");
+    document.getElementById("loading").style = "display:none";
     if (data.statusCode == 401) {
       redirect(VIEWS_CONSTANTS.LOGIN);
     } else {
@@ -496,7 +500,7 @@ lettertemplates.addEventListener("click", function () {
   draftLetters.classList = "cursor-pointer p-3 px-6";
   displayArea();
 });
-function displayArea() {
+async function displayArea() {
   if (sendletters.classList.contains("active")) {
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
@@ -895,6 +899,8 @@ function displayArea() {
   }
 
   if (recentsendletters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+    console.log('oooooooooopppppppppppppppppp');
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -907,7 +913,8 @@ function displayArea() {
     area.innerHTML = `<div id="insert-table"></div>`;
 
     document.getElementsByTagName("main")[0].appendChild(area);
-    addTable();
+    await addTable();
+    document.getElementById("loading").style = "display:none";
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");
@@ -1526,7 +1533,7 @@ function displayArea() {
               document.getElementById(
                 "adminlist"
               ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
-                }</option>`;
+              }</option>`;
             });
           });
         document
@@ -2479,6 +2486,8 @@ function displayArea() {
       }
     });
   }
+
+
 }
 //Employee Name
 function addModalOpenCloseFeature() {

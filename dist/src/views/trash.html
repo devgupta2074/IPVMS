@@ -1,100 +1,83 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>trash</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tailwind.css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>
+  </head>
+  <link rel="stylesheet" href="tailwind.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../scripts/docxtohtml.js"></script>
+  <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
+  <script src="../scripts/docx-preview.min.js"></script>
+  <script src = "preview.css"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+    integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
     <!-- <script src="https://unpkg.com/@themesberg/flowbite@latest/dist/flowbite.bundle.js"></script>  -->
-</head>
-<body>
-    
-    <div
-    id="modal"
-    class="modal fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40"
+
+  </head>
+  <body
+    class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden"
   >
-    <div
-      class="modal-content mx-auto my-20 p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
+    <main
+      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
     >
-      <div class="modal-header flex items-center justify-between mb-4">
-        <h1 class="modal-title text-xl font-medium text-gray-800">
-          Add New Category
-        </h1>
-        <button
-          id="closeButton"
-          class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </button>
-      </div>
-      <form id="categoryForm" class="">
-        <div class="mb-4">
-          <label
-            for="categoryName"
-            class="pt-2 block text-sm text-gray-700 capitalize"
-            >Category name</label
-          >
-          <input
-            id="categoryName"
-            placeholder="IT policies"
-            type="text"
-            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-          />
+
+
+<!-- 
+  <div role="status" class="max-w-md p-4 space-y-4 animate-pulse md:p-6 ">
+    <div class="flex items-center justify-between">
+        <div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px]  w-24 mb-2.5"></div>
+            <div class="w-32 h-2 bg-gray-200 rounded-[4px] "></div>
         </div>
-         <div class="mb-4">
-            <label
-              for="categoryName"
-              class="pt-2 block text-sm text-gray-700 capitalize"
-              >color</label
-            >
-            <input
-              id="categoryName"
-              placeholder="SVG"
-              type="color"
-              class="block  px-3  mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-            />
-          </div>
-        <div class="mb-4">
-          <label
-            for="categoryName"
-            class="pt-2 block text-sm text-gray-700 capitalize"
-            >SVG</label
-          >
-          <input
-            id="categoryName"
-            placeholder="SVG"
-            type="file"
-            accept=".svg"
-            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-          />
-        </div>
-        <div class="flex justify-end">
-          <button
-            id="inviteSubmit"
-            type="button"
-        
-            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
-          >
-            Add Category
-          </button>
-        </div>
-      </div>
-     
-      </form>
+        <div class="h-2.5 bg-gray-300 rounded-[4px]  w-24"></div>
     </div>
-</body>
+    <div class="flex items-center justify-between pt-4">
+        <div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+            <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+        </div>
+        <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+    </div>
+    <div class="flex items-center justify-between pt-4">
+        <div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+            <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+        </div>
+        <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+    </div>
+    <div class="flex items-center justify-between pt-4">
+        <div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+            <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+        </div>
+        <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+    </div>
+    <div class="flex items-center justify-between pt-4">
+        <div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+            <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+        </div>
+        <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+    </div>
+    <span class="sr-only">Loading...</span>
+</div> -->
+
+  </main>
+
+  </body>
+  <!-- <script src="./script/"></script> -->
+  <!-- <script defer type="module" src="/scripts/document.js"></script> -->
+
+  <script type="module" src="./scripts/trash.js"></script>
 </html>

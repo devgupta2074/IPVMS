@@ -147,7 +147,7 @@ module.exports = {
       },
 
       "gulf-blue": {
-        50: "#e9f6ff",
+        50: "#BDD0ED",
         100: "#ceebff",
         200: "#a7ddff",
         300: "#6bccff",
@@ -187,8 +187,8 @@ module.exports = {
         950: "#201b4b",
       },
       "steel-gray": {
-        50: "#f2f4fb",
-        100: "#e8eaf7",
+        50: "#F0F0F0",
+        100: "#DFDFDF ",
         200: "#d5daf0",
         300: "#bcc1e5",
         400: "#a0a2d9",

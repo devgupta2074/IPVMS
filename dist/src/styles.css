@@ -731,6 +731,19 @@ video {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+.from-steel-gray-50 {
+  --tw-gradient-from: #f0f0f0 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(240 240 240 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.to-steel-gray-100 {
+  --tw-gradient-to: #dfdfdf var(--tw-gradient-to-position);
+}
+.bg-gulf-blue-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(189 208 237 / var(--tw-bg-opacity));
+}
 .bg-ship-cove-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(113 139 211 / var(--tw-bg-opacity));

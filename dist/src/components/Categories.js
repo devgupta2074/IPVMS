@@ -106,6 +106,8 @@ function addSelectHighlight() {
       };
       resetVariables();
       fetchTable(tableType);
+      document.getElementById("document-search-bar").value = '';
+      document.getElementById('x').classList.add('hidden');
     });
   });
 }

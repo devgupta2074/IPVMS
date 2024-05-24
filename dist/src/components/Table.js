@@ -17,7 +17,7 @@ const docxModal = (id) => {
       <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
   
       <!-- Modal content -->
-      <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+      <div class="fixed inset-0  w-3/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
         <div class="absolute top-0 right-0 p-2 ">
           <button onclick="closeModal(${id})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -27,9 +27,9 @@ const docxModal = (id) => {
         </div>
   
         <div id="printThis" class="p-6 pt-0  ">
-          <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+          <div id="render-docs" class="  flex flex-col justify-center items-center ">
           ${style}
-          <div class='docx-wrapper' id='docx-wrapper'>
+          <div class='shadow-2xl' id='docx-wrapper'>
           </div>
           
             </div>
@@ -124,7 +124,8 @@ function addTable() {
 
   console.log(tableDiv);
 
-  tableDiv.innerHTML = `<table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
+  tableDiv.innerHTML = `
+  <table id='table' class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md">
     <thead class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="py-4 flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
@@ -309,6 +310,7 @@ export const fetchTable = async (tableType) => {
     });
 
   document.getElementById("loading").style = "display:none";
+  return true;
 };
 
 function getdate(dateString) {
@@ -901,7 +903,7 @@ function handlePaginationOnClick() {
 
 function addSearchbar() {
   const sbar = document.getElementById("document-search-bar");
-
+  const cross_mark = document.getElementById("x");
   sbar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const tableType = {
@@ -913,8 +915,22 @@ function addSearchbar() {
       // console.log(tableType);
       // resetVariables();
       fetchTable(tableType);
-      sbar.value = "";
+      // sbar.value = "";
+      cross_mark.classList.remove("hidden");
       // addPagination(currentPage);
     }
+  });
+
+  cross_mark.addEventListener("click", () => {
+    sbar.value = "";
+    const tableType = {
+      name: "",
+      title: `${sbar.value}`,
+      category: `${category}`,
+      pagination: true,
+    };
+
+    fetchTable(tableType);
+    cross_mark.classList.add("hidden");
   });
 }

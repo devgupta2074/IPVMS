@@ -251,7 +251,7 @@ var totalItems;
 // };
 
 // const fetchDoc = async (currentPage, pageSize) => {
-//   // document.getElementById("loading").style = "display:block";
+//  document.getElementById("loading").style = "display:block";
 //   // if (category == "Select a category") {
 //   //   category = "";
 //   // }
@@ -293,7 +293,7 @@ var totalItems;
 //       }
 //     });
 
-//   // document.getElementById("loading").style = "display:none";
+//  document.getElementById("loading").style = "display:none";
 // }
 
 async function getTemplateInfo(templateId) {
@@ -341,15 +341,13 @@ async function getUserInfoToDisplay(userId) {
         <div
           class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
         >
-         ${
-           result.first_name.charAt(0).toUpperCase() +
-           result.last_name.charAt(0).toUpperCase()
-         }
+         ${result.first_name.charAt(0).toUpperCase() +
+        result.last_name.charAt(0).toUpperCase()
+        }
         </div>
         <div class="font-roboto font-normal text-base leading-6">
-          <div class="text-mineshaft-900">${
-            result.first_name + " " + result.last_name
-          }</div>
+          <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
+        }</div>
           <div class="text-mineshaft-600">${result.designation}</div>
         </div>
       </div>
@@ -358,9 +356,8 @@ async function getUserInfoToDisplay(userId) {
       >
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Employee ID</p>
-          <p class="text-mineshaft-600 leading-6 text-base">${
-            result.employee_code
-          }</p>
+          <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
+        }</p>
         </div>
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -435,6 +432,9 @@ async function getUserInfoToDisplay(userId) {
         </div>
       </div>
     </div>`;
+      console.log('lololololollololol');
+      // document.getElementById("loading").style = "display:none";
+
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -448,6 +448,7 @@ if (localStorage.getItem("token") === null) {
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
     console.log(data, "d");
+    document.getElementById("loading").style = "display:none";
     if (data.statusCode == 401) {
       redirect(VIEWS_CONSTANTS.LOGIN);
     } else {
@@ -499,7 +500,7 @@ lettertemplates.addEventListener("click", function () {
   draftLetters.classList = "cursor-pointer p-3 px-6";
   displayArea();
 });
-function displayArea() {
+async function displayArea() {
   if (sendletters.classList.contains("active")) {
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
@@ -535,7 +536,7 @@ function displayArea() {
     // }
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = ` <div id="selectionarea" class="w-full mt-5 flex flex-row gap-5">
+    area.innerHTML = ` <div id="selectionarea" class="relative w-full mt-5 flex flex-row gap-5">
     <div class="w-full flex flex-col">
       <div class="w-full flex flex-col">
         <label class="text-chicago-700 font-normal leading-5 mb-2"
@@ -568,7 +569,7 @@ function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -607,7 +608,7 @@ function displayArea() {
        <li >
         <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
         
-          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+          <label id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
         </div>
       </li>
         </ul>
@@ -646,7 +647,7 @@ function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul
@@ -882,7 +883,7 @@ function displayArea() {
       console.log("template id", templateId);
       window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => {});
+    document.addEventListener("DOMContentLoaded", async () => { });
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 
@@ -898,6 +899,8 @@ function displayArea() {
   }
 
   if (recentsendletters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+    console.log('oooooooooopppppppppppppppppp');
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -910,7 +913,8 @@ function displayArea() {
     area.innerHTML = `<div id="insert-table"></div>`;
 
     document.getElementsByTagName("main")[0].appendChild(area);
-    addTable();
+    await addTable();
+    document.getElementById("loading").style = "display:none";
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");
@@ -923,6 +927,8 @@ function displayArea() {
     // });
   }
   if (draftLetters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -935,7 +941,9 @@ function displayArea() {
     area.innerHTML = `<div id="insert-table"></div>`;
 
     document.getElementsByTagName("main")[0].appendChild(area);
-    addTable1();
+    await addTable1();
+    document.getElementById("loading").style = "display:none";
+
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");
@@ -1528,8 +1536,7 @@ function displayArea() {
               console.log(item.email, "email");
               document.getElementById(
                 "adminlist"
-              ).innerHTML += `<option value=${item.id}>${
-                item.first_name + " " + item.last_name
+              ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
               }</option>`;
             });
           });
@@ -1988,13 +1995,13 @@ function displayArea() {
                   </svg>  
               </div>`
             : file.status === "SUCCESS"
-            ? `<div class="flex gap-2">
+              ? `<div class="flex gap-2">
               <p class="text-black text-xs font-light">Success</p>
               <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
               <span class="sr-only">Success</span>
               </div>
               `
-            : `
+              : `
               <div role="status">
                   <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -2116,9 +2123,8 @@ function displayArea() {
                       <div class="flex   flex-row" id="${item.name}status">
                         <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                           ${Math.round(item.size / 1024)}KB
-                          <span class="hover:cursor-pointer" id="${
-                            item.name
-                          }removebtn"
+                          <span class="hover:cursor-pointer" id="${item.name
+          }removebtn"
                           
                           >
                             <svg
@@ -2484,6 +2490,8 @@ function displayArea() {
       }
     });
   }
+
+
 }
 //Employee Name
 function addModalOpenCloseFeature() {
@@ -2508,7 +2516,7 @@ function addModalOpenCloseFeature() {
        <div id="printThis" class="p-6 pt-0  ">
          <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
          ${style}
-         <div class='docx-wrapper' id='docx-wrapper'>
+         <div class='' id='docx-wrapper'>
          </div>
          
            </div>

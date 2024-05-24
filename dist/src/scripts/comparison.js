@@ -869,7 +869,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (tag) {
           if (
             isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-              false &&
+            false &&
             tag.textContent !== ""
           ) {
             const removedelement = document.createElement("p");

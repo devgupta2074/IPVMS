@@ -63,61 +63,61 @@ const NavBar = `
   </svg>
   </span>
 
-  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
-    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
-      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-    </svg>
-  
-    <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
-    Invite Member</div>
-  </div>
-  </button>
-    
-  
-  </div>
-  </aside>
-  <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
-  <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
-  <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
-    <input type="name" name="search" id="globalsearch" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
-    <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
-      <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
-    </svg>
-  </div>
-  <div class="flex items-center justify-center gap-5 pr-10">
-  <button>
-    <svg class="h-6 w-6 ">
-      <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
-    </svg>
-  </button> 
-    <figure class=" ">
-      <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
-    </figure>
-  <div class="relative">
-    <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-  </svg></button>
-    <!-- Dropdown menu -->
-    <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 0 auto auto 0; margin: 0px; transform: translate3d(-30px, 40.6px, 0px);" data-popper-placement="bottom">
-      <div class="px-4 py-3">
-        <span id="dropdownname" class=" hidden text-sm"></span>
-        <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
-          <span class="block text-sm font-medium  text-boulder-500 truncate">Hr Admin</span>
-      </div>
-      <ul class="py-1" aria-labelledby="dropdown">
-        <li>
-          <a href="#" id="signout" class="text-sm flex flex-row hover:bg-gray-100 text-black gap-2 items-center   px-4 py-2">
-            <svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.36693 10.7338L9.42474 8.67581H3.60634C2.77053 8.67581 2.77053 7.40607 3.60634 7.40607H9.42492L7.36693 5.34826L8.26452 4.45067C8.65792 4.84407 11.3988 7.53649 11.5051 7.72022C11.6544 7.97817 11.6068 8.29105 11.4017 8.49406L8.26452 11.6314L7.36693 10.7338ZM6.748 1.26956V0H2.56122C1.3466 0 0.35498 0.991619 0.35498 2.20624V13.8758C0.35498 15.0904 1.3466 16.0821 2.56122 16.0821H6.74818V14.8125H2.56122C2.04731 14.8125 1.62454 14.3897 1.62454 13.8758V2.20624C1.62454 1.69233 2.04731 1.26956 2.56122 1.26956H6.748Z" fill="black"></path>
+<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
-  <span class="font-roboto  font-medium"> Log Out</span></a>
-        </li>
-      </ul>
+ 
+  <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
+  Invite Member</div>
+</div>
+</button>
+  
+ 
+</div>
+</aside>
+<header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
+<img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
+<div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
+  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+  <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
+    <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
+  </svg>
+</div>
+<div class="flex items-center justify-center gap-5 pr-10">
+<button>
+  <svg class="h-6 w-6 ">
+    <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
+  </svg>
+</button> 
+  <figure class=" ">
+    <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
+  </figure>
+<div class="relative">
+  <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+</svg></button>
+  <!-- Dropdown menu -->
+  <div class="hidden bg-white text-base z-50 absolute top-7 right-1  list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown"  data-popper-placement="bottom">
+    <div class="px-4 py-3">
+      <span id="dropdownname" class=" hidden text-sm"></span>
+      <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
+        <span class="block text-sm font-medium  text-boulder-500 truncate">Hr Admin</span>
     </div>
-    <!-- Dropdown menu -->
-    </div>
+    <ul class="py-1" aria-labelledby="dropdown">
+      <li>
+        <a href="#" id="signout" class="text-sm flex flex-row hover:bg-gray-100 text-black gap-2 items-center   px-4 py-2">
+          <svg width="12" height="17" viewBox="0 0 12 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M7.36693 10.7338L9.42474 8.67581H3.60634C2.77053 8.67581 2.77053 7.40607 3.60634 7.40607H9.42492L7.36693 5.34826L8.26452 4.45067C8.65792 4.84407 11.3988 7.53649 11.5051 7.72022C11.6544 7.97817 11.6068 8.29105 11.4017 8.49406L8.26452 11.6314L7.36693 10.7338ZM6.748 1.26956V0H2.56122C1.3466 0 0.35498 0.991619 0.35498 2.20624V13.8758C0.35498 15.0904 1.3466 16.0821 2.56122 16.0821H6.74818V14.8125H2.56122C2.04731 14.8125 1.62454 14.3897 1.62454 13.8758V2.20624C1.62454 1.69233 2.04731 1.26956 2.56122 1.26956H6.748Z" fill="black"></path>
+</svg>
+<span class="font-roboto  font-medium"> Log Out</span></a>
+      </li>
+    </ul>
   </div>
-  </header>
+  <!-- Dropdown menu -->
+  </div>
+</div>
+</header>
 
   `;
 
@@ -211,6 +211,7 @@ export async function InsertNavbar() {
       dropdown.classList.add("hidden");
     }
   });
+
   let dropdownname = document.getElementById("dropdownname");
   let dropdownemail = document.getElementById("dropdownemail");
 

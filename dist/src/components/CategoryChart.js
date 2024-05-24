@@ -242,6 +242,7 @@ export const fetchCategory = async () => {
         });
       }
     });
+  return true;
 };
 
 export const fetchCategoryZero = async () => {

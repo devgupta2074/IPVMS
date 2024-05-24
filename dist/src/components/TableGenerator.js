@@ -350,7 +350,7 @@ export const resetVariables = () => {
   siblingCount = 1;
 };
 
-export function addTable() {
+export async function addTable() {
   const tableDiv = document.getElementById("insert-table");
   tableDiv.innerHTML = "";
 
@@ -440,7 +440,7 @@ export function addTable() {
   </tbody>
 </table>
       `;
-  fetchTable();
+  await fetchTable();
   addSortFeature();
   addModalOpenCloseFeature();
 }

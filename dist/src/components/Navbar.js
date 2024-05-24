@@ -97,7 +97,7 @@ const NavBar = `
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 </svg></button>
   <!-- Dropdown menu -->
-  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 0 auto auto 0; margin: 0px; transform: translate3d(-30px, 40.6px, 0px);" data-popper-placement="bottom">
+  <div class="hidden bg-white text-base z-50 absolute top-7 right-1  list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown"  data-popper-placement="bottom">
     <div class="px-4 py-3">
       <span id="dropdownname" class=" hidden text-sm"></span>
       <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
@@ -208,6 +208,8 @@ export async function InsertNavbar() {
       dropdown.classList.add("hidden");
     }
   });
+
+
   let dropdownname = document.getElementById("dropdownname");
   let dropdownemail = document.getElementById("dropdownemail");
 

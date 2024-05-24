@@ -536,7 +536,7 @@ async function displayArea() {
     // }
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = ` <div id="selectionarea" class="w-full mt-5 flex flex-row gap-5">
+    area.innerHTML = ` <div id="selectionarea" class="relative w-full mt-5 flex flex-row gap-5">
     <div class="w-full flex flex-col">
       <div class="w-full flex flex-col">
         <label class="text-chicago-700 font-normal leading-5 mb-2"
@@ -569,7 +569,7 @@ async function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -608,7 +608,7 @@ async function displayArea() {
        <li >
         <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
         
-          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+          <label id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
         </div>
       </li>
         </ul>
@@ -647,7 +647,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul

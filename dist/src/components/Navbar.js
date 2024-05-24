@@ -9,7 +9,7 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -27,7 +27,7 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -45,7 +45,7 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#policy"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -62,7 +62,7 @@ const NavBar = `
 </svg>
 </span>
 
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -201,13 +201,23 @@ export async function InsertNavbar() {
   let name = document.getElementById("name");
   let modalname = document.getElementById("modalname");
   let dropdown = document.getElementById("dropdown");
-  modalname.addEventListener("click", function () {
+  modalname.addEventListener("click", function (event) {
     if (dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
       dropdown.classList.remove("hidden");
     } else {
+      event.stopPropagation();
       dropdown.classList.add("hidden");
     }
   });
+
+  document.addEventListener('click', (event) => {
+    if (!dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
+      dropdown.classList.add("hidden");
+    }
+  });
+
 
 
   let dropdownname = document.getElementById("dropdownname");
@@ -279,21 +289,7 @@ export async function InsertNavbar() {
         Send invitation to the user for joining the platform
       </p>
       <form id="inviteForm" class="invite-form">
-        <div class="mb-4">
-          <label
-            for="userName"
-            class="pt-2 block text-sm text-gray-700 capitalize"
-            >User name</label
-          >
-          <input
-            id="userName"
-            placeholder="Arthur Melo"
-            type="text"
-            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-          />
-        </div>
-
-        <div class="mb-4">
+        <div class="my-5">
           <label
             for="userEmail"
             class="block text-sm text-gray-700 capitalize"
@@ -301,19 +297,18 @@ export async function InsertNavbar() {
           >
           <input
             id="userEmail"
-            placeholder="arthurmelo@example.app"
             type="email"
             class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
           />
         </div>
 
-        <div class="flex justify-end">
+        <div class="flex justify-center ">
           <button
             id="inviteSubmit"
             type="button"
-            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
+            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-ship-cove-900  rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
           >
-            Invite Member
+           Send Invitation 
           </button>
         </div>
       </div>

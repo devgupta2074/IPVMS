@@ -2782,17 +2782,13 @@ const handleSignSwiftCall = async () => {
       }
     );
   }
-  const email = "tarora@ex2india.com";
-  const username = "Tapasvi";
+  const email = localStorage.getItem("email");
   const userId = "10200";
-
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
-        name: username,
         email: email,
-        id: userId,
       }),
       mode: "cors",
     })

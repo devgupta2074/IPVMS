@@ -2,6 +2,7 @@ import { CreatePolicy } from "../api/createpolicy.js";
 import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
+import { removeLoading, showLoading } from "../scripts/loading.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
@@ -34,9 +35,7 @@ const docxModal = (id) => {
             </div>
           
         
-          <a href="#" onclick="closeModal(${id})" class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-           Close Modal
-          </a>
+          
         </div>
       </div>
     </div>
@@ -55,11 +54,11 @@ const docCard = (title, created_by, created_at, id, index, type) => {
     return `
       
       <tr
-   
-      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
+     onclick="openModal(${id})"
+      class=" hover:cursor-pointer flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
     >
       <td class="w-14">${index}</td>
-      <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-52 hover:text-blue-600 hover:underline hover:cursor-pointer"     onclick="openModal(${id})">${title}</2td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${date}</td>
       <td class="w-28">Admin</td>
@@ -666,7 +665,21 @@ function addModalOpenCloseFeature() {
   window.openModal = async function (modalId) {
     console.log(modalId, "modal id");
     document.getElementById(modalId).style.display = "block";
+    //
+    const modal = document.getElementById(modalId);
     document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
+    document.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal(modalId);
+      }
+    });
+
+    // Close modal when pressing the escape key
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeModal(modalId);
+      }
+    });
     window.addEventListener("beforeprint", (event) => {
       console.log("Before print");
       const contents = document
@@ -674,26 +687,17 @@ function addModalOpenCloseFeature() {
         .getElementsByClassName("docx-wrapper")[0].outerHTML;
       document.getElementById(modalId).innerHTML = contents;
     });
-    window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
-
-      if (event.target.id === modalId) {
-        window.closeModal(modalId);
-      }
-    });
 
     await fetchAndRenderDoc(modalId);
   };
 
   window.closeModal = function (modalId) {
     document.getElementById(modalId).style.display = "none";
-    document
-      .getElementsByTagName("body")[0]
-      .classList.remove("overflow-y-hidden");
   };
 }
 
 const fetchAndRenderDoc = async (modalId) => {
+  showLoading();
   const response = await fetch(
     `http://localhost:5001/api/file/getFile/${modalId}`,
     {
@@ -714,6 +718,13 @@ const fetchAndRenderDoc = async (modalId) => {
         .getElementById(modalId)
         .querySelector("#docx-wrapper").innerHTML = docData;
       const modal = document.getElementById(modalId);
+      window.addEventListener("click", function (event) {
+        console.log(event.target.id, "clcikde", modalId);
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      });
+      removeLoading();
     });
 };
 

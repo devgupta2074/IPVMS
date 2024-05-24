@@ -2,8 +2,20 @@ import { CreatePolicy } from "../api/createpolicy.js";
 import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
+import { DELETE_LETTER } from "../api/deleteLetterModal.js";
 
 import { style } from "../utils/constants.js";
+
+var ModaltoDeleteId;
+
+function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + "...";
+  } else {
+    return str;
+  }
+}
+
 export const fetchTable = async () => {
   const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
 
@@ -27,6 +39,7 @@ export const fetchTable = async () => {
         data.data.map((item, index) => {
           console.log(item);
           parentElement.innerHTML += docCard(
+            index,
             item.id,
             item.employee_name,
             item.template_name,
@@ -43,6 +56,7 @@ export const fetchTable = async () => {
 };
 
 const docCard = (
+  indx,
   id,
   ename,
   tname,
@@ -56,21 +70,21 @@ const docCard = (
   date = date.toLocaleDateString("en-GB");
   created_at = date;
 
-  if (ename !== "NewUser") {
+  if (ename !== "New User") {
     return `
       
       <tr
       class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
     >
-      <td class="w-14">${id}</td>
+      <td class="w-14">${indx + 1}</td>
       <td class="w-52">${ename}</2td>
-      <td class="w-28">${tname}</td>
+      <td class="w-28">${truncateString(tname, 10)}</td>
       <td class="w-28">${category}</td>
       <td class="w-28">${created_at}</td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${created_at}</td>
       <td class="w-28">
-        <div class="flex gap-2">
+        <div class="flex gap-5 items-center">
           <button type="button" onclick="openLetterFile(${id})">
             <svg id="view" class="h-6 w-6">
               <use
@@ -85,8 +99,17 @@ const docCard = (
           ></use>
         </svg>
         </button>
-          
+        <button type="button" class="mb-3 flex justify-center items-center" onClick="deleteLetter(${id})">
+        <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
+<path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
+<path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
+<path d="M5.25 0.875H8.75V1.75H5.25V0.875Z" fill="#5D5D5D"/>
+</svg>
+      </button>
         </div>
+        <div id="letterdeletemodal">
+    </div>
       </td>
     </tr>
 
@@ -97,15 +120,15 @@ const docCard = (
     <tr
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${id}</td>
+    <td class="w-14">${indx + 1}</td>
     <td class="w-52">${rname}</2td>
-    <td class="w-28">${tname}</td>
+    <td class="w-28">${truncateString(tname, 10)}</td>
     <td class="w-28">${category}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">
-      <div class="flex gap-2">
+      <div class="flex gap-5">
         <button type="button" onclick="openLetterFile(${id})">
           <svg id="view" class="h-6 w-6">
             <use
@@ -120,6 +143,16 @@ const docCard = (
         ></use>
       </svg>
       </button>
+      <button type="button" class="flex justify-center items-center mb-3" onClick="deleteLetter(${id})">
+      <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
+<path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
+<path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
+<path d="M5.25 0.875H8.75V1.75H5.25V0.875Z" fill="#5D5D5D"/>
+</svg>
+    </button>
+    <div id="letterdeletemodal">
+    </div>
         
       </div>
     </td>
@@ -146,6 +179,76 @@ function addSortFeature() {
     });
   });
 }
+window.deleteLetter = function (id) {
+  ModaltoDeleteId = id;
+  const deleteModalHtml = `
+  <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+  <!-- Modal content -->
+  <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+      <button type="button" id="cancelButton" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="deleteModal">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          <span class="sr-only">Close modal</span>
+      </button>
+      <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+      <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete this item?</p>
+      <div class="flex justify-center items-center space-x-4">
+          <button id="cancelButton1" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+               Cancel
+          </button>
+          <button type="submit" id="confirmButton" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+              Yes, I'm sure
+          </button>
+      </div>
+  </div> `;
+
+  document.getElementById("letterdeletemodal").innerHTML = deleteModalHtml;
+  const cancelButton = document.getElementById("cancelButton");
+  const cancelButton1 = document.getElementById("cancelButton1");
+  const confirmButton = document.getElementById("confirmButton");
+  cancelButton.addEventListener("click", () => {
+    document.getElementById("letterdeletemodal").innerHTML = "";
+  });
+  cancelButton1.addEventListener("click", () => {
+    document.getElementById("letterdeletemodal").innerHTML = "";
+  });
+  confirmButton.addEventListener("click", async () => {
+    // Add you1r delete logic here
+    const result = await DELETE_LETTER(ModaltoDeleteId);
+    console.log(result);
+    if (result.success) {
+      Toastify({
+        text: "Letter deleted success",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+      setTimeout(() => {
+        location.reload();
+        document.getElementById("letterdeletemodal").innerHTML = "";
+      }, 1000);
+    }
+
+    //delete ModaldeleteModal.classList.add("hidden");
+  });
+  const deleteModal = document.getElementById("deleteModal");
+  window.addEventListener("click", (event) => {
+    // console.log("event ", event.target);
+    if (event.target === deleteModal) {
+      document.getElementById("letterdeletemodal").innerHTML = "";
+    }
+
+    // setTimeout(() => {
+    //   location.reload();
+    // }, 2000);
+  });
+};
 
 // View Modal
 

@@ -10,6 +10,7 @@ var email;
 var category;
 var recipientId;
 var templateId;
+var template_name;
 var description;
 var result2;
 var shouldBeSigned = false;
@@ -112,19 +113,19 @@ export const makeForm = (result) => {
     }
     return `<div class="mb-6">
     <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-    <input type="text"  id=${title} id="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${title}" required />
+    <input required   type="text"  id=${title} id="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${title}" required />
  </div>`;
   };
   const emailElement = (title) => {
     return `<div class="mb-6">
       <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-      <input  type="email" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
+      <input required   type="email" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
       </div>`;
   };
   const numberElement = (title) => {
     return `<div>
       <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-      <input   type="number" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" maxlength="10"   required />
+      <input   required type="number" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" maxlength="10"   required />
   </div>`;
   };
 
@@ -303,6 +304,7 @@ export const makeForm = (result) => {
       el.innerHTML += dateElement(item.name);
     }
   });
+
   const hasEmailVariable = variableNames.some((item) => item.type === "email");
   if (!hasEmailVariable) {
     let el = container.appendChild(document.createElement("div"));
@@ -325,35 +327,36 @@ export const makeForm = (result) => {
       result?.first_name + result?.last_name || "";
   }
   if (document.getElementById("lastname")) {
-    document.getElementById("lastname").value = result.last_name || "";
+    document.getElementById("lastname").value = result?.last_name || "";
   }
   if (document.getElementById("employeecode")) {
-    document.getElementById("employeecode").value = result.employee_code || "";
+    document.getElementById("employeecode").value = result?.employee_code || "";
   }
   if (document.getElementById("mobilenumber")) {
-    document.getElementById("mobilenumber").value = result.mobile_number || "";
+    document.getElementById("mobilenumber").value = result?.mobile_number || "";
   }
   if (document.getElementById("employmenttype")) {
     document.getElementById("employmenttype").value =
-      result.employment_type || "";
+      result?.employment_type || "";
   }
   if (document.getElementById("businessunit")) {
-    document.getElementById("businessunit").value = result.business_unit || "";
+    document.getElementById("businessunit").value = result?.business_unit || "";
   }
   if (document.getElementById("department")) {
-    document.getElementById("department").value = result.department || "";
+    document.getElementById("department").value = result?.department || "";
   }
   if (document.getElementById("subdepartment")) {
-    document.getElementById("subdepartment").value = result.subdepartment || "";
+    document.getElementById("subdepartment").value =
+      result?.subdepartment || "";
   }
   if (document.getElementById("region")) {
-    document.getElementById("region").value = result.region || "";
+    document.getElementById("region").value = result?.region || "";
   }
   if (document.getElementById("branch")) {
-    document.getElementById("branch").value = result.branch || "";
+    document.getElementById("branch").value = result?.branch || "";
   }
   if (document.getElementById("designation")) {
-    document.getElementById("designation").value = result.designation || "";
+    document.getElementById("designation").value = result?.designation || "";
   }
   if (document.getElementById("Email")) {
     document.getElementById("Email").value = result?.email || "";
@@ -434,12 +437,20 @@ Handlebars.registerHelper("email", function (context) {
   return new Handlebars.SafeString(result);
 });
 
-document.getElementById("saveasdraft").addEventListener("click", async () => {
-  const res = await saveAsDraft();
-  setTimeout(() => {
-    window.location.href = "http://localhost:5555/letters";
-  }, 3000);
-});
+document
+  .getElementById("letterform")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const res = await saveAsDraft();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 3000);
+  });
+document
+  .getElementById("saveasdraft")
+  .addEventListener("click", async (event) => {
+    document.getElementById("submitBtn").click();
+  });
 const saveAsDraft = async () => {
   const htmlData1 = document.querySelector(".container").innerHTML;
   // console.log("html data is", htmlData1);
@@ -624,24 +635,7 @@ const handleSignSwiftCall = async () => {
   );
 
   const ShareLink = fileUpload.data.url;
-  if (ShareLink) {
-    //draft->pending
-    await axios.post(
-      "http://localhost:5001/api/file/upload/updateLetterStatus",
-      {
-        letterId: letterId,
-        htmlData: element.innerHTML,
-        recipientId: recipientId,
-        createdBy: ipvmsuserId,
-        templateId: templateId,
-        email: recipientEmail,
-        name: recipientName,
-        fileName: fileName,
-      }
-    );
-  }
-  const email = "tarora@ex2india.com";
-
+  const email = localStorage.getItem("email");
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
@@ -655,47 +649,81 @@ const handleSignSwiftCall = async () => {
         console.log("data is", data);
         if (data.status == 500) {
           console.log("first log in sign swift");
+          Toastify({
+            text: "Make a account in signwift first",
+            duration: 3000,
+            newWindow: true,
+            className: "text-black",
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "white",
+            },
+          }).showToast();
           document.getElementById("loginError").classList.remove("hidden");
-          //error
         } else {
           console.log("data", data);
+          const signSwiftId = data.user.customerId;
           fetch("http://localhost:3000/api/document/uploadDocument", {
             method: "POST",
             body: JSON.stringify({
               userId: data.user.customerId,
               ShareLink: ShareLink,
+              title: title,
             }),
             mode: "cors",
           })
             .then((response) => response.json())
-            .then((data) => {
+            .then(async (data) => {
               removeLoading();
-              console.log("upload doc  is", data);
-              //error upload doc
-              if (data.status !== 201) {
-                document
-                  .getElementById("uploadError")
-                  .classList.remove("hidden");
-              } else {
-                console.log("success");
-                document
-                  .getElementById("uploadSuccess")
-                  .classList.remove("hidden");
-                Toastify({
-                  text: "Letter send succesfully",
-                  duration: 3000,
-                  newWindow: true,
-                  className: "text-black",
-                  gravity: "top", // `top` or `bottom`
-                  position: "right", // `left`, `center` or `right`
-                  stopOnFocus: true, // Prevents dismissing of toast on hover
-                  style: {
-                    background: "white",
-                  },
-                }).showToast();
-                setTimeout(() => {
-                  window.location.href = "http://localhost:5555/letters";
-                }, 2000);
+              const docId = data.document.id;
+              if (docId) {
+                //draft->pending
+                const data1 = await axios.post(
+                  "http://localhost:5001/api/file/upload/updateLetterStatus",
+                  {
+                    letterId: letterId,
+                    htmlData: element.innerHTML,
+                    recipientId: recipientId,
+                    createdBy: ipvmsuserId,
+                    templateId: templateId,
+                    email: recipientEmail,
+                    name: recipientName,
+                    fileName: fileName,
+                    swift_id: docId,
+                  }
+                );
+                console.log("data is data1", data1);
+                if (data1?.data?.success) {
+                  console.log("upload doc  is", data);
+                  //error upload doc
+                  if (data.status !== 201) {
+                    document
+                      .getElementById("uploadError")
+                      .classList.remove("hidden");
+                  } else {
+                    console.log("success");
+                    document
+                      .getElementById("uploadSuccess")
+                      .classList.remove("hidden");
+                    Toastify({
+                      text: "Redirecting to sign swift",
+                      duration: 3000,
+                      newWindow: true,
+                      className: "text-black",
+                      gravity: "top", // `top` or `bottom`
+                      position: "right", // `left`, `center` or `right`
+                      stopOnFocus: true, // Prevents dismissing of toast on hover
+                      style: {
+                        background: "white",
+                      },
+                    }).showToast();
+                    setTimeout(() => {
+                      window.location.href = `https://ex-sign-swift.vercel.app/user/${signSwiftId}/document/${docId}/step1`;
+                    }, 2000);
+                  }
+                }
               }
             });
         }
@@ -704,9 +732,37 @@ const handleSignSwiftCall = async () => {
 };
 
 document.getElementById("sendButton").addEventListener("click", function () {
-  const modal = document.getElementById("confirmModal");
-  modal.classList.remove("hidden");
-  modal.classList.add("flex");
+  // document.getElementById("submitBtn").click();
+  var form = document.getElementById("letterform");
+  var inputs = form.querySelectorAll("input"),
+    wasFilled = true;
+
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].type !== "checkbox") {
+      if (!inputs[i].value.trim()) {
+        Toastify({
+          text: "Fill the form first",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        inputs[i].focus();
+        wasFilled = false;
+        break;
+      }
+    }
+  }
+  if (wasFilled) {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  }
 });
 
 document

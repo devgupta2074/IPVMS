@@ -44,9 +44,7 @@ const docxModal = (id) => {
           </div>
         
       
-        <a href="#" onclick="closeModal(${id})" class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-         Close Modal
-        </a>
+   
       </div>
     </div>
   </div>

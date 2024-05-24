@@ -53,11 +53,10 @@ if (localStorage.getItem("token") === null) {
 console.log(userdata);
 let name = document.getElementById("name");
 
-console.log('hello from dashboard');
-
+console.log("hello from dashboard");
 
 async function all_load() {
-  console.log('koooooooooooooooooooooooooooooooooooooooookoooooooo');
+  console.log("koooooooooooooooooooooooooooooooooooooooookoooooooo");
   await fetchTable({ name: "recent" });
   await fetchCategory();
   await getPolicyApprovals();
@@ -68,7 +67,6 @@ async function all_load() {
 // loading.style = 'display: block;';
 all_load();
 // loading.style = 'display: none;';
-
 
 async function getPolicyApprovals() {
   const response = await GetPolicyApprovalsByUserId(
@@ -112,15 +110,17 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent by ${approve.sent_by_first_name + " " + approve.sent_by_last_name
-        }
+            Sent by ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${approve.request_by
-        })"
+          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${
+        approve.request_by
+      })"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
@@ -143,15 +143,17 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent To ${approve.sent_by_first_name + " " + approve.sent_by_last_name
-        }
+            Sent To ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openSentToModal('${approve.status}',${approve.id}, ${approve.doc_id
-        },'${approve.reason}')"
+          onClick="openSentToModal('${approve.status}',${approve.id}, ${
+        approve.doc_id
+      },'${approve.reason}')"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
@@ -179,7 +181,6 @@ window.openSentToModal = async function (status, id, doc_id, reason) {
         document.getElementById("reasondetails").innerText = "";
       });
   }
-
 };
 document.getElementById("closereview").addEventListener("click", function () {
   document.getElementById("rejectionmodal").classList.add("hidden");
@@ -197,7 +198,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
   const htmljson = documentdata.data.htmljson;
 
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
+    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
     {
       method: "GET",
       headers: {
@@ -213,7 +214,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     });
 
   const response = await fetch(
-    `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+    `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
       sentbyid
     )}`,
     {
@@ -241,7 +242,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     .getElementById("approve")
     .addEventListener("click", async function () {
       const response = await fetch(
-        `http://localhost:5001/api/approvePolicyApproval?id=${id}`,
+        `http://ipvms-api.exitest.com/api/approvePolicyApproval?id=${id}`,
         {
           method: "GET",
           headers: {
@@ -260,7 +261,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
           const htmljson = documentdata.data.htmljson;
 
           const firstv = await fetch(
-            `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
+            `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -276,7 +277,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
             });
 
           const response = await fetch(
-            `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+            `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
               localStorage.getItem("userid")
             )}`,
             {
@@ -316,7 +317,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
               );
 
               const response = await fetch(
-                `http://localhost:5001/api/updatePolicyHtmlData`,
+                `http://ipvms-api.exitest.com/api/updatePolicyHtmlData`,
                 {
                   method: "POST",
                   headers: {
@@ -332,7 +333,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 }
               )
                 .then((response) => response.json())
-                .then((data) => { });
+                .then((data) => {});
             });
 
           document.getElementById("extralarge-modal").classList.add("hidden");
@@ -358,7 +359,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       });
       const reason = document.getElementById("message").value;
       const response = await fetch(
-        `http://localhost:5001/api/rejectPolicyApproval`,
+        `http://ipvms-api.exitest.com/api/rejectPolicyApproval`,
         {
           method: "POST",
           headers: {

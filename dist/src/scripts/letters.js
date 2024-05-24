@@ -256,7 +256,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -321,7 +321,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://localhost:5001/api/user/getUserInfo/${userId}`,
+    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -341,13 +341,15 @@ async function getUserInfoToDisplay(userId) {
         <div
           class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
         >
-         ${result.first_name.charAt(0).toUpperCase() +
-        result.last_name.charAt(0).toUpperCase()
-        }
+         ${
+           result.first_name.charAt(0).toUpperCase() +
+           result.last_name.charAt(0).toUpperCase()
+         }
         </div>
         <div class="font-roboto font-normal text-base leading-6">
-          <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
-        }</div>
+          <div class="text-mineshaft-900">${
+            result.first_name + " " + result.last_name
+          }</div>
           <div class="text-mineshaft-600">${result.designation}</div>
         </div>
       </div>
@@ -356,8 +358,9 @@ async function getUserInfoToDisplay(userId) {
       >
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Employee ID</p>
-          <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
-        }</p>
+          <p class="text-mineshaft-600 leading-6 text-base">${
+            result.employee_code
+          }</p>
         </div>
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -432,9 +435,8 @@ async function getUserInfoToDisplay(userId) {
         </div>
       </div>
     </div>`;
-      console.log('lololololollololol');
+      console.log("lololololollololol");
       // document.getElementById("loading").style = "display:none";
-
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -883,7 +885,7 @@ async function displayArea() {
       console.log("template id", templateId);
       window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => { });
+    document.addEventListener("DOMContentLoaded", async () => {});
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 
@@ -900,7 +902,7 @@ async function displayArea() {
 
   if (recentsendletters.classList.contains("active")) {
     document.getElementById("loading").style = "display:block";
-    console.log('oooooooooopppppppppppppppppp');
+    console.log("oooooooooopppppppppppppppppp");
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -1308,7 +1310,7 @@ async function displayArea() {
         document.getElementById("area").classList.add("hidden");
 
         const response2 = await fetch(
-          `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+          `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1488,7 +1490,7 @@ async function displayArea() {
               console.log(data);
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://localhost:5001/api/file/uploadTemplate",
+                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1536,7 +1538,8 @@ async function displayArea() {
               console.log(item.email, "email");
               document.getElementById(
                 "adminlist"
-              ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
+              ).innerHTML += `<option value=${item.id}>${
+                item.first_name + " " + item.last_name
               }</option>`;
             });
           });
@@ -1852,7 +1855,7 @@ async function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://localhost:5001/api/file/uploadTemplate",
+                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1995,13 +1998,13 @@ async function displayArea() {
                   </svg>  
               </div>`
             : file.status === "SUCCESS"
-              ? `<div class="flex gap-2">
+            ? `<div class="flex gap-2">
               <p class="text-black text-xs font-light">Success</p>
               <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
               <span class="sr-only">Success</span>
               </div>
               `
-              : `
+            : `
               <div role="status">
                   <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -2123,8 +2126,9 @@ async function displayArea() {
                       <div class="flex   flex-row" id="${item.name}status">
                         <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                           ${Math.round(item.size / 1024)}KB
-                          <span class="hover:cursor-pointer" id="${item.name
-          }removebtn"
+                          <span class="hover:cursor-pointer" id="${
+                            item.name
+                          }removebtn"
                           
                           >
                             <svg
@@ -2490,8 +2494,6 @@ async function displayArea() {
       }
     });
   }
-
-
 }
 //Employee Name
 function addModalOpenCloseFeature() {
@@ -2561,7 +2563,7 @@ addModalOpenCloseFeature();
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -2596,14 +2598,17 @@ const saveAsDraft = async () => {
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
-    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
-      html_data: htmlData1,
-      templateId: templateId,
-      recipientId: recipientId,
-      createdby: ipvmsuserId,
-      email: recipientEmail,
-      name: recipientName,
-    });
+    const res = await axios.post(
+      "http://ipvms-api.exitest.com/api/file/saveLetter",
+      {
+        html_data: htmlData1,
+        templateId: templateId,
+        recipientId: recipientId,
+        createdby: ipvmsuserId,
+        email: recipientEmail,
+        name: recipientName,
+      }
+    );
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -2669,7 +2674,7 @@ const handleGeneratePdf = async () => {
 
   try {
     const response = await axios.post(
-      "http://localhost:5001/api/file/uploadLetter",
+      "http://ipvms-api.exitest.com/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -2764,7 +2769,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://localhost:5001/api/file/upload/letterpdf",
+    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -2777,7 +2782,7 @@ const handleSignSwiftCall = async () => {
   if (ShareLink) {
     //draft->pending
     await axios.post(
-      "http://localhost:5001/api/file/upload/updateLetterStatus",
+      "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,

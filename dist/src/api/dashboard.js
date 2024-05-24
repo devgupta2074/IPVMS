@@ -40,7 +40,7 @@ const getQueueLetters = async () => {
   // from local storage
 
   const data = await axios.get(
-    `http://localhost:5001/api/file/letter/${userId}`
+    `http://ipvms-api.exitest.com/api/file/letter/${userId}`
   );
 
   console.log("upload doc is", data);
@@ -48,7 +48,7 @@ const getQueueLetters = async () => {
   // link and render
   let queueLetterHtml = `<ul role="list" class="flex flex-col justify-between">`;
 
-  if (data) {
+  if (data && data.data.data.length !== 0) {
     data.data.data.forEach((item) => {
       if (item.status === "PENDING") {
         if (item.firstname === "New" && item.lastname === "User") {

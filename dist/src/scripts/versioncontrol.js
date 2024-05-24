@@ -252,7 +252,7 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -393,7 +393,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://localhost:5001/api/file/getFile/${id}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -692,7 +692,7 @@ export function applyChangesFromV1toV2withouthighlight(
       if (tag) {
         if (
           isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-          false &&
+            false &&
           tag.textContent !== ""
         ) {
           const removedelement = document.createElement("p");
@@ -1013,7 +1013,7 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       if (tag) {
         if (
           isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-          false &&
+            false &&
           tag.textContent !== ""
         ) {
           const removedelement = document.createElement("p");
@@ -1081,7 +1081,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1408,7 +1408,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://localhost:5001/api/file/uploadFile",
+  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1432,7 +1432,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://localhost:5001/api/file/getFile/4",
+  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -1526,7 +1526,7 @@ async function ChangeVersion(modalid, id) {
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalid}`,
+    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1545,7 +1545,7 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
+    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1663,12 +1663,12 @@ async function ChangeVersion(modalid, id) {
                 textbefore =
                   childnodeposition - 1 >= 0
                     ? tag.parentElement.childNodes[childnodeposition - 1]
-                      .nodeValue
+                        .nodeValue
                     : null;
                 textafter =
                   childnodeposition + 1 < tag.parentElement.childNodes.length
                     ? tag.parentElement.childNodes[childnodeposition + 1]
-                      .nodeValue
+                        .nodeValue
                     : null;
               }
               console.log(tag.children, "hello hello");
@@ -1774,7 +1774,7 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1803,7 +1803,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1812,18 +1812,21 @@ async function ChangeVersion(modalid, id) {
           }
         )
           .then((response) => response.json())
-          .then((data) => { });
+          .then((data) => {});
       } else {
       }
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1850,7 +1853,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -1958,15 +1961,18 @@ const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${version.id
-            }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
+          <li id=${
+            version.id
+          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
+              version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${
+              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0)}
              </p>

@@ -1,6 +1,14 @@
+function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + "...";
+  } else {
+    return str;
+  }
+}
+
 export const fetchTable = async () => {
   const apiLink =
-    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING";
+    "http://ipvms-api.exitest.com/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -22,12 +30,14 @@ export const fetchTable = async () => {
         data.data.map((item, index) => {
           console.log(item);
           parentElement.innerHTML += docCard(
+            index,
             item.id,
             item.employee_name,
             item.template_name,
-            item.category,
+            item.status,
             item.created_at,
             item.created_by,
+            item.rname,
             item.filepath
           );
           console.log("id is", item.id);
@@ -46,7 +56,7 @@ export const fetchTable = async () => {
           if (downloadButton) {
             downloadButton.addEventListener("click", async () => {
               const result = await axios.get(
-                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
+                `http://ipvms-api.exitest.com/api/file/getLetterUrl/${item.filepath}`
               );
               console.log("url", result.data.url);
               window.location.href = result.data.url;
@@ -59,32 +69,34 @@ export const fetchTable = async () => {
 };
 
 const docCard = (
+  indx,
   id,
   ename,
   tname,
-  category,
+  status,
   created_at,
   created_by,
+  rname,
   filepath
 ) => {
   let date = new Date(created_at);
   date = date.toLocaleDateString("en-GB");
   created_at = date;
-
-  return `
+  if (ename === "New User") {
+    return `
     
     <tr
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${id}</td>
-    <td class="w-52">${ename}</2td>
-    <td class="w-28">${tname}</td>
-    <td class="w-28">${category}</td>
+    <td class="w-14">${indx + 1}</td>
+    <td class="w-52">${rname}</2td>
+    <td class="w-28">${truncateString(tname, 10)}</td>
+    <td class="w-28">${status}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">
-      <div class="flex gap-1">
+      <div class="flex gap-5">
         <button type="buttonF" id="pdf${id}" >
           <svg id="view" class="h-6 w-6">
             <use
@@ -104,6 +116,42 @@ const docCard = (
   </tr>
         
         `;
+  } else {
+    return `
+    
+    <tr
+    class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
+  >
+    <td class="w-14">${indx + 1}</td>
+    <td class="w-52">${ename}</2td>
+    <td class="w-28">${truncateString(tname, 10)}</td>
+    <td class="w-28">${status}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">${created_by}</td>
+    <td class="w-28">${created_at}</td>
+    <td class="w-28">
+      <div class="flex gap-5">
+        <button type="buttonF" id="pdf${id}" >
+          <svg id="view" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#view"
+            ></use>
+          </svg>
+        </button>
+        <a class="hover:cursor-pointer" blank="#" id="url${id}" >
+          <svg id="download" class="h-6 w-6">
+            <use
+              xlink:href="/assets/icons/icon.svg#download"
+            ></use>
+          </svg>
+        </a>
+      </div>
+    </td>
+  </tr>
+        
+        `;
+  }
+
   //   .toLocaleDateString('en-GB')
 };
 
@@ -302,7 +350,7 @@ export const resetVariables = () => {
   siblingCount = 1;
 };
 
-export function addTable() {
+export async function addTable() {
   const tableDiv = document.getElementById("insert-table");
   tableDiv.innerHTML = "";
 
@@ -338,7 +386,7 @@ export function addTable() {
       </th>
       <th scope="col" class="w-28">
         <div class="flex items-center font-normal">
-          Category
+          Status
           <a href="#" class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
               <use
@@ -384,7 +432,7 @@ export function addTable() {
           </a>
         </div>
       </th>
-      <th scope="col" class="w-28 font-normal">Action</th>
+      <th scope="col" class="w-28 font-normal ">Action</th>
     </tr>
   </thead>  
   <tbody id="tbody">
@@ -392,7 +440,7 @@ export function addTable() {
   </tbody>
 </table>
       `;
-  fetchTable();
+  await fetchTable();
   addSortFeature();
   addModalOpenCloseFeature();
 }

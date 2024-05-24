@@ -1,3 +1,4 @@
+import { InviteApiRequest } from "../api/invitation";
 const inviteButton = document.getElementById("inviteButton");
 const modal = document.getElementById("modal");
 const closeButton = document.getElementById("closeButton");
@@ -18,7 +19,7 @@ async function handleInvite() {
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   console.log(name, email);
-  // const res = await InviteApiRequest(email, name);
+  const res = await InviteApiRequest(email, name);
   modal.style.display = "none";
 }
 // api call to invite team member

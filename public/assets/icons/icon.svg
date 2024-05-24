@@ -52,6 +52,14 @@
 <symbol id="rightarrow" width="8" height="13" viewBox="0 0 8 13" fill="none"  xmlns="http://www.w3.org/2000/svg">
 <path d="M1 1.60107L6 6.60107L1 11.6011" stroke="#3689F5" stroke-width="2"/>
 </symbol>
+<symbol id="delete" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M3 6h18" stroke="#000" stroke-width="2"/>
+  <path d="M8 6V4h8v2M5 6v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6H5z" stroke="#000" stroke-width="2"/>
+</symbol>
+
+
+
+
 </svg>
 
 

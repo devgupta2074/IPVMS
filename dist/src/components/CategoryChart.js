@@ -121,7 +121,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
       </div>
       </div> `;
   } else {
-    return '';
+    return "";
   }
 }
 
@@ -146,7 +146,7 @@ export const fetchCategory = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    `http://ipvms-api.exitest.com//documents/count/category`,
     {
       method: "GET",
       headers: {
@@ -245,13 +245,14 @@ export const fetchCategory = async () => {
         });
       }
     });
+  return true;
 };
 
 export const fetchCategoryZero = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    `http://ipvms-api.exitest.com//documents/count/category`,
     {
       method: "GET",
       headers: {

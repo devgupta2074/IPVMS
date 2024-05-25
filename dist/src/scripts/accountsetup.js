@@ -72,10 +72,20 @@ async function SetupAccount() {
         console.log(data);
 
         if (data?.success) {
-          console.log(data);
+
+          if (data.statusCode === 318) {
+            passworderror.innerHTML = "Account is already setup for user. Try Logging In.";
+            passworderror.classList.remove("opacity-0");
+            setTimeout(() => {
+              passworderror.classList.add("opacity-0");
+              redirect(VIEWS_CONSTANTS.LOGIN);
+            }, 5000);
+          }
+          // console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
           redirect(VIEWS_CONSTANTS.LOGIN);
+
         } else {
           if (data.error === TOAST_ERRORS.INVALID_EMAIL_FORMAT) {
             emailerror.innerHTML = "Invalid Email Format";

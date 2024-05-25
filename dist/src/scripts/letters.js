@@ -975,7 +975,7 @@ async function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
@@ -986,7 +986,7 @@ async function displayArea() {
   <button
     onclick="openlettereditor(${0})"
     type="button"
-    class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
+    class="flex min-w-48 text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4  h-10   rounded-md  items-center gap-2 p-2"  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>

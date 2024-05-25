@@ -57,9 +57,11 @@ In`;
             console.log(token);
 
             localStorage.setItem(API_CONSTANTS.TOKEN, token[1]);
-            // console.log('00000000000000000000000000000000');
             redirect(VIEWS_CONSTANTS.ACCOUNT_SETUP);
           } else {
+
+            console.log(data);
+            localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
             redirect(VIEWS_CONSTANTS.DASHBOARD);
           }
 

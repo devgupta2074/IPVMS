@@ -256,7 +256,7 @@ export async function InsertNavbar() {
     invitemodal.id = "removemodal1111";
     invitemodal.innerHTML = `<div
     id="modalinvite"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
+    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
   >
     <div
       class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
@@ -318,9 +318,17 @@ export async function InsertNavbar() {
     // document.getElementById("inviteSubmit").addEventListener("click",()=>{
 
     // })
+    modal = document.getElementById("modalinvite");
+    document.addEventListener("click", function (event) {
+      console.log("event", event.target);
+
+      if (event.target.classList.contains('backdrop')) {
+        modal.style.display = "none";
+      }
+    });
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
-    modal = document.getElementById("modalinvite");
+
     if (modal) {
       modal.style.display = "flex";
     }

@@ -335,8 +335,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 .then((response) => response.json())
                 .then((data) => {});
             });
-          document.getElementById("toast-heading").innerText =
-            "Policy Approved and Published";
+          // document.getElementById("toast-heading").innerText =
+          //   "Policy Approved and Published";
           document.getElementById("toast-text").innerText =
             "You have approved and published the policy. You can now view the policy on the policy table";
           document.getElementById("toast-default").classList.remove("hidden");

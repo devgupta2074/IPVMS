@@ -252,7 +252,7 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -393,7 +393,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
+    `http://localhost:5001/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -1081,7 +1081,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1408,7 +1408,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
+  //       "http://localhost:5001/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1432,7 +1432,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
+  //       "http://localhost:5001/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {
@@ -1526,7 +1526,7 @@ async function ChangeVersion(modalid, id) {
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
+    `http://localhost:5001/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1545,7 +1545,7 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1774,7 +1774,7 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1803,7 +1803,7 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1818,15 +1818,12 @@ async function ChangeVersion(modalid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  )
+  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1853,7 +1850,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    `http://localhost:5001/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -2100,6 +2097,7 @@ document
 //     removeEmptyPages();
 //   }
 // // });
+
 document
   .getElementById("container-content-1")
   .addEventListener("input", function (event) {
@@ -2108,7 +2106,25 @@ document
       event.inputType === "deleteContentBackward" ||
       event.inputType === "deleteContentForward"
     ) {
-      checkDivSizeBack();
+      if (document.getElementsByClassName("docx").length > 0) {
+        checkDivSizeBack();
+      }
+
+      // document.addEventListener("keydown", function (event) {
+      //   console.log("keydown", event.key);
+      //   // Check if the pressed key is the backspace key
+      //   if (event.key === "Backspace" || event.keyCode === 8) {
+      //     console.log(
+      //       "inside this backspace,",
+      //       document.getElementsByClassName("docx")
+      //     );
+      //     if (document.getElementsByClassName("docx").length === 0) {
+      //       document.getElementById(
+      //         "container-content-1"
+      //       ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+      //     }
+      //   }
+      // });
     }
   });
 export function setIdToNull(node) {
@@ -2239,7 +2255,16 @@ function checkDivSize() {
       // editableDiv.appendChild(newpage);
     }
     // checkclientheightofarticles();
-    removeEmptyPages();
+    if (document.getElementsByClassName("docx").length > 1) {
+      console.log("hello");
+      removeEmptyPages();
+    }
+  }
+
+  if (document.getElementsByClassName("docx").length === 0) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
   }
 }
 
@@ -2398,7 +2423,7 @@ export function imageLoaded() {
 }
 
 function checkDivSizeBack() {
-  console.log("Checking container size");
+  console.log("Checking container size back");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
   for (let i = 0; i < pages.length; i++) {
@@ -2436,6 +2461,7 @@ function checkDivSizeBack() {
 }
 
 export function removeEmptyPages() {
+  console.log("Removing empty pages");
   const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {

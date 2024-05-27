@@ -256,7 +256,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -321,7 +321,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    `http://localhost:5001/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -1310,7 +1310,7 @@ async function displayArea() {
         document.getElementById("area").classList.add("hidden");
 
         const response2 = await fetch(
-          `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+          `http://localhost:5001/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1490,7 +1490,7 @@ async function displayArea() {
               console.log(data);
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url: "http://localhost:5001/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1855,7 +1855,7 @@ async function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url: "http://localhost:5001/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -2563,7 +2563,7 @@ addModalOpenCloseFeature();
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -2598,17 +2598,14 @@ const saveAsDraft = async () => {
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
-    const res = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/saveLetter",
-      {
-        html_data: htmlData1,
-        templateId: templateId,
-        recipientId: recipientId,
-        createdby: ipvmsuserId,
-        email: recipientEmail,
-        name: recipientName,
-      }
-    );
+    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
+      html_data: htmlData1,
+      templateId: templateId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
+    });
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -2674,7 +2671,7 @@ const handleGeneratePdf = async () => {
 
   try {
     const response = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/uploadLetter",
+      "http://localhost:5001/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -2769,7 +2766,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
+    "http://localhost:5001/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -2782,7 +2779,7 @@ const handleSignSwiftCall = async () => {
   if (ShareLink) {
     //draft->pending
     await axios.post(
-      "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
+      "http://localhost:5001/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,

@@ -394,7 +394,7 @@ function sortTable(col) {
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalId}`,
+    `http://localhost:5001/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

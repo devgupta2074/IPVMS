@@ -17,8 +17,7 @@ function truncateString(str, num) {
 }
 
 export const fetchTable = async () => {
-  const apiLink =
-    "http://ipvms-api.exitest.com/api/file/getLetters?status=DRAFT";
+  const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -629,7 +628,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("area").classList.add("hidden");
 
     const response2 = await fetch(
-      `http://ipvms-api.exitest.com/api/file/getLetter/${modalId}`,
+      `http://localhost:5001/api/file/getLetter/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -665,7 +664,7 @@ function addEditorOpenCloseFeature() {
 addEditorOpenCloseFeature();
 const fetchAndRenderLetter = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getLetter/${modalId}`,
+    `http://localhost:5001/api/file/getLetter/${modalId}`,
     {
       method: "GET",
       headers: {

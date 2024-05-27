@@ -40,7 +40,7 @@ const getQueueLetters = async () => {
   // from local storage
 
   const data = await axios.get(
-    `http://ipvms-api.exitest.com/api/file/letter/${userId}`
+    `http://localhost:5001/api/file/letter/${userId}`
   );
 
   console.log("upload doc is", data);

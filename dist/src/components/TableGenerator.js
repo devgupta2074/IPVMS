@@ -8,7 +8,7 @@ function truncateString(str, num) {
 
 export const fetchTable = async () => {
   const apiLink =
-    "http://ipvms-api.exitest.com/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
+    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -56,7 +56,7 @@ export const fetchTable = async () => {
           if (downloadButton) {
             downloadButton.addEventListener("click", async () => {
               const result = await axios.get(
-                `http://ipvms-api.exitest.com/api/file/getLetterUrl/${item.filepath}`
+                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
               );
               console.log("url", result.data.url);
               window.location.href = result.data.url;

@@ -60,57 +60,60 @@
           </div>
         </div>
       </div>
-      <div
-        id="dashboardlist"
-        class="flex flex-col justify-center items-center gap-14 w-full mt-[24px]"
-      >
-        <div class="flex justify-between w-full gap-6 h-full">
-          <div
-            class="flex justify-start basis-1/2 w-full p-4 bg-white rounded-lg sm:p-8"
-          >
-            <div class="flex flex-col w-full items-center justify-start">
-              <div
-                class="pb-4 border-b border-#ECEEF3 text-start flex justify-between w-full"
-              >
-                <h5 class="text-lg font-semibold leading-none text-gray-900">
+      <div id="dashboardlist" class="flex flex-col justify-center items-center gap-14 w-full mt-[24px]">
+        <div class="flex justify-between w-full gap-6 h-full ">
+          <div   id="mainqueue"  class="flex flex-col justify-start gap-3 items-center  w-full p-4 bg-white rounded-lg sm:p-8">
+            <div  class="flex flex-col w-full items-center justify-between">
+              <div class="pb-4 border-b border-#ECEEF3 text-start flex justify-between w-full">
+                <h5 class="text-lg font-semibold leading-none text-gray-900 ">
                   Employee Queue Letter
                 </h5>
+                <div class="w-16 flex items-center justify-between">
+                  <!-- <a
+                        href="#"
+                        class="text-sm font-medium text-blue-500 hover:underline"
+                      >
+                        View all
+                      </a> -->
+                  <!-- icon right arrow -->
+                  <!-- <svg class="h-6 w-6 z-50">
+                        <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
+                      </svg> -->
+                </div>
               </div>
-
-              <div
-                id="queueLetter"
-                class="flow-root w-full max-h-72 overflow-y-auto overflow-x-hidden"
-              ></div>
+             
+              <div id="queueLetter" class="flow-root w-full max-h-72 overflow-y-auto overflow-x-hidden">
+                
+              </div>
             </div>
           </div>
-        </div>
-        <div  id="policyapproval2" class="flex flex-col justify-start gap-3 items-center  w-full p-4 bg-white rounded-lg sm:p-8">
-            <div   class="flex items-center justify-between pb-4 border-b border-#ECEEF3 w-full">
-              <h5 class="text-lg font-semibold leading-none tex-[#333333]">
-                Policy Approval
-              </h5>
-              <div class="w-16 flex items-center justify-between">
-                <!-- <a
-                    href="#"
-                    class="text-sm font-medium text-blue-500 hover:underline hover:cursor-pointer"
-                  >
-                    View all
-                  </a> -->
-                <!-- icon right arrow -->
-                <!-- <svg class="h-6 w-6 z-50">
-                    <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
-                  </svg> -->
+          <div  id="policyapproval2" class="flex flex-col justify-start gap-3 items-center  w-full p-4 bg-white rounded-lg sm:p-8">
+              <div   class="flex items-center justify-between pb-4 border-b border-#ECEEF3 w-full">
+                <h5 class="text-lg font-semibold leading-none tex-[#333333]">
+                  Policy Approval
+                </h5>
+                <div class="w-16 flex items-center justify-between">
+                  <!-- <a
+                      href="#"
+                      class="text-sm font-medium text-blue-500 hover:underline hover:cursor-pointer"
+                    >
+                      View all
+                    </a> -->
+                  <!-- icon right arrow -->
+                  <!-- <svg class="h-6 w-6 z-50">
+                      <use xlink:href="/assets/icons/icon.svg#rightarrow"></use>
+                    </svg> -->
+                </div>
               </div>
-            </div>
-            <div class="flow-root w-full max-h-72 overflow-y-auto overflow-x-hidden">
-              <ul id="policyapproval" role="list ">
-        
-              </ul>
-            </div>
+              <div class="flow-root w-full max-h-72 overflow-y-auto overflow-x-hidden">
+                <ul id="policyapproval" role="list ">
+          
+                </ul>
+              </div>
+          </div>
         </div>
+  
       </div>
-
-    </div>
     <div class="w-full" id="main-body"></div>
     <section id="dashboardtable" class="mt-16">
       <div class="font-roboto font-semibold text-mineshaft-900 text-2xl mb-5">Recent Policy Updates</div>

@@ -1261,6 +1261,7 @@ async function displayArea() {
       window.openlettereditor = async function (modalId) {
         const res = await GetAllCategory();
         document.getElementById("sectiondetails").classList.add("hidden");
+        document.getElementById("letters-tab").classList.add("hidden");
         document.getElementById("version-area").classList.remove("hidden");
 
         if (modalId == 0) {
@@ -2531,7 +2532,7 @@ function addModalOpenCloseFeature() {
     document.addEventListener("click", function (event) {
       // console.log(modalId, "event", event.target);
 
-      if (event.target.classList.contains('backdrop')) {
+      if (event.target.classList.contains("backdrop")) {
         window.closeLetter(modalId);
       }
     });

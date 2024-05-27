@@ -885,7 +885,11 @@ async function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
+
       window.location.href = `http://ipvms.exitest.com//template?templateId=${templateId}&userId=${userId}`;
+
+  
+
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 
@@ -2614,6 +2618,9 @@ if (document.getElementById("savesdraft")) {
     const res = await saveAsDraft();
     setTimeout(() => {
       window.location.href = "http://ipvms.exitest.com//letters";
+
+
+
     }, 3000);
   });
 }
@@ -2721,7 +2728,9 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://ipvms.exitest.com//letters";
+
+        window.location.href = "http://ipvms.exitest.com/letters";
+ 
       }, 3000);
     }
   } catch (error) {
@@ -2738,7 +2747,10 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://ipvms.exitest.com//letters";
+
+
+      window.location.href = "http://ipvms.exitest.com/letters";
+
     }, 2000);
   } finally {
     removeLoading();
@@ -2877,7 +2889,9 @@ const handleSignSwiftCall = async () => {
                   },
                 }).showToast();
                 setTimeout(() => {
-                  window.location.href = "http://ipvms.exitest.com//letters";
+
+                  window.location.href = "http://ipvms.exitest.com/letters";
+
                 }, 2000);
               }
             });
@@ -2931,7 +2945,8 @@ if (document.getElementById("sendLetter")) {
       handleSignSwiftCall();
     }
 
-    // window.location.href = "http://ipvms.exitest.com//letters";
+
+
   });
 }
 if (document.getElementById("signCheckbox")) {

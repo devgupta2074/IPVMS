@@ -94,7 +94,9 @@ const getQueueLetters = async () => {
     });
 
     queueLetterHtml += `</ul>`;
-    document.getElementById("queueLetter").innerHTML = queueLetterHtml;
+    if (document.getElementById("queueLetter")) {
+      document.getElementById("queueLetter").innerHTML = queueLetterHtml;
+    }
   } else {
     document.getElementById("mainqueue").innerHTML = `
     <div class="flex items-center justify-start w-full mb-2">

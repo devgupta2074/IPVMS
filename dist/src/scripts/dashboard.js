@@ -212,7 +212,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-
+  localStorage.setItem("sentbyid", sentbyid);
   const response = await fetch(
     `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
       sentbyid
@@ -278,7 +278,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
 
           const response = await fetch(
             `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-              localStorage.getItem("userid")
+              localStorage.getItem("sentbyid")
             )}`,
             {
               method: "GET",
@@ -335,11 +335,19 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 .then((response) => response.json())
                 .then((data) => {});
             });
-
+          // document.getElementById("toast-heading").innerText =
+          //   "Policy Approved and Published";
+          document.getElementById("toast-text").innerText =
+            "You have approved and published the policy. You can now view the policy on the policy table";
+          document.getElementById("toast-default").classList.remove("hidden");
           document.getElementById("extralarge-modal").classList.add("hidden");
           document.getElementById("dashboardarea").classList.remove("hidden");
           document.getElementById("dashboardlist").classList.remove("hidden");
           document.getElementById("dashboardtable").classList.remove("hidden");
+          setTimeout(async () => {
+            await getPolicyApprovals();
+            document.getElementById("toast-default").classList.add("hidden");
+          }, 2000);
         });
     });
   document
@@ -373,11 +381,16 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       )
         .then((response) => response.json())
         .then((data) => {
+          document.getElementById("toast-default").classList.remove("hidden");
           document.getElementById("rejectionmodal").classList.add("hidden");
           document.getElementById("extralarge-modal").classList.add("hidden");
           document.getElementById("dashboardarea").classList.remove("hidden");
           document.getElementById("dashboardlist").classList.remove("hidden");
           document.getElementById("dashboardtable").classList.remove("hidden");
+          setTimeout(async () => {
+            await getPolicyApprovals();
+            document.getElementById("toast-default").classList.add("hidden");
+          }, 2000);
         });
     });
 };

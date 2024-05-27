@@ -2097,6 +2097,7 @@ document
 //     removeEmptyPages();
 //   }
 // // });
+
 document
   .getElementById("container-content-1")
   .addEventListener("input", function (event) {
@@ -2105,7 +2106,25 @@ document
       event.inputType === "deleteContentBackward" ||
       event.inputType === "deleteContentForward"
     ) {
-      checkDivSizeBack();
+      if (document.getElementsByClassName("docx").length > 0) {
+        checkDivSizeBack();
+      }
+
+      // document.addEventListener("keydown", function (event) {
+      //   console.log("keydown", event.key);
+      //   // Check if the pressed key is the backspace key
+      //   if (event.key === "Backspace" || event.keyCode === 8) {
+      //     console.log(
+      //       "inside this backspace,",
+      //       document.getElementsByClassName("docx")
+      //     );
+      //     if (document.getElementsByClassName("docx").length === 0) {
+      //       document.getElementById(
+      //         "container-content-1"
+      //       ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+      //     }
+      //   }
+      // });
     }
   });
 export function setIdToNull(node) {
@@ -2236,7 +2255,16 @@ function checkDivSize() {
       // editableDiv.appendChild(newpage);
     }
     // checkclientheightofarticles();
-    removeEmptyPages();
+    if (document.getElementsByClassName("docx").length > 1) {
+      console.log("hello");
+      removeEmptyPages();
+    }
+  }
+
+  if (document.getElementsByClassName("docx").length === 0) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
   }
 }
 
@@ -2395,7 +2423,7 @@ export function imageLoaded() {
 }
 
 function checkDivSizeBack() {
-  console.log("Checking container size");
+  console.log("Checking container size back");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
   for (let i = 0; i < pages.length; i++) {
@@ -2433,6 +2461,7 @@ function checkDivSizeBack() {
 }
 
 export function removeEmptyPages() {
+  console.log("Removing empty pages");
   const articles = document.querySelectorAll("article");
   // console.log(articles.length, "articcle length");
   // if (articles.length > 1) {

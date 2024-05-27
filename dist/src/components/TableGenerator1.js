@@ -597,6 +597,10 @@ export const sortTable = (col) => {
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
     document.getElementById("version-area").classList.add("hidden");
+    if (document.getElementById("letters-tab")) {
+      document.getElementById("letters-tab").classList.add("hidden");
+    }
+
     document.getElementById("button-header").innerHTML = `
     <button
 type="button"
@@ -690,6 +694,10 @@ Save as Draft
   };
   window.closeEditor = function () {
     document.getElementById("extralarge-modal").classList.add("hidden");
+    if (document.getElementById("letters-tab")) {
+      document.getElementById("letters-tab").classList.remove("hidden");
+      document.getElementById("area").classList.remove("hidden");
+    }
   };
 }
 
@@ -770,7 +778,7 @@ function addModalOpenCloseFeatureLetter() {
     window.addEventListener("click", function (event) {
       console.log(event, "clcikde", modalId);
 
-      if (event.target.classList.contains('backdrop')) {
+      if (event.target.classList.contains("backdrop")) {
         window.closeModal(modalId);
       }
     });

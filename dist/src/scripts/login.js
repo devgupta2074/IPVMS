@@ -99,7 +99,11 @@ const signInButton = document.getElementById("signin");
 signInButton.addEventListener("click", function () {
   SignIn();
 });
-
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    SignIn();
+  }
+});
 // hide and show password and tooltip for the same
 const eyeButton = document.getElementById("eye");
 const tooltiptext = document.getElementById("password-tooltip");

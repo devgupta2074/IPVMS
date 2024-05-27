@@ -367,7 +367,8 @@ export async function InsertNavbar() {
         setTimeout(() => {
           modal.style.display = "none";
           document.getElementById("emailerror").classList.add("hidden");
-        }, 1000);
+        }, 1400);
+        //toa
       }
       if (result.status != 409) {
         document.getElementById("success-message").classList.remove("hidden");
@@ -376,6 +377,7 @@ export async function InsertNavbar() {
           modal.style.display = "none";
           document.getElementById("success-message").classList.add("hidden");
         }, 1000);
+        //toast ->
       }
     }
   });

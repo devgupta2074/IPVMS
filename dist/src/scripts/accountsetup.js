@@ -91,6 +91,9 @@ async function SetupAccount() {
           // console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
+          localStorage.setItem("email", data?.user?.email);
+          localStorage.setItem("userId", data?.user?.id);
+
           redirect(VIEWS_CONSTANTS.LOGIN);
         } else {
           if (data.error === TOAST_ERRORS.INVALID_EMAIL_FORMAT) {
@@ -115,7 +118,6 @@ async function SetupAccount() {
 }
 
 const token = localStorage.getItem("token");
-
 console.log(token);
 const apiUrl =
   API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_USER_INFO;

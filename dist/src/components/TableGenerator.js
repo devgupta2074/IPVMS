@@ -63,7 +63,7 @@ export const fetchTable = async () => {
             });
           }
         });
-        addPagination();
+        // addPagination();
       }
     });
 };

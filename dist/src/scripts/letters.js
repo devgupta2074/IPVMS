@@ -1761,7 +1761,7 @@ async function displayArea() {
               .querySelector("select").value
           );
 
-          const categoryId = document
+          var categoryId = document
             .getElementById(`${file.file.name}category`)
             .querySelector("select").value;
           const getFile = async () => {
@@ -2663,7 +2663,7 @@ const saveAsDraft = async () => {
 
 const handleGeneratePdf = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.getElementById("container-content-1");
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -2766,7 +2766,8 @@ const removeLoading = () => {
 var shouldBeSigned = false;
 const handleSignSwiftCall = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.getElementById("container-content-1");
+  console.log("elemenet is ", element);
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",

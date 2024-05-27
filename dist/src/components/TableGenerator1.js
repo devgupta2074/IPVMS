@@ -960,7 +960,7 @@ const onEditorOpen = () => {
   var shouldBeSigned = false;
   const handleSignSwiftCall = async () => {
     showLoading();
-    var element = document.getElementById("container");
+    var element = document.getElementById("docx-wrapper-1");
     var opt = {
       margin: 0,
       filename: "Contrato.pdf",

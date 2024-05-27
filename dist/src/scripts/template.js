@@ -637,7 +637,7 @@ const handleSignSwiftCall = async () => {
   const ShareLink = fileUpload.data.url;
   const email = localStorage.getItem("email");
   if (fileUpload) {
-    fetch("http://localhost:3000/api/users/findUser", {
+    fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -649,6 +649,7 @@ const handleSignSwiftCall = async () => {
         console.log("data is", data);
         if (data.status == 500) {
           console.log("first log in sign swift");
+          removeLoading();
           Toastify({
             text: "Make a account in signwift first",
             duration: 3000,
@@ -665,15 +666,18 @@ const handleSignSwiftCall = async () => {
         } else {
           console.log("data", data);
           const signSwiftId = data.user.customerId;
-          fetch("http://localhost:3000/api/document/uploadDocument", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: data.user.customerId,
-              ShareLink: ShareLink,
-              title: title,
-            }),
-            mode: "cors",
-          })
+          fetch(
+            "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                userId: data.user.customerId,
+                ShareLink: ShareLink,
+                title: title,
+              }),
+              mode: "cors",
+            }
+          )
             .then((response) => response.json())
             .then(async (data) => {
               removeLoading();

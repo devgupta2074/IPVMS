@@ -198,7 +198,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
   const htmljson = documentdata.data.htmljson;
 
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
+    `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
     {
       method: "GET",
       headers: {
@@ -214,7 +214,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     });
 
   const response = await fetch(
-    `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+    `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
       sentbyid
     )}`,
     {
@@ -242,7 +242,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     .getElementById("approve")
     .addEventListener("click", async function () {
       const response = await fetch(
-        `http://ipvms-api.exitest.com/api/approvePolicyApproval?id=${id}`,
+        `http://localhost:5001/api/approvePolicyApproval?id=${id}`,
         {
           method: "GET",
           headers: {
@@ -261,7 +261,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
           const htmljson = documentdata.data.htmljson;
 
           const firstv = await fetch(
-            `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
+            `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -277,7 +277,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
             });
 
           const response = await fetch(
-            `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+            `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
               localStorage.getItem("userid")
             )}`,
             {
@@ -317,7 +317,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
               );
 
               const response = await fetch(
-                `http://ipvms-api.exitest.com/api/updatePolicyHtmlData`,
+                `http://localhost:5001/api/updatePolicyHtmlData`,
                 {
                   method: "POST",
                   headers: {
@@ -359,7 +359,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       });
       const reason = document.getElementById("message").value;
       const response = await fetch(
-        `http://ipvms-api.exitest.com/api/rejectPolicyApproval`,
+        `http://localhost:5001/api/rejectPolicyApproval`,
         {
           method: "POST",
           headers: {

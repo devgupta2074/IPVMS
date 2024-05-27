@@ -15,7 +15,6 @@ import { redirect, showNextPolicy } from "../utils/utils.js";
 showNextPolicy();
 setInterval(showNextPolicy, 3000);
 
-
 async function SetupAccount() {
   const setupButton = document.getElementById("setup-account");
 
@@ -26,7 +25,15 @@ async function SetupAccount() {
   const firstName = document.getElementById("fname").value;
   const lastName = document.getElementById("lname").value;
 
-  console.log("lololololololoolol", firstName, lastName, email, password, cnfPassword, phone);
+  console.log(
+    "lololololololoolol",
+    firstName,
+    lastName,
+    email,
+    password,
+    cnfPassword,
+    phone
+  );
 
   // console.log("from webpage", email, password);
   if (!phone || !firstName || !lastName) {
@@ -72,9 +79,9 @@ async function SetupAccount() {
         console.log(data);
 
         if (data?.success) {
-
           if (data.statusCode === 318) {
-            passworderror.innerHTML = "Account is already setup for user. Try Logging In.";
+            passworderror.innerHTML =
+              "Account is already setup for user. Try Logging In.";
             passworderror.classList.remove("opacity-0");
             setTimeout(() => {
               passworderror.classList.add("opacity-0");
@@ -85,7 +92,6 @@ async function SetupAccount() {
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
           redirect(VIEWS_CONSTANTS.LOGIN);
-
         } else {
           if (data.error === TOAST_ERRORS.INVALID_EMAIL_FORMAT) {
             emailerror.innerHTML = "Invalid Email Format";
@@ -108,7 +114,7 @@ async function SetupAccount() {
   }
 }
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 
 console.log(token);
 const apiUrl =
@@ -135,7 +141,7 @@ async function UserInfoApiRequest(token) {
 
 const user = await UserInfoApiRequest(token);
 console.log(user.data.email);
-document.getElementById('email').value = user.data.email;
+document.getElementById("email").value = user.data.email;
 
 const setupButton = document.getElementById("setup-account");
 setupButton.addEventListener("click", function () {

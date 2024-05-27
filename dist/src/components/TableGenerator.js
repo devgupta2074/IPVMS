@@ -63,7 +63,7 @@ export const fetchTable = async () => {
             });
           }
         });
-        //addPagination()
+        addPagination();
       }
     });
 };
@@ -209,14 +209,15 @@ function addModalOpenCloseFeature() {
   //       .classList.remove("overflow-y-hidden");
   //   }
   // });
-
 }
 
 // Pagination
 
 function addPagination() {
   const paginationElement = document.getElementById("pagination-controller");
+  console.log("pagggg", totalItems, currentPage, pageSize, siblingCount);
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
+  console.log(paginationElement, "pagination elemenet is");
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
@@ -338,8 +339,9 @@ const addDocPageStatus = () => {
   </p>`;
 };
 const addPaginationElement = (arr) => {
+  console.log(arr, "array");
   const paginationElement = document.getElementById("pagination-controller");
-  arr.forEach((item) => {
+  arr?.forEach((item) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {

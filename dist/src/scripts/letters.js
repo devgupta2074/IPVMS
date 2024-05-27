@@ -914,7 +914,11 @@ async function displayArea() {
     console.log(document.getElementsByTagName("main"));
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = `<div id="insert-table"></div>`;
+    area.innerHTML = `<div id="insert-table">
+    
+    </div>
+    
+    `;
 
     document.getElementsByTagName("main")[0].appendChild(area);
     await addTable();

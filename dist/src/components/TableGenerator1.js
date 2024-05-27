@@ -236,7 +236,7 @@ window.deleteLetter = function (id) {
         },
       }).showToast();
       setTimeout(() => {
-        location.reload();
+        fetchTable();
         document.getElementById("letterdeletemodal").innerHTML = "";
       }, 1000);
     }

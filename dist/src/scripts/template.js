@@ -50,7 +50,7 @@ const getTemplate = (id, recipientId) => {
     console.log("in user deatil user id is", recipientId);
     if (recipientId) {
       const response = await fetch(
-        `http://localhost:5001/api/user/getUserById/${recipientId}`,
+        `http://ipvms-api.exitest.com/api/user/getUserById/${recipientId}`,
         {
           method: "GET",
         }
@@ -458,14 +458,17 @@ const saveAsDraft = async () => {
   console.log("recipient email is", recipientEmail);
 
   try {
-    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
-      html_data: htmlData1,
-      templateId: templateId,
-      recipientId: recipientId,
-      createdby: ipvmsuserId,
-      email: recipientEmail,
-      name: recipientName,
-    });
+    const res = await axios.post(
+      "http://ipvms-api.exitest.com/api/file/saveLetter",
+      {
+        html_data: htmlData1,
+        templateId: templateId,
+        recipientId: recipientId,
+        createdby: ipvmsuserId,
+        email: recipientEmail,
+        name: recipientName,
+      }
+    );
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -530,7 +533,7 @@ const handleGeneratePdf = async () => {
   formData.append("letter_id", letterId);
   try {
     const response = await axios.post(
-      "http://localhost:5001/api/file/uploadLetter",
+      "http://ipvms-api.exitest.com/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -625,7 +628,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://localhost:5001/api/file/upload/letterpdf",
+    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -685,7 +688,7 @@ const handleSignSwiftCall = async () => {
               if (docId) {
                 //draft->pending
                 const data1 = await axios.post(
-                  "http://localhost:5001/api/file/upload/updateLetterStatus",
+                  "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
                   {
                     letterId: letterId,
                     htmlData: element.innerHTML,

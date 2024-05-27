@@ -56,7 +56,7 @@ const range = (start, end) => {
 const fetchDoc = async (currentPage, pageSize) => {
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
+    `http://ipvms-api.exitest.com/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
     {
       method: "GET",
       headers: {

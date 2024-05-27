@@ -1757,7 +1757,7 @@ async function displayArea() {
               .querySelector("select").value
           );
 
-          const categoryId = document
+          let categoryId = document
             .getElementById(`${file.file.name}category`)
             .querySelector("select").value;
           const getFile = async () => {

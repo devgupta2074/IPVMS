@@ -921,7 +921,9 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       childElement.childNodes &&
       childElement.childNodes.length > 0
     ) {
-      childElement.classList.add("greenhighlight");
+      if (!childElement.classList.contains("docx-wrapper")) {
+        childElement.classList.add("greenhighlight");
+      }
     }
   }
   console.log(v1);
@@ -1017,13 +1019,13 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           tag.textContent !== ""
         ) {
           const removedelement = document.createElement("p");
-          removedelement.classList.add("redhighlight");
+          // removedelement.classList.add("redhighlight");
           tag.parentElement.insertBefore(removedelement, tag);
           console.log(tag.id, "removed");
           console.log(tag.parentElement, "remove remove remove");
           console.log(v2.removedTags[tagid].textContent, "text text text");
           if (tag.parentElement.tagName.toLowerCase() !== "article") {
-            tag.parentElement.classList.add("redhighlight");
+            // tag.parentElement.classList.add("redhighlight");
           }
         }
         if (tag != null) {
@@ -1059,6 +1061,17 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
     }
   }
   // imageLoaded();
+  const paragraphs = document.querySelectorAll("p");
+
+  // Filter for empty <p> elements without any attributes
+
+  const emptyParagraphs = Array.from(paragraphs).filter(
+    (p) => p.innerHTML.trim() === "" && p.attributes.length === 0
+  );
+  // Log each empty <p> element to the console
+  emptyParagraphs.forEach((p) => console.log(p));
+  console.log(emptyParagraphs.length, "emptypsssss");
+  emptyParagraphs.forEach((p) => p.remove());
 }
 
 document.addEventListener("DOMContentLoaded", async function () {

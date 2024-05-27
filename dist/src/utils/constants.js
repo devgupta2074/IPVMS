@@ -46,12 +46,13 @@ const LOGIN_CONSTANTS = {
 const VIEWS_CONSTANTS = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
-
+  ACCOUNT_SETUP: "/accountsetup",
   FORGET_PASSWORD: "/forgotpassword",
   EMAIL_SENT: "/emailsent",
   RESET_PASSWORD: "/resetpassword",
   RESET_SUCCESS: "/resetsuccess",
   LINK_NOT_VALID: "/linkexpired",
+
 };
 const PASSWORD_CONSTANTS = {
   DIGIT: "Password should contain at least one digit",

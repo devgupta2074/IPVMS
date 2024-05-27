@@ -690,6 +690,25 @@ function addModalOpenCloseFeature() {
       document.getElementById(modalId).innerHTML = contents;
     });
 
+    window.addEventListener("click", function (event) {
+      console.log(event.target, "clcikde", modalId);
+
+      if (event.target.classList.contains("backdrop")) {
+        window.closeModal(modalId);
+      }
+    });
+
+    // document.addEventListener('click', (event) => {
+
+    //   console.log(document.getElementById(modalId).style.display);
+    //   if (document.getElementById(modalId).style.display === "block") {
+    //     event.stopPropagation();
+    //     document.getElementById(modalId).style.display = "none";
+    //     document
+    //       .getElementsByTagName("body")[0]
+    //       .classList.remove("overflow-y-hidden");
+    //   }
+    // });
     await fetchAndRenderDoc(modalId);
   };
 

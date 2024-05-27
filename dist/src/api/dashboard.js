@@ -21,16 +21,6 @@ export async function UserInfoApiRequest(token) {
   } catch (error) {
     console.log(error, "error");
   }
-  // await makeRequest(apiUrl, requestOptions)
-  //   .then((data) => {
-  //     console.log(data, "makerequest");
-  //     return data;
-  //   })
-  //   .catch((error) => {
-  //     // Handle errors
-  //     console.error(error);
-  //     return error;
-  //   });
 }
 
 const getQueueLetters = async () => {

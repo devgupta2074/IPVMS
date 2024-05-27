@@ -3,14 +3,14 @@ import { VIEWS_CONSTANTS } from "../utils/constants.js";
 import { InviteApiRequest } from "../api/invitation.js";
 
 const NavBar = `
-  <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
-  <button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
-  <span id="doc-svg" class=" peer/doc-svg">
-  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-  <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
-  </svg>
-  </span>
-  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
+<button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
     <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
       <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -22,13 +22,13 @@ const NavBar = `
   </button>
 
 
-  <button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
-  <span id="doc-svg" class=" peer/doc-svg">
-  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-  <use xlink:href="/assets/icons/icon.svg#shield"></use>
-  </svg>
-  </span>
-  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<span id="doc-svg" class=" peer/doc-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#shield"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
     <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
       <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -40,21 +40,21 @@ const NavBar = `
   </button>
 
 
-  <button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
-  <span id="letter-svg" class=" peer/letter-svg">
-  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-  <use xlink:href="/assets/icons/icon.svg#policy"></use>
+<button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+<span id="letter-svg" class=" peer/letter-svg">
+<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+<use xlink:href="/assets/icons/icon.svg#policy"></use>
+</svg>
+</span>
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
+    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
-  </span>
-  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
-    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
-      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-    </svg>
-  
-    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
-    Letters</div>
-  </div>
-  </button>
+ 
+  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+  Letters</div>
+</div>
+</button>
 
   <button id="inviteButton1111" class="h-[2.5rem] w-[2.5rem] flex flex-row">
   <span id="invite-svg" class=" peer/invite-svg">
@@ -63,7 +63,7 @@ const NavBar = `
   </svg>
   </span>
 
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -204,10 +204,19 @@ export async function InsertNavbar() {
   let name = document.getElementById("name");
   let modalname = document.getElementById("modalname");
   let dropdown = document.getElementById("dropdown");
-  modalname.addEventListener("click", function () {
+  modalname.addEventListener("click", function (event) {
     if (dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
       dropdown.classList.remove("hidden");
     } else {
+      event.stopPropagation();
+      dropdown.classList.add("hidden");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
       dropdown.classList.add("hidden");
     }
   });
@@ -247,74 +256,80 @@ export async function InsertNavbar() {
     const invitemodal = document.createElement("div");
     invitemodal.id = "removemodal1111";
     invitemodal.innerHTML = `<div
-      id="modalinvite"
-      class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
+    id="modalinvite"
+    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
+  >
+    <div
+      class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
     >
-      <div
-        class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
-      >
-        <div class="modal-header flex items-center justify-between mb-4">
-          <h1 class="modal-title text-xl font-medium text-gray-800">
-            Invite member
-          </h1>
-          <button
-            id="closeButton1111"
-            class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
+      <div class="modal-header flex items-center justify-between mb-4">
+        <h1 class="modal-title text-xl font-medium text-gray-800">
+          Invite member
+        </h1>
+        <button
+          id="closeButton1111"
+          class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </button>
+      </div>
+      <p class="modal-text text-sm text-gray-500">
+        Send invitation to the user for joining the platform
+      </p>
+      <form id="inviteForm" class="invite-form">
+        <div class="my-5">
+          <label
+            for="userEmail"
+            class="block text-sm text-gray-700 capitalize"
+            >User email</label
+          >
+          <input
+            id="userEmail"
+            type="email"
+            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
+          />
+        </div>
+
+        <div class="flex justify-center ">
+          <button
+            id="inviteSubmit"
+            type="button"
+            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-ship-cove-900  rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
+          >
+           Send Invitation 
           </button>
         </div>
-        <p class="modal-text text-sm text-gray-500">
-          Send invitation to the user for joining the platform
-        </p>
-        <form id="inviteForm" class="invite-form">
-          <div class="mb-4">
-            <label
-              for="userEmail"
-              class="pt-2 block text-sm text-gray-700 capitalize"
-              >User Email</label
-            >
-            <input
-              id="userEmail"
-              placeholder="Test@gmail.com"
-              type="email"
-              class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-            />
-          </div>
+      </div>
+     
+      </form>
+    </div>`;
+    // document.getElementById("inviteSubmit").addEventListener("click",()=>{
 
-          <div class="flex justify-end">
-            <button
-              id="inviteSubmit"
-              type="button"
-              class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
-            >
-              Invite Member
-            </button>
-          </div>
-          <h4  id="success-message" class="text-green-800 hidden">
-          Invitation send success
-          </h4>
-        </div>
-      
-        </form>
-      </div>`;
+    // })
+    modal = document.getElementById("modalinvite");
+    document.addEventListener("click", function (event) {
+      console.log("event", event.target);
 
+      if (event.target.classList.contains("backdrop")) {
+        modal.style.display = "none";
+      }
+    });
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
-    modal = document.getElementById("modalinvite");
+
     if (modal) {
       modal.style.display = "flex";
     }

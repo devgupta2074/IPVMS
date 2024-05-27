@@ -5,7 +5,7 @@ var amount = "";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://localhost:5001/documents/count/category",
+    "http://ipvms-api.exitest.com/documents/count/category",
     {
       method: "GET",
       headers: {
@@ -339,7 +339,7 @@ function addNewCategoryOpenClose() {
     document.addEventListener("click", function (event) {
       console.log("event", event.target);
 
-      if (event.target.classList.contains('backdrop')) {
+      if (event.target.classList.contains("backdrop")) {
         modal.classList.add("hidden");
         inputfield.reset();
       }
@@ -363,7 +363,7 @@ function addCategorySubmit() {
     console.log(categoryName);
 
     const response = await fetch(
-      "http://localhost:5001/api/categories/createNewCategory",
+      "http://ipvms-api.exitest.com/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {

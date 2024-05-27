@@ -23,7 +23,8 @@ function truncateString(str, num) {
 }
 
 export const fetchTable = async () => {
-  const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
+  const apiLink =
+    "http://ipvms-api.exitest.com/api/file/getLetters?status=DRAFT";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -658,7 +659,7 @@ Save as Draft
     document.getElementById("area").classList.add("hidden");
 
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getLetter/${modalId}`,
+      `http://ipvms-api.exitest.com/api/file/getLetter/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -704,7 +705,7 @@ Save as Draft
 addEditorOpenCloseFeature();
 const fetchAndRenderLetter = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getLetter/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getLetter/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -805,7 +806,7 @@ const onEditorOpen = () => {
       .addEventListener("click", async () => {
         const res = await saveAsDraft();
         setTimeout(() => {
-          window.location.href = "http://localhost:5555/letters";
+          window.location.href = "http://ipvms.exitest.com/letters";
         }, 3000);
       });
   }
@@ -816,7 +817,7 @@ const onEditorOpen = () => {
     try {
       console.log("name", recipientName);
       const res = await axios.post(
-        "http://localhost:5001/api/file/saveLetter",
+        "http://ipvms-api.exitest.com/api/file/saveLetter",
         {
           html_data: htmlData1,
           templateId: templateId,
@@ -890,7 +891,7 @@ const onEditorOpen = () => {
     formData.append("letter_id", letterId);
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/file/uploadLetter",
+        "http://ipvms-api.exitest.com/api/file/uploadLetter",
         formData,
         {
           headers: {
@@ -912,7 +913,7 @@ const onEditorOpen = () => {
       }).showToast();
       if (response.status == 200) {
         setTimeout(() => {
-          window.location.href = "http://localhost:5555/letters";
+          window.location.href = "http://ipvms.exitest.com/letters";
         }, 1000);
       }
     } catch (error) {
@@ -929,7 +930,7 @@ const onEditorOpen = () => {
         },
       }).showToast();
       setTimeout(() => {
-        window.location.href = "http://localhost:5555/letters";
+        window.location.href = "http://ipvms.exitest.com/letters";
       }, 2000);
     } finally {
       removeLoading();
@@ -985,7 +986,7 @@ const onEditorOpen = () => {
     const fileName = "pdfFile" + Date.now() + ".pdf";
     formData.append("file", pdfBlob, fileName);
     const fileUpload = await axios.post(
-      "http://localhost:5001/api/file/upload/letterpdf",
+      "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
       formData,
       {
         headers: {
@@ -1042,7 +1043,7 @@ const onEditorOpen = () => {
                 if (docId) {
                   //draft->pending
                   const data1 = await axios.post(
-                    "http://localhost:5001/api/file/upload/updateLetterStatus",
+                    "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
                     {
                       letterId: letterId,
                       htmlData: element.innerHTML,
@@ -1131,7 +1132,7 @@ const onEditorOpen = () => {
       handleSignSwiftCall();
     }
 
-    // window.location.href = "http://localhost:5555/letters";
+    // window.location.href = "http://ipvms.exitest.com/letters";
   });
   document
     .getElementById("signCheckbox")

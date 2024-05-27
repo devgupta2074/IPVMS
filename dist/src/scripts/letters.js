@@ -258,7 +258,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -323,7 +323,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://localhost:5001/api/user/getUserInfo/${userId}`,
+    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -885,7 +885,7 @@ async function displayArea() {
       console.log("on click");
       console.log("user id", userId);
       console.log("template id", templateId);
-      window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `http://ipvms.exitest.com//template?templateId=${templateId}&userId=${userId}`;
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 
@@ -1322,7 +1322,7 @@ async function displayArea() {
         document.getElementById("area").classList.add("hidden");
 
         const response2 = await fetch(
-          `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+          `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1503,7 +1503,7 @@ async function displayArea() {
               console.log(data);
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://localhost:5001/api/file/uploadTemplate",
+                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1878,7 +1878,7 @@ async function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://localhost:5001/api/file/uploadTemplate",
+                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -2588,7 +2588,7 @@ addModalOpenCloseFeature();
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+    `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -2613,7 +2613,7 @@ if (document.getElementById("savesdraft")) {
   document.getElementById("saveasdraft").addEventListener("click", async () => {
     const res = await saveAsDraft();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com//letters";
     }, 3000);
   });
 }
@@ -2623,14 +2623,17 @@ const saveAsDraft = async () => {
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
-    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
-      html_data: htmlData1,
-      templateId: templateId,
-      recipientId: recipientId,
-      createdby: ipvmsuserId,
-      email: recipientEmail,
-      name: recipientName,
-    });
+    const res = await axios.post(
+      "http://ipvms-api.exitest.com/api/file/saveLetter",
+      {
+        html_data: htmlData1,
+        templateId: templateId,
+        recipientId: recipientId,
+        createdby: ipvmsuserId,
+        email: recipientEmail,
+        name: recipientName,
+      }
+    );
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -2696,7 +2699,7 @@ const handleGeneratePdf = async () => {
 
   try {
     const response = await axios.post(
-      "http://localhost:5001/api/file/uploadLetter",
+      "http://ipvms-api.exitest.com/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -2718,7 +2721,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://localhost:5555/letters";
+        window.location.href = "http://ipvms.exitest.com//letters";
       }, 3000);
     }
   } catch (error) {
@@ -2735,7 +2738,7 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com//letters";
     }, 2000);
   } finally {
     removeLoading();
@@ -2792,7 +2795,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://localhost:5001/api/file/upload/letterpdf",
+    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -2805,7 +2808,7 @@ const handleSignSwiftCall = async () => {
   if (ShareLink) {
     //draft->pending
     await axios.post(
-      "http://localhost:5001/api/file/upload/updateLetterStatus",
+      "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,
@@ -2874,7 +2877,7 @@ const handleSignSwiftCall = async () => {
                   },
                 }).showToast();
                 setTimeout(() => {
-                  window.location.href = "http://localhost:5555/letters";
+                  window.location.href = "http://ipvms.exitest.com//letters";
                 }, 2000);
               }
             });
@@ -2928,7 +2931,7 @@ if (document.getElementById("sendLetter")) {
       handleSignSwiftCall();
     }
 
-    // window.location.href = "http://localhost:5555/letters";
+    // window.location.href = "http://ipvms.exitest.com//letters";
   });
 }
 if (document.getElementById("signCheckbox")) {

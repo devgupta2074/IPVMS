@@ -197,6 +197,19 @@ function addModalOpenCloseFeature() {
       .getElementsByTagName("body")[0]
       .classList.remove("overflow-y-hidden");
   };
+
+  // document.addEventListener('click', (event) => {
+
+  //   console.log(document.getElementById(modalId).style.display);
+  //   if (document.getElementById(modalId).style.display === "block") {
+  //     event.stopPropagation();
+  //     document.getElementById(modalId).style.display = "none";
+  //     document
+  //       .getElementsByTagName("body")[0]
+  //       .classList.remove("overflow-y-hidden");
+  //   }
+  // });
+
 }
 
 // Pagination

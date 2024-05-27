@@ -826,9 +826,9 @@ function addModalOpenCloseFeatureLetter() {
       document.getElementById(modalId).innerHTML = contents;
     });
     window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
+      console.log(event, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
+      if (event.target.classList.contains('backdrop')) {
         window.closeModal(modalId);
       }
     });

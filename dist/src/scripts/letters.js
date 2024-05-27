@@ -306,7 +306,7 @@ async function getTemplateInfo(templateId) {
       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
     </svg>
 
-    <svg class="w-[260px] h-[150px]">
+    <svg class="w-[260px] h-[150px] cursor-pointer">
       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
     </svg>
   </div>
@@ -403,7 +403,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -422,7 +422,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -977,7 +977,7 @@ async function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
@@ -988,7 +988,7 @@ async function displayArea() {
   <button
     onclick="openlettereditor(${0})"
     type="button"
-    class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
+    class="flex min-w-48 text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4  h-10   rounded-md  items-center gap-2 p-2"  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>
@@ -1059,10 +1059,10 @@ async function displayArea() {
         insertdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1096,19 +1096,7 @@ async function displayArea() {
           }
         };
       });
-      document.addEventListener("click", function (event) {
-        console.log("event", event.target.tagName);
-        if (event.target.tagName !== "svg") {
-          const modals = document.getElementsByClassName("closethemodal");
-          console.log("hello", modals);
-          for (let i = 0; i < modals.length; i++) {
-            if (modals[i].classList.contains("hidden")) {
-            } else {
-              modals[i].classList.add("hidden");
-            }
-          }
-        }
-      });
+
       const customdefault = document.getElementById("insert-custom");
       customdefault.innerHTML = ``;
       customtemplates.forEach((template) => {
@@ -1129,10 +1117,10 @@ async function displayArea() {
         customdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1186,10 +1174,10 @@ async function displayArea() {
         insertdraft.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -2503,7 +2491,7 @@ function addModalOpenCloseFeature() {
     newel.innerHTML = `  <div id=${modalId}  >
    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
      <!-- Background overlay -->
-     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
  
      <!-- Modal content -->
      <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
@@ -2539,11 +2527,12 @@ function addModalOpenCloseFeature() {
         .getElementsByClassName("docx-wrapper")[0].outerHTML;
       document.getElementById(modalId).innerHTML = contents;
     });
-    window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
-        window.closeModal(modalId);
+    document.addEventListener("click", function (event) {
+      // console.log(modalId, "event", event.target);
+
+      if (event.target.classList.contains('backdrop')) {
+        window.closeLetter(modalId);
       }
     });
 

@@ -443,7 +443,7 @@ document
     event.preventDefault();
     const res = await saveAsDraft();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com/letters";
     }, 3000);
   });
 document
@@ -555,7 +555,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://localhost:5555/letters";
+        window.location.href = "http://ipvms.exitest.com/letters";
       }, 3000);
     }
   } catch (error) {
@@ -572,7 +572,7 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com/letters";
     }, 2000);
   } finally {
     removeLoading();
@@ -800,7 +800,7 @@ document.getElementById("sendLetter").addEventListener("click", function () {
     handleSignSwiftCall();
   }
 
-  // window.location.href = "http://localhost:5555/letters";
+  // window.location.href = "http://ipvms.exitest.com/letters";
 });
 document.getElementById("signCheckbox").addEventListener("change", function () {
   const signMessage = document.getElementById("signMessage");

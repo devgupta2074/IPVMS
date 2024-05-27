@@ -221,12 +221,11 @@ async function handleInvite() {
   const name = document.getElementById("userName").value;
   const email = document.getElementById("userName").value;
   console.log(name, email);
-  const res = await InviteApiRequest(email, name);
-
+  // const res = await InviteApiRequest(email, name);
   modal.style.display = "none";
 }
 document.getElementById("inviteSubmit").addEventListener("click", function () {
-  handleInvite();
+  // handleInvite();
 });
 
 // api call to invite team member

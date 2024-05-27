@@ -1,6 +1,8 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
 import { VIEWS_CONSTANTS } from "../utils/constants.js";
 import { InviteApiRequest } from "../api/invitation.js";
+import { showLoading } from "../scripts/loading.js";
+import { removeLoading } from "../scripts/loading.js";
 
 const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
@@ -292,27 +294,33 @@ export async function InsertNavbar() {
       <form id="inviteForm" class="invite-form">
         <div class="my-5">
           <label
-            for="userEmail"
+            for="email"
             class="block text-sm text-gray-700 capitalize"
             >User email</label
           >
           <input
             id="userEmail"
             type="email"
+            required
             class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
           />
-        </div>
-
-        <div class="flex justify-center ">
+          <div class="flex justify-center mt-4 ">
           <button
             id="inviteSubmit"
-            type="button"
+            type="submit"
             class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-ship-cove-900  rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
           >
            Send Invitation 
           </button>
         </div>
+          
+        </div>
+
+        
+        <p id="success-message" class="text-green-400 text-md hidden">invitation send success </p>
+        <p id="emailerror" class="text-red-400 text-md hidden">Email already exist </p>
       </div>
+      
      
       </form>
     </div>`;
@@ -339,17 +347,34 @@ export async function InsertNavbar() {
         modal.style.display = "none";
       });
     }
-    document.getElementById("inviteSubmit").addEventListener("click", () => {
-      console.log("clcked on invite sumbn");
+    document.getElementById("inviteForm").addEventListener("submit", (e) => {
+      e.preventDefault();
       handleInvite();
     });
     async function handleInvite() {
       const name = document.getElementById("userEmail").value;
-      const res = await InviteApiRequest(name);
-      if (res) {
-        document.getElementById("success-message").classList.remove("hidden");
+      showLoading();
+
+      const result = await InviteApiRequest(name);
+      console.log(result.status, "status id");
+
+      // if (result?.data?.statusCode === 409) {
+      //   document.getElementById("emailerror").classList.remove("hidden");
+      // }
+      if (result.status === 409) {
+        document.getElementById("emailerror").classList.remove("hidden");
+        removeLoading();
         setTimeout(() => {
           modal.style.display = "none";
+          document.getElementById("emailerror").classList.add("hidden");
+        }, 1000);
+      }
+      if (result.status != 409) {
+        document.getElementById("success-message").classList.remove("hidden");
+        removeLoading();
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.getElementById("success-message").classList.add("hidden");
         }, 1000);
       }
     }

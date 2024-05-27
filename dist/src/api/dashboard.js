@@ -32,17 +32,19 @@ const getQueueLetters = async () => {
   const data = await axios.get(
     `http://localhost:5001/api/file/letter/${userId}`
   );
+  const filteredData = data.data.data.filter((item) => {
+    return item.status === "PENDING";
+  });
 
   console.log("upload doc is", data);
   // error upload doc
   // link and render
   let queueLetterHtml = `<ul role="list" class="flex flex-col justify-between">`;
 
-  if (data && data.data.data.length !== 0) {
-    data.data.data.forEach((item) => {
-      if (item.status === "PENDING") {
-        if (item.firstname === "New" && item.lastname === "User") {
-          queueLetterHtml += `<li class="mt-4">
+  if (filteredData && filteredData.length != 0) {
+    filteredData.forEach((item) => {
+      if (item.firstname === "New" && item.lastname === "User") {
+        queueLetterHtml += `<li class="mt-4">
         <div role="button"
           class="flex items-center gap-3 transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg p-3">
           <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
@@ -66,8 +68,8 @@ const getQueueLetters = async () => {
 
         </div>
           `;
-        } else {
-          queueLetterHtml += `<li class="mt-4">
+      } else {
+        queueLetterHtml += `<li class="mt-4">
           <div role="button"
             class="flex items-center gap-3 transition duration-300 hover:border-gray-400 hover:bg-gray-50 hover:rounded-lg p-3">
             <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
@@ -80,24 +82,15 @@ const getQueueLetters = async () => {
                 ${item?.firstname + " " + item?.lastname}
               </p>
             </div>`;
-        }
+      }
 
-        if (item?.status === "DRAFT") {
-          queueLetterHtml += `<div class="w-20 flex justify-center items-center">
-          <div class="w-20 flex justify-center items-center box-border bg-[#E0E0E0] border border-[#B2B0B0] text-[#575757] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#B2B0B0] hover:border-[#575757] hover:text-white">
-            DRAFT
-          </div>
-        </div>`;
-        } else if (item?.status === "PENDING") {
-          queueLetterHtml += `<div class="flex justify-center items-center">
+      queueLetterHtml += `<div class="flex justify-center items-center">
           <div class="bg-[#FFF0E1] border border-[#F47960] text-[#F47960] text-xs font-semibold px-4 py-1 rounded-full transition-colors duration-300 hover:bg-[#F47960] hover:border-[#F47960] hover:text-white">
             Pending
           </div>
         </div>`;
-        }
 
-        queueLetterHtml += `</div></li>`;
-      }
+      queueLetterHtml += `</div></li>`;
     });
 
     queueLetterHtml += `</ul>`;

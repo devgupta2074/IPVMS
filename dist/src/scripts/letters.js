@@ -24,6 +24,8 @@ import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
 import { imageLoaded } from "./versioncontrol.js";
 
+// global variables
+
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
 function extractParentText(parentId) {
   const parentElement = document.getElementById(parentId);
@@ -1532,43 +1534,52 @@ async function displayArea() {
               }</option>`;
             });
           });
-        document
-          .getElementById("closereview")
-          .addEventListener("click", closereviewmodal);
-        document
-          .getElementById("sendreview")
-          .addEventListener("click", async function () {
-            console.log(document.getElementById("adminlist").value);
-            if (
-              document.getElementById("adminlist").value !== "Select an Admin"
-            ) {
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-1");
-              document.getElementById("admin-error").classList.add("opacity-0");
-              const response = await SetDocumentToApprove(
-                parseInt(document.getElementById("adminlist").value),
-                parseInt(localStorage.getItem("modalId")),
-                parseInt(localStorage.getItem("userid"))
-              ).then(() => {
-                closereviewmodal();
+        if (document.getElementById("closerreview")) {
+          document
+            .getElementById("closereview")
+            .addEventListener("click", closereviewmodal);
+        }
+
+        if (document.getElementById("sendreview")) {
+          document
+            .getElementById("sendreview")
+            .addEventListener("click", async function () {
+              console.log(document.getElementById("adminlist").value);
+              if (
+                document.getElementById("adminlist").value !== "Select an Admin"
+              ) {
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
-              });
-              console.log(response);
-              if (response) {
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-1");
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
+                  .getElementById("admin-error")
+                  .classList.add("opacity-0");
+                const response = await SetDocumentToApprove(
+                  parseInt(document.getElementById("adminlist").value),
+                  parseInt(localStorage.getItem("modalId")),
+                  parseInt(localStorage.getItem("userid"))
+                ).then(() => {
+                  closereviewmodal();
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                });
+                console.log(response);
+                if (response) {
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                }
+              } else {
+                document
+                  .getElementById("admin-error")
+                  .classList.add("opacity-1");
+                document
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-0");
               }
-            } else {
-              document.getElementById("admin-error").classList.add("opacity-1");
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-0");
-            }
-          });
+            });
+        }
       }
     }
 
@@ -1598,6 +1609,7 @@ async function displayArea() {
       };
 
       dropDownBtn.addEventListener("click", () => {
+        console.log(dropDownBtn, document.getElementById("modalcontainer"));
         showModalUpload();
         console.log("modal opened");
       });
@@ -2489,7 +2501,7 @@ function addModalOpenCloseFeature() {
   window.openLetter = async function (modalId) {
     console.log(modalId, "modal id");
     const newel = document.createElement("div");
-    newel.innerHTML = `  <div id=${modalId}  >
+    newel.innerHTML = ` <div id=${modalId}  >
    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
      <!-- Background overlay -->
      <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
@@ -2584,7 +2596,7 @@ if (document.getElementById("savesdraft")) {
 }
 
 const saveAsDraft = async () => {
-  const htmlData1 = document.querySelector(".container").innerHTML;
+  const htmlData1 = document.querySelector(".container-content-1").innerHTML;
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
@@ -2650,7 +2662,7 @@ const handleGeneratePdf = async () => {
   const pdfBlob = await html2pdf().from(element).output("blob");
   const formData = new FormData();
   let letterId;
-  console.log(email);
+  // console.log(email);
   const fileName = "pdfsend" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   formData.append("userId", 20);
@@ -2783,7 +2795,7 @@ const handleSignSwiftCall = async () => {
     );
   }
   const email = localStorage.getItem("email");
-  const userId = "10200";
+  // const userId = "10200";
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
@@ -2796,9 +2808,11 @@ const handleSignSwiftCall = async () => {
       .then((data) => {
         console.log("data is", data);
         if (data.status == 500) {
+          removeLoading();
           console.log("first log in sign swift");
           document.getElementById("loginError").classList.remove("hidden");
           //error
+          removeLoading();
         } else {
           console.log("data", data);
           fetch("http://localhost:3000/api/document/uploadDocument", {

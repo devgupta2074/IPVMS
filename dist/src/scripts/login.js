@@ -52,8 +52,18 @@ In`;
         if (data?.success) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
-          localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
-          redirect(VIEWS_CONSTANTS.DASHBOARD);
+          if (data.statusCode === 318) {
+            const token = data.message.split(':');
+            console.log(token);
+
+            localStorage.setItem(API_CONSTANTS.TOKEN, token[1]);
+            redirect(VIEWS_CONSTANTS.ACCOUNT_SETUP);
+          } else {
+            console.log(data);
+            localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
+            redirect(VIEWS_CONSTANTS.DASHBOARD);
+          }
+
         } else {
           if (data.error === LOGIN_CONSTANTS.INVALID_DOMAIN) {
             emailerror.innerHTML = "Invalid email domain";

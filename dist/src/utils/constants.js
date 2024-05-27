@@ -46,12 +46,13 @@ const LOGIN_CONSTANTS = {
 const VIEWS_CONSTANTS = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
-
+  ACCOUNT_SETUP: "/accountsetup",
   FORGET_PASSWORD: "/forgotpassword",
   EMAIL_SENT: "/emailsent",
   RESET_PASSWORD: "/resetpassword",
   RESET_SUCCESS: "/resetsuccess",
   LINK_NOT_VALID: "/linkexpired",
+
 };
 const PASSWORD_CONSTANTS = {
   DIGIT: "Password should contain at least one digit",
@@ -80,9 +81,16 @@ const ROUTES_CONSTANTS = {
   GET_ALL_TEMPLATES: "/api/file/getAllTemplate",
   CREATE_POLICY: "/api/file/createPolicy",
   GET_ALL_CATEGORY: "/api/categories/getAllCategories",
+  GET_ADMIN_LIST: "/getAdminList",
+  SET_TO_APPROVE: "/api/setDocumentToApprove",
+  GET_POLICY_APPROVAL: "/getPolicyApprovalsByUserId",
+  GET_POLICY_APPROVAL_USER_SENT: "/getPolicyApprovalsUserSent",
+  GET_DOCUMENT_BY_ID: "/api/file/getFile/",
+  DELETE_TEMPLATE: "/deleteTemplate",
+  DELETE_LETTER_MODAL: "/api/file/deleteLetter",
 };
 export const style = `<style>
-.docx-wrapper { background: gray; padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 
+.docx-wrapper {  padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 
 .docx-wrapper>section.docx { background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
 .docx { color: black; hyphens: auto; text-underline-position: from-font; }
 section.docx { box-sizing: border-box; display: flex; flex-flow: column nowrap; position: relative; overflow: hidden; }

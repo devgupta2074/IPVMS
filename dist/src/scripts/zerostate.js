@@ -44,9 +44,7 @@ const docxModal = (id) => {
           </div>
         
       
-        <a href="#" onclick="closeModal(${id})" class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-         Close Modal
-        </a>
+   
       </div>
     </div>
   </div>
@@ -106,7 +104,7 @@ const docCard = (title, category, created_by, created_at, id) => {
 };
 
 const fetchDoc = async (currentPage, pageSize) => {
-  // document.getElementById("loading").style = "display:block";
+  document.getElementById("loading").style = "display:block";
   // if (category == "Select a category") {
   //   category = "";
   // }
@@ -125,7 +123,7 @@ It seems there are no recent policy updates to display at the moment.
  </div>
         `;
 
-  // document.getElementById("loading").style = "display:none";
+  document.getElementById("loading").style = "display:none";
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -223,12 +221,11 @@ async function handleInvite() {
   const name = document.getElementById("userName").value;
   const email = document.getElementById("userName").value;
   console.log(name, email);
-  const res = await InviteApiRequest(email, name);
-
+  // const res = await InviteApiRequest(email, name);
   modal.style.display = "none";
 }
 document.getElementById("inviteSubmit").addEventListener("click", function () {
-  handleInvite();
+  // handleInvite();
 });
 
 // api call to invite team member

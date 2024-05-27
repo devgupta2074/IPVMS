@@ -1,5 +1,8 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
 import { VIEWS_CONSTANTS } from "../utils/constants.js";
+import { InviteApiRequest } from "../api/invitation.js";
+import { showLoading } from "../scripts/loading.js";
+import { removeLoading } from "../scripts/loading.js";
 
 const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
@@ -9,16 +12,16 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
-  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
-    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-  </svg>
- 
-  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
-    Policies</div>
-</div>
-</button>
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+  
+    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+      Dashboard</div>
+  </div>
+  </button>
 
 
 <button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
@@ -27,16 +30,16 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
-  <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
-    <use xlink:href="./assets/icons/icon.svg#triangle"></use>
-  </svg>
- 
-  <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
-    Policies</div>
-</div>
-</button>
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+  
+    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+      Policies</div>
+  </div>
+  </button>
 
 
 <button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
@@ -45,7 +48,7 @@ const NavBar = `
 <use xlink:href="/assets/icons/icon.svg#policy"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -55,20 +58,20 @@ const NavBar = `
 </div>
 </button>
 
-<button id="inviteButton" class="h-[2.5rem] w-[2.5rem] flex flex-row">
-<span id="invite-svg" class=" peer/invite-svg">
-<svg class="h-[2.5rem] w-[2.5rem] p-2  ">
-<use xlink:href="/assets/icons/icon.svg#document"></use>
-</svg>
-</span>
+  <button id="inviteButton1111" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+  <span id="invite-svg" class=" peer/invite-svg">
+  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+  <use xlink:href="/assets/icons/icon.svg#invite-employee"></use>
+  </svg>
+  </span>
 
-<div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
  
   <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
-  Invite Memeber</div>
+  Invite Member</div>
 </div>
 </button>
   
@@ -78,8 +81,8 @@ const NavBar = `
 <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
-  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
-  <svg class="h-6 w-6 z-50 -ml-12 mt-1">
+  <input type="name" name="search" id="globalsearch" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+  <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
     <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
   </svg>
 </div>
@@ -97,7 +100,7 @@ const NavBar = `
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
 </svg></button>
   <!-- Dropdown menu -->
-  <div class="hidden bg-white text-base z-50   list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown" style="position: absolute; inset: 0 auto auto 0; margin: 0px; transform: translate3d(-30px, 40.6px, 0px);" data-popper-placement="bottom">
+  <div class="hidden bg-white text-base z-50 absolute top-7 right-1  list-none divide-y divide-gray-100 rounded shadow my-4" id="dropdown"  data-popper-placement="bottom">
     <div class="px-4 py-3">
       <span id="dropdownname" class=" hidden text-sm"></span>
       <span id="dropdownemail" class="block text-sm   font-semibold text-gray-900 truncate"></span>
@@ -118,7 +121,7 @@ const NavBar = `
 </div>
 </header>
 
-`;
+  `;
 
 export async function InsertNavbar() {
   let userdata;
@@ -133,6 +136,9 @@ export async function InsertNavbar() {
         redirect(VIEWS_CONSTANTS.LOGIN);
       } else {
         userdata = data;
+        localStorage.setItem("userid", userdata.data.id);
+        localStorage.setItem("userId", userdata.data.id);
+        localStorage.setItem("email", userdata.data.email);
       }
     });
   }
@@ -171,10 +177,10 @@ export async function InsertNavbar() {
   const signoutbutton = document.getElementById("signout");
   const todashboard = document.getElementById("dashboard");
   console.log("inviteButton dashboard", todashboard);
-  const inviteButton = document.getElementById("inviteButton");
+  const inviteButton1111 = document.getElementById("inviteButton1111");
   console.log("inviteButton");
   let modal = document.getElementById("modal");
-  let closeButton = document.getElementById("closeButton");
+  let closeButton = document.getElementById("closeButton1111");
   const inviteSubmit = document.getElementById("inviteSubmit");
 
   todashboard.addEventListener("click", () => {
@@ -200,13 +206,23 @@ export async function InsertNavbar() {
   let name = document.getElementById("name");
   let modalname = document.getElementById("modalname");
   let dropdown = document.getElementById("dropdown");
-  modalname.addEventListener("click", function () {
+  modalname.addEventListener("click", function (event) {
     if (dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
       dropdown.classList.remove("hidden");
     } else {
+      event.stopPropagation();
       dropdown.classList.add("hidden");
     }
   });
+
+  document.addEventListener("click", (event) => {
+    if (!dropdown.classList.contains("hidden")) {
+      event.stopPropagation();
+      dropdown.classList.add("hidden");
+    }
+  });
+
   let dropdownname = document.getElementById("dropdownname");
   let dropdownemail = document.getElementById("dropdownemail");
 
@@ -224,25 +240,26 @@ export async function InsertNavbar() {
     " " +
     userdata.data.last_name +
     `  <svg
-  class="w-4 h-4 ml-2"
-  fill="none"
-  stroke="currentColor"
-  viewBox="0 0 24 24"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    stroke-width="2"
-    d="M19 9l-7 7-7-7"
-  ></path>
-</svg>`;
-  inviteButton.addEventListener("click", function () {
+    class="w-4 h-4 ml-2"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M19 9l-7 7-7-7"
+    ></path>
+  </svg>`;
+  inviteButton1111.addEventListener("click", function () {
+    console.log("invite member clicked");
     const invitemodal = document.createElement("div");
-    invitemodal.id = "removemodal";
-    invitemodal.innerHTML = `      <div
-    id="modal"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center"
+    invitemodal.id = "removemodal1111";
+    invitemodal.innerHTML = `<div
+    id="modalinvite"
+    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
   >
     <div
       class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
@@ -252,7 +269,7 @@ export async function InsertNavbar() {
           Invite member
         </h1>
         <button
-          id="closeButton"
+          id="closeButton1111"
           class="close-button text-gray-600 hover:text-gray-700 focus:outline-none"
         >
           <svg
@@ -275,69 +292,107 @@ export async function InsertNavbar() {
         Send invitation to the user for joining the platform
       </p>
       <form id="inviteForm" class="invite-form">
-        <div class="mb-4">
+        <div class="my-5">
           <label
-            for="userName"
-            class="pt-2 block text-sm text-gray-700 capitalize"
-            >User name</label
-          >
-          <input
-            id="userName"
-            placeholder="Arthur Melo"
-            type="text"
-            class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label
-            for="userEmail"
+            for="email"
             class="block text-sm text-gray-700 capitalize"
             >User email</label
           >
           <input
             id="userEmail"
-            placeholder="arthurmelo@example.app"
             type="email"
+            required
             class="block w-full px-3 py-2 mt-2 text-gray-600 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-indigo-400 focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-40"
           />
-        </div>
-
-        <div class="flex justify-end">
+          <div class="flex justify-center mt-4 ">
           <button
             id="inviteSubmit"
-            type="button"
-        
-            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-indigo-500 rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
+            type="submit"
+            class="invite-submit px-3 py-2 text-sm text-white capitalize transition-colors duration-200 bg-ship-cove-900  rounded-md focus:outline-none focus:ring focus:ring-indigo-300 focus:ring-opacity-50 hover:bg-indigo-600"
           >
-            Invite Member
+           Send Invitation 
           </button>
         </div>
+          
+        </div>
+
+        
+        <p id="success-message" class="text-green-400 text-md hidden">invitation send success </p>
+        <p id="emailerror" class="text-red-400 text-md hidden">Email already exist </p>
       </div>
+      
      
       </form>
     </div>`;
+    // document.getElementById("inviteSubmit").addEventListener("click",()=>{
+
+    // })
+    modal = document.getElementById("modalinvite");
+    document.addEventListener("click", function (event) {
+      console.log("event", event.target);
+
+      if (event.target.classList.contains("backdrop")) {
+        modal.style.display = "none";
+      }
+    });
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
-    modal = document.getElementById("modal");
+
     if (modal) {
       modal.style.display = "flex";
     }
-    closeButton = document.getElementById("closeButton");
+    closeButton = document.getElementById("closeButton1111");
     if (closeButton) {
       closeButton.addEventListener("click", function () {
         modal.style.display = "none";
       });
     }
+    document.getElementById("inviteForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      handleInvite();
+    });
+    async function handleInvite() {
+      const name = document.getElementById("userEmail").value;
+      showLoading();
+
+      const result = await InviteApiRequest(name);
+      console.log(result.status, "status id");
+
+      // if (result?.data?.statusCode === 409) {
+      //   document.getElementById("emailerror").classList.remove("hidden");
+      // }
+      if (result.status === 409) {
+        document.getElementById("emailerror").classList.remove("hidden");
+        removeLoading();
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.getElementById("emailerror").classList.add("hidden");
+        }, 1000);
+      }
+      if (result.status != 409) {
+        document.getElementById("success-message").classList.remove("hidden");
+        removeLoading();
+        setTimeout(() => {
+          modal.style.display = "none";
+          document.getElementById("success-message").classList.add("hidden");
+        }, 1000);
+      }
+    }
   });
+  //function to close the modal when clicking outside of it
 
   if (closeButton) {
     closeButton.addEventListener("click", function () {
-      const removemodal = document.getElementById("removemodal");
-      removemodal.remove();
+      const removemodal1111 = document.getElementById("removemodal1111");
+      removemodal1111.remove();
       modal.style.display = "none";
     });
   }
+  window.addEventListener("click", function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
 }
 
 // <div class="tooltip">

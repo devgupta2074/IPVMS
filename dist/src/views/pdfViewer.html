@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Viewer</title>
+    <!-- Tailwind CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <style>
+      .pdf-container {
+        width: 100%;
+        height: 90vh; /* Adjust height as needed */
+        /* Enable scrolling */
+        /* Thin scrollbar */
+      }
+      .pdf-page {
+        margin-bottom: 20px; /* Adjust spacing between pages */
+      }
+      .pdf-page:last-child {
+        margin-bottom: 0; /* Remove margin from last page */
+      }
+      body {
+        scrollbar-width: thin;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-200">
+    <div class="container mx-auto p-4">
+      <div
+        id="pdf-container"
+        class="pdf-container flex flex-col items-center border relative"
+      >
+        <!-- PDF pages will be displayed here -->
+      </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <!-- PDF.js script -->
+
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", async () => {
+        var filename = window.location.search.substring(6);
+        const response = await axios.get(
+          `http://localhost:5001/api/file/getLetterUrl/${filename}`
+        );
+        var { pdfjsLib } = globalThis;
+
+        var loadingTask = pdfjsLib.getDocument(response.data.url);
+        loadingTask.promise.then(function (pdf) {
+          console.log("PDF loaded");
+
+          var totalPages = pdf.numPages;
+          var pdfContainer = document.getElementById("pdf-container");
+
+          function renderPage(pageNumber) {
+            pdf.getPage(pageNumber).then(function (page) {
+              console.log("Page loaded");
+
+              var canvas = document.createElement("canvas");
+              var context = canvas.getContext("2d");
+              canvas.classList.add("pdf-page");
+
+              var scales = { 1: 3.2, 2: 4 },
+                defaultScale = 3,
+                scale = scales[window.devicePixelRatio] || defaultScale;
+
+              var viewport = page.getViewport({ scale: scale });
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              var displayWidth = 1.5;
+              canvas.style.width = `${
+                (viewport.width * displayWidth) / scale
+              }px`;
+              canvas.style.height = `${
+                (viewport.height * displayWidth) / scale
+              }px`;
+
+              var renderContext = {
+                intent: "print",
+                canvasContext: context,
+                viewport: viewport,
+              };
+              var renderTask = page.render(renderContext);
+              renderTask.promise.then(function () {
+                console.log("Page rendered");
+              });
+
+              pdfContainer.appendChild(canvas);
+            });
+          }
+
+          // Render all pages
+          for (let i = 1; i <= totalPages; i++) {
+            renderPage(i);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

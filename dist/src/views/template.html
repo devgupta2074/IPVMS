@@ -7,6 +7,46 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link  rel="stylesheet"   href="styles.css"></link>
+    <link  rel="stylesheet"   href="tailwind.css"></link>
+    
+    
+    <style>
+         .drawer-open {
+      transform: translateX(0);
+    }
+    .drawer-close {
+      transform: translateX(100%);
+    }
+    .drawer-transition {
+      transition: transform 0.3s ease-in-out;
+    }
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+      display: none;
+    }
+    .backdrop.show {
+      display: block;
+    }
+    </style>
+    <style>
+
+
+#writeIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+    transition: top 0.3s, left 0.3s;
+}
+    </style>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -14,86 +54,151 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script>
-      var title;
-      var htmlData;
-      var category;
-      var description;
-      const getTemplate = (id, userId) => {
-        console.log("in get temo id is", id);
-
-        const getTemplatedoc = async (id, userId, result2) => {
-          console.log("in get temo id in getTempdox is", id);
-          const response = await fetch(
-            `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
-            {
-              method: "GET",
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const result = data.data[0];
-              // Handle the response from the backend
-              console.log(result);
-              category = result.category;
-              description = result.description;
-              htmlData = result.htmldata;
-              title = result.title;
-              document.getElementById("container").innerHTML = htmlData;
-              makeForm(result2);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        };
-        const getUserDetails = async (userId) => {
-          console.log("in user deatil user id is", userId);
-          const response = await fetch(
-            `http://localhost:5001/api/user/getUserInfo/${userId}`,
-            {
-              method: "GET",
-            }
-          )
-            .then((response) => response.json())
-            .then((data) => {
-              const result = data.data;
-              // Handle the response from the backend
-              console.log(result);
-              console.log(document.getElementById("firstname"));
-              console.log(document.getElementById("lastname"));
-              getTemplatedoc(id, userId, result);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        };
-        getUserDetails(userId);
-      };
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  
+    <script type="module" defer src="/scripts/template.js"></script>
     <style>
       .container {
         scrollbar-width: none;
+        min-height: "100%";
+        min-width: "100%";
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        height: auto;
       }
       .container2 {
         scrollbar-width: none;
       }
     </style>
   </head>
-  <body>
-    <div class="flex flex-col gap-5 p-2 h-screen overflow-y-hidden">
-      <div class="flex flex-row items-center justify-center text-2xl">
-        Template
-      </div>
-      <div class="flex flex-row gap-1 overflow-y-scroll">
-        <div
-          id="container"
-          class="container w-4/5 border-2 border-gray-100 p-10 pt-5 h-full rounded-md"
-        ></div>
+  <body class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden vsc-initialized">
+    <main class="bg-zircon-50 w-[auto] p-12 overflow-y-auto rounded-lg col-start-2  col-end-3 h-calc(100vh - 87px)">
+      <button
+            onclick="window.location"
+            class=" flex flex-row gap-3 mb-5  items-center font-roboto font-normal leading-4 text-mineshaft-900"
+          >
+            <svg
+              width="19"
+              height="16"
+              viewBox="0 0 19 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z"
+                fill="#333333"
+              />
+            </svg>
 
-        <div
+            Back
+          </button>
+      <div class="flex w-full flex-row gap-0 ">
+        
+    <div class="flex flex-col gap-5 p-2 h-full overflow-y-auto w-2/3 ">
+
+          <div class="relative w-full max-h-full">
+            
+            <div class="relative bg-white rounded-md shadow">
+              <div
+                class="flex items-center flex-row   justify-between p-3  border-b rounded-t"
+              >
+            
+                <h3
+                  id="doc_title"
+                  class="text-xl font-medium text-gray-900 "
+                >
+                  Template name
+
+                </h3>
+                <div class="flex flex-row items-center gap-4">
+                  <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
+                  <svg id="editletter" class="hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 40 40">
+                    <path fill="#f5ce85" d="M5.982 29.309L8.571 26.719 13.618 31.115 10.715 34.019 2.453 37.547z"></path><path fill="#967a44" d="M8.595,27.403l4.291,3.737l-2.457,2.457l-7.026,3.001l3.001-7.003L8.595,27.403 M8.548,26.036 l-2.988,2.988l-4.059,9.474L11,34.44l3.351-3.351L8.548,26.036L8.548,26.036z"></path><path fill="#36404d" d="M3.805 33.13L1.504 38.5 6.888 36.201z"></path><path fill="#f78f8f" d="M30.062,5.215L32.3,2.978C32.931,2.347,33.769,2,34.66,2s1.729,0.347,2.36,0.978 c1.302,1.302,1.302,3.419,0,4.721l-2.237,2.237L30.062,5.215z"></path><path fill="#c74343" d="M34.66,2.5c0.758,0,1.471,0.295,2.007,0.831c1.107,1.107,1.107,2.907,0,4.014l-1.884,1.884 L30.77,5.215l1.884-1.884C33.189,2.795,33.902,2.5,34.66,2.5 M34.66,1.5c-0.982,0-1.965,0.375-2.714,1.124l-2.591,2.591 l5.428,5.428l2.591-2.591c1.499-1.499,1.499-3.929,0-5.428v0C36.625,1.875,35.643,1.5,34.66,1.5L34.66,1.5z"></path><g><path fill="#ffeea3" d="M11.346,33.388c-0.066-0.153-0.157-0.308-0.282-0.454c-0.31-0.363-0.749-0.584-1.31-0.661 c-0.2-1.267-1.206-1.803-1.989-1.964c-0.132-0.864-0.649-1.342-1.201-1.582l21.49-21.503l4.721,4.721L11.346,33.388z"></path><path fill="#ba9b48" d="M28.054,7.931l4.014,4.014L11.431,32.594c-0.242-0.278-0.638-0.59-1.261-0.748 c-0.306-1.078-1.155-1.685-1.983-1.943c-0.151-0.546-0.447-0.968-0.821-1.272L28.054,7.931 M28.053,6.517L5.56,29.023 c0,0,0.007,0,0.021,0c0.197,0,1.715,0.054,1.715,1.731c0,0,1.993,0.062,1.993,1.99c1.982,0,1.71,1.697,1.71,1.697l22.482-22.495 L28.053,6.517L28.053,6.517z"></path></g><g><path fill="#d9e7f5" d="M29.107 4.764H34.685V11.440999999999999H29.107z" transform="rotate(-45.009 31.895 8.103)"></path><path fill="#788b9c" d="M31.507,4.477l4.014,4.014l-3.237,3.237L28.27,7.714L31.507,4.477 M31.507,3.063l-4.651,4.651 l5.428,5.428l4.651-4.651L31.507,3.063L31.507,3.063z"></path></g>
+                    </svg>
+                <button
+                type="button"
+                id="sendButton"
+              
+                class="hover:cursor-pointer bg-blue-500  border-2 border-[#EAEAEA] text-white  font-medium rounded-full text-sm px-5 py-2.5 text-center "
+              >
+                Send 
+              </button>
+
+<!-- modal to send letter --> 
+<div id="confirmModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-[1000]">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+      <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Confirmation</h2>
+          <span class="close text-gray-500 text-2xl cursor-pointer">&times;</span>
+      </div>
+      <p class="mb-5">Do you want to send the letter?</p>
+      <label class="inline-flex items-center mb-4">
+          <input type="checkbox" id="signCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
+          <span class="ml-2 text-gray-700">Should be signed</span>
+      </label>
+      <p id="signMessage" class="text-blue-600 mb-4 hidden">The letter will be sent to Sign Swift for signature. Please follow up on their website.</p>
+      <p id="loginError" class="text-red-600 mb-4 hidden">User not found in Sign Swift. Please <a href="https://ex-sign-swift.vercel.app" class="text-blue-600 underline">log in</a>.</p>
+      <p id="uploadError" class="text-red-600 mb-4 hidden">An error occurred while uploading the file. Please try again.</p>
+      <p id="uploadSuccess" class="text-green-600 mb-4 hidden">Success</p>
+      <div class="flex justify-end space-x-4">
+          <button id="sendLetter" class="px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+          <button id="cancelSend" class="px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+      </div>
+  </div>
+</div>
+
+<!-- modal end -->
+
+
+
+
+
+                  <button
+                    id="saveasdraft"
+                    type="button"
+                    
+                    class="hover:cursor-pointer text-white bg-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center "
+                  >
+                    Save as Draft
+                  </button>
+                
+                  
+
+                  <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
+                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                          </svg>
+                          <span class="sr-only">Close modal</span>
+                      </button> -->
+
+                    </div>
+              </div>
+            <div
+            id="container"
+            class="container w-full items-center flex justify-start   overflow-y-auto     rounded-md">
+        
+        
+          </div>
+         
+        </div>
+        </div>
+       
+
+        <!-- <div
           class="relative flex h-[calc(85vh-2rem)] ml-5 mr-5 w-full max-w-[25rem] flex-col rounded-xl bg-white bg-clip-border p-4 text-gray-700 shadow-xl shadow-blue-gray-900/5"
         >
           <h1 class="text-gray-800 text-2xl">Form</h1>
@@ -107,6 +212,13 @@
           >
             Submit
           </button>
+          <button
+            type="button"
+            id="generate"
+            class="mt-0 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Generate pdf
+          </button> -->
           <!-- <button
             type="submit"
             id="print_to_pdf"
@@ -115,112 +227,35 @@
             get Pdf
           </button> -->
         </div>
+        <div class="w-1/3 0 sticky top-0 right-0  p-4 mt-2  bg-white rounded-md shadow-md ">
+          <form id="letterform" class="mb-6 pb-6 sticky top-0 right-0 overflow-y-auto h-[40rem]">
+            <h5 id="drawer-label" class="mb-6 text-base font-semibold text-gray-500 uppercase dark:text-gray-400">
+              <svg class="w-4 h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+              </svg>Fill Form
+            </h5>
+            <div  id="container2"   class="container2 mb-6 overflow-y-scroll h-screen">
+              </div>
+              <button type="submit" id="submitBtn" style="display:none;"></button>
+          </form>
+          
+        </div>
       </div>
+
     </div>
+<!--SLIDE PANEL -->
 
-    <script src="../scripts/template.js"></script>
 
-    <script>
-      const main = document.getElementById("main");
-      if (main) {
-        main.addEventListener("click", function (event) {
-          const input = document
-            .getElementById("main")
-            .getElementsByTagName("input")[0]
-            .click();
-        });
-        const elem = document
-          .getElementById("main")
-          .getElementsByTagName("input")[0];
-        if (elem) {
-          elem.addEventListener("change", function (event) {
-            const file = event.target.files[0];
+<!-- drawer component -->
 
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function (event) {
-                const imageElement = document.getElementById(elem.id + "image");
-                console.log(imageElement);
-                if (imageElement) {
-                  imageElement.src = event.target.result;
-                }
-              };
-              reader.readAsDataURL(file);
-            }
-          });
-        }
-      }
 
-      const handleSubmit = () => {
-        const inputs = document.querySelectorAll(".container2 input");
-        const values = {};
-        console.log(inputs);
-        inputs.forEach((input) => {
-          values[input.id] = input.value;
-        });
 
-        var template = Handlebars.compile(htmlData);
-        Handlebars.registerHelper("image", function (context) {
-          var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
-          return new Handlebars.SafeString(result);
-        });
-        Handlebars.registerHelper("number", function (astring) {
-          return astring;
-        });
 
-        Handlebars.registerHelper("link", function (context) {
-          var result = `<a href="${context}" class="text-blue-500">${context}</a>`;
-          return new Handlebars.SafeString(result);
-        });
+<!--  -->
 
-        Handlebars.registerHelper("date", function (astring) {
-          return astring;
-        });
 
-        Handlebars.registerHelper("email", function (context) {
-          var result = `<a href="mailto:${context}" class="text-blue-500">${context}</a>`;
-          return new Handlebars.SafeString(result);
-        });
 
-        // const element=document.createElement('div');
-        // element.innerHTML=template({...values});
-        // console.log(template({...values}));
-        console.log({ ...values });
-        const newValues = {};
-
-        Object.keys(values).forEach((key) => {
-          if (values[key] === "") {
-            newValues[key] = `{{${key}}}`;
-          } else {
-            newValues[key] = values[key];
-          }
-        });
-        console.log(newValues);
-        document.getElementById("container").innerHTML = template({
-          ...newValues,
-        });
-        // document.querySelector('.container').appendChild(element);
-
-        Object.keys(values).forEach((key) => {
-          document.getElementById(key).value = values[key];
-        });
-      };
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function (event) {
-        const url = window.location.href;
-        console.log("URL:", url);
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        console.log(urlParams);
-        const id = urlParams.get("templateId");
-        const userId = urlParams.get("userId");
-        console.log("user id is", userId);
-
-        getTemplate(id, userId);
-      });
-    </script>
-    <script></script>
 
     <!-- <script>
       // window.jsPDF = window.jspdf.jsPDF;
@@ -247,5 +282,59 @@
         saveAsPdf();
       };
     </script> -->
+    <script>
+      var isEditable=false;
+  document.getElementById("editletter").addEventListener("click",()=>{
+    console.log("clicked on edit")
+    const container = document.getElementById("container");
+    document.getElementById("container").contentEditable=!isEditable;
+    isEditable=!isEditable;
+    if (isEditable) {
+                container.focus();
+            }
+  }) 
+
+
+  
+  
+    </script>
+</main>
+<script>
+
+
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   </body>
+  <script>
+    const showLoading = () => {
+      const loading = document.createElement("div");
+      loading.id = "loadingicon";
+      loading.innerHTML = `<div id="loading"  >
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+<div class="flex gap-2 justify-center items-center h-screen">
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+</div>
+</div>  
+</div>`;
+      document.body.appendChild(loading);
+    };
+    const removeLoading = () => {
+      const loadingElement = document.getElementById("loadingicon");
+      if (loadingElement) {
+        loadingElement.remove();
+      }
+    };
+  </script>
+
+  
+
+   <script>
+    const main = document.getElementById("main");
+    
+    
+  </script>
+
+  
 </html>

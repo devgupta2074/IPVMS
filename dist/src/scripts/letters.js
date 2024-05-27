@@ -1,12 +1,17 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
-import { GetAllTemplates } from "../api/getAllTemplates.js";
+import {
+  GetAllTemplates,
+  GetAllTemplatesByStatus,
+} from "../api/getAllTemplates.js";
 import { GetAllUsers } from "../api/getAllUsers.js";
 import { addTable, sortTable, getdate } from "../components/TableGenerator.js";
+import { addTable1 } from "../components/TableGenerator1.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
   ROUTES_CONSTANTS,
+  style,
   TOAST_COLORS,
   TOAST_ERRORS,
   TOAST_ICONS,
@@ -16,6 +21,10 @@ import { debounce } from "../utils/debouncing.js";
 import { docsstyle } from "../utils/docxstyle.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
+import { DELETETEMPLATE } from "../api/deleteTemplate.js";
+import { imageLoaded } from "./versioncontrol.js";
+
+// global variables
 
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
 function extractParentText(parentId) {
@@ -89,7 +98,7 @@ export const modalHtml = `<div id="container-html1" class="hidden">
 
 
 <div
-id="modal"
+id="modalupload"
 class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50"
 >
 <!-- Modal Content -->
@@ -156,58 +165,7 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
               <span class="text-[#1F2DE3]">Browse</span>
             </p>
             <p class="text-[#333333] text-xs">Or</p>
-            <p
-              class="text-[#333333] text-base flex items-center justify-center gap-1"
-            >
-              from Google Drive
-              <span>
-                <svg
-                  width="21"
-                  height="18"
-                  viewBox="0 0 21 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <g clip-path="url(#clip0_1531_13285)">
-                    <path
-                      d="M2.22423 15.409L3.08421 16.9418C3.26291 17.2645 3.51976 17.5181 3.82133 17.7025C4.68512 16.5711 5.28626 15.7029 5.62508 15.0979C5.96884 14.4839 6.39137 13.5234 6.89265 12.2167C5.54167 12.0331 4.51792 11.9414 3.8214 11.9414C3.15284 11.9414 2.12909 12.0331 0.75 12.2167C0.75 12.5739 0.83935 12.9312 1.01805 13.2539L2.22423 15.409Z"
-                      fill="#0066DA"
-                    />
-                    <path
-                      d="M17.1788 17.7025C17.4805 17.5181 17.7373 17.2645 17.916 16.9419L18.2734 16.308L19.9822 13.2539C20.1576 12.9382 20.25 12.5806 20.2502 12.2167C18.8631 12.0331 17.8412 11.9414 17.1845 11.9414C16.4787 11.9414 15.4567 12.0331 14.1187 12.2167C14.6141 13.5306 15.031 14.491 15.3696 15.0979C15.7111 15.7101 16.3141 16.5783 17.1788 17.7025Z"
-                      fill="#EA4335"
-                    />
-                    <path
-                      d="M10.5001 5.76244C11.4995 4.51698 12.1882 3.55653 12.5663 2.88126C12.8707 2.33748 13.2058 1.46924 13.5714 0.276603C13.2699 0.0922009 12.9237 0 12.5663 0H8.43394C8.07654 0 7.73041 0.103755 7.42877 0.276603C7.89388 1.64445 8.2886 2.61794 8.61279 3.197C8.9711 3.83699 9.6002 4.6921 10.5001 5.76244Z"
-                      fill="#00832D"
-                    />
-                    <path
-                      d="M14.1075 12.2168H6.89266L3.82141 17.7026C4.1229 17.887 4.4691 17.9792 4.8265 17.9792H16.1737C16.5311 17.9792 16.8773 17.8755 17.1788 17.7026L14.1075 12.2168Z"
-                      fill="#2684FC"
-                    />
-                    <path
-                      d="M10.5001 5.76212L7.42883 0.276367C7.12719 0.460769 6.87033 0.714262 6.69163 1.037L1.01805 11.1789C0.842635 11.4946 0.750232 11.8522 0.75 12.2161H6.89265L10.5001 5.76212Z"
-                      fill="#00AC47"
-                    />
-                    <path
-                      d="M17.1454 6.10798L14.3085 1.037C14.1299 0.714262 13.8729 0.460769 13.5714 0.276367L10.5001 5.7622L14.1075 12.2162H20.239C20.239 11.8589 20.1497 11.5017 19.971 11.1789L17.1454 6.10798Z"
-                      fill="#FFBA00"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_1531_13285">
-                      <rect
-                        width="19.5"
-                        height="18"
-                        fill="white"
-                        transform="translate(0.75)"
-                      />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </span>
-            </p>
-          </div>
+            </div>
           <div
             class="w-full h-8 p-2 rounded-md bg-[#BED5FF] flex items-center justify-center text-[#5D5D5D] text-xs font-normal"
           >
@@ -243,7 +201,8 @@ var maxPages = 10;
 var pageSize = 5;
 var currentPage = 1;
 var totalItems;
-// const docCard = (title, category, created_by, created_at, id) => {
+// const
+//Employee Name = (title, category, created_by, created_at, id) => {
 //   let date = new Date(created_at);
 //   date = date.toLocaleDateString("en-GB");
 //   // console.log(created_at);
@@ -270,7 +229,7 @@ var totalItems;
 //         </svg>
 //       </button>
 
-//       <button onclick="openModal(${id})">
+//       <button onclick="openLetter(${id})">
 //         <svg id="redeye" class="h-6 w-6">
 //           <use
 //             xlink:href="/assets/icons/icon.svg#redeye"
@@ -294,7 +253,7 @@ var totalItems;
 // };
 
 // const fetchDoc = async (currentPage, pageSize) => {
-//   // document.getElementById("loading").style = "display:block";
+//  document.getElementById("loading").style = "display:block";
 //   // if (category == "Select a category") {
 //   //   category = "";
 //   // }
@@ -321,7 +280,8 @@ var totalItems;
 //         // document.getElementById("main-body").innerHTML = "";
 //         data.data.map((item) => {
 //           console.log(item);
-//           parentElement.innerHTML += docCard(
+//           parentElement.innerHTML +=
+//Employee Name(
 //             item.title || "demo",
 //             item.category_name,
 //             item.created_by,
@@ -335,7 +295,7 @@ var totalItems;
 //       }
 //     });
 
-//   // document.getElementById("loading").style = "display:none";
+//  document.getElementById("loading").style = "display:none";
 // }
 
 async function getTemplateInfo(templateId) {
@@ -348,7 +308,7 @@ async function getTemplateInfo(templateId) {
       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
     </svg>
 
-    <svg class="w-[260px] h-[150px]">
+    <svg class="w-[260px] h-[150px] cursor-pointer">
       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
     </svg>
   </div>
@@ -445,7 +405,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -464,7 +424,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -477,6 +437,8 @@ async function getUserInfoToDisplay(userId) {
         </div>
       </div>
     </div>`;
+      console.log("lololololollololol");
+      // document.getElementById("loading").style = "display:none";
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -490,6 +452,7 @@ if (localStorage.getItem("token") === null) {
   await UserInfoApiRequest(token).then((data) => {
     // Handle the response from the backend
     console.log(data, "d");
+    document.getElementById("loading").style = "display:none";
     if (data.statusCode == 401) {
       redirect(VIEWS_CONSTANTS.LOGIN);
     } else {
@@ -500,10 +463,13 @@ if (localStorage.getItem("token") === null) {
 InsertNavbar();
 const sendletters = document.getElementById("sendletters");
 const recentsendletters = document.getElementById("recentsentletters");
+const draftLetters = document.getElementById("draftLetters");
 const lettertemplates = document.getElementById("lettertemplates");
 displayArea();
+
 sendletters.addEventListener("click", function () {
   recentsendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
 
   lettertemplates.classList = "cursor-pointer p-3 px-6";
   sendletters.classList =
@@ -517,18 +483,28 @@ recentsendletters.addEventListener("click", function () {
 
   lettertemplates.classList = "cursor-pointer p-3 px-6";
   sendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
+  displayArea();
+});
+draftLetters.addEventListener("click", function () {
+  draftLetters.classList =
+    "cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6";
+  recentsendletters.classList = "cursor-pointer p-3 px-6";
+  lettertemplates.classList = "cursor-pointer p-3 px-6";
+  sendletters.classList = "cursor-pointer p-3 px-6";
+
   displayArea();
 });
 
 lettertemplates.addEventListener("click", function () {
   recentsendletters.classList = "cursor-pointer p-3 px-6";
-
   lettertemplates.classList =
     "cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6";
   sendletters.classList = "cursor-pointer p-3 px-6";
+  draftLetters.classList = "cursor-pointer p-3 px-6";
   displayArea();
 });
-function displayArea() {
+async function displayArea() {
   if (sendletters.classList.contains("active")) {
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
@@ -553,6 +529,7 @@ function displayArea() {
   <button
     id="generateLetter"
     type="button"
+    disabled
     class="text-link-water-600 text-base bg-link-water-100 hover:bg-link-water-300 focus:ring-4 p-1 w-1/6 h-12  rounded-md"
   >
     Generate Letter
@@ -563,7 +540,7 @@ function displayArea() {
     // }
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = ` <div id="selectionarea" class="w-full mt-5 flex flex-row gap-5">
+    area.innerHTML = ` <div id="selectionarea" class="relative w-full mt-5 flex flex-row gap-5">
     <div class="w-full flex flex-col">
       <div class="w-full flex flex-col">
         <label class="text-chicago-700 font-normal leading-5 mb-2"
@@ -596,7 +573,7 @@ function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -631,7 +608,16 @@ function displayArea() {
         <ul
           class="max-h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700"
           id="search-user"
-        ></ul>
+        >
+       <li >
+        <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+        
+          <label id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+        </div>
+      </li>
+        </ul>
+        <div id="user_list">
+        </div>
       </div>
     </div>
     <div class="w-full flex flex-col">
@@ -645,7 +631,7 @@ function displayArea() {
           id="dropdownUsersButton"
         >
           <p class="flex-1">Select Template</p>
-  
+
           <svg
             class="w-2.5 h-2.5 ms-3"
             aria-hidden="true"
@@ -665,7 +651,7 @@ function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul
@@ -709,9 +695,9 @@ function displayArea() {
       const name = document.getElementById("search").value;
       console.log(name, "name is");
       document.getElementById("search-user").innerHTML = "";
-
       const result = await GetAllUsers(name);
       if (result.data) {
+        document.getElementById("search-user").innerHTML = "";
         result.data.map((item) => {
           console.log("name", item.first_name + item.last_name);
           document.getElementById("search-user").innerHTML += make_user(
@@ -723,12 +709,20 @@ function displayArea() {
             item.id
           );
         });
+      } else {
+        document.getElementById("search-user").innerHTML = "";
+        document.getElementById("search-user").innerHTML += ` <li >
+        <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+        
+          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+        </div>
+      </li>`;
       }
     }
     async function getAllTemplates() {
-      const tempresult = await GetAllTemplates();
+      const tempresult = await GetAllTemplatesByStatus("STANDARD");
       document.getElementById("template_option").innerHTML = "";
-      console.log(tempresult);
+      console.log(tempresult, "STANDARD TEMPLATES");
       tempresult.data.map((item) => {
         document.getElementById("template_option").innerHTML += make_template(
           item.title,
@@ -736,11 +730,25 @@ function displayArea() {
         );
       });
     }
-    getAllUsers();
+
     getAllTemplates();
+    const getAllUserui = () => {
+      document.getElementById("search-user").innerHTML += ` <li >
+      <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+        <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+      </div>
+    </li>`;
+      getAllUsers();
+    };
     console.log(document.getElementById("template_option"));
     document.getElementById("search").addEventListener("input", () => {
-      debounce(getAllUsers(), 250);
+      document.getElementById("search-user").innerHTML += ` <li >
+      <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
+      
+        <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+      </div>
+    </li>`;
+      debounce(getAllUserui(), 100);
     });
 
     document
@@ -785,6 +793,7 @@ function displayArea() {
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";
+            document.getElementById("generateLetter").disabled = false;
           }
 
           const selectedusersearchmodal =
@@ -894,6 +903,8 @@ function displayArea() {
   }
 
   if (recentsendletters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+    console.log("oooooooooopppppppppppppppppp");
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -906,7 +917,37 @@ function displayArea() {
     area.innerHTML = `<div id="insert-table"></div>`;
 
     document.getElementsByTagName("main")[0].appendChild(area);
-    addTable();
+    await addTable();
+    document.getElementById("loading").style = "display:none";
+    // fetchDoc(currentPage - 1, pageSize);
+
+    // const sortButtons = document.querySelectorAll(".sort");
+    // sortButtons.forEach((e, index) => {
+    //   e.addEventListener("click", () => {
+    //     console.log(index);
+    //     window.event.preventDefault();
+    //     sortTable(index, 0);
+    //   });
+    // });
+  }
+  if (draftLetters.classList.contains("active")) {
+    document.getElementById("loading").style = "display:block";
+
+    if (document.getElementById("area")) {
+      document.getElementById("area").remove();
+    }
+
+    document.getElementById("sectiondetails").innerHTML = "";
+
+    console.log(document.getElementsByTagName("main"));
+    const area = document.createElement("div");
+    area.id = "area";
+    area.innerHTML = `<div id="insert-table"></div>`;
+
+    document.getElementsByTagName("main")[0].appendChild(area);
+    await addTable1();
+    document.getElementById("loading").style = "display:none";
+
     // fetchDoc(currentPage - 1, pageSize);
 
     // const sortButtons = document.querySelectorAll(".sort");
@@ -938,23 +979,23 @@ function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
     ></use>
   </svg>
-  Upload Policy
+  Upload Letter
 </button>
   <button
-    id="generateLetter"
+    onclick="openlettereditor(${0})"
     type="button"
-    class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
+    class="flex min-w-48 text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4  h-10   rounded-md  items-center gap-2 p-2"  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>
 
-    Add New Letter
+    Add New Template
   </button>
  </div>
  
@@ -965,357 +1006,586 @@ function displayArea() {
     const area = document.createElement("div");
     area.id = "area";
     area.innerHTML = `<div class="mt-5 ">
-    <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4">Draft Template
-    </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-    <div>
-    <div
-      class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-    >
-      <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-        <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-      </svg>
+    <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4">Default Template
+    </div><div id="insert-default" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
+    
   
-      <svg class="w-[260px] h-[150px]">
-        <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-      </svg>
-    </div>
-    <div
-      class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-    >
-      <div class="text-base">Increment Letter</div>
-      <div class="text-sm">Mar 26, 2023</div>
-    </div>
-  </div>
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
 
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
- <div>
-    <div
-      class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-    >
-      <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-        <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-      </svg>
-  
-      <svg class="w-[260px] h-[150px]">
-        <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-      </svg>
-    </div>
-    <div
-      class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-    >
-      <div class="text-base">Increment Letter</div>
-      <div class="text-sm">Mar 26, 2023</div>
-    </div>
-  </div>
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
-
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
    </div>
-   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Draft Template
-   </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-   <div>
-   <div
-     class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-   >
-     <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-     </svg>
- 
-     <svg class="w-[260px] h-[150px]">
-       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-     </svg>
-   </div>
-   <div
-     class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-   >
-     <div class="text-base">Increment Letter</div>
-     <div class="text-sm">Mar 26, 2023</div>
-   </div>
- </div>
- <div>
- <div
-   class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
- >
-   <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-     <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-   </svg>
+   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Custom Template
+   </div><div id="insert-custom" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
 
-   <svg class="w-[260px] h-[150px]">
-     <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-   </svg>
- </div>
- <div
-   class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
- >
-   <div class="text-base">Increment Letter</div>
-   <div class="text-sm">Mar 26, 2023</div>
- </div>
-</div>
-<div>
-   <div
-     class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-   >
-     <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-     </svg>
- 
-     <svg class="w-[260px] h-[150px]">
-       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-     </svg>
-   </div>
-   <div
-     class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-   >
-     <div class="text-base">Increment Letter</div>
-     <div class="text-sm">Mar 26, 2023</div>
-   </div>
- </div>
- <div>
- <div
-   class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
- >
-   <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-     <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-   </svg>
-
-   <svg class="w-[260px] h-[150px]">
-     <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-   </svg>
- </div>
- <div
-   class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
- >
-   <div class="text-base">Increment Letter</div>
-   <div class="text-sm">Mar 26, 2023</div>
- </div>
-</div>
-<div>
-<div
- class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
- <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
- </svg>
-
- <svg class="w-[260px] h-[150px]">
-   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
- </svg>
-</div>
-<div
- class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
- <div class="text-base">Increment Letter</div>
- <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
- class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
- <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-   <use xlink:href="./assets/icons/icon.svg#threedots"></use>
- </svg>
-
- <svg class="w-[260px] h-[150px]">
-   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
- </svg>
-</div>
-<div
- class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
- <div class="text-base">Increment Letter</div>
- <div class="text-sm">Mar 26, 2023</div>
-</div>
 </div>
   </div>
   <div class="text-mineshaft-900 font-roboto font-semibold text-base leading-4 mt-5">Draft Template
-  </div><div class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll "> 
-  <div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
+  </div><div id="insert-draft" class="flex flex-row mt-5 gap-5 no-scrollbar overflow-x-scroll ">
 
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
 
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-  <div
-    class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-  >
-    <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-      <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-    </svg>
-
-    <svg class="w-[260px] h-[150px]">
-      <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-    </svg>
-  </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
-  </div>
-</div>
-<div>
-<div
-  class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-  <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-    <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-  </svg>
-
-  <svg class="w-[260px] h-[150px]">
-    <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-  </svg>
-</div>
-<div
-  class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-  <div class="text-base">Increment Letter</div>
-  <div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-<svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-</svg>
-
-<svg class="w-[260px] h-[150px]">
-  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-</svg>
-</div>
-<div
-class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-<div class="text-base">Increment Letter</div>
-<div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
-<div>
-<div
-class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
->
-<svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-</svg>
-
-<svg class="w-[260px] h-[150px]">
-  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-</svg>
-</div>
-<div
-class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
->
-<div class="text-base">Increment Letter</div>
-<div class="text-sm">Mar 26, 2023</div>
-</div>
-</div>
  </div> </div>`;
+    let drafttemplates = [];
+    let customtemplates = [];
+    let defaulttemplates = [];
+
+    async function getAllTemplates() {
+      const tempresult = await GetAllTemplates();
+
+      console.log(tempresult, "get all templates");
+
+      tempresult.data.map((template) => {
+        if (template.mode === "STANDARD") {
+          defaulttemplates.push(template);
+        } else if (template.mode === "DRAFT") {
+          drafttemplates.push(template);
+        } else if (template.mode === "CUSTOM") {
+          customtemplates.push(template);
+        }
+      });
+
+      const insertdefault = document.getElementById("insert-default");
+      insertdefault.innerHTML = ``;
+      defaulttemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        insertdefault.innerHTML += `
+        <div class="relative">
+        <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
+            <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+          </svg>
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
+            <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+          </svg>
+        </div>
+        <div 
+          class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+          <div class="text-base overflow-hidden text-ellipsis text-nowrap">${template.title}</div>
+          <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+        </div>
+        <div id="dropdown${template.id}" class="z-10 closethemodal hidden absolute top-0 right-0 mt-12 bg-white divide-gray-100 rounded-lg shadow w-44 h-32">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+            <li>
+              <a href="#" onclick="openlettereditor(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Edit</a>
+            </li>
+            <li>
+              <a href="#" onclick="deletetemplate(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+        `;
+        window.openLetterModal = async function (id) {
+          if (
+            document
+              .getElementById("dropdown" + id)
+              .classList.contains("hidden")
+          ) {
+            document.getElementById("dropdown" + id).classList.remove("hidden");
+          } else {
+            document.getElementById("dropdown" + id).classList.add("hidden");
+          }
+        };
+      });
+
+      const customdefault = document.getElementById("insert-custom");
+      customdefault.innerHTML = ``;
+      customtemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        customdefault.innerHTML += `
+        <div class="relative">
+        <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
+            <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+          </svg>
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
+            <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+          </svg>
+        </div>
+        <div 
+          class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+          <div class="text-base overflow-hidden text-ellipsis text-nowrap">${template.title}</div>
+          <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+        </div>
+        <div id="dropdown${template.id}" class="z-10 closethemodal hidden absolute top-0 right-0 mt-12 bg-white divide-gray-100 rounded-lg shadow w-44 h-32">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+            <li>
+              <a href="#" onclick="openlettereditor(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Edit</a>
+            </li>
+            <li>
+              <a href="#" onclick="deletetemplate(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+        `;
+        window.openLetterModal = async function (id) {
+          if (
+            document
+              .getElementById("dropdown" + id)
+              .classList.contains("hidden")
+          ) {
+            document.getElementById("dropdown" + id).classList.remove("hidden");
+          } else {
+            document.getElementById("dropdown" + id).classList.add("hidden");
+          }
+        };
+      });
+      const insertdraft = document.getElementById("insert-draft");
+      insertdraft.innerHTML = ``;
+      drafttemplates.forEach((template) => {
+        const date = new Date(template.created_at);
+
+        // Options for formatting
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+        };
+
+        // Format the date
+        const formattedDate = date.toLocaleDateString("en-US", options);
+
+        // Replace comma for the desired format
+        const formattedDateString = formattedDate.replace(",", "");
+        insertdraft.innerHTML += `
+        <div class="relative">
+        <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
+            <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+          </svg>
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
+            <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+          </svg>
+        </div>
+        <div 
+          class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+          <div class="text-base overflow-hidden text-ellipsis text-nowrap">${template.title}</div>
+          <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+        </div>
+        <div id="dropdown${template.id}" class="z-10 closethemodal hidden absolute top-0 right-0 mt-12 bg-white divide-gray-100 rounded-lg shadow w-44 h-32">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+            <li>
+              <a href="#" onclick="openlettereditor(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Edit</a>
+            </li>
+            <li>
+              <a href="#" onclick="deletetemplate(${template.id})" class="block px-4 py-2 hover:bg-gray-100">Delete</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+        `;
+
+        window.openLetterModal = async function (id) {
+          if (
+            document
+              .getElementById("dropdown" + id)
+              .classList.contains("hidden")
+          ) {
+            document.getElementById("dropdown" + id).classList.remove("hidden");
+          } else {
+            document.getElementById("dropdown" + id).classList.add("hidden");
+          }
+        };
+      });
+    }
+    window.deletetemplate = async function (id) {
+      // console.log("id: " + id);
+      const response = await DELETETEMPLATE(id);
+      if (response) {
+        Toastify({
+          text: "Template deleted success",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        setTimeout(() => {
+          document.getElementById("insert-default").innerHTML = "";
+          document.getElementById("insert-custom").innerHTML = "";
+          document.getElementById("insert-draft").innerHTML = "";
+          location.reload();
+        }, 2000);
+      } else {
+        Toastify({
+          text: "some error occured",
+          duration: 3000,
+          newWindow: true,
+          className: "text-red-500 font-bold",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        setTimeout(() => {
+          document.getElementById("insert-default").innerHTML = "";
+          document.getElementById("insert-custom").innerHTML = "";
+          document.getElementById("insert-draft").innerHTML = "";
+          location.reload();
+        }, 2000);
+      }
+    };
+
+    function addEditorOpenCloseFeature() {
+      window.openlettereditor = async function (modalId) {
+        const res = await GetAllCategory();
+        document.getElementById("sectiondetails").classList.add("hidden");
+        document.getElementById("version-area").classList.remove("hidden");
+
+        if (modalId == 0) {
+          document.getElementById("onlyforblank").classList.remove("hidden");
+          document.getElementById("version-area").classList.add("hidden");
+          document.getElementById("create-template").classList.remove("hidden");
+          document.getElementById("review").classList.add("hidden");
+          document.getElementById("json").classList.add("hidden");
+          document.getElementById("container-content-1").contentEditable = true;
+          modalId = 37;
+
+          // category = res?.data;
+          // let categoryElement = `  <option selected>Select a category</option>`;
+          // // let categoryElement = `
+          // //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+          // //     <option  class="flex justify-center items-center" selected>Choose Category</option>
+          // //   `;
+
+          // category?.map((item) => {
+          //   categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+          // });
+          // document.getElementById("category").innerHTML = categoryElement;
+          // categoryElement += `
+          // <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+          // `;
+        }
+        localStorage.setItem("modalId", modalId);
+        console.log("fniefniefnir");
+        let htmljson;
+
+        // document.getElementById("policy-detail").classList.add("hidden");
+        // document.getElementById("policy-table").classList.add("hidden");
+        // document.getElementById("pagination-area").classList.add("hidden");
+        document.getElementById("extralarge-modal").classList.remove("hidden");
+        document.getElementById("area").classList.add("hidden");
+
+        const response2 = await fetch(
+          `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: "Bearer " + token,
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem("modalId", modalId);
+            if (data.data.title !== "emptydocx.docx") {
+              document.getElementById("doc_title").textContent =
+                data.data.title;
+            }
+
+            // fetchVersionsDateWise(modalId);
+            // Handle the response from the backend
+            console.log(data.data, "fffffkbnjb ");
+            document.getElementById("docx-wrapper-1").innerHTML =
+              data.data[0].htmldata;
+            htmljson = data.data[0].htmljson;
+            localStorage.setItem("htmljson", JSON.stringify(htmljson));
+            console.log("ddddddddddddddddddddddddd");
+          });
+        // const container = document.getElementsByClassName("docx-wrapper")[0];
+        // container.id = "docx-wrapper";
+        imageLoaded();
+      };
+      window.closeEditor = function () {
+        console.log("fniefniefnir");
+
+        document.getElementById("extralarge-modal").classList.add("hidden");
+        document.getElementById("area").classList.remove("hidden");
+        document.getElementById("sectiondetails").classList.remove("hidden");
+        if (
+          !document.getElementById("onlyforblank").classList.contains("hidden")
+        ) {
+          document.getElementById("onlyforblank").classList.add("hidden");
+          document.getElementById("json").textContent =
+            "Save a Version as Draft";
+          document.getElementById("version-area").classList.remove("hidden");
+          document.getElementById("create-template").classList.add("hidden");
+          document.getElementById("json").classList.remove("hidden");
+        }
+        document.getElementById("policy-detail").classList.remove("hidden");
+        document.getElementById("policy-table").classList.remove("hidden");
+        document.getElementById("pagination-area").classList.remove("hidden");
+      };
+      if (document.getElementById("create-template")) {
+        document
+          .getElementById("create-template")
+          .addEventListener("click", async function () {
+            document.getElementById("policyname-error").classList.add("hidden");
+            document
+              .getElementById("policydescription-error")
+              .classList.add("hidden");
+            document
+              .getElementById("policycategory-error")
+              .classList.add("hidden");
+            let policyname = document.getElementById("policy-name").value;
+            let policydescription =
+              document.getElementById("policy-description").value;
+            let policycategory = document.getElementById("category").value;
+            console.log(policycategory, policydescription, policyname);
+
+            if (
+              policyname !== "" &&
+              policydescription !== "" &&
+              policycategory !== "Select a category"
+            ) {
+              // document.getElementById("policyname-error").classList.add("hidden");
+              // document
+              //   .getElementById("policydescription-error")
+              //   .classList.add("hidden");
+              // document
+              //   .getElementById("policycategory-error")
+              //   .classList.add("hidden");
+
+              const blobToBase64 = (blob) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                return new Promise((resolve) => {
+                  reader.onloadend = () => {
+                    resolve(reader.result);
+                  };
+                });
+              };
+
+              async function convertImagesToBase64(divId) {
+                // Find the div element
+                var div = document.getElementById(divId);
+
+                // Find all images within the div
+                var images = div.getElementsByTagName("img");
+
+                // Iterate over each image
+                if (images.length > 0) {
+                  for (var i = 0; i < images.length; i++) {
+                    var img = images[i];
+
+                    // Create a blob URL for the image
+                    var blob = await fetch(img.src).then((response) =>
+                      response.blob()
+                    );
+
+                    // Convert blob to base64
+                    var base64 = await blobToBase64(blob);
+
+                    img.src = base64;
+                  }
+                }
+              }
+
+              await convertImagesToBase64("container-content-1");
+              const container = document.getElementById("container-content-1");
+              var tags = container.querySelectorAll(".docx-wrapper *");
+              // console.log(tags);
+              var idCounter = 1;
+              tags.forEach(function (tag) {
+                if (!tag.id) {
+                  tag.id = "id_" + idCounter;
+                  idCounter++;
+                }
+              });
+              const sections = container.getElementsByClassName("docx");
+              console.log(sections);
+              for (var i = 0; i < sections.length; i++) {
+                console.log("section height chages");
+                sections[i].setAttribute(
+                  "style",
+                  "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
+                );
+              }
+              const containerdocx =
+                container.getElementsByClassName("docx-wrapper")[0];
+              const headers = containerdocx.getElementsByTagName("header");
+              console.log(headers);
+              // for (var i = 0; i < headers.length; i++) {
+              //   console.log("section height chages");
+              //   headers[i].setAttribute(
+              //     "style",
+              //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
+              //   );
+              // }
+              const articles = containerdocx.getElementsByTagName("article");
+              console.log(articles);
+              // for (var i = 0; i < articles.length; i++) {
+              //   console.log("section height chages");
+              //   articles[i].setAttribute("style", "margin-top: 48px; ");
+              // }
+              var containerContent = document.getElementById(
+                "container-content-1"
+              );
+
+              let resHtml = document.getElementById("docx-wrapper-1").innerHTML;
+
+              console.log("ggg", resHtml);
+              // dummy value
+              //   const categoryId = 1;
+              const htmlJson = extractHtmlToJson(
+                containerContent.getElementsByClassName("docx-wrapper")[0]
+              );
+              console.log(resHtml, htmlJson);
+
+              const data = {
+                htmlText: resHtml,
+                htmljson: htmlJson,
+                mode: policycategory,
+                name: policyname,
+              };
+              const token = localStorage.getItem("token");
+              console.log("token is ", token);
+              // document
+              //   .getElementById("container-html1")
+              //   .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
+              console.log(data);
+              const axiosRequestArgs = {
+                method: "post",
+                url: "http://localhost:5001/api/file/uploadTemplate",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
+                },
+                data: data,
+              };
+              axios(axiosRequestArgs).then((res) => {
+                console.log(res.data);
+              });
+
+              console.log("results");
+              window.closeEditor();
+            } else {
+              if (policyname == "") {
+                document
+                  .getElementById("policyname-error")
+                  .classList.remove("hidden");
+              }
+              if (policydescription == "") {
+                document
+                  .getElementById("policydescription-error")
+                  .classList.remove("hidden");
+              }
+              if (policycategory == "Select a category") {
+                document
+                  .getElementById("policycategory-error")
+                  .classList.remove("hidden");
+              }
+            }
+          });
+      }
+      function closereviewmodal() {
+        document.getElementById("sendforreview").classList.add("hidden");
+      }
+      if (document.getElementById("review")) {
+        document
+          .getElementById("review")
+          .addEventListener("click", async function () {
+            document.getElementById("adminlist").innerHTML =
+              "  <option selected>Select an Admin</option>";
+            document.getElementById("sendforreview").classList.remove("hidden");
+            const adminlist = await GetAdminList();
+            console.log(adminlist, "Admin list");
+            adminlist.map((item) => {
+              console.log(item.email, "email");
+              document.getElementById(
+                "adminlist"
+              ).innerHTML += `<option value=${item.id}>${
+                item.first_name + " " + item.last_name
+              }</option>`;
+            });
+          });
+        if (document.getElementById("closerreview")) {
+          document
+            .getElementById("closereview")
+            .addEventListener("click", closereviewmodal);
+        }
+
+        if (document.getElementById("sendreview")) {
+          document
+            .getElementById("sendreview")
+            .addEventListener("click", async function () {
+              console.log(document.getElementById("adminlist").value);
+              if (
+                document.getElementById("adminlist").value !== "Select an Admin"
+              ) {
+                document
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-1");
+                document
+                  .getElementById("admin-error")
+                  .classList.add("opacity-0");
+                const response = await SetDocumentToApprove(
+                  parseInt(document.getElementById("adminlist").value),
+                  parseInt(localStorage.getItem("modalId")),
+                  parseInt(localStorage.getItem("userid"))
+                ).then(() => {
+                  closereviewmodal();
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                });
+                console.log(response);
+                if (response) {
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                }
+              } else {
+                document
+                  .getElementById("admin-error")
+                  .classList.add("opacity-1");
+                document
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-0");
+              }
+            });
+        }
+      }
+    }
+
+    addEditorOpenCloseFeature();
+
+    getAllTemplates();
+
     document.getElementsByTagName("main")[0].appendChild(area);
 
     let dropDownBtn = document.getElementById("uploadpolicy");
@@ -1328,8 +1598,8 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     const makeModal = () => {
       document.getElementById("modalcontainer").innerHTML += modalHtml;
       const closeModalBtn = document.getElementById("closeModalBtn");
-      const modal = document.getElementById("modal");
-      const showModal = () => {
+      const modal = document.getElementById("modalupload");
+      const showModalUpload = () => {
         modal.classList.remove("hidden");
       };
 
@@ -1338,7 +1608,8 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
       };
 
       dropDownBtn.addEventListener("click", () => {
-        showModal();
+        console.log(dropDownBtn, document.getElementById("modalcontainer"));
+        showModalUpload();
         console.log("modal opened");
       });
 
@@ -1568,11 +1839,13 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
                 htmlJson,
                 categoryId
               );
-
+              if (categoryId == "DEFAULT") {
+                categoryId = "STANDARD";
+              }
               const data = {
                 htmlText: htmlData,
-                htmlJson,
-                categoryId,
+                htmljson: htmlJson,
+                mode: categoryId,
                 name: title,
               };
               const token = localStorage.getItem("token");
@@ -1794,7 +2067,7 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
                   
     </label>
               
-     <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-scroll    gap-4">`;
+     <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-auto    gap-4">`;
 
       files.map((item) => {
         html += `
@@ -2033,10 +2306,10 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     `;
     async function insertallcategories() {
       const res = await GetAllCategory();
-      category = res?.data;
+      category = ["DRAFT", "CUSTOM", "DEFAULT"];
 
       category?.map((item) => {
-        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+        categoryElement += `<option value=${item} id=${item}>${item}</option>`;
       });
       categoryElement += `</select>
       <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
@@ -2222,3 +2495,444 @@ class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 lead
     });
   }
 }
+//Employee Name
+function addModalOpenCloseFeature() {
+  window.openLetter = async function (modalId) {
+    console.log(modalId, "modal id");
+    const newel = document.createElement("div");
+    newel.innerHTML = ` <div id=${modalId}  >
+   <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
+     <!-- Background overlay -->
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
+ 
+     <!-- Modal content -->
+     <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+       <div class="absolute top-0 right-0 p-2 ">
+         <button onclick="closeLetter(${modalId})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+           </svg>
+         </button>
+       </div>
+ 
+       <div id="printThis" class="p-6 pt-0  ">
+         <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+         ${style}
+         <div class='' id='docx-wrapper'>
+         </div>
+         
+           </div>
+         
+       
+      
+       </div>
+     </div>
+   </div>
+ </div>`;
+    document.getElementsByTagName("body")[0].appendChild(newel);
+
+    document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
+    window.addEventListener("beforeprint", (event) => {
+      console.log("Before print");
+      const contents = document
+        .getElementById(modalId)
+        .getElementsByClassName("docx-wrapper")[0].outerHTML;
+      document.getElementById(modalId).innerHTML = contents;
+    });
+
+    document.addEventListener("click", function (event) {
+      // console.log(modalId, "event", event.target);
+
+      if (event.target.classList.contains("backdrop")) {
+        window.closeLetter(modalId);
+      }
+    });
+
+    await fetchAndRenderDoc(modalId);
+  };
+
+  window.closeLetter = function (modalId) {
+    document.getElementById(modalId).style.display = "none";
+    document
+      .getElementsByTagName("body")[0]
+      .classList.remove("overflow-y-hidden");
+  };
+}
+addModalOpenCloseFeature();
+//
+// letter modal feature
+
+const fetchAndRenderDoc = async (modalId) => {
+  const response = await fetch(
+    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data, "response issss");
+      const docData = data.data[0].htmldata;
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = "";
+      document
+        .getElementById(modalId)
+        .querySelector("#docx-wrapper").innerHTML = docData;
+      const modal = document.getElementById(modalId);
+    });
+};
+if (document.getElementById("savesdraft")) {
+  document.getElementById("saveasdraft").addEventListener("click", async () => {
+    const res = await saveAsDraft();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 3000);
+  });
+}
+
+const saveAsDraft = async () => {
+  const htmlData1 = document.querySelector(".container-content-1").innerHTML;
+  // console.log("html data is", htmlData1);
+  try {
+    console.log("name", recipientName);
+    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
+      html_data: htmlData1,
+      templateId: templateId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
+    });
+    if (res) {
+      Toastify({
+        text: "Letter save as draft success",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+    }
+  } catch (error) {
+    Toastify({
+      text: "Some error occured",
+      duration: 3000,
+      newWindow: true,
+      className: "text-red",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+  }
+};
+
+const handleGeneratePdf = async () => {
+  showLoading();
+  var element = document.getElementById("container");
+  var opt = {
+    margin: 0,
+    filename: "Contrato.pdf",
+    image: {
+      type: "",
+      quality: 0.98,
+    },
+    html2canvas: {
+      scale: 2,
+      letterRendering: true,
+    },
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait",
+    },
+    pagebreak: { mode: "avoid-all", after: "section" },
+  };
+  const pdfBlob = await html2pdf().from(element).output("blob");
+  const formData = new FormData();
+  let letterId;
+  // console.log(email);
+  const fileName = "pdfsend" + Date.now() + ".pdf";
+  formData.append("file", pdfBlob, fileName);
+  formData.append("userId", 20);
+  formData.append("templateId", 23);
+  formData.append("email", "tapasviarora2002@gmail.com");
+  formData.append("html_data", element.innerHTML.toString());
+  formData.append("letter_id", letterId);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5001/api/file/uploadLetter",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    Toastify({
+      text: "Letter send succesfully",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    if (response.status == 200) {
+      setTimeout(() => {
+        window.location.href = "http://localhost:5555/letters";
+      }, 3000);
+    }
+  } catch (error) {
+    Toastify({
+      text: "Some error occured",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    setTimeout(() => {
+      window.location.href = "http://localhost:5555/letters";
+    }, 2000);
+  } finally {
+    removeLoading();
+  }
+};
+
+//loader
+const showLoading = () => {
+  const loading = document.createElement("div");
+  loading.id = "loadingicon";
+  loading.innerHTML = `<div id="loading"  >
+<div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+<div class="flex gap-2 justify-center items-center h-screen">
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+<div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+</div>
+</div>  
+</div>`;
+  document.body.appendChild(loading);
+};
+const removeLoading = () => {
+  const loadingElement = document.getElementById("loadingicon");
+  if (loadingElement) {
+    loadingElement.remove();
+  }
+};
+var shouldBeSigned = false;
+const handleSignSwiftCall = async () => {
+  showLoading();
+  var element = document.getElementById("container");
+  var opt = {
+    margin: 0,
+    filename: "Contrato.pdf",
+    image: {
+      type: "",
+      quality: 0.98,
+    },
+    html2canvas: {
+      scale: 2,
+      letterRendering: true,
+    },
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait",
+    },
+    pagebreak: { mode: "avoid-all", after: "section" },
+  };
+  let letterId;
+  const pdfBlob = await html2pdf().from(element).output("blob");
+  const formData = new FormData();
+  const fileName = "pdfFile" + Date.now() + ".pdf";
+  formData.append("file", pdfBlob, fileName);
+  const fileUpload = await axios.post(
+    "http://localhost:5001/api/file/upload/letterpdf",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  const ShareLink = fileUpload.data.url;
+  if (ShareLink) {
+    //draft->pending
+    await axios.post(
+      "http://localhost:5001/api/file/upload/updateLetterStatus",
+      {
+        letterId: letterId,
+        htmlData: element.innerHTML,
+        recipientId: recipientId,
+        createdBy: ipvmsuserId,
+        templateId: templateId,
+        email: recipientEmail,
+        name: recipientName,
+        fileName: fileName,
+      }
+    );
+  }
+  const email = localStorage.getItem("email");
+  // const userId = "10200";
+  if (fileUpload) {
+    fetch("http://localhost:3000/api/users/findUser", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+      }),
+      mode: "cors",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data is", data);
+        if (data.status == 500) {
+          removeLoading();
+          console.log("first log in sign swift");
+          document.getElementById("loginError").classList.remove("hidden");
+          //error
+          removeLoading();
+        } else {
+          console.log("data", data);
+          fetch("http://localhost:3000/api/document/uploadDocument", {
+            method: "POST",
+            body: JSON.stringify({
+              userId: data.user.customerId,
+              ShareLink: ShareLink,
+            }),
+            mode: "cors",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              removeLoading();
+              console.log("upload doc  is", data);
+              //error upload doc
+              if (data.status !== 201) {
+                document
+                  .getElementById("uploadError")
+                  .classList.remove("hidden");
+              } else {
+                console.log("success");
+                document
+                  .getElementById("uploadSuccess")
+                  .classList.remove("hidden");
+                Toastify({
+                  text: "Letter send succesfully",
+                  duration: 3000,
+                  newWindow: true,
+                  className: "text-black",
+                  gravity: "top", // `top` or `bottom`
+                  position: "right", // `left`, `center` or `right`
+                  stopOnFocus: true, // Prevents dismissing of toast on hover
+                  style: {
+                    background: "white",
+                  },
+                }).showToast();
+                setTimeout(() => {
+                  window.location.href = "http://localhost:5555/letters";
+                }, 2000);
+              }
+            });
+        }
+      });
+  }
+};
+
+if (document.getElementById("sendButton")) {
+  document.getElementById("sendButton").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+}
+
+if (document.getElementsByClassName("close")[0]) {
+  document
+    .getElementsByClassName("close")[0]
+    .addEventListener("click", function () {
+      const modal = document.getElementById("confirmModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.getElementById("loginError").classList.add("hidden");
+      document.getElementById("uploadError").classList.add("hidden");
+
+      const signMessage = document.getElementById("signMessage");
+      signMessage.classList.remove("hidden");
+    });
+}
+if (document.getElementById("cancelSend")) {
+  document.getElementById("cancelSend").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("uploadError").classList.add("hidden");
+    document.getElementById("successError").classList.add("hidden");
+    const signMessage = document.getElementById("signMessage");
+    signMessage.classList.remove("hidden");
+  });
+}
+
+if (document.getElementById("sendLetter")) {
+  document.getElementById("sendLetter").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+
+    if (!shouldBeSigned) {
+      handleGeneratePdf();
+    } else {
+      handleSignSwiftCall();
+    }
+
+    // window.location.href = "http://localhost:5555/letters";
+  });
+}
+if (document.getElementById("signCheckbox")) {
+  document
+    .getElementById("signCheckbox")
+    .addEventListener("change", function () {
+      const signMessage = document.getElementById("signMessage");
+
+      if (this.checked) {
+        signMessage.classList.remove("hidden");
+        shouldBeSigned = true;
+      } else {
+        signMessage.classList.add("hidden");
+        shouldBeSigned = false;
+      }
+    });
+}
+
+// pdf generate function
+
+window.onclick = function (event) {
+  const modal = document.getElementById("confirmModal");
+  if (event.target == modal) {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("uploadError").classList.add("hidden");
+
+    const signMessage = document.getElementById("signMessage");
+    signMessage.classList.remove("hidden");
+  }
+};

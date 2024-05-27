@@ -30,7 +30,7 @@ const afterinputhtml = (files, categoryElement) => {
               
 </label>
           
- <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-scroll    gap-4">`;
+ <div id="file-list" class="w-full h-40 flex flex-col  overflow-y-auto    gap-4">`;
 
   files.map((item) => {
     html += `
@@ -416,7 +416,9 @@ function extractParentText(parentId) {
       }
     }
   } else {
-    textContent = parentElement.textContent;
+    if (parentElement) {
+      textContent = parentElement.textContent;
+    }
   }
 
   return textContent;

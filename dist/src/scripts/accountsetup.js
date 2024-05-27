@@ -1,5 +1,6 @@
 import { LoginApiRequest } from "../api/login.js";
 import { setupAccountApiRequest } from "../api/setupaccount.js";
+import { makeRequest } from "../api/apiRequest.js";
 import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
@@ -11,24 +12,50 @@ import {
 } from "../utils/constants.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";
 
+showNextPolicy();
+setInterval(showNextPolicy, 3000);
+
 async function SetupAccount() {
   const setupButton = document.getElementById("setup-account");
 
+  const phone = document.getElementById("pnumber").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const cnfPassword = document.getElementById("cnf-password").value;
   const firstName = document.getElementById("fname").value;
   const lastName = document.getElementById("lname").value;
-  console.log("first name", firstName, lastName, email, password);
 
-  console.log("from webpage", email, password);
-  if (email.length == 0) {
-    emailerror.innerHTML = "Please enter your email address";
-    emailerror.classList.remove("opacity-0");
+  console.log(
+    "lololololololoolol",
+    firstName,
+    lastName,
+    email,
+    password,
+    cnfPassword,
+    phone
+  );
+
+  // console.log("from webpage", email, password);
+  if (!phone || !firstName || !lastName) {
+    passworderror.innerHTML = "Enter All the fields";
+    passworderror.classList.remove("opacity-0");
     setTimeout(() => {
-      emailerror.classList.add("opacity-1");
+      passworderror.classList.add("opacity-0");
+    }, 3000);
+  } else if (email.length == 0) {
+    passworderror.innerHTML = "Please enter your email address";
+    passworderror.classList.remove("opacity-0");
+    setTimeout(() => {
+      passworderror.classList.add("opacity-0");
     }, 3000);
   } else if (password.length == 0) {
     passworderror.innerHTML = "Please enter your password";
+    passworderror.classList.remove("opacity-0");
+    setTimeout(() => {
+      passworderror.classList.add("opacity-0");
+    }, 3000);
+  } else if (cnfPassword != password) {
+    passworderror.innerHTML = "Passwords dont match try again.";
     passworderror.classList.remove("opacity-0");
     setTimeout(() => {
       passworderror.classList.add("opacity-0");
@@ -43,16 +70,28 @@ async function SetupAccount() {
     // const response = await LoginApiRequest(email, password);
     // console.log(response, "he");
     await setupAccountApiRequest(firstName, lastName, email, password)
-      .then((data) => {
-        console.log(data);
+      .then(async (data) => {
         setupButton.removeAttribute("disabled", "");
         setupButton.setAttribute("enabled", "");
         setupButton.innerHTML = `Setup Account`;
+        // console.log(data);
+        data = await data.json();
+        console.log(data);
+
         if (data?.success) {
-          console.log(data);
+          if (data.statusCode === 318) {
+            passworderror.innerHTML =
+              "Account is already setup for user. Try Logging In.";
+            passworderror.classList.remove("opacity-0");
+            setTimeout(() => {
+              passworderror.classList.add("opacity-0");
+              redirect(VIEWS_CONSTANTS.LOGIN);
+            }, 5000);
+          }
+          // console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
-          redirect(VIEWS_CONSTANTS.DASHBOARD);
+          redirect(VIEWS_CONSTANTS.LOGIN);
         } else {
           if (data.error === TOAST_ERRORS.INVALID_EMAIL_FORMAT) {
             emailerror.innerHTML = "Invalid Email Format";
@@ -74,6 +113,35 @@ async function SetupAccount() {
       });
   }
 }
+
+const token = localStorage.getItem("token");
+
+console.log(token);
+const apiUrl =
+  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_USER_INFO;
+async function UserInfoApiRequest(token) {
+  const requestOptions = {
+    method: API_CONSTANTS.GET,
+    headers: {
+      //   'Authorization': 'Bearer <token>'
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  };
+
+  try {
+    const response = await makeRequest(apiUrl, requestOptions);
+    console.log(response, "makerequest");
+
+    return response.json();
+  } catch (error) {
+    console.log(error, "error");
+  }
+}
+
+const user = await UserInfoApiRequest(token);
+console.log(user.data.email);
+document.getElementById("email").value = user.data.email;
 
 const setupButton = document.getElementById("setup-account");
 setupButton.addEventListener("click", function () {

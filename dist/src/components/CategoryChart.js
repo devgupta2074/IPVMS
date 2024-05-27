@@ -106,19 +106,23 @@ const list = [
   },
 ];
 function generatecategorydisplayhtml(titlex, count, color, svg) {
-  return ` <div
-    class="flex items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
-    >
-    <div class="p-3 bg-[${color}] rounded-full">
-    ${svg}
-    </div>
-    <div>
-    <h1 class="text-chicago-700 font-roboto text-[26px] font-bold leading-none"> ${count}</h1>
-      <p class="font-roboto font-normal text-base">
-      ${titlex}
-      </p>
-    </div>
-    </div> `;
+  if (count > 0) {
+    return ` <div
+      class="flex items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+      >
+      <div class="p-3 bg-[${color}] rounded-full">
+      ${svg}
+      </div>
+      <div>
+      <h1 class="text-chicago-700  font-roboto text-[26px] font-bold leading-none"> ${count}</h1>
+        <p class="font-roboto font-normal text-base">
+        ${titlex}
+        </p>
+      </div>
+      </div> `;
+  } else {
+    return "";
+  }
 }
 
 const fetchCategoryCount = async (item) => {
@@ -238,6 +242,7 @@ export const fetchCategory = async () => {
         });
       }
     });
+  return true;
 };
 
 export const fetchCategoryZero = async () => {

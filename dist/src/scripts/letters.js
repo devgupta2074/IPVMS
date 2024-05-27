@@ -1259,6 +1259,23 @@ async function displayArea() {
       }
     };
 
+    document.addEventListener("click", function (event) {
+      console.log(event.target, event.target.tagName);
+      const modals = document.getElementsByClassName("closethemodal");
+      if (event.target.tagName === "use" || event.target.tagName === "svg") {
+        console.log(event.target.tagName, event.target.tagName === "svg");
+      } else {
+        for (let i = 0; i < modals.length; i++) {
+          const element = modals[i];
+
+          if (element.classList.contains("hidden")) {
+          } else {
+            element.classList.add("hidden");
+          }
+        }
+      }
+    });
+
     function addEditorOpenCloseFeature() {
       window.openlettereditor = async function (modalId) {
         const res = await GetAllCategory();
@@ -2555,7 +2572,7 @@ function addModalOpenCloseFeature() {
   };
 
   window.closeLetter = function (modalId) {
-    document.getElementById(modalId).style.display = "none";
+    document.getElementById(modalId).remove();
     document
       .getElementsByTagName("body")[0]
       .classList.remove("overflow-y-hidden");

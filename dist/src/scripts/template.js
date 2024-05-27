@@ -50,7 +50,7 @@ const getTemplate = (id, recipientId) => {
     console.log("in user deatil user id is", recipientId);
     if (recipientId) {
       const response = await fetch(
-        `http://ipvms-api.exitest.com/api/user/getUserById/${recipientId}`,
+        `http://localhost:5001/api/user/getUserById/${recipientId}`,
         {
           method: "GET",
         }
@@ -458,17 +458,14 @@ const saveAsDraft = async () => {
   console.log("recipient email is", recipientEmail);
 
   try {
-    const res = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/saveLetter",
-      {
-        html_data: htmlData1,
-        templateId: templateId,
-        recipientId: recipientId,
-        createdby: ipvmsuserId,
-        email: recipientEmail,
-        name: recipientName,
-      }
-    );
+    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
+      html_data: htmlData1,
+      templateId: templateId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
+    });
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -533,7 +530,7 @@ const handleGeneratePdf = async () => {
   formData.append("letter_id", letterId);
   try {
     const response = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/uploadLetter",
+      "http://localhost:5001/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -628,7 +625,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
+    "http://localhost:5001/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -640,7 +637,7 @@ const handleSignSwiftCall = async () => {
   const ShareLink = fileUpload.data.url;
   const email = localStorage.getItem("email");
   if (fileUpload) {
-    fetch("http://localhost:3000/api/users/findUser", {
+    fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -652,6 +649,7 @@ const handleSignSwiftCall = async () => {
         console.log("data is", data);
         if (data.status == 500) {
           console.log("first log in sign swift");
+          removeLoading();
           Toastify({
             text: "Make a account in signwift first",
             duration: 3000,
@@ -668,15 +666,18 @@ const handleSignSwiftCall = async () => {
         } else {
           console.log("data", data);
           const signSwiftId = data.user.customerId;
-          fetch("http://localhost:3000/api/document/uploadDocument", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: data.user.customerId,
-              ShareLink: ShareLink,
-              title: title,
-            }),
-            mode: "cors",
-          })
+          fetch(
+            "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                userId: data.user.customerId,
+                ShareLink: ShareLink,
+                title: title,
+              }),
+              mode: "cors",
+            }
+          )
             .then((response) => response.json())
             .then(async (data) => {
               removeLoading();
@@ -684,7 +685,7 @@ const handleSignSwiftCall = async () => {
               if (docId) {
                 //draft->pending
                 const data1 = await axios.post(
-                  "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
+                  "http://localhost:5001/api/file/upload/updateLetterStatus",
                   {
                     letterId: letterId,
                     htmlData: element.innerHTML,

@@ -46,14 +46,26 @@ In`;
     await LoginApiRequest(email, password)
       .then((data) => {
         console.log(data, "dev");
+
         siginbutton.removeAttribute("disabled", "");
         siginbutton.setAttribute("enabled", "");
         siginbutton.innerHTML = `Sign In  `;
         if (data?.success) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
-          localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
-          redirect(VIEWS_CONSTANTS.DASHBOARD);
+          if (data?.user?.password_reset === false) {
+            const token = data.token;
+            console.log(token, "token is");
+            console.log("go setup accoiunt");
+            localStorage.setItem("token", token);
+            redirect(VIEWS_CONSTANTS.ACCOUNT_SETUP);
+          } else {
+            console.log(data);
+            localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
+            localStorage.setItem("email", data?.user?.email);
+            localStorage.setItem("userId", data?.user?.id);
+            redirect(VIEWS_CONSTANTS.DASHBOARD);
+          }
         } else {
           if (data.error === LOGIN_CONSTANTS.INVALID_DOMAIN) {
             emailerror.innerHTML = "Invalid email domain";
@@ -87,7 +99,11 @@ const signInButton = document.getElementById("signin");
 signInButton.addEventListener("click", function () {
   SignIn();
 });
-
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    SignIn();
+  }
+});
 // hide and show password and tooltip for the same
 const eyeButton = document.getElementById("eye");
 const tooltiptext = document.getElementById("password-tooltip");

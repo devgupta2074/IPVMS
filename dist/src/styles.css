@@ -731,7 +731,10 @@ video {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
-
+.bg-ship-cove-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 45 227 / var(--tw-bg-opacity));
+}
 .from-steel-gray-50 {
   --tw-gradient-from: #f0f0f0 var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(240 240 240 / 0) var(--tw-gradient-to-position);

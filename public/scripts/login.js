@@ -47,12 +47,15 @@ async function SignIn() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
-        console.log(data);
-        if (data?.statusCode == 200) {
+        console.log(data, "sta us   ");
+        if (data?.statusCode === 200) {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
-          redirect(VIEWS_CONSTANTS.DASHBOARD);
+          // redirect(VIEWS_CONSTANTS.DASHBOARD);
+        } else if (data?.statusCode === 318) {
+          localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
+          redirect(VIEWS_CONSTANTS.ACCOUNT_SETUP);
         } else {
           if (data.error === LOGIN_CONSTANTS.INVALID_DOMAIN) {
             emailerror.innerHTML = "Invalid email domain";

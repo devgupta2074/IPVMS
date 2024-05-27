@@ -12,6 +12,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -26,6 +30,7 @@
     <script src="../scripts/docx-preview.min.js"></script>
     <script type="module" src="/scripts/editor.js"></script>
     <script src = "preview.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
     integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
@@ -42,7 +47,7 @@
       class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
     >
 
-    <div id="loading" class="z-[999999999999] w-[96%] absolute top-24 left-28" style="display:block;">
+    <div id="loading" class="z-[800] w-[96%] absolute top-24 left-28" style="display:block;">
       <div
       class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-[500px]"
     >
@@ -186,7 +191,8 @@
       </div>
       </div>
     </div>
-      <div class="flex flex-col gap-3">
+      <div id="letters-tab" class="flex flex-col gap-3">
+        <div id="modalcontainer" class=""></div>
         <div
           class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
         >
@@ -216,7 +222,7 @@
       </div>
 
       <div id="extralarge-modal" tabindex="-1" class="hidden  w-full  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <button onclick="window.location.reload()" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
+        <button onclick="closeEditor()" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
           <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
             </svg>
@@ -311,11 +317,12 @@
                     
                 </h3>
                 
-                <div class="flex flex-row items-center gap-4 sticky top-0 right-0">
+                <div id="button-header" class="flex flex-row items-center gap-4 sticky top-0 right-0">
                   <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
                   <button id="review"  type="button" class=" text-blue-700 bg-white font-roboto border-2 border-blue-700  font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 ">Send for Review</button>
                  
                   <button id="json" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save a Version as Draft</button>
+                  
                   <button id="create-template" type="button" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Template</button>
       
                   <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
@@ -327,46 +334,12 @@
                 </div>
           
             </div>
-            <div id="sendforreview" class="hidden z-[6999]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-              <div class="relative p-4 w-full max-w-2xl max-h-full">
-                  <!-- Modal content -->
-                  <div class="relative bg-white rounded-lg shadow ">
-                      <!-- Modal header -->
-                      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                          <h3 class="text-xl font-semibold text-gray-900">
-      Send your Latest Version for Approval
-                          </h3>
-                          <button id="closereview" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                      </div>
-                      <!-- Modal body -->
-                      <div class="p-4 md:p-5 space-y-4">
-                        <label for="admin-select" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Select an Admin to Send For Review</label>
-                        <select id="adminlist" class="block w-full p-2 font-normal text-chicago-600 leading-5  border  text-sm ">
-                        
-                        </select>     <div id="admin-error" class=" opacity-0 font-normal text-sm text-red-600 mt-1 ">
-              Please select one.
+            <div id="sendforreview" class="hidden z-[200]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
             </div>
-                       
-                          <p class="text-base leading-relaxed text-gray-500 ">
-                             Note : You are sending your latest version of this template for review. You will get the updates of the review on your dashboard.
-                          </p>
-                      </div>
-                      <!-- Modal footer -->
-                      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-                          <button id="sendreview"  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send</button>
-                          <button id="cancelreview" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 ">Cancel</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
        
          
-              <div id="editor-tools" class="  flex flex-row gap-5 m-3 ">
+              <div  class="  flex flex-row gap-5 m-3 ">
                 <div class="flex-1 flex flex-row gap-5 m-3 options sticky ">
                   <div class="flex  flex-row gap-0">
                     <select id="fontName" class="adv-option-button bg-gray-50 border border-gray-300 text-gray-900 text-xs  w-[5.0625rem] h-[1.75rem] rounded-l-md  p-1 m-0  "></select>
@@ -521,7 +494,57 @@
              
             </div>
                 
-      <div id="modalcontainer"></div>
+
+
+<!-- editor for draft letter -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       
           <!-- HIDDEN ELEMENT FOR UPLOADING POLICY -->
           <div id="container-html1" class="hidden"></div>

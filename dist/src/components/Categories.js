@@ -5,7 +5,7 @@ var amount = "";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://ipvms-api.exitest.com/documents/count/category",
+    "http://localhost:5001/documents/count/category",
     {
       method: "GET",
       headers: {
@@ -236,7 +236,7 @@ function addNewCategoryModal() {
   categoryModal.innerHTML = ` 
     <div
     id="Categorymodal"
-    class="modal fixed hidden inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40"
+    class="modal fixed hidden inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 backdrop"
   >
     <div
       class="modal-content mx-auto my-20 p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
@@ -335,6 +335,15 @@ function addNewCategoryOpenClose() {
   category_btn.addEventListener("click", () => {
     modal = document.getElementById("Categorymodal");
     modal.classList.remove("hidden");
+
+    document.addEventListener("click", function (event) {
+      console.log("event", event.target);
+
+      if (event.target.classList.contains('backdrop')) {
+        modal.classList.add("hidden");
+        inputfield.reset();
+      }
+    });
   });
   let closeButton = document.getElementById("closeButton");
   const inputfield = document.getElementById("categoryForm");
@@ -354,7 +363,7 @@ function addCategorySubmit() {
     console.log(categoryName);
 
     const response = await fetch(
-      "http://ipvms-api.exitest.com/api/categories/createNewCategory",
+      "http://localhost:5001/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {

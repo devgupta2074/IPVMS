@@ -115,3 +115,67 @@ const highlighterRemover = (className) => {
 };
 
 window.onload = initializer();
+
+if (document.getElementById("bold")) {
+  document.getElementById("bold").addEventListener("click", () => {
+    if (
+      document.getElementById("bold").classList.contains("bg-link-water-100")
+    ) {
+      document.getElementById("bold").classList.remove("bg-link-water-100");
+      document.getElementById("bold").classList.remove("rounded-md");
+    } else {
+      document.getElementById("bold").classList.add("bg-link-water-100");
+      document.getElementById("bold").classList.add("rounded-md");
+    }
+  });
+}
+
+if (document.getElementById("italic")) {
+  document.getElementById("italic").addEventListener("click", () => {
+    if (
+      document.getElementById("italic").classList.contains("bg-link-water-100")
+    ) {
+      document.getElementById("italic").classList.remove("bg-link-water-100");
+      document.getElementById("italic").classList.remove("rounded-md");
+    } else {
+      document.getElementById("italic").classList.add("bg-link-water-100");
+      document.getElementById("italic").classList.add("rounded-md");
+    }
+  });
+}
+if (document.getElementById("underline")) {
+  document.getElementById("underline").addEventListener("click", () => {
+    if (
+      document
+        .getElementById("underline")
+        .classList.contains("bg-link-water-100")
+    ) {
+      document
+        .getElementById("underline")
+        .classList.remove("bg-link-water-100");
+      document.getElementById("underline").classList.remove("rounded-md");
+    } else {
+      document.getElementById("underline").classList.add("bg-link-water-100");
+      document.getElementById("underline").classList.add("rounded-md");
+    }
+  });
+}
+if (document.getElementById("strikethrough")) {
+  document.getElementById("strikethrough").addEventListener("click", () => {
+    if (
+      document
+        .getElementById("strikethrough")
+        .classList.contains("bg-link-water-100")
+    ) {
+      document
+        .getElementById("strikethrough")
+        .classList.remove("bg-link-water-100");
+      document.getElementById("strikethrough").classList.remove("rounded-md");
+    } else {
+      document
+        .getElementById("strikethrough")
+        .classList.add("bg-link-water-100");
+      document.getElementById("strikethrough").classList.add("rounded-md");
+    }
+  });
+}

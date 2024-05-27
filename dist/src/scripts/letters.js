@@ -24,6 +24,8 @@ import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
 import { imageLoaded } from "./versioncontrol.js";
 
+// global variables
+
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
 function extractParentText(parentId) {
   const parentElement = document.getElementById(parentId);
@@ -256,7 +258,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     `http://localhost:5001/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -306,7 +308,7 @@ async function getTemplateInfo(templateId) {
       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
     </svg>
 
-    <svg class="w-[260px] h-[150px]">
+    <svg class="w-[260px] h-[150px] cursor-pointer">
       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
     </svg>
   </div>
@@ -321,7 +323,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    `http://localhost:5001/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -403,7 +405,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -422,7 +424,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -912,7 +914,11 @@ async function displayArea() {
     console.log(document.getElementsByTagName("main"));
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = `<div id="insert-table"></div>`;
+    area.innerHTML = `<div id="insert-table">
+    
+    </div>
+    
+    `;
 
     document.getElementsByTagName("main")[0].appendChild(area);
     await addTable();
@@ -977,7 +983,7 @@ async function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
@@ -988,7 +994,7 @@ async function displayArea() {
   <button
     onclick="openlettereditor(${0})"
     type="button"
-    class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
+    class="flex min-w-48 text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4  h-10   rounded-md  items-center gap-2 p-2"  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>
@@ -1059,10 +1065,10 @@ async function displayArea() {
         insertdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})'  class="absolute cursor-pointer top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1096,19 +1102,7 @@ async function displayArea() {
           }
         };
       });
-      document.addEventListener("click", function (event) {
-        console.log("event", event.target.tagName);
-        if (event.target.tagName !== "svg") {
-          const modals = document.getElementsByClassName("closethemodal");
-          console.log("hello", modals);
-          for (let i = 0; i < modals.length; i++) {
-            if (modals[i].classList.contains("hidden")) {
-            } else {
-              modals[i].classList.add("hidden");
-            }
-          }
-        }
-      });
+
       const customdefault = document.getElementById("insert-custom");
       customdefault.innerHTML = ``;
       customtemplates.forEach((template) => {
@@ -1129,10 +1123,10 @@ async function displayArea() {
         customdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1186,10 +1180,10 @@ async function displayArea() {
         insertdraft.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1269,10 +1263,28 @@ async function displayArea() {
       }
     };
 
+    document.addEventListener("click", function (event) {
+      console.log(event.target, event.target.tagName);
+      const modals = document.getElementsByClassName("closethemodal");
+      if (event.target.tagName === "use" || event.target.tagName === "svg") {
+        console.log(event.target.tagName, event.target.tagName === "svg");
+      } else {
+        for (let i = 0; i < modals.length; i++) {
+          const element = modals[i];
+
+          if (element.classList.contains("hidden")) {
+          } else {
+            element.classList.add("hidden");
+          }
+        }
+      }
+    });
+
     function addEditorOpenCloseFeature() {
       window.openlettereditor = async function (modalId) {
         const res = await GetAllCategory();
         document.getElementById("sectiondetails").classList.add("hidden");
+        document.getElementById("letters-tab").classList.add("hidden");
         document.getElementById("version-area").classList.remove("hidden");
 
         if (modalId == 0) {
@@ -1310,7 +1322,7 @@ async function displayArea() {
         document.getElementById("area").classList.add("hidden");
 
         const response2 = await fetch(
-          `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+          `http://localhost:5001/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1346,6 +1358,7 @@ async function displayArea() {
         document.getElementById("extralarge-modal").classList.add("hidden");
         document.getElementById("area").classList.remove("hidden");
         document.getElementById("sectiondetails").classList.remove("hidden");
+        document.getElementById("letters-tab").classList.remove("hidden");
         if (
           !document.getElementById("onlyforblank").classList.contains("hidden")
         ) {
@@ -1490,7 +1503,7 @@ async function displayArea() {
               console.log(data);
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url: "http://localhost:5001/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1543,43 +1556,52 @@ async function displayArea() {
               }</option>`;
             });
           });
-        document
-          .getElementById("closereview")
-          .addEventListener("click", closereviewmodal);
-        document
-          .getElementById("sendreview")
-          .addEventListener("click", async function () {
-            console.log(document.getElementById("adminlist").value);
-            if (
-              document.getElementById("adminlist").value !== "Select an Admin"
-            ) {
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-1");
-              document.getElementById("admin-error").classList.add("opacity-0");
-              const response = await SetDocumentToApprove(
-                parseInt(document.getElementById("adminlist").value),
-                parseInt(localStorage.getItem("modalId")),
-                parseInt(localStorage.getItem("userid"))
-              ).then(() => {
-                closereviewmodal();
+        if (document.getElementById("closerreview")) {
+          document
+            .getElementById("closereview")
+            .addEventListener("click", closereviewmodal);
+        }
+
+        if (document.getElementById("sendreview")) {
+          document
+            .getElementById("sendreview")
+            .addEventListener("click", async function () {
+              console.log(document.getElementById("adminlist").value);
+              if (
+                document.getElementById("adminlist").value !== "Select an Admin"
+              ) {
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
-              });
-              console.log(response);
-              if (response) {
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-1");
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
+                  .getElementById("admin-error")
+                  .classList.add("opacity-0");
+                const response = await SetDocumentToApprove(
+                  parseInt(document.getElementById("adminlist").value),
+                  parseInt(localStorage.getItem("modalId")),
+                  parseInt(localStorage.getItem("userid"))
+                ).then(() => {
+                  closereviewmodal();
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                });
+                console.log(response);
+                if (response) {
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                }
+              } else {
+                document
+                  .getElementById("admin-error")
+                  .classList.add("opacity-1");
+                document
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-0");
               }
-            } else {
-              document.getElementById("admin-error").classList.add("opacity-1");
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-0");
-            }
-          });
+            });
+        }
       }
     }
 
@@ -1609,6 +1631,7 @@ async function displayArea() {
       };
 
       dropDownBtn.addEventListener("click", () => {
+        console.log(dropDownBtn, document.getElementById("modalcontainer"));
         showModalUpload();
         console.log("modal opened");
       });
@@ -1738,7 +1761,7 @@ async function displayArea() {
               .querySelector("select").value
           );
 
-          const categoryId = document
+          var categoryId = document
             .getElementById(`${file.file.name}category`)
             .querySelector("select").value;
           const getFile = async () => {
@@ -1855,7 +1878,7 @@ async function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url: "http://localhost:5001/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -2500,25 +2523,26 @@ function addModalOpenCloseFeature() {
   window.openLetter = async function (modalId) {
     console.log(modalId, "modal id");
     const newel = document.createElement("div");
-    newel.innerHTML = `  <div id=${modalId}  >
+    newel.innerHTML = ` <div id=${modalId}  >
    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
      <!-- Background overlay -->
-     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
  
      <!-- Modal content -->
-     <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
-       <div class="absolute top-0 right-0 p-2 ">
-         <button onclick="closeLetter(${modalId})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-           </svg>
-         </button>
-       </div>
+     <div class="fixed inset-0  w-3/5 m-auto  bg-link-water-100 rounded-lg shadow-xl  p-6 transform transition-all sm:my-8 overflow-y-scroll">
+     
  
        <div id="printThis" class="p-6 pt-0  ">
-         <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+        <div class="relative ">
+        <button onclick="closeLetter(${modalId})"  type="button" class= " absolute top-0 right-0 p-1.5 m-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm  ml-auto inline-flex items-center">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+      </div>
+         <div id="render-docs" class=" ">
          ${style}
-         <div class='' id='docx-wrapper'>
+         <div class='shaow-2xl bg-white' id='docx-wrapper'>
          </div>
          
            </div>
@@ -2539,11 +2563,12 @@ function addModalOpenCloseFeature() {
         .getElementsByClassName("docx-wrapper")[0].outerHTML;
       document.getElementById(modalId).innerHTML = contents;
     });
-    window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
-        window.closeModal(modalId);
+    document.addEventListener("click", function (event) {
+      // console.log(modalId, "event", event.target);
+
+      if (event.target.classList.contains("backdrop")) {
+        window.closeLetter(modalId);
       }
     });
 
@@ -2551,7 +2576,7 @@ function addModalOpenCloseFeature() {
   };
 
   window.closeLetter = function (modalId) {
-    document.getElementById(modalId).style.display = "none";
+    document.getElementById(modalId).remove();
     document
       .getElementsByTagName("body")[0]
       .classList.remove("overflow-y-hidden");
@@ -2563,7 +2588,7 @@ addModalOpenCloseFeature();
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+    `http://localhost:5001/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -2594,21 +2619,18 @@ if (document.getElementById("savesdraft")) {
 }
 
 const saveAsDraft = async () => {
-  const htmlData1 = document.querySelector(".container").innerHTML;
+  const htmlData1 = document.querySelector(".container-content-1").innerHTML;
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
-    const res = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/saveLetter",
-      {
-        html_data: htmlData1,
-        templateId: templateId,
-        recipientId: recipientId,
-        createdby: ipvmsuserId,
-        email: recipientEmail,
-        name: recipientName,
-      }
-    );
+    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
+      html_data: htmlData1,
+      templateId: templateId,
+      recipientId: recipientId,
+      createdby: ipvmsuserId,
+      email: recipientEmail,
+      name: recipientName,
+    });
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -2641,7 +2663,7 @@ const saveAsDraft = async () => {
 
 const handleGeneratePdf = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.getElementById("container-content-1");
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -2663,7 +2685,7 @@ const handleGeneratePdf = async () => {
   const pdfBlob = await html2pdf().from(element).output("blob");
   const formData = new FormData();
   let letterId;
-  console.log(email);
+  // console.log(email);
   const fileName = "pdfsend" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   formData.append("userId", 20);
@@ -2674,7 +2696,7 @@ const handleGeneratePdf = async () => {
 
   try {
     const response = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/uploadLetter",
+      "http://localhost:5001/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -2744,7 +2766,8 @@ const removeLoading = () => {
 var shouldBeSigned = false;
 const handleSignSwiftCall = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.getElementById("container-content-1");
+  console.log("elemenet is ", element);
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -2769,7 +2792,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
+    "http://localhost:5001/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -2782,7 +2805,7 @@ const handleSignSwiftCall = async () => {
   if (ShareLink) {
     //draft->pending
     await axios.post(
-      "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
+      "http://localhost:5001/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,
@@ -2796,7 +2819,7 @@ const handleSignSwiftCall = async () => {
     );
   }
   const email = localStorage.getItem("email");
-  const userId = "10200";
+  // const userId = "10200";
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
@@ -2809,9 +2832,11 @@ const handleSignSwiftCall = async () => {
       .then((data) => {
         console.log("data is", data);
         if (data.status == 500) {
+          removeLoading();
           console.log("first log in sign swift");
           document.getElementById("loginError").classList.remove("hidden");
           //error
+          removeLoading();
         } else {
           console.log("data", data);
           fetch("http://localhost:3000/api/document/uploadDocument", {

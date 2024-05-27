@@ -184,13 +184,26 @@ page-break-before: always;
        margin: 10pt;
      }
    }
+
+   .docx menu,
+.docx ul {
+  list-style: disc !important;
+  margin: 0;
+  padding: 0;
+}
+.docx ol {
+  list-style-type: decimal  !important;
+  margin: 0;
+  padding: 0;
+}
+
  </style>
   <body
   class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden"
 >
     <main class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-full">
 
-      <div id="loading" class="z-[999999999999] w-[95%] absolute top-28 left-28" style="display:block;">
+      <div id="loading" class="z-10 w-[95%] absolute top-28 left-28" style="display:block;">
         <div
         class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-[500px]"
       >

@@ -8,7 +8,7 @@ function truncateString(str, num) {
 
 export const fetchTable = async () => {
   const apiLink =
-    "http://ipvms-api.exitest.com/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
+    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -56,14 +56,14 @@ export const fetchTable = async () => {
           if (downloadButton) {
             downloadButton.addEventListener("click", async () => {
               const result = await axios.get(
-                `http://ipvms-api.exitest.com/api/file/getLetterUrl/${item.filepath}`
+                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
               );
               console.log("url", result.data.url);
               window.location.href = result.data.url;
             });
           }
         });
-        //addPagination()
+        // addPagination();
       }
     });
 };
@@ -197,13 +197,27 @@ function addModalOpenCloseFeature() {
       .getElementsByTagName("body")[0]
       .classList.remove("overflow-y-hidden");
   };
+
+  // document.addEventListener('click', (event) => {
+
+  //   console.log(document.getElementById(modalId).style.display);
+  //   if (document.getElementById(modalId).style.display === "block") {
+  //     event.stopPropagation();
+  //     document.getElementById(modalId).style.display = "none";
+  //     document
+  //       .getElementsByTagName("body")[0]
+  //       .classList.remove("overflow-y-hidden");
+  //   }
+  // });
 }
 
 // Pagination
 
 function addPagination() {
   const paginationElement = document.getElementById("pagination-controller");
+  console.log("pagggg", totalItems, currentPage, pageSize, siblingCount);
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
+  console.log(paginationElement, "pagination elemenet is");
   paginationElement.innerHTML = "";
   console.log(arr);
   addPaginationElement(arr);
@@ -325,8 +339,9 @@ const addDocPageStatus = () => {
   </p>`;
 };
 const addPaginationElement = (arr) => {
+  console.log(arr, "array");
   const paginationElement = document.getElementById("pagination-controller");
-  arr.forEach((item) => {
+  arr?.forEach((item) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {

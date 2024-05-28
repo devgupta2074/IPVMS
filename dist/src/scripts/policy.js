@@ -112,7 +112,7 @@ const fetchDoc = async (currentPage, pageSize) => {
   //   category = "";
   // }
   const response = await fetch(
-    `http://localhost:5001/api/file/getRecentPolicies`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getRecentPolicies`,
     {
       method: "GET",
       headers: {
@@ -248,7 +248,7 @@ if (localStorage.getItem("token") === null) {
 addTable();
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -288,7 +288,7 @@ window.openEditor = async function (modalId) {
   let htmljson;
   document.getElementById("extralarge-modal").classList.remove("hidden");
   const response2 = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

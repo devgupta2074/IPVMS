@@ -1,4 +1,5 @@
 import { InsertNavbar } from "../components/Navbar.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   InsertNavbar();
@@ -50,7 +51,8 @@ const getTemplate = (id, recipientId) => {
     console.log("in user deatil user id is", recipientId);
     if (recipientId) {
       const response = await fetch(
-        `http://localhost:5001/api/user/getUserById/${recipientId}`,
+        API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          `/api/user/getUserById/${recipientId}`,
         {
           method: "GET",
         }
@@ -112,8 +114,8 @@ export const makeForm = (result) => {
       return numberElement(title);
     }
     return `<div class="mb-6">
-    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-    <input required   type="text"  id=${title} id="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${title}" required />
+    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">${title}</label>
+    <input required   type="text"  id=${title} id="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="${title}" required />
  </div>`;
   };
   const emailElement = (title) => {
@@ -458,14 +460,17 @@ const saveAsDraft = async () => {
   console.log("recipient email is", recipientEmail);
 
   try {
-    const res = await axios.post("http://localhost:5001/api/file/saveLetter", {
-      html_data: htmlData1,
-      templateId: templateId,
-      recipientId: recipientId,
-      createdby: ipvmsuserId,
-      email: recipientEmail,
-      name: recipientName,
-    });
+    const res = await axios.post(
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/saveLetter",
+      {
+        html_data: htmlData1,
+        templateId: templateId,
+        recipientId: recipientId,
+        createdby: ipvmsuserId,
+        email: recipientEmail,
+        name: recipientName,
+      }
+    );
     if (res) {
       Toastify({
         text: "Letter save as draft success",
@@ -530,7 +535,7 @@ const handleGeneratePdf = async () => {
   formData.append("letter_id", letterId);
   try {
     const response = await axios.post(
-      "http://localhost:5001/api/file/uploadLetter",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -625,7 +630,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://localhost:5001/api/file/upload/letterpdf",
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -681,7 +686,8 @@ const handleSignSwiftCall = async () => {
               if (docId) {
                 //draft->pending
                 const data1 = await axios.post(
-                  "http://localhost:5001/api/file/upload/updateLetterStatus",
+                  API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                    "/api/file/upload/updateLetterStatus",
                   {
                     letterId: letterId,
                     htmlData: element.innerHTML,

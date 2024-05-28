@@ -4,7 +4,7 @@ import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
 import { DELETE_LETTER } from "../api/deleteLetterModal.js";
 
-import { style } from "../utils/constants.js";
+import { API_CONSTANTS, style } from "../utils/constants.js";
 
 var ModaltoDeleteId;
 var templateId;
@@ -23,7 +23,8 @@ function truncateString(str, num) {
 }
 
 export const fetchTable = async () => {
-  const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
+  const apiLink =
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/getLetters?status=DRAFT";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -658,7 +659,7 @@ Save as Draft
     document.getElementById("area").classList.add("hidden");
 
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getLetter/${modalId}`,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetter/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -704,7 +705,7 @@ Save as Draft
 addEditorOpenCloseFeature();
 const fetchAndRenderLetter = async (modalId) => {
   const response = await fetch(
-    `http://localhost:5001/api/file/getLetter/${modalId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetter/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -816,7 +817,7 @@ const onEditorOpen = () => {
     try {
       console.log("name", recipientName);
       const res = await axios.post(
-        "http://localhost:5001/api/file/saveLetter",
+        API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/saveLetter",
         {
           html_data: htmlData1,
           templateId: templateId,
@@ -890,7 +891,7 @@ const onEditorOpen = () => {
     formData.append("letter_id", letterId);
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/file/uploadLetter",
+        API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/uploadLetter",
         formData,
         {
           headers: {
@@ -985,7 +986,7 @@ const onEditorOpen = () => {
     const fileName = "pdfFile" + Date.now() + ".pdf";
     formData.append("file", pdfBlob, fileName);
     const fileUpload = await axios.post(
-      "http://localhost:5001/api/file/upload/letterpdf",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/upload/letterpdf",
       formData,
       {
         headers: {
@@ -1042,7 +1043,8 @@ const onEditorOpen = () => {
                 if (docId) {
                   //draft->pending
                   const data1 = await axios.post(
-                    "http://localhost:5001/api/file/upload/updateLetterStatus",
+                    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                      "/api/file/upload/updateLetterStatus",
                     {
                       letterId: letterId,
                       htmlData: element.innerHTML,

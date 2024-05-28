@@ -198,7 +198,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
   const htmljson = documentdata.data.htmljson;
 
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersions?docId=${doc_id}`,
     {
       method: "GET",
       headers: {
@@ -214,9 +215,10 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     });
   localStorage.setItem("sentbyid", sentbyid);
   const response = await fetch(
-    `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-      sentbyid
-    )}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+        sentbyid
+      )}`,
     {
       method: "GET",
       headers: {
@@ -242,7 +244,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     .getElementById("approve")
     .addEventListener("click", async function () {
       const response = await fetch(
-        `http://localhost:5001/api/approvePolicyApproval?id=${id}`,
+        API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          `/api/approvePolicyApproval?id=${id}`,
         {
           method: "GET",
           headers: {
@@ -261,7 +264,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
           const htmljson = documentdata.data.htmljson;
 
           const firstv = await fetch(
-            `http://localhost:5001/api/versioncontrol/getVersions?docId=${doc_id}`,
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              `/api/versioncontrol/getVersions?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -277,9 +281,10 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
             });
 
           const response = await fetch(
-            `http://localhost:5001/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-              localStorage.getItem("sentbyid")
-            )}`,
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              `/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+                localStorage.getItem("sentbyid")
+              )}`,
             {
               method: "GET",
               headers: {
@@ -317,7 +322,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
               );
 
               const response = await fetch(
-                `http://localhost:5001/api/updatePolicyHtmlData`,
+                API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                  `/api/updatePolicyHtmlData`,
                 {
                   method: "POST",
                   headers: {
@@ -367,7 +373,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       });
       const reason = document.getElementById("message").value;
       const response = await fetch(
-        `http://localhost:5001/api/rejectPolicyApproval`,
+        API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/rejectPolicyApproval`,
         {
           method: "POST",
           headers: {

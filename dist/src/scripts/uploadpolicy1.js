@@ -1,4 +1,5 @@
 import { GetAllCategory } from "../api/getAllCategories.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 import {
   assignIDsToElements,
   handleChanges,
@@ -695,7 +696,7 @@ export class BulkUpload {
             .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
           const axiosRequestArgs = {
             method: "post",
-            url: "http://localhost:5001/api/file/createPolicy",
+            url: API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + token,

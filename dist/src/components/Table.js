@@ -6,7 +6,7 @@ import { removeLoading, showLoading } from "../scripts/loading.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
-import { style } from "../utils/constants.js";
+import { API_CONSTANTS, style } from "../utils/constants.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
 
 const docxModal = (id) => {
@@ -242,11 +242,14 @@ export const fetchTable = async (tableType) => {
   const title = tableType.title ? tableType.title : "";
 
   if (tableType.name == "recent") {
-    apiLink = "http://localhost:5001/api/file/getRecentPolicies";
+    apiLink =
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=${title}&category=${category}`;
+    apiLink =
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/file/document?page=${
+        currentPage - 1
+      }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -423,6 +426,11 @@ function addEditorOpenCloseFeature() {
       categoryElement += `
       <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
       `;
+    } else {
+      if (document.getElementById("review")) {
+        document.getElementById("review").classList.remove("hidden");
+      }
+      document.getElementById("addpolicy").innerText = "Edit Policy";
     }
     localStorage.setItem("modalId", modalId);
     console.log("fniefniefnir");
@@ -434,7 +442,7 @@ function addEditorOpenCloseFeature() {
     document.getElementById("extralarge-modal").classList.remove("hidden");
 
     const response2 = await fetch(
-      `http://localhost:5001/api/file/getFile/${modalId}`,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {
@@ -445,9 +453,16 @@ function addEditorOpenCloseFeature() {
     )
       .then((response) => response.json())
       .then((data) => {
+        console.log(data.data.category);
         localStorage.setItem("modalId", modalId);
+
         if (data.data.title !== "emptydocx.docx") {
-          document.getElementById("doc_title").textContent = data.data.title;
+          document.getElementById("policy-name").value = data.data.title;
+          document.getElementById("policy-name").disabled = true;
+          document.getElementById(
+            "category"
+          ).innerHTML += `<option selected >${data.data.category}</option>`;
+          document.getElementById("category").disabled = true;
         }
 
         fetchVersionsDateWise(modalId);
@@ -481,21 +496,17 @@ function addEditorOpenCloseFeature() {
       .getElementById("create-policy")
       .addEventListener("click", async function () {
         document.getElementById("policyname-error").classList.add("hidden");
-        document
-          .getElementById("policydescription-error")
-          .classList.add("hidden");
+        // document
+        //   .getElementById("policydescription-error")
+        //   .classList.add("hidden");
         document.getElementById("policycategory-error").classList.add("hidden");
         let policyname = document.getElementById("policy-name").value;
-        let policydescription =
-          document.getElementById("policy-description").value;
+        // let policydescription =
+        //   document.getElementById("policy-description").value;
         let policycategory = document.getElementById("category").value;
-        console.log(policycategory, policydescription, policyname);
+        console.log(policycategory, policyname);
 
-        if (
-          policyname !== "" &&
-          policydescription !== "" &&
-          policycategory !== "Select a category"
-        ) {
+        if (policyname !== "" && policycategory !== "Select a category") {
           // document.getElementById("policyname-error").classList.add("hidden");
           // document
           //   .getElementById("policydescription-error")
@@ -604,11 +615,11 @@ function addEditorOpenCloseFeature() {
               .getElementById("policyname-error")
               .classList.remove("hidden");
           }
-          if (policydescription == "") {
-            document
-              .getElementById("policydescription-error")
-              .classList.remove("hidden");
-          }
+          // if (policydescription == "") {
+          //   document
+          //     .getElementById("policydescription-error")
+          //     .classList.remove("hidden");
+          // }
           if (policycategory == "Select a category") {
             document
               .getElementById("policycategory-error")
@@ -723,7 +734,7 @@ function addModalOpenCloseFeature() {
 const fetchAndRenderDoc = async (modalId) => {
   showLoading();
   const response = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalId}`,
     {
       method: "GET",
       headers: {

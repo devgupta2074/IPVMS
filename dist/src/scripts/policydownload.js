@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../utils/constants.js";
+
 document.addEventListener("DOMContentLoaded", function (event) {
   const url = window.location.href;
   console.log("URL:", url);
@@ -10,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   const fetchAndRenderDoc = async (modalId) => {
     const response = await fetch(
-      `http://localhost:5001/api/file/getFile/${modalId}`,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalId}`,
       {
         method: "GET",
         headers: {

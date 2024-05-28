@@ -252,7 +252,8 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+        "/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -393,7 +394,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://localhost:5001/api/file/getFile/${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -1539,7 +1540,7 @@ async function ChangeVersion(modalid, id) {
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://localhost:5001/api/file/getFile/${modalid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1558,7 +1559,8 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://localhost:5001/api/versioncontrol/getVersions?docId=${modalid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1787,7 +1789,8 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              "/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1816,7 +1819,8 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          API_CONSTANTS.BACKEND_BASE_URL_PROD +
+            `/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1831,12 +1835,15 @@ async function ChangeVersion(modalid, id) {
       console.log(data.data[0], "firtv");
       return data.data[0].delta;
     });
-  const response = fetch(`http://localhost:5001/getVersionbyID?id=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getVersionbyID?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -1863,7 +1870,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    `http://localhost:5001/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {

@@ -30,7 +30,7 @@ const getQueueLetters = async () => {
   // from local storage
 
   const data = await axios.get(
-    `http://localhost:5001/api/file/letter/${userId}`
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/letter/${userId}`
   );
   const filteredData = data.data.data.filter((item) => {
     return item.status === "PENDING";

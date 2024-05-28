@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../utils/constants.js";
+
 const list = [
   {
     color: "#4485FB",
@@ -127,7 +129,8 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 
 const fetchCategoryCount = async (item) => {
   await fetch(
-    `http://localhost:5001/documents/count/category?category=${item.id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/documents/count/category?category=${item.id}`,
     {
       method: "GET",
       headers: {
@@ -145,12 +148,15 @@ const fetchCategoryCount = async (item) => {
 export const fetchCategory = async () => {
   const y = [];
 
-  const response = fetch(`http://localhost:5001/documents/count/category`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/documents/count/category`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log("data", data);
@@ -248,12 +254,15 @@ export const fetchCategory = async () => {
 export const fetchCategoryZero = async () => {
   const y = [];
 
-  const response = fetch(`http://localhost:5001/documents/count/category`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/documents/count/category`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
     .then((response) => response.json())
     .then((data) => {
       console.log("data", data);

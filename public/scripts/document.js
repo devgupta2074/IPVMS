@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../../dist/src/utils/constants.js";
+
 let maxPages = 4;
 let pageSize = 1;
 let currentPage = 1;
@@ -56,7 +58,8 @@ const range = (start, end) => {
 const fetchDoc = async (currentPage, pageSize) => {
   document.getElementById("loading").style = "display:block";
   const response = await fetch(
-    `http://localhost:5001/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/file/document?page=${currentPage}&size=${pageSize}&title=${title}`,
     {
       method: "GET",
       headers: {

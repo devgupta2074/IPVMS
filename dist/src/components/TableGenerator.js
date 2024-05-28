@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../utils/constants.js";
+
 function truncateString(str, num) {
   if (str.length > num) {
     return str.slice(0, num) + "...";
@@ -8,7 +10,8 @@ function truncateString(str, num) {
 
 export const fetchTable = async () => {
   const apiLink =
-    "http://localhost:5001/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    "/api/file/getLetters?page=0&size=5&name=&template=&status=PENDING,SIGNED";
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -56,7 +59,8 @@ export const fetchTable = async () => {
           if (downloadButton) {
             downloadButton.addEventListener("click", async () => {
               const result = await axios.get(
-                `http://localhost:5001/api/file/getLetterUrl/${item.filepath}`
+                API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                  `/api/file/getLetterUrl/${item.filepath}`
               );
               console.log("url", result.data.url);
               window.location.href = result.data.url;
@@ -209,7 +213,6 @@ function addModalOpenCloseFeature() {
   //       .classList.remove("overflow-y-hidden");
   //   }
   // });
-
 }
 
 // Pagination

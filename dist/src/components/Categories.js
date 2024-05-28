@@ -1,11 +1,12 @@
 import { removeLoading, showLoading } from "../scripts/loading.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 import { fetchTable, resetVariables } from "./Table.js";
 
 var amount = "";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://localhost:5001/documents/count/category",
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/documents/count/category",
     {
       method: "GET",
       headers: {
@@ -339,7 +340,7 @@ function addNewCategoryOpenClose() {
     document.addEventListener("click", function (event) {
       console.log("event", event.target);
 
-      if (event.target.classList.contains('backdrop')) {
+      if (event.target.classList.contains("backdrop")) {
         modal.classList.add("hidden");
         inputfield.reset();
       }
@@ -363,7 +364,7 @@ function addCategorySubmit() {
     console.log(categoryName);
 
     const response = await fetch(
-      "http://localhost:5001/api/categories/createNewCategory",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {

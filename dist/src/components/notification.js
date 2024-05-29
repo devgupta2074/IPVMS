@@ -96,7 +96,7 @@ export const insertNotification = async () => {
   document.getElementById("notificationContainer").innerHTML = "";
   document.getElementById("notificationContainer").innerHTML = notificationhtml;
   const result = await fetch(
-    "http://ipvms.exitest.com/api/notification/getNotification/22?role=1"
+    "http://ipvms-api.exitest.com/api/notification/getNotification/22?role=1"
   );
   const data = await result.json();
   const message = data?.notification;

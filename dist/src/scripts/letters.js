@@ -1375,23 +1375,19 @@ async function displayArea() {
           .getElementById("create-template")
           .addEventListener("click", async function () {
             document.getElementById("policyname-error").classList.add("hidden");
-            document
-              .getElementById("policydescription-error")
-              .classList.add("hidden");
+            // document
+            //   .getElementById("policydescription-error")
+            //   .classList.add("hidden");
             document
               .getElementById("policycategory-error")
               .classList.add("hidden");
             let policyname = document.getElementById("policy-name").value;
-            let policydescription =
-              document.getElementById("policy-description").value;
+            // let policydescription =
+            //   document.getElementById("policy-description").value;
             let policycategory = document.getElementById("category").value;
-            console.log(policycategory, policydescription, policyname);
+            console.log(policycategory, policyname);
 
-            if (
-              policyname !== "" &&
-              policydescription !== "" &&
-              policycategory !== "Select a category"
-            ) {
+            if (policyname !== "" && policycategory !== "Select a category") {
               // document.getElementById("policyname-error").classList.add("hidden");
               // document
               //   .getElementById("policydescription-error")
@@ -1521,11 +1517,11 @@ async function displayArea() {
                   .getElementById("policyname-error")
                   .classList.remove("hidden");
               }
-              if (policydescription == "") {
-                document
-                  .getElementById("policydescription-error")
-                  .classList.remove("hidden");
-              }
+              // if (policydescription == "") {
+              //   document
+              //     .getElementById("policydescription-error")
+              //     .classList.remove("hidden");
+              // }
               if (policycategory == "Select a category") {
                 document
                   .getElementById("policycategory-error")
@@ -2535,7 +2531,7 @@ function addModalOpenCloseFeature() {
  
        <div id="printThis" class="p-6 pt-0  ">
         <div class="relative ">
-        <button onclick="closeLetter(${modalId})"  type="button" class= " absolute top-0 right-0 p-1.5 m-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm  ml-auto inline-flex items-center">
+        <button onclick="closeLetter(${modalId})"  type="button" class= " z-[8000] absolute top-0 right-0 p-1.5 m-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm  ml-auto inline-flex items-center">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
           </svg>

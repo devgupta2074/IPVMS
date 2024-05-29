@@ -12,6 +12,74 @@ let imagesposition = [];
 let userdata;
 
 let htmljson;
+
+let savedRange;
+
+document
+  .getElementById("container-content-1")
+  .addEventListener("mouseup", saveCaretPosition);
+document
+  .getElementById("container-content-1")
+  .addEventListener("keyup", saveCaretPosition);
+document
+  .getElementById("container-content-1")
+  .addEventListener("focus", saveCaretPosition);
+if (document.getElementById("uploadButton")) {
+  document
+    .getElementById("uploadButton")
+    .addEventListener("click", function () {
+      document.getElementById("imageUpload").click();
+    });
+
+  document
+    .getElementById("imageUpload")
+    .addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.maxWidth = "100%";
+
+          insertImageAtCaret(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+}
+
+function saveCaretPosition() {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) {
+    savedRange = sel.getRangeAt(0);
+  }
+}
+
+function insertImageAtCaret(img) {
+  if (savedRange) {
+    const range = savedRange.cloneRange();
+    range.deleteContents();
+
+    const frag = document.createDocumentFragment();
+    frag.appendChild(img);
+
+    const node = frag.firstChild;
+    range.insertNode(frag);
+
+    if (node) {
+      range.setStartAfter(node);
+      range.collapse(true);
+
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  } else {
+    document.getElementById("editableDiv").appendChild(img);
+  }
+}
+
 function extractParentText(parentId) {
   console.log("Extracting parent", parentId);
   const parentElement = document.getElementById(parentId);
@@ -633,7 +701,9 @@ export function applyChangesFromV1toV2withouthighlight(
           console.log(
             v1[v2.changedTags[tagId].id].textContent.split(" ").length,
             v2.changedTags[tagId].textContent.split(" ").length,
-            "hello tap"
+            "hello tap",
+            v1,
+            v2.changedTags[tagId]
           );
 
           tag.textContent = v2.changedTags[tagId].textContent;
@@ -710,7 +780,6 @@ export function applyChangesFromV1toV2withouthighlight(
           tag.remove();
         }
       } else {
-        continue;
       }
     }
   }
@@ -956,7 +1025,10 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           console.log(
             v1[v2.changedTags[tagId].id].textContent.split(" ").length,
             v2.changedTags[tagId].textContent.split(" ").length,
-            "hello tap"
+            "hello tap",
+            v1,
+            v2.changedTags[tagId],
+            v1[v2.changedTags[tagId].id].textContent
           );
 
           tag.textContent = v2.changedTags[tagId].textContent;
@@ -1019,8 +1091,12 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
             false &&
           tag.textContent !== ""
         ) {
-          const removedelement = document.createElement("p");
-          // removedelement.classList.add("redhighlight");
+          const removedelement = document.createElement("s");
+
+          removedelement.textContent = v1[v2.removedTags[tagid]].textContent;
+          removedelement.style =
+            v1[v2.removedTags[tagid]].style + "background-color: #ffaaaa;";
+
           tag.parentElement.insertBefore(removedelement, tag);
           console.log(tag.id, "removed");
           console.log(tag.parentElement, "remove remove remove");
@@ -2318,6 +2394,8 @@ export function imageLoaded() {
     container.classList.add("container");
     container.style = "display: inline-block; position:relative;";
 
+    console.log(image.parentNode.childNodes, "image parent child nodes");
+
     image.parentNode.insertBefore(container, image);
     container.appendChild(image);
 
@@ -2440,6 +2518,22 @@ export function imageLoaded() {
       document.removeEventListener("mouseup", stopResize);
     }
   });
+
+  console.log(dynamicImages);
+  // for (var i = 0; i < dynamicImages.length; i++) {
+  //   if (
+  //     dynamicImages[i].parentElement.parentElement.classList.contains(
+  //       "image-container"
+  //     )
+  //   ) {
+  //     const x = dynamicImages[i];
+  //     const y = dynamicImages[i].parentElement;
+  //     const z = dynamicImages[i].parentElement.parentElement.parentElement;
+  //     dynamicImages[i].parentElement.parentElement.parentElement.remove();
+  //     y.appendChild(x);
+  //     z.appendChild(y);
+  //   }
+  // }
 }
 
 function checkDivSizeBack() {

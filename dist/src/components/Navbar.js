@@ -3,6 +3,7 @@ import { VIEWS_CONSTANTS } from "../utils/constants.js";
 import { InviteApiRequest } from "../api/invitation.js";
 import { showLoading } from "../scripts/loading.js";
 import { removeLoading } from "../scripts/loading.js";
+import { insertNotification } from "./notification.js";
 
 const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
@@ -78,6 +79,7 @@ const NavBar = `
  
 </div>
 </aside>
+<div id="notify"></div>
 <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
@@ -87,7 +89,7 @@ const NavBar = `
   </svg>
 </div>
 <div class="flex items-center justify-center gap-5 pr-10">
-<button>
+<button onClick="notificationHandler()">
   <svg class="h-6 w-6 ">
     <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
   </svg>
@@ -118,6 +120,8 @@ const NavBar = `
   </div>
   <!-- Dropdown menu -->
   </div>
+</div>
+<div id=""notificationContainer">
 </div>
 </header>
 
@@ -162,6 +166,10 @@ export async function InsertNavbar() {
     }
     // Remove the to-be-deleted element
     parentElement.removeChild(toBeDeletedElement);
+    document.getElementById(
+      "notify"
+    ).innerHTML += `<div id="notificationContainer"></div>`;
+    insertNotification();
   }
   var url = window.location.pathname;
 

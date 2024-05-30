@@ -820,6 +820,7 @@ const handlePagination = async (item) => {
     category: category,
     pagination: true,
   };
+  console.log("deeevv", tableType);
   await fetchTable(tableType);
 };
 
@@ -945,7 +946,7 @@ function addSearchbar() {
         category: `${category}`,
         pagination: true,
       };
-      // console.log(tableType);
+      console.log(tableType, "ddev");
       // resetVariables();
       fetchTable(tableType);
       // sbar.value = "";
@@ -962,7 +963,7 @@ function addSearchbar() {
       category: `${category}`,
       pagination: true,
     };
-
+    console.log("ddevs");
     fetchTable(tableType);
     cross_mark.classList.add("hidden");
   });

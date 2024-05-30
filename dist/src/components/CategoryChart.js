@@ -110,7 +110,8 @@ const list = [
 function generatecategorydisplayhtml(titlex, count, color, svg) {
   if (count > 0) {
     return ` <div
-      class="flex items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+    onclick="clickoncategory('${titlex}')"
+      class="flex cursor-pointer items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
       >
       <div class="p-3 bg-[${color}] rounded-full">
       ${svg}
@@ -126,6 +127,11 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
     return "";
   }
 }
+
+window.clickoncategory = function (titlex) {
+  window.location.href = "http://localhost:5555/document";
+  localStorage.setItem("category", titlex);
+};
 
 const fetchCategoryCount = async (item) => {
   await fetch(

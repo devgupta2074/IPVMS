@@ -71,7 +71,7 @@ async function addCategoryElements(arr) {
   await arr.forEach((element) => {
     if (element.id != null)
       categoryRow.innerHTML += `
-    <button class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
+    <button id="${element.category}" class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
     `;
   });
 
@@ -89,6 +89,7 @@ function addSelectHighlight() {
   );
 
   category_buttons.forEach((e) => {
+    console.log(e, "dev e category button");
     e.addEventListener("click", () => {
       window.event.preventDefault();
       ``;
@@ -113,7 +114,7 @@ function addSelectHighlight() {
   });
 }
 
-function removeClr(elements) {
+export function removeClr(elements) {
   elements.forEach((e) => {
     e.classList.remove(
       "text-[#1F2DE3]",
@@ -364,7 +365,7 @@ function addCategorySubmit() {
     console.log(categoryName);
 
     const response = await fetch(
-      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/categories/createNewCategory",
+      "http://localhost:5001/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {

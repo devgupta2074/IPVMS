@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../utils/constants.js";
+
 const notificationhtml = `
 <div
 class="w-full h-full z-[999999999] hidden bg-gray-800 bg-opacity-90 top-0 overflow-y-auto overflow-x-hidden fixed sticky-0"
@@ -96,7 +98,8 @@ export const insertNotification = async (userId) => {
   document.getElementById("notificationContainer").innerHTML = "";
   document.getElementById("notificationContainer").innerHTML = notificationhtml;
   const result = await fetch(
-    `http://ipvms-api.exitest.com/api/notification/getNotification/${userId}?role=1`
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/notification/getNotification/${userId}?role=1`
   );
   const data = await result.json();
   const message = data?.notification;

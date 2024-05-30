@@ -25,7 +25,7 @@ const getTemplate = (id, recipientId) => {
   const getTemplatedoc = async (id) => {
     console.log("in get temo id in getTempdox is", id);
     const response = await fetch(
-      `http://127.0.0.1:5001/api/file/getTemplateById/${id}`,
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getTemplateById/${id}`,
       {
         method: "GET",
       }

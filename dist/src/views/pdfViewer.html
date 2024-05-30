@@ -50,7 +50,7 @@
       document.addEventListener("DOMContentLoaded", async () => {
         var filename = window.location.search.substring(6);
         const response = await axios.get(
-          `http://localhost:5001/api/file/getLetterUrl/${filename}`
+          `http://ipvms-api.exitest.com/api/file/getLetterUrl/${filename}`
         );
         var { pdfjsLib } = globalThis;
 

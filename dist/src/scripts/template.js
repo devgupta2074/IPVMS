@@ -445,7 +445,7 @@ document
     event.preventDefault();
     const res = await saveAsDraft();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com/letters";
     }, 3000);
   });
 document
@@ -557,7 +557,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://localhost:5555/letters";
+        window.location.href = "http://ipvms.exitest.com/letters";
       }, 3000);
     }
   } catch (error) {
@@ -574,7 +574,7 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://localhost:5555/letters";
+      window.location.href = "http://ipvms.exitest.com/letters";
     }, 2000);
   } finally {
     removeLoading();
@@ -642,7 +642,7 @@ const handleSignSwiftCall = async () => {
   const ShareLink = fileUpload.data.url;
   const email = localStorage.getItem("email");
   if (fileUpload) {
-    fetch("http://localhost:3000/api/users/findUser", {
+    fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -654,6 +654,7 @@ const handleSignSwiftCall = async () => {
         console.log("data is", data);
         if (data.status == 500) {
           console.log("first log in sign swift");
+          removeLoading();
           Toastify({
             text: "Make a account in signwift first",
             duration: 3000,
@@ -670,15 +671,18 @@ const handleSignSwiftCall = async () => {
         } else {
           console.log("data", data);
           const signSwiftId = data.user.customerId;
-          fetch("http://localhost:3000/api/document/uploadDocument", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: data.user.customerId,
-              ShareLink: ShareLink,
-              title: title,
-            }),
-            mode: "cors",
-          })
+          fetch(
+            "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                userId: data.user.customerId,
+                ShareLink: ShareLink,
+                title: title,
+              }),
+              mode: "cors",
+            }
+          )
             .then((response) => response.json())
             .then(async (data) => {
               removeLoading();
@@ -803,7 +807,7 @@ document.getElementById("sendLetter").addEventListener("click", function () {
     handleSignSwiftCall();
   }
 
-  // window.location.href = "http://localhost:5555/letters";
+  // window.location.href = "http://ipvms.exitest.com/letters";
 });
 document.getElementById("signCheckbox").addEventListener("change", function () {
   const signMessage = document.getElementById("signMessage");

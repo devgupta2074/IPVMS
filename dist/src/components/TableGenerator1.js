@@ -237,7 +237,7 @@ window.deleteLetter = function (id) {
         },
       }).showToast();
       setTimeout(() => {
-        location.reload();
+        fetchTable();
         document.getElementById("letterdeletemodal").innerHTML = "";
       }, 1000);
     }
@@ -806,7 +806,7 @@ const onEditorOpen = () => {
       .addEventListener("click", async () => {
         const res = await saveAsDraft();
         setTimeout(() => {
-          window.location.href = "http://localhost:5555/letters";
+          window.location.href = "http://ipvms.exitest.com/letters";
         }, 3000);
       });
   }
@@ -913,7 +913,7 @@ const onEditorOpen = () => {
       }).showToast();
       if (response.status == 200) {
         setTimeout(() => {
-          window.location.href = "http://localhost:5555/letters";
+          window.location.href = "http://ipvms.exitest.com/letters";
         }, 1000);
       }
     } catch (error) {
@@ -930,7 +930,7 @@ const onEditorOpen = () => {
         },
       }).showToast();
       setTimeout(() => {
-        window.location.href = "http://localhost:5555/letters";
+        window.location.href = "http://ipvms.exitest.com/letters";
       }, 2000);
     } finally {
       removeLoading();
@@ -961,7 +961,7 @@ const onEditorOpen = () => {
   var shouldBeSigned = false;
   const handleSignSwiftCall = async () => {
     showLoading();
-    var element = document.getElementById("container");
+    var element = document.getElementById("docx-wrapper-1");
     var opt = {
       margin: 0,
       filename: "Contrato.pdf",
@@ -1133,7 +1133,7 @@ const onEditorOpen = () => {
       handleSignSwiftCall();
     }
 
-    // window.location.href = "http://localhost:5555/letters";
+    // window.location.href = "http://ipvms.exitest.com/letters";
   });
   document
     .getElementById("signCheckbox")

@@ -173,7 +173,7 @@ export async function InsertNavbar() {
     document.getElementById(
       "notify"
     ).innerHTML += `<div id="notificationContainer"></div>`;
-    insertNotification();
+    insertNotification(userdata.data.id);
   }
   var url = window.location.pathname;
 

@@ -276,27 +276,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   categoryElement += `</select>
   <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
   `;
+  if (document.getElementById("dropzone-file")) {
+    document
+      .getElementById("dropzone-file")
+      .addEventListener("change", (event) => {
+        const files = event.target.files;
+        console.log(files);
+        filesUploaded = Array.from(files);
+        console.log("files are", files);
 
-  document
-    .getElementById("dropzone-file")
-    .addEventListener("change", (event) => {
-      const files = event.target.files;
-      console.log(files);
-      filesUploaded = Array.from(files);
-      console.log("files are", files);
-
-      uploadFilesListUi(categoryElement);
-      document.getElementById("uploadbtn").disabled = false;
-      document
-        .getElementById("dropzone-file1")
-        .addEventListener("change", (event) => {
-          let newFiles = event.target.files;
-          newFiles = Array.from(newFiles);
-          filesUploaded = filesUploaded.concat(newFiles);
-          newFiles.map((item) => {
-            document.getElementById(
-              "file-list"
-            ).innerHTML += `<div class="flex flex-row gap-3">
+        uploadFilesListUi(categoryElement);
+        document.getElementById("uploadbtn").disabled = false;
+        document
+          .getElementById("dropzone-file1")
+          .addEventListener("change", (event) => {
+            let newFiles = event.target.files;
+            newFiles = Array.from(newFiles);
+            filesUploaded = filesUploaded.concat(newFiles);
+            newFiles.map((item) => {
+              document.getElementById(
+                "file-list"
+              ).innerHTML += `<div class="flex flex-row gap-3">
   <div
     class="flex flex-row   justify-between bg-[#F7F7F7] w-96 px-4 py-5  rounded-md  h-10 items-center"
   >
@@ -386,18 +386,19 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${categoryElement}
           </div>
           </div>`;
+            });
+            filesUploaded.map((item) => {
+              document
+                .getElementById(`${item.name}removebtn`)
+                .addEventListener("click", () => {
+                  handleRemoveFile(item.name, categoryElement);
+                });
+            });
           });
-          filesUploaded.map((item) => {
-            document
-              .getElementById(`${item.name}removebtn`)
-              .addEventListener("click", () => {
-                handleRemoveFile(item.name, categoryElement);
-              });
-          });
-        });
-    });
+      });
 
-  console.log(category);
+    console.log(category);
+  }
 });
 
 /// bulk upload logic
@@ -868,7 +869,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // global var for file uploaded
 
   const handleUpload = async () => {
-    const upload = new BulkUpload(2, onUpdateEvent, onUploadComplete, 100);
+    const upload = new BulkUpload(5, onUpdateEvent, onUploadComplete, 100);
     // fileUploaded
     console.log(filesUploaded, "filesUploaded are");
     upload.startUpload(filesUploaded);
@@ -892,50 +893,52 @@ document.addEventListener("DOMContentLoaded", async () => {
   // });
 
   console.log("is it working");
-  document.getElementById("uploadbtn").addEventListener("click", () => {
-    console.log("upload");
-    if (filesUploaded.length === 0) {
-      document.getElementById("uploadbtn").disabled = true;
-      document.getElementById("upload-error").style = "display:block";
-    } else {
-      document.getElementById("upload-error").style = "display:hidden";
+  if (document.getElementById("uploadbtn")) {
+    document.getElementById("uploadbtn").addEventListener("click", () => {
+      console.log("upload");
+      if (filesUploaded.length === 0) {
+        document.getElementById("uploadbtn").disabled = true;
+        document.getElementById("upload-error").style = "display:block";
+      } else {
+        document.getElementById("upload-error").style = "display:hidden";
 
-      console.log(category, "category");
-      let flag = true;
-      filesUploaded.map((item) => {
-        console.log(
-          document
-            .getElementById(`${item.name}category`)
-            .querySelector("select")
-        );
-        console.log(
-          document
-            .getElementById(`${item.name}category`)
-            .querySelector("select").value
-        );
-        if (
-          document
-            .getElementById(`${item.name}category`)
-            .querySelector("select").value == "Choose Category"
-        ) {
-          flag = false;
-          document
-            .getElementById(`${item.name}category`)
-            .querySelector("p")
-            .classList.remove("hidden");
-        } else {
-          document
-            .getElementById(`${item.name}category`)
-            .querySelector("p")
-            .classList.add("hidden");
+        console.log(category, "category");
+        let flag = true;
+        filesUploaded.map((item) => {
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select")
+          );
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value
+          );
+          if (
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value == "Choose Category"
+          ) {
+            flag = false;
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.remove("hidden");
+          } else {
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.add("hidden");
+          }
+        });
+        if (flag) {
+          document.getElementById("uploadbtn").classList.add("hidden");
+          handleUpload();
         }
-      });
-      if (flag) {
-        document.getElementById("uploadbtn").classList.add("hidden");
-        handleUpload();
       }
-    }
-  });
+    });
+  }
 });
 
 //error on not choosing category

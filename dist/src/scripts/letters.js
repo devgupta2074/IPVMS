@@ -651,7 +651,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul
@@ -675,8 +675,22 @@ async function displayArea() {
   </li>`;
     };
 
-    const make_template = (title, id) => {
-      return `<li>
+    const make_template = (title, id, mode, created_by) => {
+      console.log(created_by, "ddddd");
+      const userid = localStorage.getItem("userid");
+      let x = "";
+      if (mode === "STANDARD") {
+        x = `<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">DEFAULT</span>`;
+      }
+      if (mode === "CUSTOM") {
+        x = `<span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">${mode}</span>`;
+      }
+      if (mode === "DRAFT") {
+        x = `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"> ${mode}</span>
+        `;
+      }
+      if (mode != "DRAFT") {
+        return `<li>
       <div
         class="flex items-center p-2 rounded hover:bg-gray-100 "
       >
@@ -685,10 +699,31 @@ async function displayArea() {
         id=${id}
           for="checkbox-item-5"
           class="flex flex-row items-center justify-between w-full ms-2 text-sm font-normal text-chicago-700 rounded "
-          >${title}</label
+          >${title} ${x} </label
         >
+       
       </div>
     </li>`;
+      } else {
+        if (parseInt(userid) === created_by) {
+          return `<li>
+          <div
+            class="flex items-center p-2 rounded hover:bg-gray-100 "
+          >
+           
+            <label
+            id=${id}
+              for="checkbox-item-5"
+              class="flex flex-row items-center justify-between w-full ms-2 text-sm font-normal text-chicago-700 rounded "
+              >${title} ${x} </label
+            >
+           
+          </div>
+        </li>`;
+        } else {
+          return "";
+        }
+      }
     };
 
     async function getAllUsers() {
@@ -720,13 +755,15 @@ async function displayArea() {
       }
     }
     async function getAllTemplates() {
-      const tempresult = await GetAllTemplatesByStatus("STANDARD");
+      const tempresult = await GetAllTemplates();
       document.getElementById("template_option").innerHTML = "";
       console.log(tempresult, "STANDARD TEMPLATES");
       tempresult.data.map((item) => {
         document.getElementById("template_option").innerHTML += make_template(
           item.title,
-          item.id
+          item.id,
+          item.mode,
+          item.created_by
         );
       });
     }
@@ -1034,7 +1071,10 @@ async function displayArea() {
       tempresult.data.map((template) => {
         if (template.mode === "STANDARD") {
           defaulttemplates.push(template);
-        } else if (template.mode === "DRAFT") {
+        } else if (
+          template.mode === "DRAFT" &&
+          parseInt(localStorage.getItem("userid")) == template.created_by
+        ) {
           drafttemplates.push(template);
         } else if (template.mode === "CUSTOM") {
           customtemplates.push(template);

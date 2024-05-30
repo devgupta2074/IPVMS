@@ -138,6 +138,10 @@ export async function InsertNavbar() {
         userdata = data;
         localStorage.setItem("userid", userdata.data.id);
         localStorage.setItem("userId", userdata.data.id);
+        localStorage.setItem(
+          "isAdmin",
+          userdata.data.group_id == 2 ? true : false
+        );
         localStorage.setItem("email", userdata.data.email);
       }
     });

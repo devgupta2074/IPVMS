@@ -129,7 +129,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 }
 
 window.clickoncategory = function (titlex) {
-  window.location.href = "http://localhost:5555/document";
+  window.location.href = "http://ipvms.exitest.com/document";
   localStorage.setItem("category", titlex);
 };
 

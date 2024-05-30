@@ -95,7 +95,7 @@ async function getPolicyApprovals() {
         ></use>
       </svg>
       <div class="font-roboto font-normal  text-base text-boulder-400 ">
-        Oops!  It seems there are no policies awaiting approval at the moment.
+      You don't have any pending policies for Approval
       </div>
   </div>`;
   } else {

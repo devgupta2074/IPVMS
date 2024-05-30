@@ -806,7 +806,7 @@ const onEditorOpen = () => {
       .addEventListener("click", async () => {
         const res = await saveAsDraft();
         setTimeout(() => {
-          window.location.href = "http://ipvms.exitest.com/letters";
+          window.location.href = "http://localhost:5555/letters";
         }, 3000);
       });
   }
@@ -913,7 +913,7 @@ const onEditorOpen = () => {
       }).showToast();
       if (response.status == 200) {
         setTimeout(() => {
-          window.location.href = "http://ipvms.exitest.com/letters";
+          window.location.href = "http://localhost:5555/letters";
         }, 1000);
       }
     } catch (error) {
@@ -930,7 +930,7 @@ const onEditorOpen = () => {
         },
       }).showToast();
       setTimeout(() => {
-        window.location.href = "http://ipvms.exitest.com/letters";
+        window.location.href = "http://localhost:5555/letters";
       }, 2000);
     } finally {
       removeLoading();
@@ -1133,7 +1133,7 @@ const onEditorOpen = () => {
       handleSignSwiftCall();
     }
 
-    // window.location.href = "http://ipvms.exitest.com/letters";
+    // window.location.href = "http://localhost:5555/letters";
   });
   document
     .getElementById("signCheckbox")

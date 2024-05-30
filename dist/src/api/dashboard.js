@@ -115,7 +115,7 @@ const getQueueLetters = async () => {
         ></use>
       </svg>
       <div class="font-roboto font-normal  text-base text-boulder-400 ">
-      Oops! It seems there are no queue letter  at the moment.
+      You don't have any letter pending to be signed
       </div>
   </div>
     `;

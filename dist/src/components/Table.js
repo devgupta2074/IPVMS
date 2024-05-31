@@ -7,6 +7,10 @@ import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
 import { API_CONSTANTS, style } from "../utils/constants.js";
+import {
+  makepolicyactive,
+  makepolicyinactive,
+} from "./PolicyActiveInactive.js";
 import { fetchVersionsDateWise } from "./VersionTable.js";
 
 const docxModal = (id) => {
@@ -403,6 +407,13 @@ function addEditorOpenCloseFeature() {
     const res = await GetAllCategory();
     document.getElementById("onlyforblank").classList.remove("hidden");
 
+    document
+      .getElementById("inactive")
+      .addEventListener("click", makepolicyinactive);
+    document
+      .getElementById("active")
+      .addEventListener("click", makepolicyactive);
+
     if (modalId == 0) {
       // document.getElementById("onlyforblank").classList.remove("hidden");
       // document.getElementById("version-area").classList.add("hidden");
@@ -454,11 +465,21 @@ function addEditorOpenCloseFeature() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data.data.category);
+        console.log("active", data.data);
         localStorage.setItem("modalId", modalId);
+        if (localStorage.getItem("isAdmin") === "true") {
+          if (data.data.is_active) {
+            document.getElementById("inactive").classList.remove("hidden");
+            console.log("Inactive modal");
+          } else {
+            document.getElementById("active").classList.remove("hidden");
+          }
+        }
 
         if (data.data.title !== "emptydocx.docx") {
           document.getElementById("policy-name").value = data.data.title;
           document.getElementById("policy-name").disabled = true;
+
           document.getElementById(
             "category"
           ).innerHTML += `<option selected >${data.data.category}</option>`;
@@ -480,6 +501,12 @@ function addEditorOpenCloseFeature() {
   window.closeEditor = function () {
     console.log("fniefniefnir");
     document.getElementById("extralarge-modal").classList.add("hidden");
+    if (!document.getElementById("active").classList.contains("hidden")) {
+      document.getElementById("active").classList.add("hidden");
+    }
+    if (!document.getElementById("inactive").classList.contains("hidden")) {
+      document.getElementById("inactive").classList.add("hidden");
+    }
     if (!document.getElementById("onlyforblank").classList.contains("hidden")) {
       document.getElementById("onlyforblank").classList.add("hidden");
       document.getElementById("json").textContent = "Save a Version as Draft";

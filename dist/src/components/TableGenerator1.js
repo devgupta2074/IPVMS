@@ -4,7 +4,7 @@ import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
 import { DELETE_LETTER } from "../api/deleteLetterModal.js";
 
-import { API_CONSTANTS, style } from "../utils/constants.js";
+import { API_CONSTANTS, style, URL_CONSTANTS } from "../utils/constants.js";
 
 var ModaltoDeleteId;
 var templateId;
@@ -806,7 +806,7 @@ const onEditorOpen = () => {
       .addEventListener("click", async () => {
         const res = await saveAsDraft();
         setTimeout(() => {
-          window.location.href = "http://ipvms.exitest.com/letters";
+          window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
         }, 3000);
       });
   }
@@ -913,7 +913,7 @@ const onEditorOpen = () => {
       }).showToast();
       if (response.status == 200) {
         setTimeout(() => {
-          window.location.href = "http://ipvms.exitest.com/letters";
+          window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
         }, 1000);
       }
     } catch (error) {
@@ -930,7 +930,7 @@ const onEditorOpen = () => {
         },
       }).showToast();
       setTimeout(() => {
-        window.location.href = "http://ipvms.exitest.com/letters";
+        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 2000);
     } finally {
       removeLoading();
@@ -1132,8 +1132,6 @@ const onEditorOpen = () => {
     } else {
       handleSignSwiftCall();
     }
-
-    // window.location.href = "http://ipvms.exitest.com/letters";
   });
   document
     .getElementById("signCheckbox")

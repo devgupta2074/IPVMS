@@ -70,5 +70,5 @@ toletters.addEventListener("click", () => {
 });
 signoutbutton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = "http://ipvms.exitest.com/login";
+  window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/login";
 });

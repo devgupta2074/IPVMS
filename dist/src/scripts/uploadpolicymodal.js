@@ -42,12 +42,12 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
       </button>
     </div>
     <div
-      class="flex w-full h-full flex-col gap-8 items-center"
+      class="flex w-full h-full flex-col gap-8 items-center cursor-pointer"
       id="upload-content"
     >
       <label
         for="dropzone-file"
-        class="flex items-center justify-center w-full p-6 rounded-md bg-[#EBF3FF80] border border-dashed border-[#0052F194]"
+        class="flex items-center cursor-pointer justify-center w-full p-6 rounded-md bg-[#EBF3FF80] border border-dashed border-[#0052F194]"
       >
         <div class="flex flex-col items-center justify-center gap-5">
           <svg
@@ -116,7 +116,10 @@ const makeModal = () => {
     const closeModalBtn = document.getElementById("closeModalBtn");
     const modal = document.getElementById("modal");
     console.log("modal is", modal);
-    modal.classList.remove("hidden");
+    if (modal) {
+      modal.classList.remove("hidden");
+    }
+
     document.addEventListener("click", function (event) {
       // console.log("event", event.target);
       if (event.target.classList.contains("backdrop")) {

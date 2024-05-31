@@ -1,5 +1,5 @@
 import { InsertNavbar } from "../components/Navbar.js";
-import { API_CONSTANTS } from "../utils/constants.js";
+import { API_CONSTANTS, URL_CONSTANTS } from "../utils/constants.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   InsertNavbar();
@@ -445,7 +445,7 @@ document
     event.preventDefault();
     const res = await saveAsDraft();
     setTimeout(() => {
-      window.location.href = "http://ipvms.exitest.com/letters";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
     }, 3000);
   });
 document
@@ -558,7 +558,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://ipvms.exitest.com/letters";
+        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 3000);
     }
   } catch (error) {
@@ -575,7 +575,7 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://ipvms.exitest.com/letters";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
     }, 2000);
   } finally {
     removeLoading();
@@ -807,8 +807,6 @@ document.getElementById("sendLetter").addEventListener("click", function () {
   } else {
     handleSignSwiftCall();
   }
-
-  // window.location.href = "http://ipvms.exitest.com/letters";
 });
 document.getElementById("signCheckbox").addEventListener("change", function () {
   const signMessage = document.getElementById("signMessage");

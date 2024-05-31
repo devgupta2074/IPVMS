@@ -1,4 +1,4 @@
-import { API_CONSTANTS } from "../utils/constants.js";
+import { API_CONSTANTS, URL_CONSTANTS } from "../utils/constants.js";
 
 const list = [
   {
@@ -129,7 +129,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 }
 
 window.clickoncategory = function (titlex) {
-  window.location.href = "http://ipvms.exitest.com/document";
+  window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/document";
   localStorage.setItem("category", titlex);
 };
 

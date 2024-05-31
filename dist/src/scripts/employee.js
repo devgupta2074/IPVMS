@@ -3,10 +3,7 @@ import { GetAllUsers } from "../api/getAllUsers.js";
 import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
-  ROUTES_CONSTANTS,
-  TOAST_COLORS,
-  TOAST_ERRORS,
-  TOAST_ICONS,
+  URL_CONSTANTS,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
 import { debounce } from "../utils/debouncing.js";
@@ -147,7 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("on click");
     console.log("user id", userId);
     console.log("template id", templateId);
-    window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
+    window.location.href =
+      URL_CONSTANTS.FRONTEND_BASE_URL +
+      `/template?templateId=${templateId}&userId=${userId}`;
   };
 });
 

@@ -87,6 +87,8 @@ const ROUTES_CONSTANTS = {
   GET_DOCUMENT_BY_ID: "/api/file/getFile/",
   DELETE_TEMPLATE: "/deleteTemplate",
   DELETE_LETTER_MODAL: "/api/file/deleteLetter",
+  ACTIVATE_POLICY: "/api/activepolicy",
+  DEACTIVATE_POLICY: "/api/deactivatepolicy",
 };
 export const style = `<style>
 .docx-wrapper {  padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

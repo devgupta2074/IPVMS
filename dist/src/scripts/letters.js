@@ -15,6 +15,7 @@ import {
   TOAST_COLORS,
   TOAST_ERRORS,
   TOAST_ICONS,
+  URL_CONSTANTS,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
 import { debounce } from "../utils/debouncing.js";
@@ -136,12 +137,12 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
       </button>
     </div>
     <div
-      class="flex w-full h-full flex-col gap-8 items-center"
+      class="flex w-full h-full flex-col gap-8 items-center cursor-pointer"
       id="upload-content"
     >
       <label
         for="dropzone-file"
-        class="flex items-center justify-center w-full p-6 rounded-md bg-[#EBF3FF80] border border-dashed border-[#0052F194]"
+        class="flex items-center cursor-pointer justify-center w-full p-6 rounded-md bg-[#EBF3FF80] border border-dashed border-[#0052F194]"
       >
         <div class="flex flex-col items-center justify-center gap-5">
           <svg
@@ -686,7 +687,7 @@ async function displayArea() {
         x = `<span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">${mode}</span>`;
       }
       if (mode === "DRAFT") {
-        x = `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"> ${mode}</span>
+        x = `<span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">        ${mode}</span>
         `;
       }
       if (mode != "DRAFT") {
@@ -923,9 +924,11 @@ async function displayArea() {
       console.log("user id", userId);
       console.log("template id", templateId);
 
-      window.location.href = `http://ipvms.exitest.com//template?templateId=${templateId}&userId=${userId}`;
+      window.location.href =
+        URL_CONSTANTS.FRONTEND_BASE_URL +
+        `/template?templateId=${templateId}&userId=${userId}`;
 
-      window.location.href = `http://ipvms.exitest.com/template?templateId=${templateId}&userId=${userId}`;
+      window.location.href = `${URL_CONSTANTS.FRONTEND_BASE_URL}/template?templateId=${templateId}&userId=${userId}`;
     };
     document.addEventListener("DOMContentLoaded", async () => {});
 
@@ -2118,7 +2121,7 @@ async function displayArea() {
       console.log(files, "fillll are");
       let html = `
     
-      <label for="dropzone-file1" class="flex w-full bg-[#EBF3FF80]   border border-[#0052F194]  border-dashed h-14 justify-center gap-1 items-center rounded-md ">
+      <label for="dropzone-file1" class="flex w-full bg-[#EBF3FF80]  cursor-pointer  border border-[#0052F194]  border-dashed h-14 justify-center gap-1 items-center rounded-md ">
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10.125 24.7504C2.86698e-05 25.8754 1.12503 13.5004 10.125 14.6254C6.75003 2.25036 25.875 2.25036 24.75 11.2504C36 7.87536 36 25.8754 25.875 24.7504M12.375 20.2504L18 15.7504M18 15.7504L23.625 20.2504M18 15.7504V32.6254" stroke="#1F2DE3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -2658,7 +2661,7 @@ if (document.getElementById("savesdraft")) {
   document.getElementById("saveasdraft").addEventListener("click", async () => {
     const res = await saveAsDraft();
     setTimeout(() => {
-      window.location.href = "http://ipvms.exitest.com/letters";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
     }, 3000);
   });
 }
@@ -2766,7 +2769,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = "http://ipvms.exitest.com/letters";
+        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 3000);
     }
   } catch (error) {
@@ -2783,7 +2786,7 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     setTimeout(() => {
-      window.location.href = "http://ipvms.exitest.com/letters";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
     }, 2000);
   } finally {
     removeLoading();
@@ -2923,7 +2926,8 @@ const handleSignSwiftCall = async () => {
                   },
                 }).showToast();
                 setTimeout(() => {
-                  window.location.href = "http://ipvms.exitest.com/letters";
+                  window.location.href =
+                    URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
                 }, 2000);
               }
             });
@@ -2976,8 +2980,6 @@ if (document.getElementById("sendLetter")) {
     } else {
       handleSignSwiftCall();
     }
-
-    // window.location.href = "http://ipvms.exitest.com/letters";
   });
 }
 if (document.getElementById("signCheckbox")) {

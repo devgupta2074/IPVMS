@@ -111,8 +111,8 @@ if (!dropDownBtn) {
 
 console.log("upload policy modal", dropDownBtn);
 const makeModal = () => {
-  document.getElementById("modalcontainer").innerHTML += modalHtml;
   const showModal = () => {
+    document.getElementById("modalcontainer").innerHTML += modalHtml;
     const closeModalBtn = document.getElementById("closeModalBtn");
     const modal = document.getElementById("modal");
     console.log("modal is", modal);

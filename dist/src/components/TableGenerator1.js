@@ -14,6 +14,10 @@ var recipientEmail;
 var recipientName;
 var letter_id;
 
+document.addEventListener("DOMContentLoaded", () => {
+  ipvmsuserId = localStorage.getItem("userId");
+});
+
 function truncateString(str, num) {
   if (str.length > num) {
     return str.slice(0, num) + "...";
@@ -597,6 +601,7 @@ export const sortTable = (col) => {
 
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    letter_id = modalId;
     document.getElementById("version-area").classList.add("hidden");
     if (document.getElementById("letters-tab")) {
       document.getElementById("letters-tab").classList.add("hidden");
@@ -880,18 +885,22 @@ const onEditorOpen = () => {
     };
     const pdfBlob = await html2pdf().from(element).output("blob");
     const formData = new FormData();
-    let letterId;
+
     // console.log(email);
     const fileName = "pdfsend" + Date.now() + ".pdf";
     formData.append("file", pdfBlob, fileName);
+    console.log("rrrrecepirnt id is", recipientId);
     formData.append("userId", recipientId);
     formData.append("templateId", templateId);
     formData.append("email", "tapasviarora2002@gmail.com");
-    formData.append("html_data", element.innerHTML.toString());
-    formData.append("letter_id", letterId);
+    formData.append("html_data", element.innerHTML);
+    formData.append("letter_id", letter_id);
+    console.log(ipvmsuserId, "actorrrrrrrrrrr");
+    formData.append("ipvms_userId", ipvmsuserId);
+    console.log("letter id is", letter_id);
     try {
       const response = await axios.post(
-        API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/uploadLetter",
+        API_CONSTANTS.BACKEND_BASE_URL + "/api/file/uploadLetter",
         formData,
         {
           headers: {
@@ -1046,7 +1055,7 @@ const onEditorOpen = () => {
                     API_CONSTANTS.BACKEND_BASE_URL_PROD +
                       "/api/file/upload/updateLetterStatus",
                     {
-                      letterId: letterId,
+                      letterId: letter_id,
                       htmlData: element.innerHTML,
                       recipientId: recipientId,
                       createdBy: ipvmsuserId,

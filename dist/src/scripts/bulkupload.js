@@ -1,4 +1,5 @@
 import { GetAllCategory } from "../api/getAllCategories.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 
 class BulkUpload {
   constructor(
@@ -214,7 +215,7 @@ class BulkUpload {
           const data = { htmlText: htmlData, htmlJson, categoryId, title };
           const axiosRequestArgs = {
             method: "post",
-            url: "http://ipvms-api.exitest.com/api/file/createPolicy",
+            url: API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/createPolicy",
             headers: {
               "Content-Type": "application/json",
             },
@@ -566,7 +567,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("file data is", fileData);
       const updateDocDetails = async () => {
         const result = await axios.post(
-          "http://ipvms-api.exitest.com/api/file/setPolicyDetail",
+          API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/setPolicyDetail",
           {
             docDetail: fileData,
           }

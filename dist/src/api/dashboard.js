@@ -30,7 +30,7 @@ const getQueueLetters = async () => {
   // from local storage
 
   const data = await axios.get(
-    `http://ipvms-api.exitest.com/api/file/letter/${userId}`
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/letter/${userId}`
   );
   const filteredData = data.data.data.filter((item) => {
     return item.status === "PENDING";
@@ -115,7 +115,7 @@ const getQueueLetters = async () => {
         ></use>
       </svg>
       <div class="font-roboto font-normal  text-base text-boulder-400 ">
-      Oops! It seems there are no queue letter  at the moment.
+      You don't have any letter pending to be signed
       </div>
   </div>
     `;

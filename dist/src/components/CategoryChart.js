@@ -1,3 +1,5 @@
+import { API_CONSTANTS } from "../utils/constants.js";
+
 const list = [
   {
     color: "#4485FB",
@@ -108,7 +110,8 @@ const list = [
 function generatecategorydisplayhtml(titlex, count, color, svg) {
   if (count > 0) {
     return ` <div
-      class="flex items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+    onclick="clickoncategory('${titlex}')"
+      class="flex cursor-pointer items-center gap-4 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
       >
       <div class="p-3 bg-[${color}] rounded-full">
       ${svg}
@@ -125,9 +128,15 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
   }
 }
 
+window.clickoncategory = function (titlex) {
+  window.location.href = "http://ipvms.exitest.com/document";
+  localStorage.setItem("category", titlex);
+};
+
 const fetchCategoryCount = async (item) => {
   await fetch(
-    `http://ipvms-api.exitest.com/documents/count/category?category=${item.id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/documents/count/category?category=${item.id}`,
     {
       method: "GET",
       headers: {
@@ -146,7 +155,7 @@ export const fetchCategory = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/documents/count/category`,
     {
       method: "GET",
       headers: {
@@ -252,7 +261,7 @@ export const fetchCategoryZero = async () => {
   const y = [];
 
   const response = fetch(
-    `http://ipvms-api.exitest.com/documents/count/category`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/documents/count/category`,
     {
       method: "GET",
       headers: {

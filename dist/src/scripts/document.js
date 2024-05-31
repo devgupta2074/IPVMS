@@ -1,5 +1,6 @@
 import {
   fetchCategories,
+  removeClr,
   removeHoverButttons,
 } from "../components/Categories.js";
 import { InsertNavbar } from "../components/Navbar.js";
@@ -20,13 +21,37 @@ document.onkeydown = function (event) {
   }
 };
 
-const tableType = {
-  name: "",
-  category: "",
-  pagination: true,
-};
 document.addEventListener("DOMContentLoaded", async () => {
-  fetchTable(tableType);
-  await fetchCategories();
+  await fetchCategories().then(() => {
+    let category = "";
+    console.log(localStorage.getItem("category"));
+    if (localStorage.getItem("category")) {
+      category = localStorage.getItem("category");
+      console.log(document.getElementById(category));
+      if (document.getElementById(category)) {
+        const category_buttons = document.querySelectorAll(
+          "div#category-row > button"
+        );
+        removeClr(category_buttons);
+        document
+          .getElementById(category)
+          .classList.add(
+            "text-[#1F2DE3]",
+            "border-b-[3px]",
+            "border-b-[#1F2DE3]"
+          );
+      }
+
+      localStorage.removeItem("category");
+    }
+
+    const tableType = {
+      name: "",
+      category: category,
+      pagination: true,
+    };
+    fetchTable(tableType);
+  });
+
   // removeHoverButttons();
 });

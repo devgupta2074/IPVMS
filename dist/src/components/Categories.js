@@ -1,11 +1,12 @@
 import { removeLoading, showLoading } from "../scripts/loading.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 import { fetchTable, resetVariables } from "./Table.js";
 
 var amount = "";
 
 export async function fetchCategories() {
   const response = await fetch(
-    "http://ipvms-api.exitest.com/documents/count/category",
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/documents/count/category",
     {
       method: "GET",
       headers: {
@@ -70,7 +71,7 @@ async function addCategoryElements(arr) {
   await arr.forEach((element) => {
     if (element.id != null)
       categoryRow.innerHTML += `
-    <button class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
+    <button id="${element.category}" class =' min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ' >${element.category}</button>
     `;
   });
 
@@ -88,6 +89,7 @@ function addSelectHighlight() {
   );
 
   category_buttons.forEach((e) => {
+    console.log(e, "dev e category button");
     e.addEventListener("click", () => {
       window.event.preventDefault();
       ``;
@@ -112,7 +114,7 @@ function addSelectHighlight() {
   });
 }
 
-function removeClr(elements) {
+export function removeClr(elements) {
   elements.forEach((e) => {
     e.classList.remove(
       "text-[#1F2DE3]",

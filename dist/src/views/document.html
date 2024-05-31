@@ -55,7 +55,7 @@
    .greenhighlight {
      /* From https://css.glass */
 background: rgba(0, 255, 23, 0.49);
-border-radius: 16px;
+
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 backdrop-filter: blur(2px);
 -webkit-backdrop-filter: blur(2px);
@@ -477,7 +477,7 @@ Back
   </button>
   <div id="onlyforblank" class="hidden  rounded-lg shadow-md w-full bg-white mb-5 flex flex-col items-start gap-[24px] self-stretch p-[24px] ">
 
-   <div class="font-roboto font-medium w-full text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
+   <div id="addpolicy" class="font-roboto font-medium w-full text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
     Add Policy
    </div>
    <div class="grid grid-cols-3 w-full gap-5 ">
@@ -488,13 +488,13 @@ Back
         Please enter the name of the policy
       </div>
   </div>
-  <div>
+  <!-- <div>
     <label for="policy-description" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Policy Description</label>
     <input type="text" id="policy-description" class="block w-full p-2 font-normal text-chicago-600 leading-5 border  text-xs  ">
     <div id="policydescription-error" class=" hidden font-normal text-sm text-red-600 mt-1 ">
       Please enter a policy description
     </div>
-</div>
+</div> -->
 
 <div id="addcategory" class="">
   <label for="category" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy Type</label>
@@ -525,7 +525,7 @@ Back
       <div class="sticky top-0 bg-white z-[6999]">
         <div class="flex items-center justify-between p-3 border-b rounded-t ">
           <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
-            New Document
+          
             <!-- <button
             id="modalname"
               type="button"
@@ -646,7 +646,7 @@ Send your Latest Version for Approval
                     </button>
                     <button class="flex items-center">
                   
-                      <input type="color" id="foreColor1" class=" adv-option-button opacity-0 absolute w-8 h-0 "/>
+                      <input type="color" id="foreColor" class=" adv-option-button opacity-0 absolute w-8 h-0 "/>
                       <svg width="28" height="28" viewBox="0 0 28 29" class="w-6 h-6 text-gray-600" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M18.0787 16.8333H9.92134L8.34802 20.7666C8.17085 21.2096 7.74187 21.5 7.26483 21.5C6.43948 21.5 5.87511 20.6664 6.18164 19.9001L12.54 4.73338C12.7172 4.29044 13.1462 4 13.6232 4H14.3768C14.8539 4 15.2829 4.29044 15.46 4.73338L21.8184 19.9001C22.1249 20.6664 21.5605 21.5 20.7352 21.5C20.2582 21.5 19.8292 21.2096 19.652 20.7666L18.0787 16.8333ZM17.1453 14.5L14 7.36583L10.8547 14.5H17.1453Z" fill="#52525B"/>
                         <rect x="3" y="23.5" width="22" height="3" rx="1.5" fill="#2463EB"/>
@@ -666,8 +666,13 @@ Send your Latest Version for Approval
                         <path d="M17.517 21.0398C16.8728 21.0398 16.3505 20.5175 16.3505 19.8733C16.3505 19.2291 16.8728 18.7068 17.517 18.7068H18.6835C19.2963 18.7068 19.9032 18.5861 20.4694 18.3516C21.0356 18.1171 21.5501 17.7733 21.9834 17.34C22.4168 16.9066 22.7605 16.3921 22.995 15.8259C23.2296 15.2597 23.3503 14.6529 23.3503 14.04C23.3503 13.4272 23.2296 12.8203 22.995 12.2541C22.7605 11.6879 22.4168 11.1735 21.9834 10.7401C21.5501 10.3068 21.0356 9.96302 20.4694 9.72849C19.9032 9.49396 19.2963 9.37325 18.6835 9.37325H17.517C16.8728 9.37325 16.3505 8.851 16.3505 8.20676C16.3505 7.56253 16.8728 7.04027 17.517 7.04027L18.6835 7.04027C20.5301 7.05531 22.2959 7.79941 23.5963 9.11049C24.8968 10.4216 25.6265 12.1934 25.6265 14.04C25.6265 15.8867 24.8968 17.6585 23.5963 18.9696C22.2959 20.2807 20.5301 21.0248 18.6835 21.0398H17.517ZM11.6829 19.8733C11.6829 20.5175 11.1606 21.0398 10.5164 21.0398H9.34991C8.4259 21.0473 7.50953 20.8718 6.65367 20.5234C5.79782 20.175 5.01941 19.6606 4.36336 19.0099C3.7073 18.3592 3.18657 17.585 2.83122 16.732C2.47586 15.879 2.29291 14.9641 2.29291 14.04C2.29291 13.116 2.47586 12.2011 2.83122 11.3481C3.18657 10.4951 3.7073 9.72091 4.36336 9.07018C5.01941 8.41944 5.79782 7.90504 6.65367 7.55664C7.50953 7.20824 8.42589 7.03275 9.34991 7.04027L10.5164 7.04027C11.1606 7.04027 11.6829 7.56253 11.6829 8.20676C11.6829 8.851 11.1606 9.37325 10.5164 9.37325H9.34991C8.73706 9.37325 8.13021 9.49396 7.56401 9.72849C6.99781 9.96302 6.48335 10.3068 6.05 10.7401C5.61665 11.1735 5.27289 11.6879 5.03836 12.2541C4.80384 12.8203 4.68313 13.4272 4.68313 14.04C4.68313 14.6529 4.80384 15.2597 5.03837 15.8259C5.27289 16.3921 5.61665 16.9066 6.05 17.34C6.48335 17.7733 6.99781 18.1171 7.56401 18.3516C8.13021 18.5861 8.73706 18.7068 9.34991 18.7068H10.5164C11.1606 18.7068 11.6829 19.2291 11.6829 19.8733ZM18.6827 12.8727C19.3274 12.8727 19.85 13.3953 19.85 14.04C19.85 14.6847 19.3273 15.2073 18.6826 15.2073L9.3507 15.2066C8.7064 15.2066 8.18406 14.6844 8.18384 14.0401C8.18361 13.3954 8.70613 12.8727 9.35078 12.8727H18.6827Z" fill="#52525B"/>
                         </svg>
                         </button> 
-                  
-                        <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <input
+                        type="file"
+                        id="imageUpload"
+                        accept="image/*"
+                        style="display: none"
+                      />
+                        <svg id="uploadButton" width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M6.20835 7.50033C5.76286 7.50033 5.25002 7.91923 5.25002 8.63053V15.4365L8.32811 11.3184C8.36154 11.2737 8.39814 11.2314 8.43763 11.1919C9.57666 10.0529 11.4234 10.0529 12.5624 11.1919C12.5867 11.2161 12.6098 11.2414 12.6318 11.2677L16.798 16.2414L18.0626 14.9836L18.064 14.9822C19.2031 13.8445 21.0488 13.845 22.1874 14.9836C22.2155 15.0117 22.2421 15.0412 22.2672 15.072L22.75 15.665V8.63053C22.75 7.91923 22.2372 7.50033 21.7917 7.50033H6.20835ZM25.0834 8.63053C25.0834 6.80478 23.6934 5.16699 21.7917 5.16699H6.20835C4.30663 5.16699 2.91669 6.80478 2.91669 8.63053V21.5003C2.91669 22.789 3.96136 23.8337 5.25002 23.8337H22.75C24.0387 23.8337 25.0834 22.789 25.0834 21.5003V8.63053ZM22.75 19.3609L20.5054 16.6037C20.2762 16.4062 19.9299 16.4161 19.7125 16.6335L19.7103 16.6357L17.5424 18.792C17.3107 19.0224 16.9931 19.1451 16.6667 19.1302C16.3403 19.1154 16.0351 18.9644 15.8253 18.7139L10.8849 12.8159C10.6712 12.6279 10.3528 12.6228 10.1334 12.8005L5.25002 19.3339V20.3701C5.25002 21.0814 5.76286 21.5003 6.20835 21.5003H21.7917C22.2372 21.5003 22.75 21.0814 22.75 20.3701V19.3609Z" fill="#52525B"/>
                           <path d="M17.5 12.7503C18.466 12.7503 19.25 11.9681 19.25 11.0003C19.25 10.0343 18.466 9.25033 17.5 9.25033C16.534 9.25033 15.75 10.0343 15.75 11.0003C15.75 11.9681 16.534 12.7503 17.5 12.7503Z" fill="#52525B"/>
                           </svg>        

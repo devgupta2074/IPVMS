@@ -2,6 +2,7 @@ import {
   applyChangesFromV1toV2,
   createversion,
 } from "../scripts/versioncontrol.js";
+import { API_CONSTANTS } from "../utils/constants.js";
 import { letterColorMapping } from "../utils/letterstyle.js";
 
 async function ChangeVersion(docid, id) {
@@ -20,7 +21,7 @@ async function ChangeVersion(docid, id) {
   document.getElementById(id).classList.add("bg-zircon-100");
   document.getElementById("container-content-1").contentEditable = false;
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${docid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${docid}`,
     {
       method: "GET",
       headers: {
@@ -38,7 +39,8 @@ async function ChangeVersion(docid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${docid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersions?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -53,7 +55,7 @@ async function ChangeVersion(docid, id) {
       return data.data[0].delta;
     });
   const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getVersionbyID?id=${id}`,
     {
       method: "GET",
       headers: {
@@ -87,7 +89,7 @@ export const fetchVersionsDateWise = async (id) => {
   const docid = id;
   console.log(id, docid);
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {

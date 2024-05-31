@@ -258,7 +258,7 @@ var totalItems;
 //   //   category = "";
 //   // }
 //   const response = await fetch(
-//     `http://ipvms-api.exitest.com/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
+//     API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getpaginateddocuments?page=${currentPage}&size=${pageSize}`,
 //     {
 //       method: "GET",
 //       headers: {
@@ -323,7 +323,7 @@ async function getTemplateInfo(templateId) {
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/user/getUserInfo/${userId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/user/getUserInfo/${userId}`,
     {
       method: "GET",
     }
@@ -651,7 +651,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul
@@ -675,8 +675,22 @@ async function displayArea() {
   </li>`;
     };
 
-    const make_template = (title, id) => {
-      return `<li>
+    const make_template = (title, id, mode, created_by) => {
+      console.log(created_by, "ddddd");
+      const userid = localStorage.getItem("userid");
+      let x = "";
+      if (mode === "STANDARD") {
+        x = `<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">DEFAULT</span>`;
+      }
+      if (mode === "CUSTOM") {
+        x = `<span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">${mode}</span>`;
+      }
+      if (mode === "DRAFT") {
+        x = `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"> ${mode}</span>
+        `;
+      }
+      if (mode != "DRAFT") {
+        return `<li>
       <div
         class="flex items-center p-2 rounded hover:bg-gray-100 "
       >
@@ -685,10 +699,31 @@ async function displayArea() {
         id=${id}
           for="checkbox-item-5"
           class="flex flex-row items-center justify-between w-full ms-2 text-sm font-normal text-chicago-700 rounded "
-          >${title}</label
+          >${title} ${x} </label
         >
+       
       </div>
     </li>`;
+      } else {
+        if (parseInt(userid) === created_by) {
+          return `<li>
+          <div
+            class="flex items-center p-2 rounded hover:bg-gray-100 "
+          >
+           
+            <label
+            id=${id}
+              for="checkbox-item-5"
+              class="flex flex-row items-center justify-between w-full ms-2 text-sm font-normal text-chicago-700 rounded "
+              >${title} ${x} </label
+            >
+           
+          </div>
+        </li>`;
+        } else {
+          return "";
+        }
+      }
     };
 
     async function getAllUsers() {
@@ -720,13 +755,15 @@ async function displayArea() {
       }
     }
     async function getAllTemplates() {
-      const tempresult = await GetAllTemplatesByStatus("STANDARD");
+      const tempresult = await GetAllTemplates();
       document.getElementById("template_option").innerHTML = "";
       console.log(tempresult, "STANDARD TEMPLATES");
       tempresult.data.map((item) => {
         document.getElementById("template_option").innerHTML += make_template(
           item.title,
-          item.id
+          item.id,
+          item.mode,
+          item.created_by
         );
       });
     }
@@ -1041,7 +1078,10 @@ async function displayArea() {
       tempresult.data.map((template) => {
         if (template.mode === "STANDARD") {
           defaulttemplates.push(template);
-        } else if (template.mode === "DRAFT") {
+        } else if (
+          template.mode === "DRAFT" &&
+          parseInt(localStorage.getItem("userid")) == template.created_by
+        ) {
           drafttemplates.push(template);
         } else if (template.mode === "CUSTOM") {
           customtemplates.push(template);
@@ -1325,7 +1365,8 @@ async function displayArea() {
         document.getElementById("area").classList.add("hidden");
 
         const response2 = await fetch(
-          `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+          API_CONSTANTS.BACKEND_BASE_URL_PROD +
+            `/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1381,23 +1422,19 @@ async function displayArea() {
           .getElementById("create-template")
           .addEventListener("click", async function () {
             document.getElementById("policyname-error").classList.add("hidden");
-            document
-              .getElementById("policydescription-error")
-              .classList.add("hidden");
+            // document
+            //   .getElementById("policydescription-error")
+            //   .classList.add("hidden");
             document
               .getElementById("policycategory-error")
               .classList.add("hidden");
             let policyname = document.getElementById("policy-name").value;
-            let policydescription =
-              document.getElementById("policy-description").value;
+            // let policydescription =
+            //   document.getElementById("policy-description").value;
             let policycategory = document.getElementById("category").value;
-            console.log(policycategory, policydescription, policyname);
+            console.log(policycategory, policyname);
 
-            if (
-              policyname !== "" &&
-              policydescription !== "" &&
-              policycategory !== "Select a category"
-            ) {
+            if (policyname !== "" && policycategory !== "Select a category") {
               // document.getElementById("policyname-error").classList.add("hidden");
               // document
               //   .getElementById("policydescription-error")
@@ -1506,7 +1543,9 @@ async function displayArea() {
               console.log(data);
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url:
+                  API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                  "/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -1525,11 +1564,11 @@ async function displayArea() {
                   .getElementById("policyname-error")
                   .classList.remove("hidden");
               }
-              if (policydescription == "") {
-                document
-                  .getElementById("policydescription-error")
-                  .classList.remove("hidden");
-              }
+              // if (policydescription == "") {
+              //   document
+              //     .getElementById("policydescription-error")
+              //     .classList.remove("hidden");
+              // }
               if (policycategory == "Select a category") {
                 document
                   .getElementById("policycategory-error")
@@ -1764,7 +1803,7 @@ async function displayArea() {
               .querySelector("select").value
           );
 
-          var categoryId = document
+          let categoryId = document
             .getElementById(`${file.file.name}category`)
             .querySelector("select").value;
           const getFile = async () => {
@@ -1881,7 +1920,9 @@ async function displayArea() {
                 .getElementsByClassName("docx-wrapper")[0].id = "docx-wrapper";
               const axiosRequestArgs = {
                 method: "post",
-                url: "http://ipvms-api.exitest.com/api/file/uploadTemplate",
+                url:
+                  API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                  "/api/file/uploadTemplate",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: "Bearer " + token,
@@ -2537,7 +2578,7 @@ function addModalOpenCloseFeature() {
  
        <div id="printThis" class="p-6 pt-0  ">
         <div class="relative ">
-        <button onclick="closeLetter(${modalId})"  type="button" class= " absolute top-0 right-0 p-1.5 m-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm  ml-auto inline-flex items-center">
+        <button onclick="closeLetter(${modalId})"  type="button" class= " z-[8000] absolute top-0 right-0 p-1.5 m-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm  ml-auto inline-flex items-center">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
           </svg>
@@ -2591,7 +2632,8 @@ addModalOpenCloseFeature();
 
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -2627,7 +2669,7 @@ const saveAsDraft = async () => {
   try {
     console.log("name", recipientName);
     const res = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/saveLetter",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/saveLetter",
       {
         html_data: htmlData1,
         templateId: templateId,
@@ -2702,7 +2744,7 @@ const handleGeneratePdf = async () => {
 
   try {
     const response = await axios.post(
-      "http://ipvms-api.exitest.com/api/file/uploadLetter",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/uploadLetter",
       formData,
       {
         headers: {
@@ -2798,7 +2840,7 @@ const handleSignSwiftCall = async () => {
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   const fileUpload = await axios.post(
-    "http://ipvms-api.exitest.com/api/file/upload/letterpdf",
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/upload/letterpdf",
     formData,
     {
       headers: {
@@ -2811,7 +2853,8 @@ const handleSignSwiftCall = async () => {
   if (ShareLink) {
     //draft->pending
     await axios.post(
-      "http://ipvms-api.exitest.com/api/file/upload/updateLetterStatus",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+        "/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,

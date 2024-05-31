@@ -12,6 +12,74 @@ let imagesposition = [];
 let userdata;
 
 let htmljson;
+
+let savedRange;
+
+document
+  .getElementById("container-content-1")
+  .addEventListener("mouseup", saveCaretPosition);
+document
+  .getElementById("container-content-1")
+  .addEventListener("keyup", saveCaretPosition);
+document
+  .getElementById("container-content-1")
+  .addEventListener("focus", saveCaretPosition);
+if (document.getElementById("uploadButton")) {
+  document
+    .getElementById("uploadButton")
+    .addEventListener("click", function () {
+      document.getElementById("imageUpload").click();
+    });
+
+  document
+    .getElementById("imageUpload")
+    .addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.style.maxWidth = "100%";
+
+          insertImageAtCaret(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+}
+
+function saveCaretPosition() {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) {
+    savedRange = sel.getRangeAt(0);
+  }
+}
+
+function insertImageAtCaret(img) {
+  if (savedRange) {
+    const range = savedRange.cloneRange();
+    range.deleteContents();
+
+    const frag = document.createDocumentFragment();
+    frag.appendChild(img);
+
+    const node = frag.firstChild;
+    range.insertNode(frag);
+
+    if (node) {
+      range.setStartAfter(node);
+      range.collapse(true);
+
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  } else {
+    document.getElementById("editableDiv").appendChild(img);
+  }
+}
+
 function extractParentText(parentId) {
   console.log("Extracting parent", parentId);
   const parentElement = document.getElementById(parentId);
@@ -252,7 +320,8 @@ export function createversion() {
     localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
     const response = fetch(
-      "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+      API_CONSTANTS.BACKEND_BASE_URL_PROD +
+        "/api/versioncontrol/createDocumentVersion",
       {
         method: "POST",
         headers: {
@@ -393,7 +462,7 @@ async function applyChangesFromV2toV1(id, callback) {
   // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${id}`,
     {
       method: "GET",
       headers: {
@@ -632,7 +701,9 @@ export function applyChangesFromV1toV2withouthighlight(
           console.log(
             v1[v2.changedTags[tagId].id].textContent.split(" ").length,
             v2.changedTags[tagId].textContent.split(" ").length,
-            "hello tap"
+            "hello tap",
+            v1,
+            v2.changedTags[tagId]
           );
 
           tag.textContent = v2.changedTags[tagId].textContent;
@@ -709,7 +780,6 @@ export function applyChangesFromV1toV2withouthighlight(
           tag.remove();
         }
       } else {
-        continue;
       }
     }
   }
@@ -921,7 +991,9 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       childElement.childNodes &&
       childElement.childNodes.length > 0
     ) {
-      childElement.classList.add("greenhighlight");
+      if (!childElement.classList.contains("docx-wrapper")) {
+        childElement.classList.add("greenhighlight");
+      }
     }
   }
   console.log(v1);
@@ -953,7 +1025,10 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           console.log(
             v1[v2.changedTags[tagId].id].textContent.split(" ").length,
             v2.changedTags[tagId].textContent.split(" ").length,
-            "hello tap"
+            "hello tap",
+            v1,
+            v2.changedTags[tagId],
+            v1[v2.changedTags[tagId].id].textContent
           );
 
           tag.textContent = v2.changedTags[tagId].textContent;
@@ -1016,14 +1091,18 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
             false &&
           tag.textContent !== ""
         ) {
-          const removedelement = document.createElement("p");
-          removedelement.classList.add("redhighlight");
+          const removedelement = document.createElement("s");
+
+          removedelement.textContent = v1[v2.removedTags[tagid]].textContent;
+          removedelement.style =
+            v1[v2.removedTags[tagid]].style + "background-color: #ffaaaa;";
+
           tag.parentElement.insertBefore(removedelement, tag);
           console.log(tag.id, "removed");
           console.log(tag.parentElement, "remove remove remove");
           console.log(v2.removedTags[tagid].textContent, "text text text");
           if (tag.parentElement.tagName.toLowerCase() !== "article") {
-            tag.parentElement.classList.add("redhighlight");
+            // tag.parentElement.classList.add("redhighlight");
           }
         }
         if (tag != null) {
@@ -1059,6 +1138,17 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
     }
   }
   // imageLoaded();
+  const paragraphs = document.querySelectorAll("p");
+
+  // Filter for empty <p> elements without any attributes
+
+  const emptyParagraphs = Array.from(paragraphs).filter(
+    (p) => p.innerHTML.trim() === "" && p.attributes.length === 0
+  );
+  // Log each empty <p> element to the console
+  emptyParagraphs.forEach((p) => console.log(p));
+  console.log(emptyParagraphs.length, "emptypsssss");
+  emptyParagraphs.forEach((p) => p.remove());
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -1526,7 +1616,7 @@ async function ChangeVersion(modalid, id) {
   // const modalid = localStorage.getItem("modalid");
   // console.log(modalid, "ddd eug");
   const htmljson = await fetch(
-    `http://ipvms-api.exitest.com/api/file/getFile/${modalid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1545,7 +1635,8 @@ async function ChangeVersion(modalid, id) {
       return htmljson;
     });
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${modalid}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1774,7 +1865,8 @@ async function ChangeVersion(modalid, id) {
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
           const response = fetch(
-            "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              "/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
@@ -1803,7 +1895,8 @@ async function ChangeVersion(modalid, id) {
 
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
-          `http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          API_CONSTANTS.BACKEND_BASE_URL_PROD +
+            `/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1819,7 +1912,7 @@ async function ChangeVersion(modalid, id) {
       return data.data[0].delta;
     });
   const response = fetch(
-    `http://ipvms-api.exitest.com/getVersionbyID?id=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getVersionbyID?id=${id}`,
     {
       method: "GET",
       headers: {
@@ -1853,7 +1946,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    `http://ipvms-api.exitest.com/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -2301,6 +2394,8 @@ export function imageLoaded() {
     container.classList.add("container");
     container.style = "display: inline-block; position:relative;";
 
+    console.log(image.parentNode.childNodes, "image parent child nodes");
+
     image.parentNode.insertBefore(container, image);
     container.appendChild(image);
 
@@ -2423,6 +2518,22 @@ export function imageLoaded() {
       document.removeEventListener("mouseup", stopResize);
     }
   });
+
+  console.log(dynamicImages);
+  // for (var i = 0; i < dynamicImages.length; i++) {
+  //   if (
+  //     dynamicImages[i].parentElement.parentElement.classList.contains(
+  //       "image-container"
+  //     )
+  //   ) {
+  //     const x = dynamicImages[i];
+  //     const y = dynamicImages[i].parentElement;
+  //     const z = dynamicImages[i].parentElement.parentElement.parentElement;
+  //     dynamicImages[i].parentElement.parentElement.parentElement.remove();
+  //     y.appendChild(x);
+  //     z.appendChild(y);
+  //   }
+  // }
 }
 
 function checkDivSizeBack() {

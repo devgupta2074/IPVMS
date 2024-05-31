@@ -95,7 +95,7 @@ async function getPolicyApprovals() {
         ></use>
       </svg>
       <div class="font-roboto font-normal  text-base text-boulder-400 ">
-        Oops!  It seems there are no policies awaiting approval at the moment.
+      You don't have any pending policies for Approval
       </div>
   </div>`;
   } else {
@@ -198,7 +198,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
   const htmljson = documentdata.data.htmljson;
 
   const firstv = await fetch(
-    `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersions?docId=${doc_id}`,
     {
       method: "GET",
       headers: {
@@ -214,9 +215,10 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     });
   localStorage.setItem("sentbyid", sentbyid);
   const response = await fetch(
-    `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-      sentbyid
-    )}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+        sentbyid
+      )}`,
     {
       method: "GET",
       headers: {
@@ -242,7 +244,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
     .getElementById("approve")
     .addEventListener("click", async function () {
       const response = await fetch(
-        `http://ipvms-api.exitest.com/api/approvePolicyApproval?id=${id}`,
+        API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          `/api/approvePolicyApproval?id=${id}`,
         {
           method: "GET",
           headers: {
@@ -261,7 +264,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
           const htmljson = documentdata.data.htmljson;
 
           const firstv = await fetch(
-            `http://ipvms-api.exitest.com/api/versioncontrol/getVersions?docId=${doc_id}`,
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              `/api/versioncontrol/getVersions?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -277,9 +281,10 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
             });
 
           const response = await fetch(
-            `http://ipvms-api.exitest.com/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
-              localStorage.getItem("sentbyid")
-            )}`,
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              `/getLatestVersionbyDocIdandUserId?id=${doc_id}&user=${parseInt(
+                localStorage.getItem("sentbyid")
+              )}`,
             {
               method: "GET",
               headers: {
@@ -317,7 +322,8 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
               );
 
               const response = await fetch(
-                `http://ipvms-api.exitest.com/api/updatePolicyHtmlData`,
+                API_CONSTANTS.BACKEND_BASE_URL_PROD +
+                  `/api/updatePolicyHtmlData`,
                 {
                   method: "POST",
                   headers: {
@@ -367,7 +373,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
       });
       const reason = document.getElementById("message").value;
       const response = await fetch(
-        `http://ipvms-api.exitest.com/api/rejectPolicyApproval`,
+        API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/rejectPolicyApproval`,
         {
           method: "POST",
           headers: {

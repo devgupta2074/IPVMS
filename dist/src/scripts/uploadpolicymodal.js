@@ -111,11 +111,10 @@ if (!dropDownBtn) {
 
 console.log("upload policy modal", dropDownBtn);
 const makeModal = () => {
-  document.getElementById("modalcontainer").innerHTML += modalHtml;
+  document.getElementById("modalcontainer").innerHTML = modalHtml;
+  const closeModalBtn = document.getElementById("closeModalBtn");
   const showModal = () => {
-    const closeModalBtn = document.getElementById("closeModalBtn");
     const modal = document.getElementById("modal");
-    console.log("modal is", modal);
     modal.classList.remove("hidden");
     document.addEventListener("click", function (event) {
       // console.log("event", event.target);
@@ -124,14 +123,13 @@ const makeModal = () => {
         hideModal();
       }
     });
-    closeModalBtn.addEventListener("click", () => {
-      hideModal();
-    });
   };
 
+  closeModalBtn.addEventListener("click", () => {
+    hideModal();
+  });
   const hideModal = () => {
-    document.getElementById("modalcontainer").innerHTML = "";
-    // modal.classList.add("hidden");
+    modal.classList.add("hidden");
   };
 
   dropDownBtn.addEventListener("click", () => {

@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 export const makeForm = (result) => {
   console.log;
   const htmlContent = document.getElementById("container").innerHTML;
-  console.log("html content is", htmlContent);
+
   const handlebarsRegex = /\{\{([^{}]+)\}\}/g;
   //extarction logic
 
@@ -121,11 +121,11 @@ export const makeForm = (result) => {
   const emailElement = (title) => {
     return `<div class="mb-6">
       <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
-      <input required   type="email" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
+      <input required  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"  type="email" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="flowbite.com" required />
       </div>`;
   };
   const numberElement = (title) => {
-    return `<div>
+    return `<div class="mb-6">
       <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">${title}</label>
       <input   required type="number" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" maxlength="10"   required />
   </div>`;
@@ -150,13 +150,13 @@ export const makeForm = (result) => {
   };
   const dateElement = (title) => {
     return `
-      <div class="relative max-w-sm">
-    <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-      </svg>
-    </div>
-    <input  datepicker type="text" id=${title} class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+      <div class="mb-6">
+    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+    ${title}
+  </label>
+    <input type="date" id=${title} name="trip-start"  
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="${title}" required 
+    />
   </div>
       `;
   };
@@ -263,6 +263,12 @@ export const makeForm = (result) => {
     }
     return Array.from(variableNames);
   }
+
+  var highlightedHtml = htmlContent.replace(
+    handlebarsRegex,
+    '<span  style="background-color: yellow; font-weight: bold;">$&</span>'
+  );
+  document.getElementById("container").innerHTML = highlightedHtml;
 
   const variableNames = extractVariableNames(htmlContent);
   console.log(variableNames);
@@ -373,7 +379,7 @@ export const makeForm = (result) => {
     .getElementById("container2")
     .querySelectorAll("input")
     .forEach((item) => {
-      item.addEventListener("change", () => {
+      item.addEventListener("change", async () => {
         console.log("changes");
         console.log("changes happened");
         const inputs = document
@@ -393,7 +399,8 @@ export const makeForm = (result) => {
             console.log("recipient name is", recipientName);
           }
         });
-        var template = Handlebars.compile(htmlData);
+        var template = await Handlebars.compile(htmlData);
+
         // Handlebars.registerHelper("image", function (context) {
         //   var result = `<img src="${context}"  class="object-cover h-48 w-48">`;
         //   return new Handlebars.SafeString(result);
@@ -416,6 +423,14 @@ export const makeForm = (result) => {
         document.getElementById("container").innerHTML = template({
           ...newValues,
         });
+        var k = document
+          .getElementById("container")
+          .innerHTML.replace(
+            handlebarsRegex,
+            '<span  style="background-color: yellow; font-weight: bold;">$&</span>'
+          );
+        document.getElementById("container").innerHTML = k;
+
         // document.querySelector('.container').appendChild(element);
 
         // Object.keys(values).forEach((key) => {
@@ -441,8 +456,16 @@ Handlebars.registerHelper("email", function (context) {
 
 document
   .getElementById("letterform")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && event.target.tagName !== "TEXTAREA") {
+      event.preventDefault();
+    }
+  });
+document
+  .getElementById("letterform")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const res = await saveAsDraft();
     setTimeout(() => {
       window.location.href = "http://ipvms.exitest.com/letters";

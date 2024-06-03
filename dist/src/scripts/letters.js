@@ -23,14 +23,257 @@ import { docsstyle } from "../utils/docxstyle.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
-import { imageLoaded } from "./versioncontrol.js";
+import {
+  applyChangesFromV1toV2,
+  applyChangesFromV1toV2withouthighlight,
+  createversion,
+  imageLoaded,
+  openDash,
+} from "../components/TemplateVersionContorl.js";
+import { letterColorMapping } from "../utils/letterstyle.js";
+import { GetTemplateById } from "../api/getTemplateById.js";
 
 // global variables
 
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
+async function ChangeVersion(docid, id) {
+  console.log("hello world dev");
+  console.log(id, "change version");
+  if (
+    localStorage.getItem("versionid") &&
+    document.getElementById(localStorage.getItem("versionid"))
+  ) {
+    document
+      .getElementById(localStorage.getItem("versionid"))
+      .classList.remove("bg-zircon-100");
+  }
+  localStorage.setItem("versionid", id);
+  console.log(document.getElementById(id), id);
+  document.getElementById(id).classList.add("bg-zircon-100");
+  document.getElementById("container-content-1").contentEditable = false;
+  const htmljson = await fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getTemplateById/${docid}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: "Bearer " + token,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the backend
+      // console.log(data.data.data);
+      document.getElementById("docx-wrapper-1").innerHTML =
+        data.data[0].htmldata;
+      const htmljson = data.data[0].htmljson;
+      return htmljson;
+    });
+  const firstv = await fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      console.log(data.data[0], "firtv");
+      return data.data[0].delta;
+    });
+  const response = fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getVersionbyIDTemplate?id=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      const divElement = "";
+      const v1 = htmljson;
+      const v2 = data[0].delta;
+      console.log(divElement, v1, v2, firstv);
+      applyChangesFromV1toV2(divElement, v1, v2, firstv);
+    });
+}
+export const fetchVersionsDateWise = async (id) => {
+  const y = [];
+  const docid = id;
+  console.log(id, docid);
+  const response = fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/letters/getversions/datewise?docId=${id}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      let runonetimeonly = true;
+      console.log("data datewise", data);
+      if (data.length == 0 && runonetimeonly && id !== 236) {
+        console.log("first verion not  there");
+        runonetimeonly = false;
+
+        createversion();
+        // fetchVersionsDateWise(id);
+      }
+
+      // Parse each element into an array
+      data.forEach((element) => {
+        const arrayOfArrays = element.grouped_values
+          .slice(1, -1)
+          .split("], [")
+          .map((item) => item.split(","));
+        console.log(arrayOfArrays);
+
+        // Step 1: Split the string into an array of arrays
+        const result = arrayOfArrays.map((subArray) => {
+          const id = parseInt(subArray[0]);
+          const version_number = parseFloat(subArray[1]);
+          const doc_id = parseInt(subArray[2]); // Access JSON value
+
+          return {
+            id,
+            version_number,
+            doc_id,
+            time: subArray[3].split(" ")[1].split(":").slice(0, 2).join(":"),
+            created_by: subArray[4],
+          };
+        });
+        console.log("data datewise", result);
+        y.push({ date: element.datew, version: result });
+      });
+
+      console.log("data datewise", y);
+
+      const versiontable = document.getElementById("version-table");
+      versiontable.innerHTML = `
+          <li class="mb-1 ms-4 p-4 bg-zircon-100">
+          <svg class=" absolute mt-2  -start-[0.25rem]  " width="10" height="10" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="3.5" cy="3.5" r="2.5" fill="white" stroke="black"/>
+            </svg>
+            
+           
+           <div class="flex flex-row items-center gap-2 w-full">
+            <p class=" text-base font-normal text-gray-500   ">
+            Current Version
+              </p>
+            
+           </div>
+           
+            
+        </li>`;
+      y.map((item) => {
+        console.log(item);
+
+        var dateObject = new Date(item.date);
+
+        // Get the day, month, and year
+        var day = dateObject.getDate();
+        var month = dateObject.getMonth() + 1; // January is 0, so we add 1
+        var year = dateObject.getFullYear();
+
+        // Pad day and month with leading zeros if necessary
+        day = day < 10 ? "0" + day : day;
+        month = month < 10 ? "0" + month : month;
+
+        // Format the date into "dd-mm-yyyy" format
+        var formattedDate = day + "-" + month + "-" + year;
+        versiontable.innerHTML += `
+            <li class="mb-1 ms-4  ">
+            <svg class=" absolute mt-2  -start-[0.25rem] open-dash-svg  " width="10" height="10" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="3.5" cy="3.5" r="2.5" fill="white" stroke="black"/>
+              </svg>
+              
+                 <div class="flex flex-row items-center gap-6 w-full p-4 hover:bg-gallery-100">
+              <p class=" text-base font-normal text-gray-500    ">
+                ${formattedDate}
+               
+                </p>
+                <button class="open-dash-btn" data-day="${day}" data-month="${month}">
+                <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.9097 0.583008C10.4346 0.583008 10.6974 1.24544 10.3263 1.63286L5.91657 6.23622C5.6865 6.47638 5.3135 6.47638 5.08343 6.23622L0.673729 1.63286C0.302607 1.24544 0.565451 0.583008 1.0903 0.583008L9.9097 0.583008Z" fill="#52525B"/>
+                </svg></button>
+               
+                
+             </div>
+             
+              <ol class="hidden" id="${day}-${month}">
+              
+            </ol>
+              
+          </li>
+            `;
+
+        const dayversions = document.getElementById(`${day}-${month}`);
+        dayversions.innerHTML = ``;
+        item.version.map((version) => {
+          console.log(version, "ffffk");
+          dayversions.innerHTML += `
+          <li id=${
+            version.id
+          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
+         
+            
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
+              version.time
+            }</time>
+           <div class="flex flex-row items-center  gap-1 w-full ">
+            <p class=" text-base font-normal text-gray-500   ">
+            <p class="bg-[${
+              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            }] rounded-full w-5 h-5 flex items-center justify-center">
+             ${version.created_by.charAt(0)}
+             </p>
+           
+              </p>
+              <p>
+               ${version.created_by}
+              </p>
+           </div>
+           
+            
+        </li>
+`;
+        });
+
+        const openDashButtons = document.querySelectorAll(".open-dash-btn");
+        openDashButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const day = button.dataset.day;
+            const month = button.dataset.month;
+            openDash(`${day}-${month}`);
+          });
+        });
+        const versionIdButtons =
+          document.querySelectorAll(".version-id-button");
+        versionIdButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            ChangeVersion(docid, button.id);
+          });
+        });
+      });
+    });
+};
+
 function extractParentText(parentId) {
   const parentElement = document.getElementById(parentId);
   // console.log(parentId);
+  console.log(parentElement, "parent element");
   let textContent = "";
 
   // Iterate over child nodes
@@ -44,12 +287,15 @@ function extractParentText(parentId) {
     }
   } else {
     textContent = parentElement.textContent;
+
+    // textContent = parentElement.textContent;
   }
 
   return textContent;
 }
 export function extractHtmlToJson(divElement) {
   const jsonOutput = {};
+  console.log(divElement, "div element");
   // console.log(document.getElementsByClassName("docx-wrapper-1"));
   const htmlTags = divElement.getElementsByTagName("*");
   console.log(htmlTags, "html");
@@ -75,9 +321,10 @@ export function extractHtmlToJson(divElement) {
     const tagId = tag.id;
     const isImgTag = tag.tagName.toLowerCase() === "img";
     const isLinkTag = tag.tagName.toLowerCase() === "a";
+    console.log(tagId, "tag id");
 
     jsonOutput[tagId] = {
-      textContent: extractParentText(tag.id),
+      textContent: tag.id != "" ? extractParentText(tag.id) : "",
       textcontentcombined: tag.textContent,
       id: tagId,
       parentId: tag.parentElement.id || "root",
@@ -300,7 +547,60 @@ var totalItems;
 // }
 
 async function getTemplateInfo(templateId) {
-  document.getElementById("selectedtemplate").innerHTML = `
+  const documentdata = await GetTemplateById(templateId);
+
+  console.log(documentdata.data[0].title, "documentdata");
+
+  const date = new Date(documentdata.data[0].created_at);
+
+  // Options for formatting
+  const options = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  };
+
+  // Format the date
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  // Replace comma for the desired format
+  const formattedDateString = formattedDate.replace(",", "");
+
+  if (document.getElementById("selectedtemplate")) {
+    document.getElementById("selectedtemplate").innerHTML = `
+
+    <div>
+    <div
+      class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+    >
+      <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+        <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+      </svg>
+  
+      <svg class="w-[260px] h-[150px] cursor-pointer">
+        <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+      </svg>
+    </div>
+    <div 
+    class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+    <div class="text-base overflow-hidden text-ellipsis text-nowrap">${documentdata.data[0].title}</div>
+    <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
+    </div>
+  </div>`;
+  } else {
+    const additionaldetails = document.getElementById("additionaldetails");
+    additionaldetails.innerHTML = ` <div
+    id="userdetails"
+    class="w-full mt-5 p-6 rounded-lg grid grid-cols-2 gap-5 bg-white"
+  >
+   
+  <div id="selectedtemplate" class="flex mt-5">
+ 
+  </div>
+  
+  </div>`;
+    document.getElementById("selectedtemplate").innerHTML = `
+
   <div>
   <div
     class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
@@ -313,13 +613,13 @@ async function getTemplateInfo(templateId) {
       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
     </svg>
   </div>
-  <div
-    class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-  >
-    <div class="text-base">Increment Letter</div>
-    <div class="text-sm">Mar 26, 2023</div>
+  <div 
+  class="bg-white rounded-b-lg p-1 w-[292px] h-8 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center">
+  <div class="text-base overflow-hidden text-ellipsis text-nowrap">${documentdata.data[0].title}</div>
+  <div class="text-sm overflow-hidden text-ellipsis text-nowrap">${formattedDateString}</div>
   </div>
 </div>`;
+  }
 }
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
@@ -336,108 +636,221 @@ async function getUserInfoToDisplay(userId) {
       // Handle the response from the backend
       console.log(result, "hello user changed");
       const additionaldetails = document.getElementById("additionaldetails");
-      additionaldetails.innerHTML = ` <div
-      id="userdetails"
-      class="w-full mt-5 p-6 rounded-lg grid grid-cols-2 gap-5 bg-white"
-    >
-      <div class="flex flex-row gap-6 items-center">
-        <div
-          class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
-        >
-         ${
-           result.first_name.charAt(0).toUpperCase() +
-           result.last_name.charAt(0).toUpperCase()
-         }
-        </div>
-        <div class="font-roboto font-normal text-base leading-6">
-          <div class="text-mineshaft-900">${
-            result.first_name + " " + result.last_name
-          }</div>
-          <div class="text-mineshaft-600">${result.designation}</div>
-        </div>
-      </div>
-      <div
-        class="flex flex-row justify-between items-center font-roboto font-normal text-sm leading-6"
+      if (result) {
+        if (document.getElementById("userdetails")) {
+          const templatedetails =
+            document.getElementById("userdetails").innerHTML;
+          additionaldetails.innerHTML = ` <div
+        id="userdetails"
+        class="w-full mt-5 p-6 rounded-lg grid grid-cols-2 gap-5 bg-white"
       >
-        <div class="flex flex-col gap-1">
-          <p class="text-mineshaft-900 leading-5">Employee ID</p>
-          <p class="text-mineshaft-600 leading-6 text-base">${
-            result.employee_code
-          }</p>
+        <div class="flex flex-row gap-6 items-center">
+          <div
+            class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
+          >
+           ${
+             result.first_name.charAt(0).toUpperCase() +
+             result.last_name.charAt(0).toUpperCase()
+           }
+          </div>
+          <div class="font-roboto font-normal text-base leading-6">
+            <div class="text-mineshaft-900">${
+              result.first_name + " " + result.last_name
+            }</div>
+            <div class="text-mineshaft-600">${result.designation}</div>
+          </div>
         </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-mineshaft-900 leading-5">Work email</p>
-          <p class="text-mineshaft-600 leading-6 text-base">
-            ${result.email}
-          </p>
-        </div>
-        <div class="flex flex-col gap-1">
-          <p class="text-mineshaft-900">Phone Number</p>
-          <p class="text-mineshaft-600 leading-6 text-base">
-           ${result.mobile_number}
-          </p>
-        </div>
-      </div>
-    </div>
-    <div id="selectedtemplate" class="flex mt-5">
-   
-    </div>
-    <div class="mt-10 pt-5 border-t">
-      <div class="">
         <div
-          class="font-roboto text-mineshaft-900 font-semibold text-lg leading-5"
+          class="flex flex-row justify-between items-center font-roboto font-normal text-sm leading-6"
         >
-          Sent Letters
-        </div>
-        <span
-          class="font-robot text-mineshaft-600 text-sm font-normal leading-4"
-          >Here you can find all the letters issued by the company.</span
-        >
-      </div>
-      <div
-        id="olduserletters"
-        class="flex flex-row gap-5 overflow-x-scroll no-scrollbar mt-5"
-      >
-        <div>
-          <div
-            class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-          >
-            <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-              <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-            </svg>
-
-            <svg class="w-[260px] h-[150px] cursor-pointer">
-              <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-            </svg>
+          <div class="flex flex-col gap-1">
+            <p class="text-mineshaft-900 leading-5">Employee ID</p>
+            <p class="text-mineshaft-600 leading-6 text-base">${
+              result.employee_code
+            }</p>
           </div>
-          <div
-            class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-          >
-            <div class="text-base">Increment Letter</div>
-            <div class="text-sm">Mar 26, 2023</div>
+          <div class="flex flex-col gap-1">
+            <p class="text-mineshaft-900 leading-5">Work email</p>
+            <p class="text-mineshaft-600 leading-6 text-base">
+              ${result.email}
+            </p>
           </div>
-        </div>
-        <div>
-          <div
-            class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-          >
-            <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-              <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-            </svg>
-
-            <svg class="w-[260px] h-[150px] cursor-pointer">
-              <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-            </svg>
-          </div>
-          <div
-            class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-          >
-            <div class="text-base">Increment Letter</div>
-            <div class="text-sm">Mar 26, 2023</div>
+          <div class="flex flex-col gap-1">
+            <p class="text-mineshaft-900">Phone Number</p>
+            <p class="text-mineshaft-600 leading-6 text-base">
+             ${result.mobile_number}
+            </p>
           </div>
         </div>
       </div>
-    </div>`;
+      <div id="selectedtemplate" class="flex mt-5">
+     
+      </div>
+      <div class="mt-10 pt-5 border-t">
+        <div class="">
+          <div
+            class="font-roboto text-mineshaft-900 font-semibold text-lg leading-5"
+          >
+            Sent Letters
+          </div>
+          <span
+            class="font-robot text-mineshaft-600 text-sm font-normal leading-4"
+            >Here you can find all the letters issued by the company.</span
+          >
+        </div>
+        <div
+          id="olduserletters"
+          class="flex flex-row gap-5 overflow-x-scroll no-scrollbar mt-5"
+        >
+          <div>
+            <div
+              class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+            >
+              <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+              </svg>
+  
+              <svg class="w-[260px] h-[150px] cursor-pointer">
+                <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+              </svg>
+            </div>
+            <div
+              class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+            >
+              <div class="text-base">Increment Letter</div>
+              <div class="text-sm">Mar 26, 2023</div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+            >
+              <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+              </svg>
+  
+              <svg class="w-[260px] h-[150px] cursor-pointer">
+                <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+              </svg>
+            </div>
+            <div
+              class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+            >
+              <div class="text-base">Increment Letter</div>
+              <div class="text-sm">Mar 26, 2023</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+          document.getElementById("selectedtemplate").innerHTML =
+            templatedetails;
+        } else {
+          additionaldetails.innerHTML = ` <div
+          id="userdetails"
+          class="w-full mt-5 p-6 rounded-lg grid grid-cols-2 gap-5 bg-white"
+        >
+          <div class="flex flex-row gap-6 items-center">
+            <div
+              class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
+            >
+             ${
+               result.first_name.charAt(0).toUpperCase() +
+               result.last_name.charAt(0).toUpperCase()
+             }
+            </div>
+            <div class="font-roboto font-normal text-base leading-6">
+              <div class="text-mineshaft-900">${
+                result.first_name + " " + result.last_name
+              }</div>
+              <div class="text-mineshaft-600">${result.designation}</div>
+            </div>
+          </div>
+          <div
+            class="flex flex-row justify-between items-center font-roboto font-normal text-sm leading-6"
+          >
+            <div class="flex flex-col gap-1">
+              <p class="text-mineshaft-900 leading-5">Employee ID</p>
+              <p class="text-mineshaft-600 leading-6 text-base">${
+                result.employee_code
+              }</p>
+            </div>
+            <div class="flex flex-col gap-1">
+              <p class="text-mineshaft-900 leading-5">Work email</p>
+              <p class="text-mineshaft-600 leading-6 text-base">
+                ${result.email}
+              </p>
+            </div>
+            <div class="flex flex-col gap-1">
+              <p class="text-mineshaft-900">Phone Number</p>
+              <p class="text-mineshaft-600 leading-6 text-base">
+               ${result.mobile_number}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="selectedtemplate" class="flex mt-5">
+       
+        </div>
+        <div class="mt-10 pt-5 border-t">
+          <div class="">
+            <div
+              class="font-roboto text-mineshaft-900 font-semibold text-lg leading-5"
+            >
+              Sent Letters
+            </div>
+            <span
+              class="font-robot text-mineshaft-600 text-sm font-normal leading-4"
+              >Here you can find all the letters issued by the company.</span
+            >
+          </div>
+          <div
+            id="olduserletters"
+            class="flex flex-row gap-5 overflow-x-scroll no-scrollbar mt-5"
+          >
+            <div>
+              <div
+                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+              >
+                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+                </svg>
+    
+                <svg class="w-[260px] h-[150px] cursor-pointer">
+                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+                </svg>
+              </div>
+              <div
+                class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+              >
+                <div class="text-base">Increment Letter</div>
+                <div class="text-sm">Mar 26, 2023</div>
+              </div>
+            </div>
+            <div>
+              <div
+                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+              >
+                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+                </svg>
+    
+                <svg class="w-[260px] h-[150px] cursor-pointer">
+                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+                </svg>
+              </div>
+              <div
+                class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
+              >
+                <div class="text-base">Increment Letter</div>
+                <div class="text-sm">Mar 26, 2023</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        }
+      } else {
+      }
+
       console.log("lololololollololol");
       // document.getElementById("loading").style = "display:none";
     })
@@ -1332,13 +1745,17 @@ async function displayArea() {
         document.getElementById("sectiondetails").classList.add("hidden");
         document.getElementById("letters-tab").classList.add("hidden");
         document.getElementById("version-area").classList.remove("hidden");
+        document.getElementById("review").classList.add("hidden");
+        if (localStorage.getItem("isAdmin") === "true") {
+          document.getElementById("approve").classList.remove("hidden");
+        }
 
         if (modalId == 0) {
           document.getElementById("onlyforblank").classList.remove("hidden");
           document.getElementById("version-area").classList.add("hidden");
           document.getElementById("create-template").classList.remove("hidden");
           document.getElementById("review").classList.add("hidden");
-          document.getElementById("json").classList.add("hidden");
+          document.getElementById("json-letter").classList.add("hidden");
           document.getElementById("container-content-1").contentEditable = true;
           modalId = 37;
 
@@ -1386,7 +1803,7 @@ async function displayArea() {
                 data.data.title;
             }
 
-            // fetchVersionsDateWise(modalId);
+            fetchVersionsDateWise(modalId);
             // Handle the response from the backend
             console.log(data.data, "fffffkbnjb ");
             document.getElementById("docx-wrapper-1").innerHTML =
@@ -1401,6 +1818,9 @@ async function displayArea() {
       };
       window.closeEditor = function () {
         console.log("fniefniefnir");
+        if (localStorage.getItem("isAdmin") === "true") {
+          document.getElementById("approve").classList.add("hidden");
+        }
 
         document.getElementById("extralarge-modal").classList.add("hidden");
         document.getElementById("area").classList.remove("hidden");
@@ -1410,16 +1830,115 @@ async function displayArea() {
           !document.getElementById("onlyforblank").classList.contains("hidden")
         ) {
           document.getElementById("onlyforblank").classList.add("hidden");
-          document.getElementById("json").textContent =
+          document.getElementById("json-letter").textContent =
             "Save a Version as Draft";
           document.getElementById("version-area").classList.remove("hidden");
           document.getElementById("create-template").classList.add("hidden");
-          document.getElementById("json").classList.remove("hidden");
+          document.getElementById("json-letter").classList.remove("hidden");
         }
-        document.getElementById("policy-detail").classList.remove("hidden");
-        document.getElementById("policy-table").classList.remove("hidden");
-        document.getElementById("pagination-area").classList.remove("hidden");
       };
+
+      document
+        .getElementById("approve")
+        .addEventListener("click", async function () {
+          const doc_id = localStorage.getItem("modalId");
+          // const response = await fetch(
+          //   API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          //     `/api/approvePolicyApproval?id=${id}`,
+          //   {
+          //     method: "GET",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //   }
+          // )
+          //   .then((response) => response.json())
+          //   .then(async (data) => {
+          const documentdata = await GetTemplateById(doc_id);
+          console.log(documentdata, "xdocumentdata");
+          document.getElementById("docx-wrapper-1").innerHTML =
+            documentdata.data[0].htmldata;
+          // document.getElementById("doc_title").textContent =
+          //   documentdata.data[0].title;
+          const htmljson = documentdata.data[0].htmljson;
+          let latestdelta;
+
+          const firstv = await fetch(
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              `/api/versioncontrol/getVersionsTemplate?docId=${doc_id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              console.log(data.data[0], "firtv");
+              latestdelta = data.data.at(-1).delta;
+              return data.data[0].delta;
+            });
+
+          const divElement = "";
+          const v1 = htmljson;
+
+          const v2 = latestdelta;
+          console.log(divElement, v1, v2, firstv);
+          const x = applyChangesFromV1toV2withouthighlight(
+            divElement,
+            v1,
+            v2,
+            firstv
+          );
+          console.log(x);
+          const htmlJson = extractHtmlToJson(
+            document.getElementById("docx-wrapper-1")
+          );
+
+          console.log(
+            document.getElementById("docx-wrapper-1"),
+            htmlJson,
+            "devvv"
+          );
+
+          const response = await fetch(
+            API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/updateTemplateHtmlData`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: doc_id,
+                htmldata: document.getElementById("docx-wrapper-1").innerHTML,
+                htmlJson: htmlJson,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.href =
+                URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+            });
+
+          // document.getElementById("toast-heading").innerText =
+          //   "Policy Approved and Published";
+          // window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+          // document.getElementById("toast-text").innerText =
+          //   "You have approved and published the policy. You can now view the policy on the policy table";
+          // document.getElementById("toast-default").classList.remove("hidden");
+          // document.getElementById("extralarge-modal").classList.add("hidden");
+          // document.getElementById("dashboardarea").classList.remove("hidden");
+          // document.getElementById("dashboardlist").classList.remove("hidden");
+          // document.getElementById("dashboardtable").classList.remove("hidden");
+          // setTimeout(async () => {
+          //   await getPolicyApprovals();
+          //   document.getElementById("toast-default").classList.add("hidden");
+          // }, 2000);
+        });
+
       if (document.getElementById("create-template")) {
         document
           .getElementById("create-template")

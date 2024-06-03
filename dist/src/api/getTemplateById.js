@@ -2,8 +2,8 @@ import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 import { makeRequest } from "./apiRequest.js";
 
 const apiUrl =
-  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_DOCUMENT_BY_ID;
-export async function GetDocumentById(id) {
+  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_TEMPLATE_BY_ID;
+export async function GetTemplateById(id) {
   const requestOptions = {
     method: API_CONSTANTS.GET,
     headers: {

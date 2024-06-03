@@ -4,7 +4,7 @@ const API_CONSTANTS = {
   PUT: "PUT",
   PATCH: "PATCH",
   DELETE: "DELETE",
-  BACKEND_BASE_URL: "http://localhost:5001",
+  BACKEND_BASE_URL: "http://ipvms-api.exitest.com",
   BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
   TOKEN: "token",
 };
@@ -84,11 +84,12 @@ const ROUTES_CONSTANTS = {
   SET_TO_APPROVE: "/api/setDocumentToApprove",
   GET_POLICY_APPROVAL: "/getPolicyApprovalsByUserId",
   GET_POLICY_APPROVAL_USER_SENT: "/getPolicyApprovalsUserSent",
-  GET_DOCUMENT_BY_ID: "/api/file/getFile/",
+  GET_DOCUMENT_BY_ID: "/api/file/getFile",
   DELETE_TEMPLATE: "/deleteTemplate",
   DELETE_LETTER_MODAL: "/api/file/deleteLetter",
   ACTIVATE_POLICY: "/api/activepolicy",
   DEACTIVATE_POLICY: "/api/deactivatepolicy",
+  GET_TEMPLATE_BY_ID: "/api/file/getTemplateById",
 };
 export const style = `<style>
 .docx-wrapper {  padding: 30px; padding-bottom: 0px; display: flex; flex-flow: column; align-items: center; } 

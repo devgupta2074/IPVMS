@@ -557,6 +557,8 @@ const handleGeneratePdf = async () => {
   formData.append("html_data", element.innerHTML.toString());
   formData.append("letter_id", letterId);
   formData.append("ipvms_userId", ipvmsuserId);
+  formData.append("recipient_name", recipientName);
+  formData.append("recipient_email", recipientEmail);
   try {
     const response = await axios.post(
       API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/uploadLetter",

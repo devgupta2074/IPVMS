@@ -2627,12 +2627,7 @@ async function displayArea() {
         }).showToast();
         // console.log(args);
         setTimeout(() => {
-          document.getElementById("modalcontainer").innerHTML = modalHtml;
-          resetModal();
-          const closeModalBtn = document.getElementById("closeModalBtn");
-          closeModalBtn.addEventListener("click", () => {
-            hideModal();
-          });
+          window.location.reload();
         }, 3000);
       }
     };
@@ -3296,6 +3291,8 @@ const handleGeneratePdf = async () => {
   formData.append("email", "tapasviarora2002@gmail.com");
   formData.append("html_data", element.innerHTML.toString());
   formData.append("letter_id", letterId);
+  formData.append("recipient_name", recipientName);
+  formData.append("recipient_email", recipientEmail);
 
   try {
     const response = await axios.post(

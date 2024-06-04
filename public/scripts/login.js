@@ -52,7 +52,7 @@ async function SignIn() {
           console.log(data);
           // launch_toast(data.message, TOAST_COLORS.SUCCESS, TOAST_ICONS.SUCCESS);
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
-          // redirect(VIEWS_CONSTANTS.DASHBOARD);
+          redirect(VIEWS_CONSTANTS.DASHBOARD);
         } else if (data?.statusCode === 318) {
           localStorage.setItem(API_CONSTANTS.TOKEN, data.token);
           redirect(VIEWS_CONSTANTS.ACCOUNT_SETUP);

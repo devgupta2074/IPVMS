@@ -135,8 +135,9 @@ const makeModal = () => {
     closeModalBtn.addEventListener("click", () => {
       hideModal();
     });
-    const hideModal = () => {
+    window.hideModal = () => {
       document.getElementById("modalcontainer").innerHTML = modalHtml;
+
       resetModal();
       const closeModalBtn = document.getElementById("closeModalBtn");
       closeModalBtn.addEventListener("click", () => {

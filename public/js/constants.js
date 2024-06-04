@@ -4,8 +4,8 @@ const API_CONSTANTS = {
   PUT: "PUT",
   PATCH: "PATCH",
   DELETE: "DELETE",
-  BACKEND_BASE_URL: "http://ipvms-api.exitest.com",
-  BACKEND_BASE_URL_PROD: "http://ipvms-api.exitest.com",
+  BACKEND_BASE_URL: "http://localhost:5001",
+  BACKEND_BASE_URL_PROD: "http://localhost:5001",
   TOKEN: "token",
 };
 const URL_CONSTANTS = {
@@ -46,7 +46,6 @@ const LOGIN_CONSTANTS = {
 const VIEWS_CONSTANTS = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
-
   FORGET_PASSWORD: "/forgotpassword",
   EMAIL_SENT: "/emailsent",
   RESET_PASSWORD: "/resetpassword",

@@ -237,7 +237,7 @@ export const fetchVersionsDateWise = async (id) => {
             <p class="bg-[${
               letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
-             ${version.created_by.charAt(0)}
+             ${version.created_by.charAt(0).toUpperCase()}
              </p>
            
               </p>

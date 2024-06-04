@@ -1,3 +1,5 @@
+import { resetModal } from "./uploadpolicy1.js";
+
 export const modalHtml = `<div id="container-html1" class="hidden">
 <!--  this will be hidden for rendering docx  -->
 </div>
@@ -89,8 +91,11 @@ class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-
     <div class="w-full h-full flex justify-center items-center">
       <button
         id="uploadbtn"
-        class="bg-[#1F2DE3] border rounded-md px-1 py-1 w-28 h-12 text-white font-medium text-base"
+        class="bg-[#1F2DE3] border rounded-md px-1 py-1 w-28 h-12 text-white font-medium text-base
+         disabled:opacity-55
+        "
         disabled
+        
       >
         Upload
       </button>
@@ -111,30 +116,40 @@ if (!dropDownBtn) {
 
 console.log("upload policy modal", dropDownBtn);
 const makeModal = () => {
-  document.getElementById("modalcontainer").innerHTML = modalHtml;
-  const closeModalBtn = document.getElementById("closeModalBtn");
-  const showModal = () => {
-    const modal = document.getElementById("modal");
-    modal.classList.remove("hidden");
-    document.addEventListener("click", function (event) {
-      // console.log("event", event.target);
-      if (event.target.classList.contains("backdrop")) {
-        console.log("hiddee modal");
-        hideModal();
-      }
+  if (document.getElementById("modalcontainer")) {
+    document.getElementById("modalcontainer").innerHTML = modalHtml;
+
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const showModal = () => {
+      const modal = document.getElementById("modal");
+      modal.classList.remove("hidden");
+      document.addEventListener("click", function (event) {
+        // console.log("event", event.target);
+        if (event.target.classList.contains("backdrop")) {
+          console.log("hiddee modal");
+          hideModal();
+        }
+      });
+    };
+
+    closeModalBtn.addEventListener("click", () => {
+      hideModal();
     });
-  };
+    const hideModal = () => {
+      document.getElementById("modalcontainer").innerHTML = modalHtml;
+      resetModal();
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      closeModalBtn.addEventListener("click", () => {
+        hideModal();
+      });
+    };
 
-  closeModalBtn.addEventListener("click", () => {
-    hideModal();
-  });
-  const hideModal = () => {
-    modal.classList.add("hidden");
-  };
-
-  dropDownBtn.addEventListener("click", () => {
-    showModal();
-    console.log("modal opened");
-  });
+    if (dropDownBtn) {
+      dropDownBtn.addEventListener("click", () => {
+        showModal();
+        console.log("modal opened");
+      });
+    }
+  }
 };
 makeModal();

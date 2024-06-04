@@ -79,7 +79,7 @@ const NavBar = `
  
 </div>
 </aside>
-<div id="notify"></div>
+
 <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
 <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
 <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
@@ -89,11 +89,12 @@ const NavBar = `
   </svg>
 </div>
 <div class="flex items-center justify-center gap-5 pr-10">
-<button onClick="notificationHandler()">
-  <svg class="h-6 w-6 ">
+<button id="btn" onClick="notificationHandler()">
+  <svg id="btn1" class="h-6 w-6 ">
     <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
   </svg>
 </button> 
+
   <figure class=" ">
     <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
   </figure>
@@ -121,9 +122,9 @@ const NavBar = `
   <!-- Dropdown menu -->
   </div>
 </div>
-<div id=""notificationContainer">
-</div>
+
 </header>
+
 
   `;
 
@@ -154,6 +155,9 @@ export async function InsertNavbar() {
   const navcomp = document.createElement("div");
   navcomp.id = "navbar-removed";
   navcomp.innerHTML = NavBar;
+  const notificationContainer = document.createElement("div");
+  notificationContainer.id = "notificationContainer";
+  document.body.appendChild(notificationContainer);
 
   body.insertBefore(navcomp, body.firstChild);
   const parentElement = document.getElementsByTagName("body")[0];
@@ -170,11 +174,10 @@ export async function InsertNavbar() {
     }
     // Remove the to-be-deleted element
     parentElement.removeChild(toBeDeletedElement);
-    document.getElementById(
-      "notify"
-    ).innerHTML += `<div id="notificationContainer"></div>`;
+
     insertNotification(userdata.data.id);
   }
+
   var url = window.location.pathname;
 
   // Extracting just the word "dashboard"
@@ -402,11 +405,11 @@ export async function InsertNavbar() {
       modal.style.display = "none";
     });
   }
-  window.addEventListener("click", function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  });
+  // window.addEventListener("click", function (event) {
+  //   if (event.target == modal) {
+  //     modal.style.display = "none";
+  //   }
+  // });
 }
 
 // <div class="tooltip">

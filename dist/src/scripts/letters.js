@@ -1439,13 +1439,13 @@ async function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm text-nowrap " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
     ></use>
   </svg>
-  Upload Letter
+  Upload Template
 </button>
   <button
     onclick="openlettereditor(${0})"

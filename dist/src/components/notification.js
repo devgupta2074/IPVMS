@@ -42,12 +42,6 @@ const messageHtml = (message) => {
     <p tabindex="0" class="focus:outline-none text-sm leading-none">
       <span class="text-indigo-700">${message}</span>
     </p>
-    <p
-      tabindex="0"
-      class="focus:outline-none text-xs leading-3 pt-1 text-gray-500"
-    >
-      2 hours ago
-    </p>
   </div>
 </div>
 `;

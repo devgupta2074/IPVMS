@@ -1012,7 +1012,7 @@ const onEditorOpen = () => {
     const ShareLink = fileUpload.data.url;
     const email = localStorage.getItem("email");
     if (fileUpload) {
-      fetch("http://localhost:3000/api/users/findUser", {
+      fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -1041,15 +1041,18 @@ const onEditorOpen = () => {
           } else {
             console.log("data", data);
             const signSwiftId = data.user.customerId;
-            fetch("http://localhost:3000/api/document/uploadDocument", {
-              method: "POST",
-              body: JSON.stringify({
-                userId: data.user.customerId,
-                ShareLink: ShareLink,
-                title: title,
-              }),
-              mode: "cors",
-            })
+            fetch(
+              "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+              {
+                method: "POST",
+                body: JSON.stringify({
+                  userId: data.user.customerId,
+                  ShareLink: ShareLink,
+                  title: title,
+                }),
+                mode: "cors",
+              }
+            )
               .then((response) => response.json())
               .then(async (data) => {
                 removeLoading();

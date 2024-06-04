@@ -73,13 +73,21 @@ const docCard = (title, created_by, created_at, id, index, type) => {
       <td class="w-28">${created_by}</td>
       <td class="w-28">
         <div class="flex gap-6 justify-center">      
-          <a href="/policydownload/${id}" target="_blank" >
+          <a onClick="handleParent(event)" href="/policydownload/${id}" target="_blank" >
             <svg id="download" class="h-6 w-4">
               <use
                 xlink:href="/assets/icons/icon.svg#download"
               ></use>
             </svg>
           </a>
+          <button
+          onclick="openModal(${id})" >
+            <svg id="view" class="h-6 w-6">
+              <use
+                xlink:href="/assets/icons/icon.svg#view"
+              ></use>
+            </svg>
+          </button>
         </div>
       </td>
     </tr>
@@ -705,6 +713,9 @@ function addEditorOpenCloseFeature() {
 }
 
 function addModalOpenCloseFeature() {
+  window.handleParent = function (event) {
+    event.stopPropagation();
+  };
   window.openModal = async function (modalId) {
     console.log(modalId, "modal id");
     document.getElementById(modalId).style.display = "block";

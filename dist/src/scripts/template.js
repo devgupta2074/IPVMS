@@ -531,7 +531,7 @@ const handleGeneratePdf = async () => {
     margin: 0,
     filename: "Contrato.pdf",
     image: {
-      type: "",
+      type: "jpeg",
       quality: 0.98,
     },
     html2canvas: {
@@ -545,7 +545,7 @@ const handleGeneratePdf = async () => {
     },
     pagebreak: { mode: "avoid-all", after: "section" },
   };
-  const pdfBlob = await html2pdf().from(element).output("blob");
+  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
   const formData = new FormData();
   let letterId;
   console.log(email);
@@ -635,7 +635,7 @@ const handleSignSwiftCall = async () => {
     filename: "Contrato.pdf",
     image: {
       type: "",
-      quality: 0.98,
+      quality: 2,
     },
     html2canvas: {
       scale: 2,

@@ -382,10 +382,26 @@ function addCategorySubmit() {
       document.getElementById("status").innerHTML = `
       <p id="success" class=" text-green-300" >Category created successfully.</p>
       `;
+      Toastify({
+        text: "Category Added  succesfully",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
 
       setTimeout(() => {
         document.getElementById("status").innerHTML = `
        `;
+        const modal = document.getElementById("Categorymodal");
+        console.log(modal);
+        modal.classList.add("hidden");
+        inputfield.reset();
       }, 2000);
     } else {
       document.getElementById(

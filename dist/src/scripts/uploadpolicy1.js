@@ -1,5 +1,6 @@
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { API_CONSTANTS } from "../utils/constants.js";
+import { modalHtml } from "./uploadpolicymodal.js";
 import {
   assignIDsToElements,
   handleChanges,
@@ -8,7 +9,6 @@ import {
 
 var uploadfiles;
 var category = [];
-
 var filesUploaded = [];
 
 const afterinputhtml = (files, categoryElement) => {
@@ -284,7 +284,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log(files);
         filesUploaded = Array.from(files);
         console.log("files are", files);
-
         uploadFilesListUi(categoryElement);
         document.getElementById("uploadbtn").disabled = false;
         document
@@ -854,8 +853,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   const onUploadComplete = (args) => {
     console.log("all file uploaded success");
-    // upload completed
     filesUploaded = args;
+    Toastify({
+      text: "All files uploaded successfully",
+      duration: 3000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+    console.log(args);
+    setTimeout(() => {
+      document.getElementById("modalcontainer").innerHTML = modalHtml;
+      resetModal();
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      closeModalBtn.addEventListener("click", () => {
+        hideModal();
+      });
+    }, 3000);
   };
 
   //   document.getElementById("ifile").addEventListener("change", () => {
@@ -897,8 +916,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("uploadbtn").addEventListener("click", () => {
       console.log("upload");
       if (filesUploaded.length === 0) {
+        document.getElementById("upload-error").style.display = "block";
         document.getElementById("uploadbtn").disabled = true;
-        document.getElementById("upload-error").style = "display:block";
       } else {
         document.getElementById("upload-error").style = "display:hidden";
 
@@ -934,6 +953,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         if (flag) {
           document.getElementById("uploadbtn").classList.add("hidden");
+
           handleUpload();
         }
       }
@@ -942,3 +962,278 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 //error on not choosing category
+export const resetModal = async () => {
+  filesUploaded = [];
+
+  const onUpdateEvent = ({
+    IN_PROGRESS,
+    IN_QUEUE,
+    FAILED_UPLOADS,
+    COMPLETED_UPLOADS,
+  }) => {
+    [
+      ...IN_PROGRESS.values(),
+      ...IN_QUEUE.values(),
+      ...FAILED_UPLOADS.values(),
+      ...COMPLETED_UPLOADS.values(),
+    ].forEach((file) => {
+      console.log(file, "file name");
+      document.getElementById(`${file.file.name}status`).innerHTML =
+        file.status === "FAILED"
+          ? `<div class="text-black font-light text-xs flex justify-center items-center gap-2">Failed
+          <svg
+                class="w-3 h-3"
+                fill="none"
+                class="text-red-500"
+                stroke="red"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>  
+          </div>`
+          : file.status === "SUCCESS"
+          ? `<div class="flex gap-2">
+          <p class="text-black text-xs font-light">Success</p>
+          <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+          <span class="sr-only">Success</span>
+          </div>
+          `
+          : `
+          <div role="status">
+              <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+              </svg>
+              <span class="sr-only">Loading...</span>
+          </div>`;
+    });
+    if (IN_PROGRESS.size == 0 && IN_QUEUE.size === 0) {
+      Toastify({
+        text: "All files uploaded successfully",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+      // console.log(args);
+      setTimeout(() => {
+        document.getElementById("modalcontainer").innerHTML = modalHtml;
+        resetModal();
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        closeModalBtn.addEventListener("click", () => {
+          hideModal();
+        });
+      }, 3000);
+    }
+  };
+  const onUploadComplete = (args) => {
+    console.log("all file uploaded success");
+    filesUploaded = args;
+  };
+  const handleUpload = async () => {
+    const upload = new BulkUpload(5, onUpdateEvent, onUploadComplete, 100);
+    // fileUploaded
+    console.log(filesUploaded, "filesUploaded are");
+    upload.startUpload(filesUploaded);
+    // const resHtml = await renderDocx(file[0], "container-html1");
+
+    // // dummy value
+    // //   const categoryId = 1;
+    // const htmlJson = "";
+    // await CreatePolicy(resHtml, htmlJson, catId, title);
+    // console.log("results");
+  };
+  const res = await GetAllCategory();
+  category = res?.data;
+  let categoryElement = `
+    <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
+      <option  class="flex justify-center items-center" selected>Choose Category</option>
+    `;
+
+  category?.map((item) => {
+    categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
+  });
+  categoryElement += `</select>
+  <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
+  `;
+  if (document.getElementById("dropzone-file")) {
+    document
+      .getElementById("dropzone-file")
+      .addEventListener("change", (event) => {
+        const files = event.target.files;
+        console.log(files);
+        filesUploaded = Array.from(files);
+        console.log("files are", files);
+        uploadFilesListUi(categoryElement);
+        document.getElementById("uploadbtn").disabled = false;
+        document
+          .getElementById("dropzone-file1")
+          .addEventListener("change", (event) => {
+            let newFiles = event.target.files;
+            newFiles = Array.from(newFiles);
+            filesUploaded = filesUploaded.concat(newFiles);
+            newFiles.map((item) => {
+              document.getElementById(
+                "file-list"
+              ).innerHTML += `<div class="flex flex-row gap-3">
+  <div
+    class="flex flex-row   justify-between bg-[#F7F7F7] w-96 px-4 py-5  rounded-md  h-10 items-center"
+  >
+        <div class="flex font-normal text-[#5D5D5D] text-sm gap-3 flex-row ">
+          <span>
+            <svg
+              width="13"
+              height="18"
+              viewBox="0 0 13 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g clip-path="url(#clip0_1531_13314)">
+                <path
+                  d="M12.8571 4.93013V16.8404C12.8571 17.4809 12.3448 18 11.7135 18H1.14366C0.511987 18 0 17.4809 0 16.8404V1.15959C0 0.519094 0.511987 0 1.14366 0H7.99495L12.8571 4.93013Z"
+                  fill="#518EF8"
+                />
+                <path
+                  d="M9.71577 9.03711H3.14111V9.77797H9.71577V9.03711Z"
+                  fill="white"
+                />
+                <path
+                  d="M9.71577 10.6914H3.14111V11.4321H9.71577V10.6914Z"
+                  fill="white"
+                />
+                <path
+                  d="M9.71577 12.3457H3.14111V13.0864H9.71577V12.3457Z"
+                  fill="white"
+                />
+                <path
+                  d="M7.81677 14H3.14111V14.7409H7.81677V14Z"
+                  fill="white"
+                />
+                <path
+                  d="M8.65833 4.8233L12.8571 6.57727V4.93041L10.4764 4.21777L8.65833 4.8233Z"
+                  fill="#3A5BBC"
+                />
+                <path
+                  d="M12.8572 4.93012H9.13861C8.50675 4.93012 7.995 4.41103 7.995 3.77053V0L12.8572 4.93012Z"
+                  fill="#ACD1FC"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_1531_13314">
+                  <rect width="12.8571" height="18" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </span>
+          ${item.name}
+        </div>
+        <div class="flex   flex-row" id="${item.name}status">
+          <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
+            ${Math.round(item.size / 1024)}KB
+            <span class="hover:cursor-pointer" id="${item.name}removebtn"
+            
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5.25 5.25H6.125V10.5H5.25V5.25Z"
+                  fill="#5D5D5D"
+                />
+                <path
+                  d="M7.875 5.25H8.75V10.5H7.875V5.25Z"
+                  fill="#5D5D5D"
+                />
+                <path
+                  d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z"
+                  fill="#5D5D5D"
+                />
+                <path
+                  d="M5.25 0.875H8.75V1.75H5.25V0.875Z"
+                  fill="#5D5D5D"
+                />
+              </svg>
+            </span>
+          </p>
+          </div>
+          </div>
+          <div class="" id="${item.name}category">
+          ${categoryElement}
+          </div>
+          </div>`;
+            });
+            filesUploaded.map((item) => {
+              document
+                .getElementById(`${item.name}removebtn`)
+                .addEventListener("click", () => {
+                  handleRemoveFile(item.name, categoryElement);
+                });
+            });
+          });
+      });
+
+    console.log(category);
+  }
+  if (document.getElementById("uploadbtn")) {
+    document.getElementById("uploadbtn").addEventListener("click", () => {
+      console.log("upload");
+      if (filesUploaded.length === 0) {
+        document.getElementById("upload-error").style.display = "block";
+        document.getElementById("uploadbtn").disabled = true;
+      } else {
+        document.getElementById("upload-error").style = "display:hidden";
+
+        console.log(category, "category");
+        let flag = true;
+        filesUploaded.map((item) => {
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select")
+          );
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value
+          );
+          if (
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value == "Choose Category"
+          ) {
+            flag = false;
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.remove("hidden");
+          } else {
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.add("hidden");
+          }
+        });
+        if (flag) {
+          document.getElementById("uploadbtn").classList.add("hidden");
+
+          handleUpload();
+        }
+      }
+    });
+  }
+};

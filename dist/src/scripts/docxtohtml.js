@@ -46,7 +46,7 @@ async function renderDocx(file, elementId) {
 }
 
 async function convertDocxToBlob(docxFilePath) {
-  console.log(docxFilePath);
+  console.log(docxFilePath, "HEEEEE");
   try {
     const response = await fetch(docxFilePath);
     console.log(response);

@@ -1487,6 +1487,10 @@ async function displayArea() {
     let defaulttemplates = [];
 
     async function getAllTemplates() {
+      drafttemplates = [];
+      customtemplates = [];
+      defaulttemplates = [];
+
       const tempresult = await GetAllTemplates();
 
       console.log(tempresult, "get all templates");
@@ -1698,7 +1702,7 @@ async function displayArea() {
           document.getElementById("insert-default").innerHTML = "";
           document.getElementById("insert-custom").innerHTML = "";
           document.getElementById("insert-draft").innerHTML = "";
-          location.reload();
+          getAllTemplates();
         }, 2000);
       } else {
         Toastify({
@@ -1717,7 +1721,7 @@ async function displayArea() {
           document.getElementById("insert-default").innerHTML = "";
           document.getElementById("insert-custom").innerHTML = "";
           document.getElementById("insert-draft").innerHTML = "";
-          location.reload();
+          getAllTemplates();
         }, 2000);
       }
     };

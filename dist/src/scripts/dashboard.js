@@ -306,6 +306,11 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 v2,
                 firstv
               );
+              document
+                .querySelectorAll(".redhighlight")
+                .forEach(function (element) {
+                  element.classList.remove("redhighlight");
+                });
 
               const htmlJson = extractHtmlToJson(
                 document

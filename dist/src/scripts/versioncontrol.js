@@ -338,6 +338,18 @@ export function createversion() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
+        Toastify({
+          text: "Policy version created successfully",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
         console.log(data);
         localStorage.setItem("version", version);
         fetchVersionsDateWise(modalid);

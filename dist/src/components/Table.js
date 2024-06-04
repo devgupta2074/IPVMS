@@ -467,7 +467,7 @@ function addEditorOpenCloseFeature() {
         console.log(data.data.category);
         console.log("active", data.data);
         localStorage.setItem("modalId", modalId);
-        if (localStorage.getItem("isAdmin") === "true") {
+        if (localStorage.getItem("isAdmin") === "true" && modalId !== 236) {
           if (data.data.is_active) {
             document.getElementById("inactive").classList.remove("hidden");
             console.log("Inactive modal");
@@ -486,7 +486,9 @@ function addEditorOpenCloseFeature() {
           document.getElementById("category").disabled = true;
         }
 
-        fetchVersionsDateWise(modalId);
+        if (modalId != 236) {
+          fetchVersionsDateWise(modalId);
+        }
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
         document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
@@ -633,7 +635,20 @@ function addEditorOpenCloseFeature() {
             policycategory,
             policyname,
             token
-          );
+          ).then(() => {
+            Toastify({
+              text: "Policy created successfully",
+              duration: 3000,
+              newWindow: true,
+              className: "text-black",
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "white",
+              },
+            }).showToast();
+          });
           console.log("results");
           window.closeEditor();
         } else {
@@ -689,6 +704,18 @@ function addEditorOpenCloseFeature() {
             parseInt(localStorage.getItem("modalId")),
             parseInt(localStorage.getItem("userid"))
           ).then(() => {
+            Toastify({
+              text: "Policy sent for review",
+              duration: 3000,
+              newWindow: true,
+              className: "text-black",
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "white",
+              },
+            }).showToast();
             closereviewmodal();
             document.getElementById("sendforreview").classList.add("hidden");
           });

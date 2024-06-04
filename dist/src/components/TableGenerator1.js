@@ -2,8 +2,26 @@ import { CreatePolicy } from "../api/createpolicy.js";
 import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
+import { DELETE_LETTER } from "../api/deleteLetterModal.js";
 
 import { style } from "../utils/constants.js";
+
+var ModaltoDeleteId;
+var templateId;
+var recipientId;
+var ipvmsuserId;
+var recipientEmail;
+var recipientName;
+var letter_id;
+
+function truncateString(str, num) {
+  if (str.length > num) {
+    return str.slice(0, num) + "...";
+  } else {
+    return str;
+  }
+}
+
 export const fetchTable = async () => {
   const apiLink = "http://localhost:5001/api/file/getLetters?status=DRAFT";
 
@@ -27,6 +45,7 @@ export const fetchTable = async () => {
         data.data.map((item, index) => {
           console.log(item);
           parentElement.innerHTML += docCard(
+            index,
             item.id,
             item.employee_name,
             item.template_name,
@@ -43,6 +62,7 @@ export const fetchTable = async () => {
 };
 
 const docCard = (
+  indx,
   id,
   ename,
   tname,
@@ -56,21 +76,21 @@ const docCard = (
   date = date.toLocaleDateString("en-GB");
   created_at = date;
 
-  if (ename !== "NewUser") {
+  if (ename !== "New User") {
     return `
       
       <tr
       class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
     >
-      <td class="w-14">${id}</td>
+      <td class="w-14">${indx + 1}</td>
       <td class="w-52">${ename}</2td>
-      <td class="w-28">${tname}</td>
+      <td class="w-28">${truncateString(tname, 10)}</td>
       <td class="w-28">${category}</td>
       <td class="w-28">${created_at}</td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${created_at}</td>
       <td class="w-28">
-        <div class="flex gap-2">
+        <div class="flex gap-5 items-center">
           <button type="button" onclick="openLetterFile(${id})">
             <svg id="view" class="h-6 w-6">
               <use
@@ -85,8 +105,17 @@ const docCard = (
           ></use>
         </svg>
         </button>
-          
+        <button type="button" class="mb-3 flex justify-center items-center" onClick="deleteLetter(${id})">
+        <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
+<path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
+<path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
+<path d="M5.25 0.875H8.75V1.75H5.25V0.875Z" fill="#5D5D5D"/>
+</svg>
+      </button>
         </div>
+        <div id="letterdeletemodal">
+    </div>
       </td>
     </tr>
 
@@ -97,15 +126,15 @@ const docCard = (
     <tr
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${id}</td>
+    <td class="w-14">${indx + 1}</td>
     <td class="w-52">${rname}</2td>
-    <td class="w-28">${tname}</td>
+    <td class="w-28">${truncateString(tname, 10)}</td>
     <td class="w-28">${category}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">${created_by}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">
-      <div class="flex gap-2">
+      <div class="flex gap-5">
         <button type="button" onclick="openLetterFile(${id})">
           <svg id="view" class="h-6 w-6">
             <use
@@ -120,6 +149,16 @@ const docCard = (
         ></use>
       </svg>
       </button>
+      <button type="button" class="flex justify-center items-center mb-3" onClick="deleteLetter(${id})">
+      <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
+<path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
+<path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
+<path d="M5.25 0.875H8.75V1.75H5.25V0.875Z" fill="#5D5D5D"/>
+</svg>
+    </button>
+    <div id="letterdeletemodal">
+    </div>
         
       </div>
     </td>
@@ -146,6 +185,76 @@ function addSortFeature() {
     });
   });
 }
+window.deleteLetter = function (id) {
+  ModaltoDeleteId = id;
+  const deleteModalHtml = `
+  <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
+  <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+  <!-- Modal content -->
+  <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+      <button type="button" id="cancelButton" class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="deleteModal">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          <span class="sr-only">Close modal</span>
+      </button>
+      <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+      <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete this item?</p>
+      <div class="flex justify-center items-center space-x-4">
+          <button id="cancelButton1" type="button" class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+               Cancel
+          </button>
+          <button type="submit" id="confirmButton" class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+              Yes, I'm sure
+          </button>
+      </div>
+  </div> `;
+
+  document.getElementById("letterdeletemodal").innerHTML = deleteModalHtml;
+  const cancelButton = document.getElementById("cancelButton");
+  const cancelButton1 = document.getElementById("cancelButton1");
+  const confirmButton = document.getElementById("confirmButton");
+  cancelButton.addEventListener("click", () => {
+    document.getElementById("letterdeletemodal").innerHTML = "";
+  });
+  cancelButton1.addEventListener("click", () => {
+    document.getElementById("letterdeletemodal").innerHTML = "";
+  });
+  confirmButton.addEventListener("click", async () => {
+    // Add you1r delete logic here
+    const result = await DELETE_LETTER(ModaltoDeleteId);
+    console.log(result);
+    if (result.success) {
+      Toastify({
+        text: "Letter deleted success",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+      setTimeout(() => {
+        location.reload();
+        document.getElementById("letterdeletemodal").innerHTML = "";
+      }, 1000);
+    }
+
+    //delete ModaldeleteModal.classList.add("hidden");
+  });
+  const deleteModal = document.getElementById("deleteModal");
+  window.addEventListener("click", (event) => {
+    // console.log("event ", event.target);
+    if (event.target === deleteModal) {
+      document.getElementById("letterdeletemodal").innerHTML = "";
+    }
+
+    // setTimeout(() => {
+    //   location.reload();
+    // }, 2000);
+  });
+};
 
 // View Modal
 
@@ -487,34 +596,54 @@ export const sortTable = (col) => {
 
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
-    const res = await GetAllCategory();
-
+    document.getElementById("version-area").classList.add("hidden");
+    document.getElementById("button-header").innerHTML = `
+    <button
+type="button"
+id="sendButton"              
+class="hover:cursor-pointer bg-blue-500  border-2 border-[#EAEAEA] text-white  font-medium rounded-full text-sm px-5 py-2.5 text-center "
+>
+Send 
+</button>
+<!-- modal to send letter --> 
+<div id="confirmModal" class=" z-[1000000] hidden  fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-end pr-20">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+      <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold">Confirmation</h2>
+          <span class="close text-gray-500 text-2xl cursor-pointer">&times;</span>
+      </div>
+      <p class="mb-5">Do you want to send the letter?</p>
+      <label class="inline-flex items-center mb-4">
+          <input type="checkbox" id="signCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
+          <span class="ml-2 text-gray-700">Should be signed</span>
+      </label>
+      <p id="signMessage" class="text-blue-600 mb-4 hidden">The letter will be sent to Sign Swift for signature. Please follow up on their website.</p>
+      <p id="loginError" class="text-red-600 mb-4 hidden">User not found in Sign Swift. Please <a href="https://ex-sign-swift.vercel.app" class="text-blue-600 underline">log in</a>.</p>
+      <p id="uploadError" class="text-red-600 mb-4 hidden">An error occurred while uploading the file. Please try again.</p>
+      <p id="uploadSuccess" class="text-green-600 mb-4 hidden">Success</p>
+      <div class="flex justify-end space-x-4">
+          <button id="sendLetter" class="px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+          <button id="cancelSend" class="px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+      </div>
+  </div>
+</div>
+<button
+id="saveasdraft"
+type="button"
+class="hover:cursor-pointer text-white bg-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center ">
+Save as Draft
+</button>`;
     if (modalId == 0) {
-      // document.getElementById("onlyforblank").classList.remove("hidden");
-      // document.getElementById("version-area").classList.add("hidden");
-      document.getElementById("create-policy").classList.remove("hidden");
-      document.getElementById("review").classList.add("hidden");
-      document.getElementById("json").classList.add("hidden");
-      document.getElementById("container-content-1").contentEditable = true;
-      modalId = 236;
+      document.getElementById("docx-wrapper-1").contentEditable = true;
+      modalId = 237;
 
-      category = res?.data;
-      let categoryElement = `  <option selected>Select a category</option>`;
       // let categoryElement = `
       //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
       //     <option  class="flex justify-center items-center" selected>Choose Category</option>
       //   `;
-
-      category?.map((item) => {
-        categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
-      });
-      document.getElementById("category").innerHTML = categoryElement;
-      categoryElement += `
-      <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
-      `;
     }
     localStorage.setItem("modalId", modalId);
-    console.log("fniefniefnir");
+
     let htmljson;
 
     // document.getElementById("policy-detail").classList.add("hidden");
@@ -546,12 +675,18 @@ function addEditorOpenCloseFeature() {
         console.log(data.data, "fffffkbnjb ");
         document.getElementById("docx-wrapper-1").innerHTML =
           data.data.html_data;
-        htmljson = data.data.htmljson;
-        localStorage.setItem("htmljson", JSON.stringify(htmljson));
+        recipientEmail = data?.data?.recipient_email;
+        recipientId = data?.data?.recipientid;
+        templateId = data?.data?.template_id;
+        recipientName = data?.data?.recipient_name;
+        letter_id = data?.data?.letter_id;
+        console.log(recipientEmail, recipientName, recipientId, templateId);
+
         console.log("ddddddddddddddddddddddddd");
       });
     // const container = document.getElementsByClassName("docx-wrapper")[0];
     // container.id = "docx-wrapper";
+    onEditorOpen();
   };
   window.closeEditor = function () {
     document.getElementById("extralarge-modal").classList.add("hidden");
@@ -572,14 +707,20 @@ const fetchAndRenderLetter = async (modalId) => {
     .then((response) => response.json())
     .then((data) => {
       const docData = data.data.html_data;
-
       document
         .getElementById(modalId)
         .querySelector("#docx-wrapper").innerHTML = "";
       document
         .getElementById(modalId)
         .querySelector("#docx-wrapper").innerHTML = docData;
+
       const modal = document.getElementById(modalId);
+      window.addEventListener("click", function (event) {
+        console.log(event.target.id, "clcikde", modalId);
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      });
     });
 };
 
@@ -587,131 +728,35 @@ function addModalOpenCloseFeatureLetter() {
   window.openLetterFile = async function (modalId) {
     console.log(modalId, "modal id");
     const newel = document.createElement("div");
-    newel.innerHTML = ` <div id="${modalId}" tabindex="-1" class="  w-full  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <button id="back-request" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
-      <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
-        </svg>
-        
-  Back
-    </button>
-    
-
-  
-    <div class="relative w-full max-h-full">
-  
-        <div class="relative bg-white rounded-md shadow z-[6999] ">
-        <div class="sticky top-0 bg-white z-[6999]">
-          <div class="flex items-center justify-between p-3 border-b rounded-t ">
-            <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
-              New Document
-              <!-- <button
-              id="modalname"
-                type="button"
-              data-dropdown-toggle="dropdown" >
-                <svg class="flex items-center justify-center" width="23" height="5" viewBox="0 0 23 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="2.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                  <circle cx="11.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                  <circle cx="20.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                  </svg>
-              </button>
-              <div
-              class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
-              id="dropdown"
-            >
-              <div class="px-4 py-3">
-                <span id="dropdownname" class="block text-sm"></span>
-                <span id="dropdownemail" class="block text-sm font-medium text-gray-900 truncate"
-                  ></span
-                >
-              </div>
-              <ul class="py-1" aria-labelledby="dropdown">
-                <li>
-                  <a
-                    href="#"
-                    id="signout"
-                    class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                    >Sign out</a
-                  >
-                </li>
-              </ul>
-            </div> -->
-                
-            </h3>
-            <div class="flex flex-row gap-5 sticky top-0">
-              <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
-              <button id="approve" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Approve</button>
-           
-              <button id="reject"  type="button" class=" text-blue-700 bg-white font-roboto border-2 border-blue-700  font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 ">Reject</button>
-             
-                <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                </svg>
-                <span class="sr-only">Close modal</span>
-            </button> -->
-            </div>
-      
-        </div>
-        <div id="rejectionmodal" class="hidden z-[6999]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-          <div class="relative p-4 w-full max-w-2xl max-h-full">
-              <!-- Modal content -->
-              <div class="relative bg-white rounded-lg shadow ">
-                  <!-- Modal header -->
-                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                      <h3 class="text-xl font-semibold text-gray-900">
-  Reject the New Changes 
-                      </h3>
-                      <button id="closereview" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                  </div>
-                  <!-- Modal body -->
-                  <div class="p-4 md:p-5 space-y-4">
-                    <label for="reason" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Please Send your Reason for Rejection</label>
-                    <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>    <div id="admin-error" class=" opacity-0 font-normal text-sm text-red-600 mt-1 ">
-          Please write a reason
-        </div>
-                   
-                      <!-- <p class="text-base leading-relaxed text-gray-500 ">
-                         Note : You are sending your latest version of this policy for review. You will get the updates of the review on your dashboard.
-                      </p> -->
-                  </div>
-                  <!-- Modal footer -->
-                  <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-                      <button id="rejectbutton"  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send</button>
-                      <button id="cancelbutton" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 ">Cancel</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-   
-     
-        
-        </div>
-         <div class="relative">
-          <div class="  sticky top-0 flex flex-row"> 
-            <div id="editor-area" class="bg-white m-4 rounded-lg flex-1  shadow-lg mt-2 mb-2 p-2 w-full"> 
-            <div id="container-content-1" contenteditable="false">
-              <div id ="docx-wrapper-1" class="docx-wrapper"></div>
-            </div>
-          </div>
-          
-        </div>
-         </div> 
-           
-  
-           
-      
-              </div>
+    newel.innerHTML = ` <div id=${modalId}  >
+   <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
+     <!-- Background overlay -->
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+ 
+     <!-- Modal content -->
+     <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
+       <div class="absolute top-0 right-0 p-2 ">
+         <button onclick="closeLetter(${modalId})" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+           </svg>
+         </button>
+       </div>
+ 
+       <div id="printThis" class="p-6 pt-0  ">
+         <div id="render-docs" class=" w-full h-full  flex flex-col justify-center items-center ">
+         ${style}
+         <div class='' id='docx-wrapper'>
+         </div>
          
-            </div>
-        
-            
-        </div>`;
+           </div>
+         
+       
+      
+       </div>
+     </div>
+   </div>
+ </div>`;
     document.getElementsByTagName("body")[0].appendChild(newel);
 
     document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
@@ -723,9 +768,9 @@ function addModalOpenCloseFeatureLetter() {
       document.getElementById(modalId).innerHTML = contents;
     });
     window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
+      console.log(event, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
+      if (event.target.classList.contains('backdrop')) {
         window.closeModal(modalId);
       }
     });
@@ -742,3 +787,370 @@ function addModalOpenCloseFeatureLetter() {
 }
 
 addModalOpenCloseFeatureLetter();
+
+// send and save as draft icons
+const onEditorOpen = () => {
+  console.log(document.getElementById("saveasdraft"));
+  if (document.getElementById("saveasdraft")) {
+    document
+      .getElementById("saveasdraft")
+      .addEventListener("click", async () => {
+        const res = await saveAsDraft();
+        setTimeout(() => {
+          window.location.href = "http://localhost:5555/letters";
+        }, 3000);
+      });
+  }
+
+  const saveAsDraft = async () => {
+    const htmlData1 = document.querySelector("#docx-wrapper-1").innerHTML;
+    // console.log("html data is", htmlData1);
+    try {
+      console.log("name", recipientName);
+      const res = await axios.post(
+        "http://localhost:5001/api/file/saveLetter",
+        {
+          html_data: htmlData1,
+          templateId: templateId,
+          recipientId: recipientId,
+          createdby: ipvmsuserId,
+          letter_id: letter_id,
+          email: recipientEmail,
+          name: recipientName,
+        }
+      );
+      if (res) {
+        Toastify({
+          text: "Letter save as draft success",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+      }
+    } catch (error) {
+      Toastify({
+        text: "Some error occured",
+        duration: 3000,
+        newWindow: true,
+        className: "text-red",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+    }
+  };
+  const handleGeneratePdf = async () => {
+    showLoading();
+    var element = document.getElementById("docx-wrapper-1");
+    var opt = {
+      margin: 0,
+      filename: "Contrato.pdf",
+      image: {
+        type: "",
+        quality: 0.98,
+      },
+      html2canvas: {
+        scale: 2,
+        letterRendering: true,
+      },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+      },
+      pagebreak: { mode: "avoid-all", after: "section" },
+    };
+    const pdfBlob = await html2pdf().from(element).output("blob");
+    const formData = new FormData();
+    let letterId;
+    // console.log(email);
+    const fileName = "pdfsend" + Date.now() + ".pdf";
+    formData.append("file", pdfBlob, fileName);
+    formData.append("userId", recipientId);
+    formData.append("templateId", templateId);
+    formData.append("email", "tapasviarora2002@gmail.com");
+    formData.append("html_data", element.innerHTML.toString());
+    formData.append("letter_id", letterId);
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/api/file/uploadLetter",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      Toastify({
+        text: "Letter send succesfully",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+      if (response.status == 200) {
+        setTimeout(() => {
+          window.location.href = "http://localhost:5555/letters";
+        }, 1000);
+      }
+    } catch (error) {
+      Toastify({
+        text: "Some error occured",
+        duration: 3000,
+        newWindow: true,
+        className: "text-black",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "white",
+        },
+      }).showToast();
+      setTimeout(() => {
+        window.location.href = "http://localhost:5555/letters";
+      }, 2000);
+    } finally {
+      removeLoading();
+    }
+  };
+
+  //loader
+  const showLoading = () => {
+    const loading = document.createElement("div");
+    loading.id = "loadingicon";
+    loading.innerHTML = `<div id="loading"  >
+  <div id="overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
+  <div class="flex gap-2 justify-center items-center h-screen">
+  <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+  <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+  <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
+  </div>
+  </div>  
+  </div>`;
+    document.body.appendChild(loading);
+  };
+  const removeLoading = () => {
+    const loadingElement = document.getElementById("loadingicon");
+    if (loadingElement) {
+      loadingElement.remove();
+    }
+  };
+  var shouldBeSigned = false;
+  const handleSignSwiftCall = async () => {
+    showLoading();
+    var element = document.getElementById("container");
+    var opt = {
+      margin: 0,
+      filename: "Contrato.pdf",
+      image: {
+        type: "",
+        quality: 0.98,
+      },
+      html2canvas: {
+        scale: 2,
+        letterRendering: true,
+      },
+      jsPDF: {
+        unit: "in",
+        format: "a4",
+        orientation: "portrait",
+      },
+      pagebreak: { mode: "avoid-all", after: "section" },
+    };
+    let letterId;
+    const pdfBlob = await html2pdf().from(element).output("blob");
+    const formData = new FormData();
+    const fileName = "pdfFile" + Date.now() + ".pdf";
+    formData.append("file", pdfBlob, fileName);
+    const fileUpload = await axios.post(
+      "http://localhost:5001/api/file/upload/letterpdf",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const ShareLink = fileUpload.data.url;
+    const email = localStorage.getItem("email");
+    if (fileUpload) {
+      fetch("http://localhost:3000/api/users/findUser", {
+        method: "POST",
+        body: JSON.stringify({
+          email: email,
+        }),
+        mode: "cors",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data is", data);
+          removeLoading();
+          if (data.status == 500) {
+            console.log("first log in sign swift");
+            Toastify({
+              text: "Make a account in signwift first",
+              duration: 3000,
+              newWindow: true,
+              className: "text-black",
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "white",
+              },
+            }).showToast();
+            document.getElementById("loginError").classList.remove("hidden");
+          } else {
+            console.log("data", data);
+            const signSwiftId = data.user.customerId;
+            fetch("http://localhost:3000/api/document/uploadDocument", {
+              method: "POST",
+              body: JSON.stringify({
+                userId: data.user.customerId,
+                ShareLink: ShareLink,
+                title: title,
+              }),
+              mode: "cors",
+            })
+              .then((response) => response.json())
+              .then(async (data) => {
+                removeLoading();
+                const docId = data.document.id;
+                if (docId) {
+                  //draft->pending
+                  const data1 = await axios.post(
+                    "http://localhost:5001/api/file/upload/updateLetterStatus",
+                    {
+                      letterId: letterId,
+                      htmlData: element.innerHTML,
+                      recipientId: recipientId,
+                      createdBy: ipvmsuserId,
+                      templateId: templateId,
+                      email: recipientEmail,
+                      name: recipientName,
+                      fileName: fileName,
+                      swift_id: docId,
+                    }
+                  );
+                  console.log("data is data1", data1);
+                  if (data1?.data?.success) {
+                    console.log("upload doc  is", data);
+                    //error upload doc
+                    if (data.status !== 201) {
+                      document
+                        .getElementById("uploadError")
+                        .classList.remove("hidden");
+                    } else {
+                      console.log("success");
+                      document
+                        .getElementById("uploadSuccess")
+                        .classList.remove("hidden");
+                      Toastify({
+                        text: "Redirecting to sign swift",
+                        duration: 3000,
+                        newWindow: true,
+                        className: "text-black",
+                        gravity: "top", // `top` or `bottom`
+                        position: "right", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                          background: "white",
+                        },
+                      }).showToast();
+                      setTimeout(() => {
+                        window.location.href = `https://ex-sign-swift.vercel.app/user/${signSwiftId}/document/${docId}/step1`;
+                      }, 2000);
+                    }
+                  }
+                }
+              });
+          }
+        });
+    }
+  };
+
+  document.getElementById("sendButton").addEventListener("click", function () {
+    // document.getElementById("submitBtn").click();
+    const modal = document.getElementById("confirmModal");
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  document
+    .getElementsByClassName("close")[0]
+    .addEventListener("click", function () {
+      const modal = document.getElementById("confirmModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.getElementById("loginError").classList.add("hidden");
+      document.getElementById("uploadError").classList.add("hidden");
+
+      const signMessage = document.getElementById("signMessage");
+      signMessage.classList.remove("hidden");
+    });
+
+  document.getElementById("cancelSend").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    document.getElementById("loginError").classList.add("hidden");
+    document.getElementById("uploadError").classList.add("hidden");
+    document.getElementById("successError").classList.add("hidden");
+    const signMessage = document.getElementById("signMessage");
+    signMessage.classList.remove("hidden");
+  });
+  document.getElementById("sendLetter").addEventListener("click", function () {
+    const modal = document.getElementById("confirmModal");
+
+    if (!shouldBeSigned) {
+      handleGeneratePdf();
+    } else {
+      handleSignSwiftCall();
+    }
+
+    // window.location.href = "http://localhost:5555/letters";
+  });
+  document
+    .getElementById("signCheckbox")
+    .addEventListener("change", function () {
+      const signMessage = document.getElementById("signMessage");
+
+      if (this.checked) {
+        signMessage.classList.remove("hidden");
+        shouldBeSigned = true;
+      } else {
+        signMessage.classList.add("hidden");
+        shouldBeSigned = false;
+      }
+    });
+
+  // pdf generate function
+
+  window.onclick = function (event) {
+    const modal = document.getElementById("confirmModal");
+    if (event.target == modal) {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.getElementById("loginError").classList.add("hidden");
+      document.getElementById("uploadError").classList.add("hidden");
+
+      const signMessage = document.getElementById("signMessage");
+      signMessage.classList.remove("hidden");
+    }
+  };
+};

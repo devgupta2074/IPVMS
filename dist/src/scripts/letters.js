@@ -24,6 +24,8 @@ import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
 import { imageLoaded } from "./versioncontrol.js";
 
+// global variables
+
 // import { BulkUpload } from "./uploadpolicy1.js"; https://minio-endpoint.skilldify.ai/ipvms-dev/letter%20%282%291715594368336.pdf?X-Amz-Algo[%E2%80%A6]6a3f4f52bee565018c18fcf38d5704243e8a78ddf35ac50fb4db61b
 function extractParentText(parentId) {
   const parentElement = document.getElementById(parentId);
@@ -306,7 +308,7 @@ async function getTemplateInfo(templateId) {
       <use xlink:href="./assets/icons/icon.svg#threedots"></use>
     </svg>
 
-    <svg class="w-[260px] h-[150px]">
+    <svg class="w-[260px] h-[150px] cursor-pointer">
       <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
     </svg>
   </div>
@@ -341,13 +343,15 @@ async function getUserInfoToDisplay(userId) {
         <div
           class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
         >
-         ${result.first_name.charAt(0).toUpperCase() +
-        result.last_name.charAt(0).toUpperCase()
-        }
+         ${
+           result.first_name.charAt(0).toUpperCase() +
+           result.last_name.charAt(0).toUpperCase()
+         }
         </div>
         <div class="font-roboto font-normal text-base leading-6">
-          <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
-        }</div>
+          <div class="text-mineshaft-900">${
+            result.first_name + " " + result.last_name
+          }</div>
           <div class="text-mineshaft-600">${result.designation}</div>
         </div>
       </div>
@@ -356,8 +360,9 @@ async function getUserInfoToDisplay(userId) {
       >
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Employee ID</p>
-          <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
-        }</p>
+          <p class="text-mineshaft-600 leading-6 text-base">${
+            result.employee_code
+          }</p>
         </div>
         <div class="flex flex-col gap-1">
           <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -400,7 +405,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -419,7 +424,7 @@ async function getUserInfoToDisplay(userId) {
               <use xlink:href="./assets/icons/icon.svg#threedots"></use>
             </svg>
 
-            <svg class="w-[260px] h-[150px]">
+            <svg class="w-[260px] h-[150px] cursor-pointer">
               <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
             </svg>
           </div>
@@ -432,9 +437,8 @@ async function getUserInfoToDisplay(userId) {
         </div>
       </div>
     </div>`;
-      console.log('lololololollololol');
+      console.log("lololololollololol");
       // document.getElementById("loading").style = "display:none";
-
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -536,7 +540,7 @@ async function displayArea() {
     // }
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = ` <div id="selectionarea" class="w-full mt-5 flex flex-row gap-5">
+    area.innerHTML = ` <div id="selectionarea" class="relative w-full mt-5 flex flex-row gap-5">
     <div class="w-full flex flex-col">
       <div class="w-full flex flex-col">
         <label class="text-chicago-700 font-normal leading-5 mb-2"
@@ -569,7 +573,7 @@ async function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 hidden items-start bg-white rounded-lg shadow w-full"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -608,7 +612,7 @@ async function displayArea() {
        <li >
         <div class="flex items-center ps-2 rounded hover:bg-gray-100 ">
         
-          <label   id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
+          <label id="newuser" class=" flex flex-row justify-between  items-center w-full py-2 ms-2 text-sm font-normal text-chicago-700 rounded ">New User</label>
         </div>
       </li>
         </ul>
@@ -647,7 +651,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg shadow"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-full bg-white divide-y divide-gray-100 rounded-lg"
         id="dropdownUser"
       >
         <ul
@@ -883,7 +887,7 @@ async function displayArea() {
       console.log("template id", templateId);
       window.location.href = `http://localhost:5555/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => { });
+    document.addEventListener("DOMContentLoaded", async () => {});
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 
@@ -900,7 +904,7 @@ async function displayArea() {
 
   if (recentsendletters.classList.contains("active")) {
     document.getElementById("loading").style = "display:block";
-    console.log('oooooooooopppppppppppppppppp');
+    console.log("oooooooooopppppppppppppppppp");
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -975,7 +979,7 @@ async function displayArea() {
   </div>
   <div class="flex flex-row gap-4 w-1/3  justify-end">
     
- <button id="uploadletter"      class=" inline-flex text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
+ <button id="uploadletter"      class=" inline-flex min-w-36 text-[#1F2DE3] p-2 gap-0 items-start h-10 text-sm " >  
   <svg id="upload" class="h-5 w-5 m-1">
     <use
       xlink:href="/assets/icons/icon.svg#upload"
@@ -986,7 +990,7 @@ async function displayArea() {
   <button
     onclick="openlettereditor(${0})"
     type="button"
-    class="flex text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-2  h-10   rounded-md  items-center gap-2 pl-4 "  >
+    class="flex min-w-48 text-white font-roboto font-medium leading-5 text-base bg-blue-700 hover:bg-blue-800 focus:ring-4  h-10   rounded-md  items-center gap-2 p-2"  >
   <svg width="14" height="14" viewBox="0 0 14 14 " class=ml-2 fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white"/>
 </svg>
@@ -1057,10 +1061,10 @@ async function displayArea() {
         insertdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1094,19 +1098,7 @@ async function displayArea() {
           }
         };
       });
-      document.addEventListener("click", function (event) {
-        console.log("event", event.target.tagName);
-        if (event.target.tagName !== "svg") {
-          const modals = document.getElementsByClassName("closethemodal");
-          console.log("hello", modals);
-          for (let i = 0; i < modals.length; i++) {
-            if (modals[i].classList.contains("hidden")) {
-            } else {
-              modals[i].classList.add("hidden");
-            }
-          }
-        }
-      });
+
       const customdefault = document.getElementById("insert-custom");
       customdefault.innerHTML = ``;
       customtemplates.forEach((template) => {
@@ -1127,10 +1119,10 @@ async function displayArea() {
         customdefault.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1184,10 +1176,10 @@ async function displayArea() {
         insertdraft.innerHTML += `
         <div class="relative">
         <div class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative justify-center">
-          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 mt-4 ml-1 mr-l">
+          <svg onclick='openLetterModal(${template.id})' class="absolute top-0 right-0 w-4 h-8 pt-4 pr-l">
             <use xlink:href="./assets/icons/icon.svg#threedots"></use>
           </svg>
-          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px]">
+          <svg onclick="openLetter(${template.id})" class="w-[260px] h-[150px] cursor-pointer">
             <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
           </svg>
         </div>
@@ -1536,47 +1528,57 @@ async function displayArea() {
               console.log(item.email, "email");
               document.getElementById(
                 "adminlist"
-              ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
+              ).innerHTML += `<option value=${item.id}>${
+                item.first_name + " " + item.last_name
               }</option>`;
             });
           });
-        document
-          .getElementById("closereview")
-          .addEventListener("click", closereviewmodal);
-        document
-          .getElementById("sendreview")
-          .addEventListener("click", async function () {
-            console.log(document.getElementById("adminlist").value);
-            if (
-              document.getElementById("adminlist").value !== "Select an Admin"
-            ) {
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-1");
-              document.getElementById("admin-error").classList.add("opacity-0");
-              const response = await SetDocumentToApprove(
-                parseInt(document.getElementById("adminlist").value),
-                parseInt(localStorage.getItem("modalId")),
-                parseInt(localStorage.getItem("userid"))
-              ).then(() => {
-                closereviewmodal();
+        if (document.getElementById("closerreview")) {
+          document
+            .getElementById("closereview")
+            .addEventListener("click", closereviewmodal);
+        }
+
+        if (document.getElementById("sendreview")) {
+          document
+            .getElementById("sendreview")
+            .addEventListener("click", async function () {
+              console.log(document.getElementById("adminlist").value);
+              if (
+                document.getElementById("adminlist").value !== "Select an Admin"
+              ) {
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
-              });
-              console.log(response);
-              if (response) {
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-1");
                 document
-                  .getElementById("sendforreview")
-                  .classList.add("hidden");
+                  .getElementById("admin-error")
+                  .classList.add("opacity-0");
+                const response = await SetDocumentToApprove(
+                  parseInt(document.getElementById("adminlist").value),
+                  parseInt(localStorage.getItem("modalId")),
+                  parseInt(localStorage.getItem("userid"))
+                ).then(() => {
+                  closereviewmodal();
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                });
+                console.log(response);
+                if (response) {
+                  document
+                    .getElementById("sendforreview")
+                    .classList.add("hidden");
+                }
+              } else {
+                document
+                  .getElementById("admin-error")
+                  .classList.add("opacity-1");
+                document
+                  .getElementById("admin-error")
+                  .classList.remove("opacity-0");
               }
-            } else {
-              document.getElementById("admin-error").classList.add("opacity-1");
-              document
-                .getElementById("admin-error")
-                .classList.remove("opacity-0");
-            }
-          });
+            });
+        }
       }
     }
 
@@ -1606,6 +1608,7 @@ async function displayArea() {
       };
 
       dropDownBtn.addEventListener("click", () => {
+        console.log(dropDownBtn, document.getElementById("modalcontainer"));
         showModalUpload();
         console.log("modal opened");
       });
@@ -1995,13 +1998,13 @@ async function displayArea() {
                   </svg>  
               </div>`
             : file.status === "SUCCESS"
-              ? `<div class="flex gap-2">
+            ? `<div class="flex gap-2">
               <p class="text-black text-xs font-light">Success</p>
               <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
               <span class="sr-only">Success</span>
               </div>
               `
-              : `
+            : `
               <div role="status">
                   <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -2123,8 +2126,9 @@ async function displayArea() {
                       <div class="flex   flex-row" id="${item.name}status">
                         <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                           ${Math.round(item.size / 1024)}KB
-                          <span class="hover:cursor-pointer" id="${item.name
-          }removebtn"
+                          <span class="hover:cursor-pointer" id="${
+                            item.name
+                          }removebtn"
                           
                           >
                             <svg
@@ -2490,18 +2494,16 @@ async function displayArea() {
       }
     });
   }
-
-
 }
 //Employee Name
 function addModalOpenCloseFeature() {
   window.openLetter = async function (modalId) {
     console.log(modalId, "modal id");
     const newel = document.createElement("div");
-    newel.innerHTML = `  <div id=${modalId}  >
+    newel.innerHTML = ` <div id=${modalId}  >
    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20  sm:block sm:p-0 ">
      <!-- Background overlay -->
-     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity " aria-hidden="true"></div>
+     <div  class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity backdrop " aria-hidden="true"></div>
  
      <!-- Modal content -->
      <div class="fixed inset-0  w-4/5 h-full pt-10 pb-10  m-auto  bg-white rounded-lg shadow-xl  transform transition-all sm:my-8 overflow-y-scroll">
@@ -2537,11 +2539,12 @@ function addModalOpenCloseFeature() {
         .getElementsByClassName("docx-wrapper")[0].outerHTML;
       document.getElementById(modalId).innerHTML = contents;
     });
-    window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
-        window.closeModal(modalId);
+    document.addEventListener("click", function (event) {
+      // console.log(modalId, "event", event.target);
+
+      if (event.target.classList.contains("backdrop")) {
+        window.closeLetter(modalId);
       }
     });
 
@@ -2592,7 +2595,7 @@ if (document.getElementById("savesdraft")) {
 }
 
 const saveAsDraft = async () => {
-  const htmlData1 = document.querySelector(".container").innerHTML;
+  const htmlData1 = document.querySelector(".container-content-1").innerHTML;
   // console.log("html data is", htmlData1);
   try {
     console.log("name", recipientName);
@@ -2658,7 +2661,7 @@ const handleGeneratePdf = async () => {
   const pdfBlob = await html2pdf().from(element).output("blob");
   const formData = new FormData();
   let letterId;
-  console.log(email);
+  // console.log(email);
   const fileName = "pdfsend" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   formData.append("userId", 20);
@@ -2790,17 +2793,13 @@ const handleSignSwiftCall = async () => {
       }
     );
   }
-  const email = "tarora@ex2india.com";
-  const username = "Tapasvi";
-  const userId = "10200";
-
+  const email = localStorage.getItem("email");
+  // const userId = "10200";
   if (fileUpload) {
     fetch("http://localhost:3000/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
-        name: username,
         email: email,
-        id: userId,
       }),
       mode: "cors",
     })
@@ -2808,9 +2807,11 @@ const handleSignSwiftCall = async () => {
       .then((data) => {
         console.log("data is", data);
         if (data.status == 500) {
+          removeLoading();
           console.log("first log in sign swift");
           document.getElementById("loginError").classList.remove("hidden");
           //error
+          removeLoading();
         } else {
           console.log("data", data);
           fetch("http://localhost:3000/api/document/uploadDocument", {

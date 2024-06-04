@@ -53,11 +53,10 @@ if (localStorage.getItem("token") === null) {
 console.log(userdata);
 let name = document.getElementById("name");
 
-console.log('hello from dashboard');
-
+console.log("hello from dashboard");
 
 async function all_load() {
-  console.log('koooooooooooooooooooooooooooooooooooooooookoooooooo');
+  console.log("koooooooooooooooooooooooooooooooooooooooookoooooooo");
   await fetchTable({ name: "recent" });
   await fetchCategory();
   await getPolicyApprovals();
@@ -69,7 +68,6 @@ async function all_load() {
 all_load();
 // loading.style = 'display: none;';
 
-
 async function getPolicyApprovals() {
   const response = await GetPolicyApprovalsByUserId(
     parseInt(localStorage.getItem("userid"))
@@ -80,9 +78,16 @@ async function getPolicyApprovals() {
   console.log(response, "dev");
   document.getElementById("policyapproval").innerHTML = "";
   if (response.length == 0 && response2.length == 0) {
-    document.getElementById(
-      "policyapproval"
-    ).innerHTML = `  <div class="flex flex-row p-4 gap-2  ">
+    document.getElementById("policyapproval2").innerHTML = ` 
+     <div class="flex items-center justify-start w-full mb-2">
+    <h5
+      class="text-xl font-semibold leading-none text-mineshaft-900"
+    >
+      Policy Approval
+    </h5>
+  </div>
+  <hr class="h-[1px] w-full  border-1 border-[#ECEEF3] bg-[#ECEEF3]" />
+  <div class="flex flex-row p-7 gap-2 ">
 
     <svg id="boards" class="h-60 w-20">
         <use
@@ -90,7 +95,7 @@ async function getPolicyApprovals() {
         ></use>
       </svg>
       <div class="font-roboto font-normal  text-base text-boulder-400 ">
-      Oops! It seems there are no policies awaiting approval at the moment.
+        Oops!  It seems there are no policies awaiting approval at the moment.
       </div>
   </div>`;
   } else {
@@ -105,15 +110,17 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent by ${approve.sent_by_first_name + " " + approve.sent_by_last_name
-        }
+            Sent by ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${approve.request_by
-        })"
+          onClick="openPolicyReview(${approve.id}, ${approve.doc_id},${
+        approve.request_by
+      })"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
@@ -136,15 +143,17 @@ async function getPolicyApprovals() {
             ${approve.title}
           </p>
           <span class="text-sm text-gray-500 truncate ">
-            Sent To ${approve.sent_by_first_name + " " + approve.sent_by_last_name
-        }
+            Sent To ${
+              approve.sent_by_first_name + " " + approve.sent_by_last_name
+            }
           </span>
         </div>
         <div class="flex justify-center items-center">
           <button
           id=${approve.id}
-          onClick="openSentToModal('${approve.status}',${approve.id}, ${approve.doc_id
-        },'${approve.reason}')"
+          onClick="openSentToModal('${approve.status}',${approve.id}, ${
+        approve.doc_id
+      },'${approve.reason}')"
             class=" text-white bg-[#3689F5] border border-[#DBDDDD] rounded-full text-xs font-semibold px-4 py-1 transition-colors duration-300 ">
             ${approve.status}
           </button>
@@ -172,7 +181,6 @@ window.openSentToModal = async function (status, id, doc_id, reason) {
         document.getElementById("reasondetails").innerText = "";
       });
   }
-
 };
 document.getElementById("closereview").addEventListener("click", function () {
   document.getElementById("rejectionmodal").classList.add("hidden");
@@ -325,7 +333,7 @@ window.openPolicyReview = async function (id, doc_id, sentbyid) {
                 }
               )
                 .then((response) => response.json())
-                .then((data) => { });
+                .then((data) => {});
             });
 
           document.getElementById("extralarge-modal").classList.add("hidden");

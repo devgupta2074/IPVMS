@@ -2,6 +2,7 @@ import { CreatePolicy } from "../api/createpolicy.js";
 import { GetAdminList } from "../api/getAdminLIst.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
+import { removeLoading, showLoading } from "../scripts/loading.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
 import { imageLoaded } from "../scripts/versioncontrol.js";
@@ -34,7 +35,7 @@ const docxModal = (id) => {
             </div>
           
         
-         
+          
         </div>
       </div>
     </div>
@@ -53,11 +54,11 @@ const docCard = (title, created_by, created_at, id, index, type) => {
     return `
       
       <tr
-   
-      class="flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
+     onclick="openModal(${id})"
+      class=" hover:cursor-pointer flex justify-around w-full py-3 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-200 ease-out hover:ease-in last:rounded-b-md"
     >
       <td class="w-14">${index}</td>
-      <td class="w-52 hover:text-blue-600 hover:underline"     onclick="openModal(${id})">${title}</2td>
+      <td class="w-52 hover:text-blue-600 hover:underline hover:cursor-pointer"     onclick="openModal(${id})">${title}</2td>
       <td class="w-28">${created_by}</td>
       <td class="w-28">${date}</td>
       <td class="w-28">Admin</td>
@@ -328,9 +329,27 @@ function sortTable(col) {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
+  sort_th.forEach(e => {
+
+    e.innerHTML = `
+  <svg id="sorticon" class="px-2 h-4 w-6">
+  <use
+    xlink:href="/assets/icons/icon.svg#sorticon"
+  ></use>
+</svg>`;
+  });
+
 
   if (order) {
     sort_th[col].setAttribute("name", `${!order}`);
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-down" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.4" d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#333333" fill-opacity="0.6"/>
+    <path d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#111111"/>
+</svg>
+    
+  `;
+
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -350,7 +369,12 @@ function sortTable(col) {
     }
   } else {
     sort_th[col].setAttribute("name", `${!order}`);
-
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-up" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#111111"/>
+        <path opacity="0.4"  d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#333333" fill-opacity="0.6"/>
+    </svg> 
+  `;
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
         let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
@@ -664,7 +688,21 @@ function addModalOpenCloseFeature() {
   window.openModal = async function (modalId) {
     console.log(modalId, "modal id");
     document.getElementById(modalId).style.display = "block";
+    //
+    const modal = document.getElementById(modalId);
     document.getElementsByTagName("body")[0].classList.add("overflow-y-hidden");
+    document.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal(modalId);
+      }
+    });
+
+    // Close modal when pressing the escape key
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeModal(modalId);
+      }
+    });
     window.addEventListener("beforeprint", (event) => {
       console.log("Before print");
       const contents = document
@@ -672,26 +710,36 @@ function addModalOpenCloseFeature() {
         .getElementsByClassName("docx-wrapper")[0].outerHTML;
       document.getElementById(modalId).innerHTML = contents;
     });
-    window.addEventListener("click", function (event) {
-      console.log(event.target.id, "clcikde", modalId);
 
-      if (event.target.id === modalId) {
+    window.addEventListener("click", function (event) {
+      console.log(event.target, "clcikde", modalId);
+
+      if (event.target.classList.contains("backdrop")) {
         window.closeModal(modalId);
       }
     });
 
+    // document.addEventListener('click', (event) => {
+
+    //   console.log(document.getElementById(modalId).style.display);
+    //   if (document.getElementById(modalId).style.display === "block") {
+    //     event.stopPropagation();
+    //     document.getElementById(modalId).style.display = "none";
+    //     document
+    //       .getElementsByTagName("body")[0]
+    //       .classList.remove("overflow-y-hidden");
+    //   }
+    // });
     await fetchAndRenderDoc(modalId);
   };
 
   window.closeModal = function (modalId) {
     document.getElementById(modalId).style.display = "none";
-    document
-      .getElementsByTagName("body")[0]
-      .classList.remove("overflow-y-hidden");
   };
 }
 
 const fetchAndRenderDoc = async (modalId) => {
+  showLoading();
   const response = await fetch(
     `http://localhost:5001/api/file/getFile/${modalId}`,
     {
@@ -712,6 +760,13 @@ const fetchAndRenderDoc = async (modalId) => {
         .getElementById(modalId)
         .querySelector("#docx-wrapper").innerHTML = docData;
       const modal = document.getElementById(modalId);
+      window.addEventListener("click", function (event) {
+        console.log(event.target.id, "clcikde", modalId);
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      });
+      removeLoading();
     });
 };
 
@@ -888,7 +943,7 @@ function handlePaginationOnClick() {
 
 function addSearchbar() {
   const sbar = document.getElementById("document-search-bar");
-  const cross_mark = document.getElementById('x');
+  const cross_mark = document.getElementById("x");
   sbar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const tableType = {
@@ -901,13 +956,13 @@ function addSearchbar() {
       // resetVariables();
       fetchTable(tableType);
       // sbar.value = "";
-      cross_mark.classList.remove('hidden');
+      cross_mark.classList.remove("hidden");
       // addPagination(currentPage);
     }
   });
 
-  cross_mark.addEventListener('click', () => {
-    sbar.value = '';
+  cross_mark.addEventListener("click", () => {
+    sbar.value = "";
     const tableType = {
       name: "",
       title: `${sbar.value}`,
@@ -916,7 +971,6 @@ function addSearchbar() {
     };
 
     fetchTable(tableType);
-    cross_mark.classList.add('hidden');
-
+    cross_mark.classList.add("hidden");
   });
 }

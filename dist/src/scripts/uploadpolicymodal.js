@@ -5,7 +5,7 @@ export const modalHtml = `<div id="container-html1" class="hidden">
 
 <div
 id="modal"
-class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center"
+class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center backdrop"
 >
 <!-- Modal Content -->
 <div class="bg-white rounded-lg shadow-lg h-[30rem]">
@@ -116,6 +116,14 @@ const makeModal = () => {
   const modal = document.getElementById("modal");
   const showModal = () => {
     modal.classList.remove("hidden");
+
+    document.addEventListener("click", function (event) {
+      // console.log("event", event.target);
+
+      if (event.target.classList.contains('backdrop')) {
+        hideModal();
+      }
+    });
   };
 
   const hideModal = () => {

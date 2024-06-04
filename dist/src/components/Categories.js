@@ -365,7 +365,7 @@ function addCategorySubmit() {
     console.log(categoryName);
 
     const response = await fetch(
-      "http://localhost:5001/api/categories/createNewCategory",
+      "http://ipvms-api.exitest.com/api/categories/createNewCategory",
       {
         method: "POST",
         headers: {

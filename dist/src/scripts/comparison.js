@@ -321,7 +321,7 @@
 //       // console.log(contentdocument);
 
 //       const response = await fetch(
-//         "http://localhost:5001/api/file/uploadFile",
+//         "http://ipvms-api.exitest.com/api/file/uploadFile",
 //         {
 //           method: "POST",
 //           headers: {
@@ -344,7 +344,7 @@
 //         });
 
 //       const response2 = await fetch(
-//         "http://localhost:5001/api/file/getFile/4",
+//         "http://ipvms-api.exitest.com/api/file/getFile/4",
 //         {
 //           method: "GET",
 //           headers: {
@@ -565,7 +565,7 @@
 //       localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
 
 //       const response = fetch(
-//         "http://localhost:5001/api/versioncontrol/createDocumentVersion",
+//         "http://ipvms-api.exitest.com/api/versioncontrol/createDocumentVersion",
 //         {
 //           method: "POST",
 //           headers: {
@@ -921,7 +921,7 @@
 
 //   // Function to apply changes from v2 to v1
 //   async function applyChangesFromV2toV1() {
-//     const response2 = await fetch("http://localhost:5001/api/file/getFile/4", {
+//     const response2 = await fetch("http://ipvms-api.exitest.com/api/file/getFile/4", {
 //       method: "GET",
 //       headers: {
 //         "Content-Type": "application/json",

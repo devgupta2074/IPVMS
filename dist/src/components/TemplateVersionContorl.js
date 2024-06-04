@@ -1192,7 +1192,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let document_version = [];
   // const response = await fetch(
-  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
+  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
   //   {
   //     method: "GET",
   //     headers: {
@@ -1519,7 +1519,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //     console.log(devDiv, "ggg");
 
   //     const response = await fetch(
-  //       "http://localhost:5001/api/file/uploadFile",
+  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
   //       {
   //         method: "POST",
   //         headers: {
@@ -1543,7 +1543,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //       });
 
   //     const response2 = await fetch(
-  //       "http://localhost:5001/api/file/getFile/4",
+  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
   //       {
   //         method: "GET",
   //         headers: {

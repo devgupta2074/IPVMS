@@ -42,150 +42,276 @@
       class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
     >
 
-    <div id="loading" class="z-[999999999999] w-[96%] absolute top-24 left-28" style="display:block;">
-      <div
-      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-[500px]"
+    <section id="loading" class="z-[999999999999] w-full absolute top-0 left-0" style="display:block;">
+      <section
+      class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden"
     >
-      <div class="bg-white px-4 rounded-lg w-[96%] mt-20">
-    
-      <!-- <div class="flex justify-between gap-4 bg-white rounded-md m-4">
-    
-      <div  class="flex flex-row gap-4 m-4">
-      
-      <span class ='min-w-36 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 py-2 text-sm'></span>  
-      <span class=" min-w-36 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 py-2  text-sm "></span>     
-      <span class=" min-w-36 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 py-2  text-sm "></span>     
-      <span class=" min-w-36 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 py-2  text-sm "></span>     
-      <span class=" min-w-36 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 py-2  text-sm "></span>     
+  
+    <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
+      <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
+      <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
+        <input type="name" name="search" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+        <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
+          <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
+        </svg>
       </div>
-    
-      </div> -->
-    
-        <table
-          class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md"
-        >
-          <thead
-            class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md"
-          >
-            <tr class="py-4 flex justify-around w-full">
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <th
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
-              ></th>
-              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
-            <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="py-4 flex justify-around w-full">
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
-            <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
-            </tr>
-            <tr class="py-4 flex justify-around w-full">
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
-            <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
-            </tr>
-            <tr class="py-4 flex justify-around w-full">
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <td
-                scope="col"
-                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
-              ></td>
-              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
-            <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
-            </tr>
-          </tbody>
-        </table>
+      <div class="flex items-center justify-center gap-5 pr-10">
+      <button>
+        <svg class="h-6 w-6 ">
+          <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
+        </svg>
+      </button> 
+        <figure class=" ">
+          <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
+        </figure>
+      <div class="relative">
+        <button  class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg></button>
+        </div>
       </div>
-      </div>
+      </header>
+  <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
+  <button  class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+  <span " class=" peer/doc-svg">
+  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+  <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+  </svg>
+  </span>
+  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+  
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+   
+    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+      Dashboard</div>
+  </div>
+  </button>
+  
+  
+  <button class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+  <span class=" peer/doc-svg">
+  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+  <use xlink:href="/assets/icons/icon.svg#shield"></use>
+  </svg>
+  </span>
+  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+  
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+   
+    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+      Policies</div>
+  </div>
+  </button>
+  
+  
+  <button  class="h-[2.5rem] w-[2.5rem] flex flex-row">
+  <span  class=" peer/letter-svg">
+  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+  <use xlink:href="/assets/icons/icon.svg#policy"></use>
+  </svg>
+  </span>
+  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+   
+    <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+    Letters</div>
+  </div>
+  </button>
+  
+  <button class="h-[2.5rem] w-[2.5rem] flex flex-row">
+  <span class=" peer/invite-svg">
+  <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+  <use xlink:href="/assets/icons/icon.svg#invite-employee"></use>
+  </svg>
+  </span>
+  
+  <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+    <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+      <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+    </svg>
+   
+    <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
+    Invite Member</div>
+  </div>
+  </button>
+    
+   
+  </div>
+  </aside>
+  
+  <!-- <
+    class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
+  > -->
+  
+  <!-- < id="loading" class="z-[999999999999] w-[95%] absolute top-28 left-28" style="display:block;"> -->
+  <div
+  class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-full"
+  >
+  <!-- < class=" rounded-lg mt-20"> -->
+  
+  <div class="flex flex-col gap-3">
+    <div
+      class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
+    >
+      Letters
     </div>
+    <div
+      class="flex flex-row gap-20 border-b-2 font-roboto font-medium text-base"
+    >
+      <div class="cursor-pointer p-3">
+        Recent Sent Letters
+      </div>
+      <div
+    
+        class="cursor-pointer p-3"
+      >
+        Send Letter
+      </div>
+      <div  class="cursor-pointer p-3">
+        Draft Letters
+      </div>
+      <div  class="cursor-pointer p-3">
+        Letter Templates
+      </div>
+      
+    </div>
+    <div  class="flex gap-4"></div>
+  </div>
+  
+  <table
+      class="w-full my-10 text-left text-sm text-gray-500 bg-white font-roboto rounded-md"
+    >
+      <thead
+        class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md"
+      >
+        <tr class="py-4 flex justify-around w-full">
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <th
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+          ></th>
+          <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+        <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="py-4 flex justify-around w-full">
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+        <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+        </tr>
+        <tr class="py-4 flex justify-around w-full">
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+        <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+        </tr>
+        <tr class="py-4 flex justify-around w-full">
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <td
+            scope="col"
+            class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+          ></td>
+          <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+        <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+        </tr>
+      </tbody>
+    </table>
+  <!-- </> -->
+  </div>
+  <!-- </> -->
+  
+  </section>
+    </section>
       <div class="flex flex-col gap-3">
         <div
           class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-2xl font-roboto font-semibold"
@@ -195,12 +321,12 @@
         <div
           class="flex flex-row gap-20 border-b-2 font-roboto font-medium text-base"
         >
-          <div id="recentsentletters" class="cursor-pointer p-3">
+          <div id="recentsentletters" class="cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6">
             Recent Sent Letters
           </div>
           <div
             id="sendletters"
-            class="cursor-pointer p-3 active text-blue-700 border-b-4 border-blue-700 px-6"
+            class="cursor-pointer p-3 "
           >
             Send Letter
           </div>

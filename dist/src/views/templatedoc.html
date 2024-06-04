@@ -491,7 +491,7 @@ console.log("currentUrl: " + currentUrl, url);
 
 const fetchAndRenderDoc = async (modalId) => {
 const response = await fetch(
-`http://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
+`http://ipvms-api.exitest.com://ipvms-api.exitest.com/api/file/getTemplateById/${modalId}`,
 {
   method: "GET",
   headers: {
@@ -514,7 +514,7 @@ const fetchCategory = async () => {
 console.log("fetching catehory");
 document.getElementById("loading").style = "display:block";
 const response = await fetch(
-`http://ipvms-api.exitest.com/api/categories/getAllCategories`,
+`http://ipvms-api.exitest.com://ipvms-api.exitest.com/api/categories/getAllCategories`,
 {
   method: "GET",
   headers: {

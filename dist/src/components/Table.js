@@ -241,9 +241,8 @@ export const fetchTable = async (tableType) => {
   if (tableType.name == "recent") {
     apiLink = "http://localhost:5001/api/file/getRecentPolicies";
   } else {
-    apiLink = `http://localhost:5001/api/file/document?page=${
-      currentPage - 1
-    }&size=${pageSize}&title=${title}&category=${category}`;
+    apiLink = `http://localhost:5001/api/file/document?page=${currentPage - 1
+      }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
   const response = await fetch(apiLink, {
@@ -330,9 +329,27 @@ function sortTable(col) {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
+  sort_th.forEach(e => {
+
+    e.innerHTML = `
+  <svg id="sorticon" class="px-2 h-4 w-6">
+  <use
+    xlink:href="/assets/icons/icon.svg#sorticon"
+  ></use>
+</svg>`;
+  });
+
 
   if (order) {
     sort_th[col].setAttribute("name", `${!order}`);
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-down" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.4" d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#333333" fill-opacity="0.6"/>
+    <path d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#111111"/>
+</svg>
+    
+  `;
+
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -352,7 +369,12 @@ function sortTable(col) {
     }
   } else {
     sort_th[col].setAttribute("name", `${!order}`);
-
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-up" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#111111"/>
+        <path opacity="0.4"  d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#333333" fill-opacity="0.6"/>
+    </svg> 
+  `;
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
         let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
@@ -628,9 +650,8 @@ function addEditorOpenCloseFeature() {
         console.log(adminlist, "Admin list");
         adminlist.map((item) => {
           console.log(item.email, "email");
-          document.getElementById("adminlist").innerHTML += `<option value=${
-            item.id
-          }>${item.first_name + " " + item.last_name}</option>`;
+          document.getElementById("adminlist").innerHTML += `<option value=${item.id
+            }>${item.first_name + " " + item.last_name}</option>`;
         });
       });
     document

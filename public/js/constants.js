@@ -46,7 +46,6 @@ const LOGIN_CONSTANTS = {
 const VIEWS_CONSTANTS = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
-
   FORGET_PASSWORD: "/forgotpassword",
   EMAIL_SENT: "/emailsent",
   RESET_PASSWORD: "/resetpassword",

@@ -2247,7 +2247,7 @@ async function displayArea() {
           return this.updateQueue(file);
         }
         this.initiated = true;
-        console.log("inittiaed");
+        console.log("template chal rha ??");
 
         file.forEach((item, indx) => {
           const value = {
@@ -2463,7 +2463,7 @@ async function displayArea() {
               axios(axiosRequestArgs)
                 .then((res) => {
                   console.log(res.data);
-
+                  console.log("file isssssssss", file.id);
                   this.inProgress.delete(file.id);
                   file.status = "SUCCESS";
                   file.uploadId = res.data.document.id;
@@ -2474,6 +2474,7 @@ async function displayArea() {
                   this.freeQueue();
                 })
                 .catch((error) => {
+                  console.log("what is the error", error.message);
                   file.isCancelled = !!axios.isCancel(error);
                   this.uploadFail(file);
                 });
@@ -2481,6 +2482,7 @@ async function displayArea() {
           };
           getFile();
         } catch (error) {
+          console.log("failed in the otehr cathc bloc,", error.message);
           this.uploadFail(file);
           //failed file upload
         }
@@ -2570,7 +2572,14 @@ async function displayArea() {
         ...FAILED_UPLOADS.values(),
         ...COMPLETED_UPLOADS.values(),
       ].forEach((file) => {
-        console.log(file, "file name");
+        console.log(
+          file,
+          "file name",
+          IN_PROGRESS,
+          IN_QUEUE,
+          FAILED_UPLOADS,
+          COMPLETED_UPLOADS
+        );
         document.getElementById(`${file.file.name}status`).innerHTML =
           file.status === "FAILED"
             ? `<div class="text-black font-light text-xs flex justify-center items-center gap-2">Failed
@@ -2606,11 +2615,35 @@ async function displayArea() {
                   <span class="sr-only">Loading...</span>
               </div>`;
       });
+
+      if (IN_PROGRESS.size == 0 && IN_QUEUE.size === 0) {
+        Toastify({
+          text: "All files uploaded successfully",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
+        // console.log(args);
+        setTimeout(() => {
+          document.getElementById("modalcontainer").innerHTML = modalHtml;
+          resetModal();
+          const closeModalBtn = document.getElementById("closeModalBtn");
+          closeModalBtn.addEventListener("click", () => {
+            hideModal();
+          });
+        }, 3000);
+      }
     };
     const onUploadComplete = (args) => {
       console.log("all file uploaded success");
       // upload completed
-      filesUploaded = args;
+      // filesUploaded = args;
     };
 
     const handleUpload = async () => {
@@ -3522,6 +3555,55 @@ if (document.getElementById("signCheckbox")) {
 }
 
 // pdf generate function
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("uploadbtn")) {
+    document.getElementById("uploadbtn").addEventListener("click", () => {
+      console.log("upload");
+      if (filesUploaded.length === 0) {
+        document.getElementById("upload-error").style.display = "block";
+        document.getElementById("uploadbtn").disabled = true;
+      } else {
+        document.getElementById("upload-error").style = "display:hidden";
+
+        console.log(category, "category");
+        let flag = true;
+        filesUploaded.map((item) => {
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select")
+          );
+          console.log(
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value
+          );
+          if (
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("select").value == "Choose Category"
+          ) {
+            flag = false;
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.remove("hidden");
+          } else {
+            document
+              .getElementById(`${item.name}category`)
+              .querySelector("p")
+              .classList.add("hidden");
+          }
+        });
+        if (flag) {
+          document.getElementById("uploadbtn").classList.add("hidden");
+
+          handleUpload();
+        }
+      }
+    });
+  }
+});
 
 window.onclick = function (event) {
   const modal = document.getElementById("confirmModal");

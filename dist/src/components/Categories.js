@@ -47,7 +47,7 @@ async function addCategoryElements(arr) {
 <button id='' class ='min-w-36 py-4 text-sm font-medium text-[#1F2DE3] border-b-[3px] border-b-[#1F2DE3] hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500'>All</button>  
 <button id='draft' class=" min-w-36 py-2  text-sm font-medium hover:text-ship-cove-500 hover:border-b-[3px] hover:border-b-ship-cove-500 ">Draft</button>     
 </div>
-<div id="addCategory-btn" class="py-4">
+<div id="addCategory-btn" class="py-4 mx-5">
 <button class=" rounded-full bg-ship-cove-200 h-8 p-1">
 <svg id="plus" class="h-4 w-4 m-1">
 <use

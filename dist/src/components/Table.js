@@ -234,7 +234,7 @@ function addTable() {
   }
 }
 
-let maxPages = 10;
+let maxPages = 7;
 let pageSize = 7;
 let currentPage = 1;
 let totalItems = 0;
@@ -276,10 +276,6 @@ export const fetchTable = async (tableType) => {
       const tablecheck = document.getElementById("table");
 
       if (!tablecheck) {
-        console.log(
-          "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-          searchcheck
-        );
         addTable();
       }
       console.log(data);
@@ -855,7 +851,7 @@ function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
-  console.log(arr);
+  console.log('.....................................', arr);
   addPaginationElement(arr);
   document.getElementById(
     item + "pagination"
@@ -865,13 +861,14 @@ function addPagination(item) {
 }
 
 const handleNextPage = async () => {
-  currentPage++;
-
+  console.log(currentPage, maxPages);
   if (currentPage > maxPages) {
     currentPage = maxPages;
     return;
   }
+
   if (currentPage < totalPageCount) {
+    currentPage++;
     handlePagination(currentPage);
   }
 };

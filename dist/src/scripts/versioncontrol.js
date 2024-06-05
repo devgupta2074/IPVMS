@@ -1003,7 +1003,10 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       childElement.childNodes &&
       childElement.childNodes.length > 0
     ) {
-      if (!childElement.classList.contains("docx-wrapper")) {
+      if (
+        !childElement.classList.contains("docx-wrapper") &&
+        childElement.children.length <= 0
+      ) {
         childElement.classList.add("greenhighlight");
       }
     }

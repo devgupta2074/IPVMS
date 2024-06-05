@@ -4,6 +4,7 @@ import { InviteApiRequest } from "../api/invitation.js";
 import { showLoading } from "../scripts/loading.js";
 import { removeLoading } from "../scripts/loading.js";
 import { insertNotification } from "./notification.js";
+import { redirect } from "../utils/utils.js";
 
 export async function InsertNavbar() {
   let userdata;

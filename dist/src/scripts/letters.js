@@ -744,8 +744,8 @@ async function getUserInfoToDisplay(userId) {
           </div>
         </div>
       </div>`;
-          document.getElementById("selectedtemplate").innerHTML =
-            templatedetails;
+          // document.getElementById("selectedtemplate").innerHTML =
+          //   templatedetails;
         } else {
           additionaldetails.innerHTML = ` <div
           id="userdetails"
@@ -833,6 +833,7 @@ async function getUserLetterDisplay(userId) {
     .then(async (data) => {
       console.log(data);
       const result = data.letter;
+      document.getElementById("olduserletters").innerHTML = "";
       result.map((item) => {
         document.getElementById("olduserletters").innerHTML += `
         <div>

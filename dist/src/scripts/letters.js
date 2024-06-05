@@ -990,7 +990,7 @@ async function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%] shadow-md"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -1068,7 +1068,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg shadow-md"
         id="dropdownUser"
       >
         <ul

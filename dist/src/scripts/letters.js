@@ -72,7 +72,7 @@ async function ChangeVersion(docid, id) {
     });
   const firstv = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
+    `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -112,7 +112,7 @@ export const fetchVersionsDateWise = async (id) => {
   console.log(id, docid);
   const response = fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/letters/getversions/datewise?docId=${id}`,
+    `/letters/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -224,18 +224,15 @@ export const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${
-            version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
+          <li id=${version.id
+            }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
-              version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${
-              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0)}
              </p>
@@ -648,14 +645,12 @@ async function getUserInfoToDisplay(userId) {
           <div
             class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
           >
-           ${
-             result.first_name.charAt(0).toUpperCase() +
-             result.last_name.charAt(0).toUpperCase()
-           }
+           ${result.first_name.charAt(0).toUpperCase() +
+            result.last_name.charAt(0).toUpperCase()
+            }
           </div>
           <div class="font-roboto font-normal text-base leading-6">
-            <div class="text-mineshaft-900">${
-              result.first_name + " " + result.last_name
+            <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
             }</div>
             <div class="text-mineshaft-600">${result.designation}</div>
           </div>
@@ -665,8 +660,7 @@ async function getUserInfoToDisplay(userId) {
         >
           <div class="flex flex-col gap-1">
             <p class="text-mineshaft-900 leading-5">Employee ID</p>
-            <p class="text-mineshaft-600 leading-6 text-base">${
-              result.employee_code
+            <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
             }</p>
           </div>
           <div class="flex flex-col gap-1">
@@ -753,15 +747,13 @@ async function getUserInfoToDisplay(userId) {
             <div
               class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
             >
-             ${
-               result.first_name.charAt(0).toUpperCase() +
-               result.last_name.charAt(0).toUpperCase()
-             }
+             ${result.first_name.charAt(0).toUpperCase() +
+            result.last_name.charAt(0).toUpperCase()
+            }
             </div>
             <div class="font-roboto font-normal text-base leading-6">
-              <div class="text-mineshaft-900">${
-                result.first_name + " " + result.last_name
-              }</div>
+              <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
+            }</div>
               <div class="text-mineshaft-600">${result.designation}</div>
             </div>
           </div>
@@ -770,9 +762,8 @@ async function getUserInfoToDisplay(userId) {
           >
             <div class="flex flex-col gap-1">
               <p class="text-mineshaft-900 leading-5">Employee ID</p>
-              <p class="text-mineshaft-600 leading-6 text-base">${
-                result.employee_code
-              }</p>
+              <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
+            }</p>
             </div>
             <div class="flex flex-col gap-1">
               <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -1343,7 +1334,7 @@ async function displayArea() {
 
       window.location.href = `${URL_CONSTANTS.FRONTEND_BASE_URL}/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => {});
+    document.addEventListener("DOMContentLoaded", async () => { });
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 
@@ -1360,7 +1351,7 @@ async function displayArea() {
 
   if (recentsendletters.classList.contains("active")) {
     document.getElementById("loading").style = "display:block";
-    console.log("oooooooooopppppppppppppppppp");
+    // console.log("oooooooooopppppppppppppppppp");
     if (document.getElementById("area")) {
       document.getElementById("area").remove();
     }
@@ -1374,21 +1365,65 @@ async function displayArea() {
     
     </div>
     
+    <section id="pagination-area" class="w-full">
+    <nav
+      class="isolate inline-flex -space-x-px rounded-md items-center  w-full justify-between"
+      aria-label="Pagination"
+    >
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div id="doc-status"></div>
+    </div>
+    <div class="flex gap-1">
+      <button
+        id="ppage"
+        type="button"
+        class="relative inline-flex items-center rounded-md px-2 h-8 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <span class="sr-only">Previous</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+      
+      <div class="flex gap-2" id="pagination-controller"></div>
+      <button
+        id="npage"
+        type="button"
+        class="relative inline-flex items-center rounded-md px-2 h-8 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <span class="sr-only">Next</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+      
+    </nav>
+  </section>
     `;
 
     document.getElementsByTagName("main")[0].appendChild(area);
     await addTable();
     document.getElementById("loading").style = "display:none";
-    // fetchDoc(currentPage - 1, pageSize);
-
-    // const sortButtons = document.querySelectorAll(".sort");
-    // sortButtons.forEach((e, index) => {
-    //   e.addEventListener("click", () => {
-    //     console.log(index);
-    //     window.event.preventDefault();
-    //     sortTable(index, 0);
-    //   });
-    // });
   }
   if (draftLetters.classList.contains("active")) {
     document.getElementById("loading").style = "display:block";
@@ -1402,7 +1437,65 @@ async function displayArea() {
     console.log(document.getElementsByTagName("main"));
     const area = document.createElement("div");
     area.id = "area";
-    area.innerHTML = `<div id="insert-table"></div>`;
+    area.innerHTML = `<div id="insert-table"></div>
+    
+
+    <section id="pagination-area" class="w-full">
+    <nav
+      class="isolate inline-flex -space-x-px rounded-md items-center  w-full justify-between"
+      aria-label="Pagination"
+    >
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div id="doc-status"></div>
+    </div>
+    <div class="flex gap-1">
+      <button
+        id="ppage"
+        type="button"
+        class="relative inline-flex items-center rounded-md px-2 h-8 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <span class="sr-only">Previous</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+      <!-- Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" -->
+      
+      <div class="flex gap-2" id="pagination-controller"></div>
+      <button
+        id="npage"
+        type="button"
+        class="relative inline-flex items-center rounded-md px-2 h-8 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+      >
+        <span class="sr-only">Next</span>
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+      
+    </nav>
+  </section>
+    
+    `;
 
     document.getElementsByTagName("main")[0].appendChild(area);
     await addTable1();
@@ -1790,7 +1883,7 @@ async function displayArea() {
 
         const response2 = await fetch(
           API_CONSTANTS.BACKEND_BASE_URL_PROD +
-            `/api/file/getTemplateById/${modalId}`,
+          `/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1869,7 +1962,7 @@ async function displayArea() {
 
           const firstv = await fetch(
             API_CONSTANTS.BACKEND_BASE_URL_PROD +
-              `/api/versioncontrol/getVersionsTemplate?docId=${doc_id}`,
+            `/api/versioncontrol/getVersionsTemplate?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -2119,8 +2212,7 @@ async function displayArea() {
               console.log(item.email, "email");
               document.getElementById(
                 "adminlist"
-              ).innerHTML += `<option value=${item.id}>${
-                item.first_name + " " + item.last_name
+              ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
               }</option>`;
             });
           });
@@ -2600,13 +2692,13 @@ async function displayArea() {
                   </svg>  
               </div>`
             : file.status === "SUCCESS"
-            ? `<div class="flex gap-2">
+              ? `<div class="flex gap-2">
               <p class="text-black text-xs font-light">Success</p>
               <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
               <span class="sr-only">Success</span>
               </div>
               `
-            : `
+              : `
               <div role="status">
                   <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -2747,9 +2839,8 @@ async function displayArea() {
                       <div class="flex   flex-row" id="${item.name}status">
                         <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                           ${Math.round(item.size / 1024)}KB
-                          <span class="hover:cursor-pointer" id="${
-                            item.name
-                          }removebtn"
+                          <span class="hover:cursor-pointer" id="${item.name
+          }removebtn"
                           
                           >
                             <svg
@@ -3187,7 +3278,7 @@ addModalOpenCloseFeature();
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/file/getTemplateById/${modalId}`,
+    `/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
@@ -3410,7 +3501,7 @@ const handleSignSwiftCall = async () => {
     //draft->pending
     await axios.post(
       API_CONSTANTS.BACKEND_BASE_URL_PROD +
-        "/api/file/upload/updateLetterStatus",
+      "/api/file/upload/updateLetterStatus",
       {
         letterId: letterId,
         htmlData: element.innerHTML,

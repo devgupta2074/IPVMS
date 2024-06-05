@@ -630,9 +630,11 @@ async function getUserInfoToDisplay(userId) {
     }
   )
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
       console.log(data);
       const result = data.data;
+      // result2->letter data
+
       // Handle the response from the backend
       console.log(result, "hello user changed");
       const additionaldetails = document.getElementById("additionaldetails");
@@ -807,45 +809,7 @@ async function getUserInfoToDisplay(userId) {
             id="olduserletters"
             class="flex flex-row gap-5 overflow-x-scroll no-scrollbar mt-5"
           >
-            <div>
-              <div
-                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-              >
-                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-                </svg>
-    
-                <svg class="w-[260px] h-[150px] cursor-pointer">
-                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-                </svg>
-              </div>
-              <div
-                class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-              >
-                <div class="text-base">Increment Letter</div>
-                <div class="text-sm">Mar 26, 2023</div>
-              </div>
-            </div>
-            <div>
-              <div
-                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-              >
-                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-                </svg>
-    
-                <svg class="w-[260px] h-[150px] cursor-pointer">
-                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-                </svg>
-              </div>
-              <div
-                class="bg-white rounded-b-lg p-1 font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-around items-center"
-              >
-                <div class="text-base">Increment Letter</div>
-                <div class="text-sm">Mar 26, 2023</div>
-              </div>
-            </div>
-          </div>
+            
         </div>`;
         }
       } else {
@@ -858,6 +822,44 @@ async function getUserInfoToDisplay(userId) {
       console.error("Error:", error);
     });
 }
+async function getUserLetterDisplay(userId) {
+  const response = await fetch(
+    `http://localhost:5001` + `/api/file/getSendletter/${userId}`,
+    {
+      method: "GET",
+    }
+  )
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      const result = data.letter;
+      result.map((item) => {
+        document.getElementById("olduserletters").innerHTML += `
+        <div>
+              <div
+                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+              >
+                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+                </svg>
+    
+                <svg class="w-[260px] h-[150px] cursor-pointer">
+                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+                </svg>
+              </div>
+              <div class="bg-white rounded-b-lg p-1 w-[20rem] font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-between items-center">
+              <div class="text-sm truncate">${item.title}</div>
+              <div class="text-sm truncate">${item.created_at}</div>
+            </div>
+            </div>
+        `;
+      });
+      ///change to updated at latter on
+
+      // result2->letter data
+    });
+}
+
 let userdata;
 if (localStorage.getItem("token") === null) {
   redirect(VIEWS_CONSTANTS.LOGIN);
@@ -1293,7 +1295,10 @@ async function displayArea() {
       <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
       </svg>`;
           event.target.appendChild(checkSymbol);
-          getUserInfoToDisplay(userId);
+          const useri = getUserInfoToDisplay(userId);
+          if (useri) {
+            getUserLetterDisplay(userId);
+          }
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";

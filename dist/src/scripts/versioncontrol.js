@@ -819,7 +819,7 @@ export function applyChangesFromV1toV2withouthighlight(
       tag.style.top = v2.imageTags[image].y + "px";
     }
   }
-  // imageLoaded();
+  //cc imageLoaded();
 }
 export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
   for (const tagid in v2.newTags) {

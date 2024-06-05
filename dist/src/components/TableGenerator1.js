@@ -37,6 +37,8 @@ function truncateString(str, num) {
 }
 
 export const fetchTable = async () => {
+  document.getElementById("loading").style = "display:block";
+
   const apiLink =
     API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetters?status=DRAFT&page=${currentPage - 1}&size=${pageSize}`;
 
@@ -75,7 +77,7 @@ export const fetchTable = async () => {
             item.template_name,
             item.category,
             item.created_at,
-            item.created_by,
+            item.created_by_name,
             item.rname
           );
         });
@@ -83,6 +85,8 @@ export const fetchTable = async () => {
         addPagination(currentPage);
       }
     });
+  document.getElementById("loading").style = "display:none";
+  return true;
 };
 
 const docCard = (
@@ -475,7 +479,7 @@ export async function addTable1() {
     <thead class="bg-ship-cove-200 py-3 text-xs capitalize text-[#333333] flex rounded-t-md">
       <tr class="flex justify-around w-full">
         <th scope="col" class="w-14 font-normal">ID</th>
-        <th scope="col" class="w-52">
+        <th scope="col" class="w-32">
           <div class="flex items-center font-normal">
            Employee Name
             <a href="#" class="sort" name="true">
@@ -487,7 +491,7 @@ export async function addTable1() {
             </a>
           </div>
         </th>
-        <th scope="col" class="w-28">
+        <th scope="col" class="w-52">
           <div class="flex items-center font-normal">
             Template
             <a href="#" class="sort" name="true">
@@ -538,7 +542,7 @@ export async function addTable1() {
         <th scope="col" class="w-28">
           <div class="flex items-center font-normal">
             Generated On
-            <a href="#" >
+            <a href="#" class="sort" name="true" >
               <svg id="sorticon" class="px-2 h-4 w-6">
                 <use
                   xlink:href="/assets/icons/icon.svg#sorticon"
@@ -577,9 +581,26 @@ export const sortTable = (col) => {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
+  sort_th.forEach(e => {
+
+    e.innerHTML = `
+  <svg id="sorticon" class="px-2 h-4 w-6">
+  <use
+    xlink:href="/assets/icons/icon.svg#sorticon"
+  ></use>
+</svg>`;
+  });
 
   if (order) {
     sort_th[col].setAttribute("name", `${!order}`);
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-down" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.4" d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#333333" fill-opacity="0.6"/>
+    <path d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#111111"/>
+</svg>
+    
+  `;
+
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -599,6 +620,13 @@ export const sortTable = (col) => {
     }
   } else {
     sort_th[col].setAttribute("name", `${!order}`);
+
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-up" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#111111"/>
+        <path opacity="0.4"  d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#333333" fill-opacity="0.6"/>
+    </svg> 
+  `;
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {

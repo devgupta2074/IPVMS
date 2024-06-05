@@ -234,7 +234,7 @@ export const fetchVersionsDateWise = async (id) => {
             <p class=" text-base font-normal text-gray-500   ">
             <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
-             ${version.created_by.charAt(0)}
+             ${version.created_by.charAt(0).toUpperCase()}
              </p>
            
               </p>
@@ -3517,7 +3517,7 @@ const handleSignSwiftCall = async () => {
   const email = localStorage.getItem("email");
   // const userId = "10200";
   if (fileUpload) {
-    fetch("http://localhost:3000/api/users/findUser", {
+    fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -3535,14 +3535,17 @@ const handleSignSwiftCall = async () => {
           removeLoading();
         } else {
           console.log("data", data);
-          fetch("http://localhost:3000/api/document/uploadDocument", {
-            method: "POST",
-            body: JSON.stringify({
-              userId: data.user.customerId,
-              ShareLink: ShareLink,
-            }),
-            mode: "cors",
-          })
+          fetch(
+            "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+            {
+              method: "POST",
+              body: JSON.stringify({
+                userId: data.user.customerId,
+                ShareLink: ShareLink,
+              }),
+              mode: "cors",
+            }
+          )
             .then((response) => response.json())
             .then((data) => {
               removeLoading();

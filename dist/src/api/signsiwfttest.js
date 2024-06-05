@@ -1,7 +1,7 @@
 import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 import { makeRequest } from "./apiRequest.js";
 
-const apiUrl = "http://localhost:3000/api/test";
+const apiUrl = "https://ex-sign-swift.vercel.app/api/test";
 export async function Gettest() {
   const requestOptions = {
     method: API_CONSTANTS.GET,

@@ -51,7 +51,7 @@ export async function InsertNavbar() {
   </button>
 
 
-<button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<button id="policy" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
 <span id="doc-svg" class=" peer/doc-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
@@ -122,7 +122,7 @@ export async function InsertNavbar() {
 </button> 
 
   <figure class=" ">
-   <div class="bg-gray-100 rounded-full p-2 text-black ">${
+   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${
      localStorage.getItem("firstname").charAt(0).toUpperCase() +
      localStorage.getItem("lastname").charAt(0).toUpperCase()
    }</div>
@@ -207,7 +207,7 @@ export async function InsertNavbar() {
     console.log("inviteButton dash");
     window.location.href = "/dashboard";
   });
-  const todocument = document.getElementById("document");
+  const todocument = document.getElementById("policy");
   todocument.addEventListener("click", () => {
     console.log("inviteButton dash");
     window.location.href = "/policy";

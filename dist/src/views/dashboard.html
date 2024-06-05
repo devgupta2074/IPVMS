@@ -26,37 +26,85 @@
   <!-- <script type="module" src="/scripts/versioncontrol.js"></script>
   <script type="module" src="/scripts/editor.js"></script> -->
 
+  <style>
+    .redhighlight {
+        /* From https://css.glass */
+        background: rgba(255, 50, 0, 0.42);
+        border-radius: 5px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(12.4px);
+        -webkit-backdrop-filter: blur(12.4px);
+        border: 1px solid rgba(255, 50, 0, 0.31);
+      }
+      .greenhighlight {
+        /* From https://css.glass */
+background: rgba(0, 255, 23, 0.49);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(2px);
+-webkit-backdrop-filter: blur(2px);
+border: 1px solid rgba(0, 255, 23, 1);
+      }
+      .bluehighlight {
+        /* From https://css.glass */
+        /* From https://css.glass */
+        background: rgba(0, 215, 255, 0.42);
+        border-radius: 5px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(12.4px);
+        -webkit-backdrop-filter: blur(12.4px);
+        border: 1px solid rgba(0, 215, 255, 0.31);
+      }
+  </style>
+
 
 </head>
 
-<body class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden vsc-initialized">
-  <main class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)">
-    <div id="dashboardarea" class="flex flex-col gap-10 ">
-      <div
-        class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-3xl font-roboto font-medium">
-        Welcome&nbsp;<span id="name"></span>
-      </div>
-      <div class="bg-white w-full px-4 rounded-lg ">
-        <div class="flex border-b-2 py-4">
-          <h2 class="flex-1 font-roboto font-semibold text-xl">Policies</h2>
-          <a href="/document"
-            class="font-roboto text-sm text-dodger-blue-500 font-medium flex gap-3 items-center justify-center">
-            View All
-            <svg class="h-6 w-6 mt-2">
-              <use xlink:href="/assets/icons/icon.svg#rightarrow-blue"></use>
-            </svg>
-          </a>
+  <body
+    class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden vsc-initialized"
+  >
+    <!-- HELLO -->
+    <main
+      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
+    >
+      <div id="dashboardarea" class="flex flex-col gap-10">
+        <div
+          class="flex flex-row text-mineshaft-900 justify-start items-start w-full rounded-lg text-3xl font-roboto font-medium"
+        >
+          Welcome&nbsp;<span id="name"></span>
         </div>
-        <div class="flex justify-between p-5 items-center gap-8">
-          <div class="relative -z-0">
-            <canvas width="250" height="250" id="myChart"></canvas>
-            <div class="justify-center text-center absolute top-[34%] left-[39%] -z-10">
-              <p id="charttotal" class="font-roboto font-bold text-chicago-700 text-[2.5rem]"></p>
-              <p class="font-roboto font-normal text-chicago-700 text-base">Policies</p>
-
-            </div>
+        <div class="bg-white w-full px-4 rounded-lg">
+          <div class="flex border-b-2 py-4">
+            <h2 class="flex-1 font-roboto font-semibold text-xl">Policies</h2>
+            <a
+              href="/policy"
+              class="font-roboto text-sm text-dodger-blue-500 font-medium flex gap-3 items-center justify-center"
+            >
+              View All
+              <svg class="h-6 w-6 mt-2">
+                <use xlink:href="/assets/icons/icon.svg#rightarrow-blue"></use>
+              </svg>
+            </a>
           </div>
-          <div id="category-display" class="grid grid-cols-4 gap-x-[26px] gap-y-[41px]">
+          <div class="flex justify-between p-5 items-center gap-8">
+            <div class="relative -z-0">
+              <canvas width="250" height="250" id="myChart"></canvas>
+              <div
+                class="justify-center text-center absolute top-[34%] left-[39%] -z-10"
+              >
+                <p
+                  id="charttotal"
+                  class="font-roboto font-bold text-chicago-700 text-[2.5rem]"
+                ></p>
+                <p class="font-roboto font-normal text-chicago-700 text-base">
+                  Policies
+                </p>
+              </div>
+            </div>
+            <div
+              id="category-display"
+              class="grid grid-cols-4 gap-x-[26px] gap-y-[41px]"
+            ></div>
           </div>
         </div>
       </div>
@@ -111,203 +159,820 @@
         
               </ul>
             </div>
+          </div>
         </div>
       </div>
+      <div class="w-full" id="main-body"></div>
+      <section id="dashboardtable" class="mt-16">
+        <div class="font-roboto font-semibold text-mineshaft-900 text-2xl mb-5">
+          Recent Policy Updates
+        </div>
 
-    </div>
-    <div class="w-full" id="main-body"></div>
-    <section id="dashboardtable" class="mt-16">
-      <div class="font-roboto font-semibold text-mineshaft-900 text-2xl mb-5">Recent Policy Updates</div>
-      <div class="" id="insert-table"></div>
-    </section>
+        <div id="insert-table"></div>
+      </section>
 
-
-   
-
-    <!-- EDITOR -->
-    <div id="extralarge-modal" tabindex="-1" class="hidden  w-full  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-      <button id="back-request" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
-        <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
+      <section id="loading" class="z-[9999999999]  absolute top-0 right-0 left-0">
+        <section
+        class="grid grid-cols-[104px_1fr] grid-rows-[87px_1fr] bg-deep-cove-950 h-lvh overflow-hidden"
+      >
+    
+      <header class="w-full py-5 pl-8   bg-deep-cove-950 flex items-center justify-end gap-5 col-span-full ">
+        <img class="h-[39px] w-[39px]" src="/assets/images/exsquared.png">
+        <div class="flex-1 ml-5 flex items-center justify-end relative gap-3">
+          <input type="name" name="search" id="globalsearch" class="w-[17.5rem] hidden p-2 px-4 font-roboto text-[0.9375rem] leading-[1.0985rem] placeholder:text-white font-medium rounded-full shadow-md text-white bg-astronaut-900 hover:border-none focus:border-none" placeholder="Search">
+          <svg class="h-6 w-6 z-50 -ml-12 mt-1 hidden">
+            <use xlink:href="/assets/icons/icon.svg#search-icon"></use>
           </svg>
-          
-    Back
-      </button>
-      <div id="onlyforblank" class="hidden  rounded-lg shadow-md w-full bg-white mb-5 flex flex-col items-start gap-[24px] self-stretch p-[24px] ">
-    
-       <div class="font-roboto font-medium w-full text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
-        Add Policy
-       </div>
-       <div class="grid grid-cols-3 w-full gap-5 ">
-        <div>
-          <label for="policy-name" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy  Name</label>
-          <input type="text" id="policy-name" class="block w-full p-2 font-normal text-chicago-600 leading-5 border text-xs  ">
-          <div id="policyname-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
-            Please enter the name of the policy
-          </div>
-      </div>
-      <div>
-        <label for="policy-description" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Policy Description</label>
-        <input type="text" id="policy-description" class="block w-full p-2 font-normal text-chicago-600 leading-5 border  text-xs  ">
-        <div id="policydescription-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
-          Please enter a policy description
         </div>
-    </div>
-    
-    <div id="addcategory" class="">
-      <label for="category" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy Type</label>
-      <select id="category" class="block w-full p-2 font-normal text-chicago-600 leading-5  border  text-sm ">
-        <option selected>Choose a category</option>
-      </select>
-      <div id="policycategory-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
-        Please select a category
-      </div>
-    </div>
-    <!-- <div class="max-w-sm mx-auto">
-      <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Send For Approval</label>
-      <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        <option selected>Choose a country</option>
-        <option value="US">United States</option>
-        <option value="CA">Canada</option>
-        <option value="FR">France</option>
-        <option value="DE">Germany</option>
-      </select>
-    </div>
-       -->
-       </div>
-    
-      </div>
-      <div class="relative w-full max-h-full">
-    
-          <div class="relative bg-white rounded-md shadow z-[6999] ">
-          <div class="sticky top-0 bg-white z-[6999]">
-            <div class="flex items-center justify-between p-3 border-b rounded-t ">
-              <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
-                New Document
-                <!-- <button
-                id="modalname"
-                  type="button"
-                data-dropdown-toggle="dropdown" >
-                  <svg class="flex items-center justify-center" width="23" height="5" viewBox="0 0 23 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="2.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                    <circle cx="11.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                    <circle cx="20.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
-                    </svg>
-                </button>
-                <div
-                class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
-                id="dropdown"
-              >
-                <div class="px-4 py-3">
-                  <span id="dropdownname" class="block text-sm"></span>
-                  <span id="dropdownemail" class="block text-sm font-medium text-gray-900 truncate"
-                    ></span
-                  >
-                </div>
-                <ul class="py-1" aria-labelledby="dropdown">
-                  <li>
-                    <a
-                      href="#"
-                      id="signout"
-                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
-                      >Sign out</a
-                    >
-                  </li>
-                </ul>
-              </div> -->
-                  
-              </h3>
-              <div class="flex flex-row gap-5 sticky top-0">
-                <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
-                <button id="approve" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Approve & Publish</button>
-             
-                <button id="reject"  type="button" class=" text-blue-700 bg-white font-roboto border-2 border-blue-700  font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 ">Reject</button>
-               
-                  <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                  </svg>
-                  <span class="sr-only">Close modal</span>
-              </button> -->
-
-             
-              </div>
-        
+        <div class="flex items-center justify-center gap-5 pr-10">
+        <button>
+          <svg class="h-6 w-6 ">
+            <use xlink:href="/assets/icons/icon.svg#bellicon"></use>
+          </svg>
+        </button> 
+          <figure class=" ">
+            <!-- <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile"> -->
+          </figure>
+        <div class="relative">
+          <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg></button>
+          <!-- Dropdown menu -->
+          <!-- Dropdown menu -->
           </div>
-          <div id="rejectionmodal" class="hidden z-[6999]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-2xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow ">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900">
-    Reject the New Changes 
-                        </h3>
-                        <button id="closereview" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                          </svg>
-                          <span class="sr-only">Close modal</span>
-                      </button>
-                    </div>
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5 space-y-4">
-                      <label for="reason" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Please Send your Reason for Rejection</label>
-                      <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>    <div id="admin-error" class=" opacity-0 font-normal text-sm text-red-600 mt-1 ">
-            Please write a reason
-          </div>
-                     
-                        <!-- <p class="text-base leading-relaxed text-gray-500 ">
-                           Note : You are sending your latest version of this policy for review. You will get the updates of the review on your dashboard.
-                        </p> -->
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
-                        <button id="rejectbutton"  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send</button>
-                        <button id="cancelbutton" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 ">Cancel</button>
-                    </div>
-                </div>
-            </div>
         </div>
-
-
-       
-      </div>
+        </header>
+    <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
+    <button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+    <span id="doc-svg" class=" peer/doc-svg">
+    <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+    <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
+    </svg>
+    </span>
+    <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+    
+      <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+        <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+      </svg>
      
-       
-          
-          </div>
-           <div class="relative">
-            <div class="  sticky top-0 flex flex-row"> 
-              <div id="editor-area" class="bg-white m-4 rounded-lg flex-1  shadow-lg mt-2 mb-2 p-2 w-full"> 
-              <div id="container-content-1" contenteditable="false">
-                <div id ="docx-wrapper-1" class="docx-wrapper"></div>
+      <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+        Dashboard</div>
+    </div>
+    </button>
+    
+    
+    <button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+    <span id="doc-svg" class=" peer/doc-svg">
+    <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+    <use xlink:href="/assets/icons/icon.svg#shield"></use>
+    </svg>
+    </span>
+    <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+    
+      <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+        <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+      </svg>
+     
+      <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+        Policies</div>
+    </div>
+    </button>
+    
+    
+    <button id="letters" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+    <span id="letter-svg" class=" peer/letter-svg">
+    <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+    <use xlink:href="/assets/icons/icon.svg#policy"></use>
+    </svg>
+    </span>
+    <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+      <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
+        <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+      </svg>
+     
+      <div class="  order-2 p-2 w-24 bg-ship-cove-500 font-roboto font-semibold text-white text-sm rounded">
+      Letters</div>
+    </div>
+    </button>
+    
+    <button id="inviteButton1111" class="h-[2.5rem] w-[2.5rem] flex flex-row">
+    <span id="invite-svg" class=" peer/invite-svg">
+    <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
+    <use xlink:href="/assets/icons/icon.svg#invite-employee"></use>
+    </svg>
+    </span>
+    
+    <div class=" my-[2px] z-10 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+      <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
+        <use xlink:href="./assets/icons/icon.svg#triangle"></use>
+      </svg>
+     
+      <div class="  order-2 p-2 w-32  bg-ship-cove-500 font-roboto text-white font-semibold text-sm rounded ">
+      Invite Member</div>
+    </div>
+    </button>
+      
+     
+    </div>
+    </aside>
+    
+    <div
+      class="bg-zircon-50 w-[auto] p-12 rounded-lg col-start-2 overflow-y-scroll col-end-3 h-calc(100vh - 87px)"
+    >
+      <div class="bg-white px-4 rounded-lg w-full">
+        <div class="flex border-b-2 py-4">
+          <h2 class="flex-1 font-roboto font-semibold text-xl">Policies</h2>
+          <a
+            href="/policy"
+            class="font-roboto text-sm text-dodger-blue-500 font-medium flex gap-3 items-center justify-center"
+          >
+            View All
+            <svg class="h-6 w-6 mt-2">
+              <use
+                xlink:href="/assets/icons/icon.svg#rightarrow-blue"
+              ></use>
+            </svg>
+          </a>
+        </div>
+    
+        <div class="flex justify-between p-5 items-center gap-8">
+          <div
+            class="rounded-full bg-gradient-to-t from-steel-gray-50 from-60% to-steel-gray-100 h-60 w-60 flex justify-center"
+          >
+            <div class="rounded-full bg-white h-32 w-32 my-auto">
+              <div class="flex flex-col my-auto items-center mt-7">
+                <div class="text-xl font-roboto font-semibold">0</div>
+                <div>Total Policies</div>
               </div>
             </div>
-            
           </div>
-           </div> 
-             
     
-             
-        
-                </div>
-           
+          <div class="grid grid-cols-4 gap-x-[26px] gap-y-[41px]">
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
               </div>
-          
-              
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+            >
+              <div class="p-4 bg-[#ECECEC] rounded-full"></div>
+              <div>
+                <div
+                  class="w-24 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                ></div>
+                <div
+                  class="w-12 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                ></div>
+              </div>
+            </div>
           </div>
-    <!-- EDITOR COMPLETED -->
-    <div id="loading" style="display:none;">
-      <div id="overlay"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); z-index: 1000;">
-        <div class="flex gap-2 justify-center items-center h-screen">
-          <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
-          <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
-          <div class="w-5 h-5 rounded-full animate-pulse bg-blue-600"></div>
         </div>
       </div>
+    
+      <div
+        class="flex flex-col justify-center items-center gap-14 w-full mt-[24px]"
+      >
+        <div class="flex justify-between w-full gap-6 h-full">
+          <div
+            class="flex justify-center basis-1/2 items-center w-full p-4 bg-white rounded-lg sm:p-8"
+          >
+            <div class="flex flex-col w-full items-center justify-between">
+              <div
+                class="pb-4 border-b border-#ECEEF3 text-start flex justify-between w-full"
+              >
+                <h5
+                  class="text-lg font-semibold leading-none text-gray-900"
+                >
+                  Employee Queue Letter
+                </h5>
+                <div class="w-16 flex items-center justify-between"></div>
+              </div>
+    
+              <!-- ADD ELEMENTS IN QUEUE LIST -->
+              <div
+                class="flex flex-col gap-2 w-full max-h-72 overflow-y-auto overflow-x-hidden"
+              >
+                <div class="flex justify-between my-2">
+                  <div
+                    class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                  >
+                    <div
+                      class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                    ></div>
+                    <div>
+                      <div
+                        class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                      ></div>
+                      <div
+                        class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                      ></div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                  ></div>
+                </div>
+    
+                <div class="flex justify-between my-2">
+                  <div
+                    class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                  >
+                    <div
+                      class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                    ></div>
+                    <div>
+                      <div
+                        class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                      ></div>
+                      <div
+                        class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                      ></div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                  ></div>
+                </div>
+    
+                <div class="flex justify-between my-2">
+                  <div
+                    class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                  >
+                    <div
+                      class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                    ></div>
+                    <div>
+                      <div
+                        class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                      ></div>
+                      <div
+                        class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                      ></div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                  ></div>
+                </div>
+    
+                <div class="flex justify-between my-2">
+                  <div
+                    class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                  >
+                    <div
+                      class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                    ></div>
+                    <div>
+                      <div
+                        class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                      ></div>
+                      <div
+                        class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                      ></div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex flex-col justify-start gap-3 items-center basis-1/2 w-full p-4 bg-white rounded-lg sm:p-8"
+          >
+            <div
+              class="flex items-center justify-between pb-4 border-b border-#ECEEF3 w-full"
+            >
+              <h5 class="text-lg font-semibold leading-none tex-[#333333]">
+                Policy Approval
+              </h5>
+              <div class="w-16 flex items-center justify-between"></div>
+            </div>
+            <div
+              class="flex flex-col gap-2 w-full max-h-72 overflow-y-auto overflow-x-hidden"
+            >
+              <div class="flex justify-between my-2">
+                <div
+                  class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                >
+                  <div
+                    class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                  ></div>
+                  <div>
+                    <div
+                      class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                    ></div>
+                    <div
+                      class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                ></div>
+              </div>
+    
+              <div class="flex justify-between my-2">
+                <div
+                  class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                >
+                  <div
+                    class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                  ></div>
+                  <div>
+                    <div
+                      class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                    ></div>
+                    <div
+                      class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                ></div>
+              </div>
+    
+              <div class="flex justify-between my-2">
+                <div
+                  class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                >
+                  <div
+                    class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                  ></div>
+                  <div>
+                    <div
+                      class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                    ></div>
+                    <div
+                      class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                ></div>
+              </div>
+    
+              <div class="flex justify-between my-2">
+                <div
+                  class="flex items-center gap-2 text-mineshaft-900 justify-start w-full rounded-lg text-[26px] font-roboto font-medium"
+                >
+                  <div
+                    class="p-4 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 rounded-full"
+                  ></div>
+                  <div>
+                    <div
+                      class="w-40 p-2 bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 font-roboto text-[26px] rounded-[4px] leading-none m-1"
+                    ></div>
+                    <div
+                      class="w-24 p-2 font-roboto font-normal text-base rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 m-1"
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  class="bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100 px-10 rounded-[4px] m-2"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="mt-16">
+        <div
+          class="font-roboto font-semibold text-mineshaft-900 text-2xl mb-5"
+        >
+          Recent Policy Updates
+        </div>
+        <table
+          class="w-full mb-5 text-left text-sm text-gray-500 bg-white font-roboto rounded-md"
+        >
+          <thead
+            class="bg-ship-cove-200 text-xs capitalize text-[#333333] flex rounded-t-md"
+          >
+            <tr class="py-4 flex justify-around w-full">
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <th
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-white from-60% to-gulf-blue-50"
+              ></th>
+              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+          <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="py-4 flex justify-around w-full">
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+          <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+            </tr>
+            <tr class="py-4 flex justify-around w-full">
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+          <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+            </tr>
+            <tr class="py-4 flex justify-around w-full">
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <td
+                scope="col"
+                class="w-28 px-3 py-2.5 rounded-[4px] bg-gradient-to-r from-steel-gray-50 from-60% to-steel-gray-100"
+              ></td>
+              <!-- <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th>
+          <th scope="col" class="w-24 px-3 py-2 bg-gulf-blue-50"></th> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+    
+    <!-- 
+      <div role="status" class="max-w-md p-4 space-y-4 animate-pulse md:p-6 ">
+        <div class="flex items-center justify-between">
+            <div>
+                <div class="h-2.5 bg-gray-300 rounded-[4px]  w-24 mb-2.5"></div>
+                <div class="w-32 h-2 bg-gray-200 rounded-[4px] "></div>
+            </div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px]  w-24"></div>
+        </div>
+        <div class="flex items-center justify-between pt-4">
+            <div>
+                <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+                <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+            </div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+        </div>
+        <div class="flex items-center justify-between pt-4">
+            <div>
+                <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+                <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+            </div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+        </div>
+        <div class="flex items-center justify-between pt-4">
+            <div>
+                <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+                <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+            </div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+        </div>
+        <div class="flex items-center justify-between pt-4">
+            <div>
+                <div class="h-2.5 bg-gray-300 rounded-[4px] w-24 mb-2.5"></div>
+                <div class="w-32 h-2 bg-gray-200 rounded-[4px]"></div>
+            </div>
+            <div class="h-2.5 bg-gray-300 rounded-[4px] w-12"></div>
+        </div>
+        <span class="sr-only">Loading...</span>
+    </div> -->
+    
+    
+    </section>
+    
+      </section>
+
+      <div id="extralarge-modal" tabindex="-1" class="hidden  w-full  overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <button id="back-request" class="mt-5 mb-5   flex flex-row gap-3 items-center font-roboto font-normal leading-4 text-mineshaft-900">
+          <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.9999 6.99997H4.41394L9.70694 1.70697L8.29294 0.292969L0.585938 7.99997L8.29294 15.707L9.70694 14.293L4.41394 8.99997H18.9999V6.99997Z" fill="#333333"/>
+            </svg>
+            
+      Back
+        </button>
+        <div id="onlyforblank" class="hidden  rounded-lg shadow-md w-full bg-white mb-5 flex flex-col items-start gap-[24px] self-stretch p-[24px] ">
+      
+         <div class="font-roboto font-medium w-full text-mineshaft-900 text-2xl leading-7 border-b-2 pb-3 ">
+          Add Policy
+         </div>
+         <div class="grid grid-cols-3 w-full gap-5 ">
+          <div>
+            <label for="policy-name" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy  Name</label>
+            <input type="text" id="policy-name" class="block w-full p-2 font-normal text-chicago-600 leading-5 border text-xs  ">
+            <div id="policyname-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
+              Please enter the name of the policy
+            </div>
+        </div>
+        <div>
+          <label for="policy-description" class="block mb-2 text-sm  font-normal text-chicago-600 leading-5 ">Policy Description</label>
+          <input type="text" id="policy-description" class="block w-full p-2 font-normal text-chicago-600 leading-5 border  text-xs  ">
+          <div id="policydescription-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
+            Please enter a policy description
+          </div>
+      </div>
+      
+      <div id="addcategory" class="">
+        <label for="category" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Policy Type</label>
+        <select id="category" class="block w-full p-2 font-normal text-chicago-600 leading-5  border  text-sm ">
+          <option selected>Choose a category</option>
+        </select>
+        <div id="policycategory-error" class=" opacity-1 font-normal text-sm text-red-600 mt-1 ">
+          Please select a category
+        </div>
+      </div>
+      <!-- <div class="max-w-sm mx-auto">
+        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Send For Approval</label>
+        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option selected>Choose a country</option>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+        </select>
+      </div>
+         -->
+         </div>
+      
+        </div>
+        <div class="relative w-full max-h-full">
+      
+            <div class="relative bg-white rounded-md shadow z-[6999] ">
+            <div class="sticky top-0 bg-white z-[6999]">
+              <div class="flex items-center justify-between p-3 border-b rounded-t ">
+                <h3 id="doc_title" class="text-xl font-medium text-gray-900 flex flex-row items-center justify-center gap-8  ">
+                  New Document
+                  <!-- <button
+                  id="modalname"
+                    type="button"
+                  data-dropdown-toggle="dropdown" >
+                    <svg class="flex items-center justify-center" width="23" height="5" viewBox="0 0 23 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="2.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                      <circle cx="11.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                      <circle cx="20.5" cy="2.5" r="2.5" fill="#AFB8D0"/>
+                      </svg>
+                  </button>
+                  <div
+                  class="hidden bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4"
+                  id="dropdown"
+                >
+                  <div class="px-4 py-3">
+                    <span id="dropdownname" class="block text-sm"></span>
+                    <span id="dropdownemail" class="block text-sm font-medium text-gray-900 truncate"
+                      ></span
+                    >
+                  </div>
+                  <ul class="py-1" aria-labelledby="dropdown">
+                    <li>
+                      <a
+                        href="#"
+                        id="signout"
+                        class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                        >Sign out</a
+                      >
+                    </li>
+                  </ul>
+                </div> -->
+                    
+                </h3>
+                <div class="flex flex-row gap-5 sticky top-0">
+                  <!-- <button id="generatepdf" type="button" class="text-dodger-blue-500  hover:bg-dodger-blue-500 border border-dodger-blue-500 bg-white focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">Generate PDF</button> -->
+                  <button id="approve" type="button" class=" text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Approve & Publish</button>
+               
+                  <button id="reject"  type="button" class=" text-blue-700 bg-white font-roboto border-2 border-blue-700  font-medium rounded-md text-sm px-5 py-2.5 text-center me-2 mb-2 ">Reject</button>
+                 
+                    <!-- <button onclick="closeEditor()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center  " data-modal-hide="extralarge-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button> -->
+  
+               
+                </div>
+          
+            </div>
+            <div id="rejectionmodal" class="hidden z-[6999]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+              <div class="relative p-4 w-full max-w-2xl max-h-full">
+                  <!-- Modal content -->
+                  <div class="relative bg-white rounded-lg shadow ">
+                      <!-- Modal header -->
+                      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+                          <h3 class="text-xl font-semibold text-gray-900">
+      Reject the New Changes 
+                          </h3>
+                          <button id="closereview" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="p-4 md:p-5 space-y-4">
+                        <label for="reason" class="block mb-2 text-sm font-normal text-chicago-600 leading-5 ">Please Send your Reason for Rejection</label>
+                        <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>    <div id="admin-error" class=" opacity-0 font-normal text-sm text-red-600 mt-1 ">
+              Please write a reason
+            </div>
+                       
+                          <!-- <p class="text-base leading-relaxed text-gray-500 ">
+                             Note : You are sending your latest version of this policy for review. You will get the updates of the review on your dashboard.
+                          </p> -->
+                      </div>
+                      <!-- Modal footer -->
+                      <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+                          <button id="rejectbutton"  type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send</button>
+                          <button id="cancelbutton" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 ">Cancel</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+  
+  
+         
+        </div>
+       
+         
+            
+            </div>
+            <div class="relative">
+              <div class="sticky top-0 flex flex-row">
+                <div
+                  id="editor-area"
+                  class="bg-white m-4 rounded-lg flex-1 shadow-lg mt-2 mb-2 p-2 w-full"
+                >
+                  <div id="container-content-1" contenteditable="false">
+                    <div id="docx-wrapper-1" class="docx-wrapper"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </main>
+    <!-- EDITOR -->
+  
+
     <div id="reasonmodal" class="hidden z-[6999]  backdrop-blur-xl overflow-y-auto overflow-x-hidden fixed flex   justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
       <div class="relative p-4 w-full max-w-2xl max-h-full">
           <!-- Modal content -->
@@ -355,9 +1020,6 @@ Reason your Policy was rejected
       </button>
   </div>
 
-    <script>
-
-    </script>
     <script type="module" src="/scripts/editor.js"></script>
 </body>
 

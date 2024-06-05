@@ -60,9 +60,8 @@ window.openNotificationModal = () => {
       500,
   };
   // Set the position of the modal just below the bell icon
-  notificationModal.style.top = `${
-    bellIconPosition.top + bellIcon.offsetHeight + 5
-  }px`;
+  notificationModal.style.top = `${bellIconPosition.top + bellIcon.offsetHeight + 5
+    }px`;
   notificationModal.style.left = `${bellIconPosition.left}px`;
   notificationModal.classList.remove("hidden");
 };
@@ -75,7 +74,7 @@ export const insertNotification = async () => {
   const userId = localStorage.getItem("userId");
   const result = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/notification/getNotification/${userId}?role=1`
+    `/api/notification/getNotification/${userId}?role=1`
   );
   const data = await result.json();
   const message = data?.notification;
@@ -95,7 +94,7 @@ window.notificationHandler = () => {
 window.addEventListener("click", function (event) {
   const modal = document.getElementById("nmessage");
   const bellIcon = document.getElementById("btn");
-  console.log(event.target);
+  // console.log(event.target);
 
   if (!bellIcon.contains(event.target) && !modal.contains(event.target)) {
     closeNotificationModal();

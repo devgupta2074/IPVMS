@@ -5,7 +5,33 @@ import { showLoading } from "../scripts/loading.js";
 import { removeLoading } from "../scripts/loading.js";
 import { insertNotification } from "./notification.js";
 
-const NavBar = `
+export async function InsertNavbar() {
+  let userdata;
+  if (localStorage.getItem("token") === null) {
+    redirect(VIEWS_CONSTANTS.LOGIN);
+  } else {
+    const token = localStorage.getItem("token");
+    await UserInfoApiRequest(token).then((data) => {
+      // Handle the response from the backend
+      console.log(data, "d");
+      if (data.statusCode == 401) {
+        redirect(VIEWS_CONSTANTS.LOGIN);
+      } else {
+        userdata = data;
+        localStorage.setItem("userid", userdata.data.id);
+        localStorage.setItem("userId", userdata.data.id);
+        localStorage.setItem(
+          "isAdmin",
+          userdata.data.group_id == 2 ? true : false
+        );
+        localStorage.setItem("email", userdata.data.email);
+        localStorage.setItem("firstname", userdata.data.first_name);
+        localStorage.setItem("lastname", userdata.data.last_name);
+      }
+    });
+  }
+
+  const NavBar = `
 <aside class="h-full col-start-1 col-end-2 px-6 bg-deep-cove-950 flex flex-col items-center mt-20 gap-y-8 sidebar-icon">
 <button id="dashboard" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
 <span id="doc-svg" class=" peer/doc-svg">
@@ -25,7 +51,7 @@ const NavBar = `
   </button>
 
 
-<button id="document" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
+<button id="policy" class="h-[2.5rem] w-[2.5rem] flex flex-row ">
 <span id="doc-svg" class=" peer/doc-svg">
 <svg class="h-[2.5rem] w-[2.5rem] p-2  ">
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
@@ -96,7 +122,10 @@ const NavBar = `
 </button> 
 
   <figure class=" ">
-    <img class="rounded-full m-1" width="39" height="39" src="/assets/images/profile2.jpg" alt="Profile">
+   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${
+     localStorage.getItem("firstname").charAt(0).toUpperCase() +
+     localStorage.getItem("lastname").charAt(0).toUpperCase()
+   }</div>
   </figure>
 <div class="relative">
   <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -127,30 +156,6 @@ const NavBar = `
 
 
   `;
-
-export async function InsertNavbar() {
-  let userdata;
-  if (localStorage.getItem("token") === null) {
-    redirect(VIEWS_CONSTANTS.LOGIN);
-  } else {
-    const token = localStorage.getItem("token");
-    await UserInfoApiRequest(token).then((data) => {
-      // Handle the response from the backend
-      console.log(data, "d");
-      if (data.statusCode == 401) {
-        redirect(VIEWS_CONSTANTS.LOGIN);
-      } else {
-        userdata = data;
-        localStorage.setItem("userid", userdata.data.id);
-        localStorage.setItem("userId", userdata.data.id);
-        localStorage.setItem(
-          "isAdmin",
-          userdata.data.group_id == 2 ? true : false
-        );
-        localStorage.setItem("email", userdata.data.email);
-      }
-    });
-  }
   const body = document.getElementsByTagName("body")[0];
   const navcomp = document.createElement("div");
   navcomp.id = "navbar-removed";
@@ -202,10 +207,10 @@ export async function InsertNavbar() {
     console.log("inviteButton dash");
     window.location.href = "/dashboard";
   });
-  const todocument = document.getElementById("document");
+  const todocument = document.getElementById("policy");
   todocument.addEventListener("click", () => {
     console.log("inviteButton dash");
-    window.location.href = "/document";
+    window.location.href = "/policy";
   });
   const toletters = document.getElementById("letters");
   toletters.addEventListener("click", () => {

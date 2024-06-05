@@ -62,7 +62,7 @@ todashboard.addEventListener("click", () => {
 
 const todocument = document.getElementById("document");
 todocument.addEventListener("click", () => {
-  window.location.href = "/document";
+  window.location.href = "/policy";
 });
 const toletters = document.getElementById("letters");
 toletters.addEventListener("click", () => {

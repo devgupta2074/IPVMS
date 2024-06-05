@@ -20,9 +20,9 @@ app.get("/editor", (req, res) => {
 app.get("/comparisontool", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "comparison.html"));
 });
-app.get("/policy", (req, res) => {
-  res.sendFile(path.join(__dirname, "src/views", "policy.html"));
-});
+// app.get("/policy", (req, res) => {
+//   res.sendFile(path.join(__dirname, "src/views", "policy.html"));
+// });
 
 app.get("/policydownload/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "policydownload.html"));
@@ -55,7 +55,7 @@ app.get("/dashboard", (req, res) => {
 app.get("/zerostate", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "dashboard-zerostate.html"));
 });
-app.get("/document", (req, res) => {
+app.get("/policy", (req, res) => {
   res.sendFile(path.join(__dirname, "src/views", "document.html"));
 });
 app.get("/", (req, res) => {

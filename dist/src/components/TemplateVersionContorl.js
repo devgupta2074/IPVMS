@@ -343,6 +343,18 @@ export function createversion() {
       .then((response) => response.json())
       .then((data) => {
         // Handle the response from the backend
+        Toastify({
+          text: "Template version created successfully",
+          duration: 3000,
+          newWindow: true,
+          className: "text-black",
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "white",
+          },
+        }).showToast();
         console.log(data);
         localStorage.setItem("version", version);
         fetchVersionsDateWise(modalid);
@@ -1825,7 +1837,7 @@ const fetchVersionsDateWise = async (id) => {
             <p class="bg-[${
               letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
-             ${version.created_by.charAt(0)}
+             ${version.created_by.charAt(0).toUpperCase()}
              </p>
            
               </p>
@@ -2026,7 +2038,7 @@ function addarticlewhileloop(articleHeight, article, i) {
   const totalarticles = document.getElementsByTagName("article");
   console.log(article, "kid");
   let index = 0;
-  while (842 > articleHeight && totalarticles.length > i + 1 && index < 100) {
+  while (1056 > articleHeight && totalarticles.length > i + 1 && index < 100) {
     // console.log(document.getElementsByTagName("article")[i]);
     // console.log(document.getElementsByTagName("article")[i + 1]);
     index += 1;
@@ -2046,9 +2058,12 @@ function addarticlewhileloop(articleHeight, article, i) {
 }
 function checkDivSize() {
   console.log("Checking container size");
-  const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
+  const editableDiv = document
+    .getElementById("docx-wrapper-1")
+    .getElementsByClassName("docx-wrapper")[0];
+  console.log(editableDiv, "editable div");
   var pages = document.getElementsByClassName("docx");
-  if (pages.length > 1) {
+  if (pages.length > 0) {
     for (let i = 0; i < pages.length; i++) {
       console.log(pages[i].id, "dev");
       const element = pages[i];
@@ -2069,9 +2084,10 @@ function checkDivSize() {
       } else {
         let article = document.getElementsByTagName("article")[i];
         let articleHeight = article.scrollHeight;
-        console.log("adding a new page dev dev ");
-        console.log(articleHeight);
-        while (792 < articleHeight) {
+        if (articleHeight > 1056) {
+          console.log("adding a new page dev dev ");
+          console.log(articleHeight);
+
           console.log("removearticlewhileloop add page");
           const newpage = document.createElement("section");
 
@@ -2097,12 +2113,15 @@ function checkDivSize() {
           newpage.appendChild(newarticle);
           newpage.appendChild(newfooter);
           editableDiv.appendChild(newpage);
-          newarticle.appendChild(article.lastChild);
-          article.lastChild.remove();
-          articleHeight = article.scrollHeight;
-          removearticlewhileloop(article, articleHeight, i);
-          // article.clientHeight = 842;
-          // article.scrollHeight = 842;
+          while (1056 < articleHeight) {
+            newarticle.insertBefore(article.lastChild, newarticle.firstChild);
+            // article.lastChild.remove();
+            articleHeight = article.scrollHeight;
+            console.log(articleHeight, "Dev artivce");
+            removearticlewhileloop(article, articleHeight, i);
+            // article.clientHeight = 842;
+            // article.scrollHeight = 842;
+          }
         }
       }
 
@@ -2111,7 +2130,7 @@ function checkDivSize() {
     // checkclientheightofarticles();
     if (document.getElementsByClassName("docx").length > 1) {
       console.log("hello");
-      removeEmptyPages();
+      // removeEmptyPages();
     }
   }
 

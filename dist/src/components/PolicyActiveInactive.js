@@ -49,7 +49,7 @@ export function makepolicyactive() {
     .addEventListener("click", async function () {
       const response = await ActivatePolicy(modalid, userid);
       console.log(response);
-      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/document";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/policy";
     });
   document
     .getElementById("closepolicyactivemodal")
@@ -114,7 +114,7 @@ export function makepolicyinactive() {
     .addEventListener("click", async function () {
       const response = await DeactivatePolicy(modalid);
       console.log(response);
-      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/document";
+      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/policy";
     });
   document
     .getElementById("closepolicyinactivemodal")

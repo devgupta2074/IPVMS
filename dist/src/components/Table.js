@@ -234,7 +234,7 @@ function addTable() {
   }
 }
 
-let maxPages = 10;
+let maxPages = 7;
 let pageSize = 7;
 let currentPage = 1;
 let totalItems = 0;
@@ -259,8 +259,7 @@ export const fetchTable = async (tableType) => {
   } else {
     apiLink =
       API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/file/document?page=${
-        currentPage - 1
+      `/api/file/document?page=${currentPage - 1
       }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
@@ -277,10 +276,6 @@ export const fetchTable = async (tableType) => {
       const tablecheck = document.getElementById("table");
 
       if (!tablecheck) {
-        console.log(
-          "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj",
-          searchcheck
-        );
         addTable();
       }
       console.log(data);
@@ -348,9 +343,27 @@ function sortTable(col) {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
+  sort_th.forEach(e => {
+
+    e.innerHTML = `
+  <svg id="sorticon" class="px-2 h-4 w-6">
+  <use
+    xlink:href="/assets/icons/icon.svg#sorticon"
+  ></use>
+</svg>`;
+  });
+
 
   if (order) {
     sort_th[col].setAttribute("name", `${!order}`);
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-down" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.4" d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#333333" fill-opacity="0.6"/>
+    <path d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#111111"/>
+</svg>
+    
+  `;
+
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -370,7 +383,12 @@ function sortTable(col) {
     }
   } else {
     sort_th[col].setAttribute("name", `${!order}`);
-
+    sort_th[col].innerHTML = `
+    <svg  class="px-2 h-4 w-6" id="sort-arrow-up" width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.68463 0.320312L8.00918 5.33029H1.36007L4.68463 0.320312Z" fill="#111111"/>
+        <path opacity="0.4"  d="M4.82282 13.6807L1.49826 8.67068L8.14737 8.67068L4.82282 13.6807Z" fill="#333333" fill-opacity="0.6"/>
+    </svg> 
+  `;
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
         let cellA = rowA.querySelectorAll("td")[col + 1].textContent.trim();
@@ -475,7 +493,7 @@ function addEditorOpenCloseFeature() {
         console.log(data.data.category);
         console.log("active", data.data);
         localStorage.setItem("modalId", modalId);
-        if (localStorage.getItem("isAdmin") === "true") {
+        if (localStorage.getItem("isAdmin") === "true" && modalId !== 236) {
           if (data.data.is_active) {
             document.getElementById("inactive").classList.remove("hidden");
             console.log("Inactive modal");
@@ -494,7 +512,9 @@ function addEditorOpenCloseFeature() {
           document.getElementById("category").disabled = true;
         }
 
-        fetchVersionsDateWise(modalId);
+        if (modalId != 236) {
+          fetchVersionsDateWise(modalId);
+        }
         // Handle the response from the backend
         console.log(data.data, "fffffkbnjb ");
         document.getElementById("docx-wrapper-1").innerHTML = data.data.data;
@@ -641,7 +661,20 @@ function addEditorOpenCloseFeature() {
             policycategory,
             policyname,
             token
-          );
+          ).then(() => {
+            Toastify({
+              text: "Policy created successfully",
+              duration: 3000,
+              newWindow: true,
+              className: "text-black",
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "white",
+              },
+            }).showToast();
+          });
           console.log("results");
           window.closeEditor();
         } else {
@@ -677,9 +710,8 @@ function addEditorOpenCloseFeature() {
         console.log(adminlist, "Admin list");
         adminlist.map((item) => {
           console.log(item.email, "email");
-          document.getElementById("adminlist").innerHTML += `<option value=${
-            item.id
-          }>${item.first_name + " " + item.last_name}</option>`;
+          document.getElementById("adminlist").innerHTML += `<option value=${item.id
+            }>${item.first_name + " " + item.last_name}</option>`;
         });
       });
     document
@@ -697,6 +729,18 @@ function addEditorOpenCloseFeature() {
             parseInt(localStorage.getItem("modalId")),
             parseInt(localStorage.getItem("userid"))
           ).then(() => {
+            Toastify({
+              text: "Policy sent for review",
+              duration: 3000,
+              newWindow: true,
+              className: "text-black",
+              gravity: "top", // `top` or `bottom`
+              position: "right", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "white",
+              },
+            }).showToast();
             closereviewmodal();
             document.getElementById("sendforreview").classList.add("hidden");
           });
@@ -807,7 +851,7 @@ function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
-  console.log(arr);
+  console.log('.....................................', arr);
   addPaginationElement(arr);
   document.getElementById(
     item + "pagination"
@@ -817,13 +861,14 @@ function addPagination(item) {
 }
 
 const handleNextPage = async () => {
-  currentPage++;
-
+  console.log(currentPage, maxPages);
   if (currentPage > maxPages) {
     currentPage = maxPages;
     return;
   }
+
   if (currentPage < totalPageCount) {
+    currentPage++;
     handlePagination(currentPage);
   }
 };
@@ -978,6 +1023,8 @@ function addSearchbar() {
   const cross_mark = document.getElementById("x");
   sbar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
+      sbar.value = sbar.value.trim();
+
       const tableType = {
         name: "",
         title: `${sbar.value}`,
@@ -987,9 +1034,12 @@ function addSearchbar() {
       console.log(tableType, "ddev");
       // resetVariables();
       fetchTable(tableType);
-      // sbar.value = "";
-      cross_mark.classList.remove("hidden");
-      // addPagination(currentPage);
+      if (sbar.value != '') {
+        cross_mark.classList.remove("hidden");
+      } else {
+        cross_mark.classList.add("hidden");
+
+      }
     }
   });
 

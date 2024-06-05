@@ -1,4 +1,4 @@
-import { InsertNavbar } from "../components/Navbar.js";
+// import { InsertNavbar } from "../components/Navbar.js";
 
 
-InsertNavbar();
+// InsertNavbar();

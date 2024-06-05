@@ -129,7 +129,7 @@ function generatecategorydisplayhtml(titlex, count, color, svg) {
 }
 
 window.clickoncategory = function (titlex) {
-  window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/document";
+  window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/policy";
   localStorage.setItem("category", titlex);
 };
 

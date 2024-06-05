@@ -14,6 +14,16 @@ var recipientEmail;
 var recipientName;
 var letter_id;
 
+
+let maxPages = 10;
+let pageSize = 5;
+let currentPage = 1;
+let totalItems;
+let title = "";
+let category = "";
+let siblingCount = 1;
+let totalPageCount;
+
 document.addEventListener("DOMContentLoaded", () => {
   ipvmsuserId = localStorage.getItem("userId");
 });
@@ -28,7 +38,7 @@ function truncateString(str, num) {
 
 export const fetchTable = async () => {
   const apiLink =
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/getLetters?status=DRAFT";
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetters?status=DRAFT&page=${currentPage - 1}&size=${pageSize}`;
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -41,13 +51,22 @@ export const fetchTable = async () => {
       if (data.success == false) {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "No data found";
+        maxPages = 10;
+        pageSize = 7;
+        currentPage = 1;
+        totalItems = 0;
+        siblingCount = 1;
+
+        addPagination(currentPage);
       } else {
         console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
+        const startItemIndex = (currentPage - 1) * pageSize + 1;
 
         data.data.map((item, index) => {
+          index = index + startItemIndex;
           console.log(item);
           parentElement.innerHTML += docCard(
             index,
@@ -61,7 +80,7 @@ export const fetchTable = async () => {
           );
         });
         //
-        //addPagination()
+        addPagination(currentPage);
       }
     });
 };
@@ -87,9 +106,9 @@ const docCard = (
       <tr
       class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
     >
-      <td class="w-14">${indx + 1}</td>
-      <td class="w-52">${ename}</2td>
-      <td class="w-28">${truncateString(tname, 10)}</td>
+      <td class="w-14">${indx}</td>
+      <td class="w-32">${ename}</td>
+      <td class="w-52">${truncateString(tname, 20)}</td>
       <td class="w-28">${category}</td>
       <td class="w-28">${created_at}</td>
       <td class="w-28">${created_by}</td>
@@ -110,8 +129,8 @@ const docCard = (
           ></use>
         </svg>
         </button>
-        <button type="button" class="mb-3 flex justify-center items-center" onClick="deleteLetter(${id})">
-        <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <button type="button" class=" flex justify-center items-center" onClick="deleteLetter(${id})">
+        <svg class=" mb-2" width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
 <path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
 <path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
@@ -131,9 +150,9 @@ const docCard = (
     <tr
     class="flex justify-around w-full py-2 bg-white border-b-[1px] border-b-[#ECEEF3] hover:bg-[#E9EDF6] transition duration-300 ease-out hover:ease-in last:rounded-b-md"
   >
-    <td class="w-14">${indx + 1}</td>
-    <td class="w-52">${rname}</2td>
-    <td class="w-28">${truncateString(tname, 10)}</td>
+    <td class="w-14">${indx}</td>
+    <td class="w-32">${rname}</td>
+    <td class="w-52">${truncateString(tname, 20)}</td>
     <td class="w-28">${category}</td>
     <td class="w-28">${created_at}</td>
     <td class="w-28">${created_by}</td>
@@ -154,8 +173,8 @@ const docCard = (
         ></use>
       </svg>
       </button>
-      <button type="button" class="flex justify-center items-center mb-3" onClick="deleteLetter(${id})">
-      <svg width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <button type="button" class="flex justify-center items-center" onClick="deleteLetter(${id})">
+      <svg class=" mb-2" width="20" height="20" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M5.25 5.25H6.125V10.5H5.25V5.25Z" fill="#5D5D5D"/>
 <path d="M7.875 5.25H8.75V10.5H7.875V5.25Z" fill="#5D5D5D"/>
 <path d="M1.75 2.625V3.5H2.625V12.25C2.625 12.4821 2.71719 12.7046 2.88128 12.8687C3.04538 13.0328 3.26794 13.125 3.5 13.125H10.5C10.7321 13.125 10.9546 13.0328 11.1187 12.8687C11.2828 12.7046 11.375 12.4821 11.375 12.25V3.5H12.25V2.625H1.75ZM3.5 12.25V3.5H10.5V12.25H3.5Z" fill="#5D5D5D"/>
@@ -172,13 +191,6 @@ const docCard = (
   //   .toLocaleDateString('en-GB')
 };
 
-let maxPages = 10;
-let pageSize = 6;
-let currentPage = 1;
-let totalItems;
-let title = "";
-let category = "";
-let siblingCount = 1;
 
 function addSortFeature() {
   const sortButtons = document.querySelectorAll(".sort");
@@ -286,27 +298,31 @@ function addModalOpenCloseFeature() {
   };
 }
 
+
 // Pagination
 
-function addPagination() {
+function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
-  console.log(arr);
+  console.log("............................................", arr);
   addPaginationElement(arr);
-  document.getElementById(1 + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
+  const dot = document.getElementById(
+    item + "pagination"
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
   addPrevAndNextfeature();
+  handlePaginationOnClick();
 }
 
 const handleNextPage = async () => {
-  currentPage++;
+  console.log('ssssssssss', currentPage, maxPages);
 
-  if (currentPage > maxPages) {
-    currentPage = maxPages;
-    return;
+  if (currentPage < totalPageCount) {
+    currentPage++;
+    console.log('ssssssssss', currentPage, maxPages, totalPageCount);
+
+    handlePagination(currentPage);
   }
-  handlePagination(currentPage);
 };
 const handlePrevPage = async () => {
   currentPage--;
@@ -324,23 +340,17 @@ const removepagination = () => {
 
 const range = (start, end) => {
   let length = end - start + 1;
+  console.log(length);
   let pages = Array.from({ length }, (_, i) => start + i);
+  console.log(pages);
   return pages;
 };
 
 const handlePagination = async (item) => {
   currentPage = item;
-  const paginationElement = document.getElementById("pagination-controller");
-  const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
-  paginationElement.innerHTML = "";
-  addPaginationElement(arr);
-  document.getElementById(item + "pagination").className =
-    "bg-indigo-800 text-white relative z-10 inline-flex items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600";
-  const tableType = {
-    name: "",
-    category: category,
-  };
-  await fetchTable(tableType);
+  addPagination(currentPage);
+  // console.log("deeevv", tableType);
+  await fetchTable();
 };
 
 const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
@@ -352,9 +362,14 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
     "pagesize",
     pageSize,
     "sibc",
-    siblingCount
+    siblingCount,
+    "totalpage",
+    totalPageCount
   );
-  const totalPageCount = Math.ceil(totalItems / pageSize);
+  if (totalItems === 0) {
+    return [1];
+  }
+  totalPageCount = Math.ceil(totalItems / pageSize);
   console.log(totalPageCount, maxPages);
   const totalPageNumbers = siblingCount + 5;
   //first last current page  2 dots
@@ -394,6 +409,7 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
   }
 };
 
+
 const addDocPageStatus = () => {
   const startItemIndex = (currentPage - 1) * pageSize + 1;
   const endItemIndex = Math.min(currentPage * pageSize, totalItems);
@@ -402,14 +418,14 @@ const addDocPageStatus = () => {
   document.getElementById("doc-status").innerHTML = "";
   document.getElementById(
     "doc-status"
-  ).innerHTML += `<p class="text-sm text-gray-700">
-                  Showing
-                  <span class="font-medium">${startItemIndex}</span>
-                  to
-                  <span class="font-medium">${endItemIndex}</span>
-                  of
-                  <span class="font-medium">${totalResults}</span> results
-    </p>`;
+  ).innerHTML += `<p class="text-sm text-gray-700 font-roboto">
+                Showing
+                <span class="font-medium font-roboto">${startItemIndex}</span>
+                to
+                <span class="font-medium font-roboto">${endItemIndex}</span>
+                of
+                <span class="font-medium font-roboto">${totalResults}</span> results
+  </p>`;
 };
 const addPaginationElement = (arr) => {
   const paginationElement = document.getElementById("pagination-controller");
@@ -417,15 +433,27 @@ const addPaginationElement = (arr) => {
     if (item === "DOTS") {
       paginationElement.innerHTML += `<h1 className="pagination-item dots no-decoration">&#8230;</h1>`;
     } else {
-      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative z-10 inline-flex items-center text-black px-4 py-2 text-sm font-semibold  focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">${item}</a>`;
+      paginationElement.innerHTML += `<button id="${item}pagination" onClick="handlePagination(${item})"  aria-current="page" class="relative bg-white h-8 font-bold rounded-md border-[1px] z-10 inline-flex items-center px-3 text-sm hover:bg-gray-50">${item}</a>`;
     }
   });
   addDocPageStatus();
 };
+
 function addPrevAndNextfeature() {
   document.getElementById("npage").addEventListener("click", handleNextPage);
   document.getElementById("ppage").addEventListener("click", handlePrevPage);
 }
+
+function handlePaginationOnClick() {
+  const paginationButtons = document.querySelectorAll(
+    "div#pagination_controller > button"
+  );
+
+  window.handlePagination = async function (Id) {
+    handlePagination(Id);
+  };
+}
+
 
 export const resetVariables = () => {
   maxPages = 10;
@@ -1012,7 +1040,7 @@ const onEditorOpen = () => {
     const ShareLink = fileUpload.data.url;
     const email = localStorage.getItem("email");
     if (fileUpload) {
-      fetch("http://localhost:3000/api/users/findUser", {
+      fetch("https://ex-sign-swift.vercel.app/api/users/findUser", {
         method: "POST",
         body: JSON.stringify({
           email: email,
@@ -1041,15 +1069,18 @@ const onEditorOpen = () => {
           } else {
             console.log("data", data);
             const signSwiftId = data.user.customerId;
-            fetch("http://localhost:3000/api/document/uploadDocument", {
-              method: "POST",
-              body: JSON.stringify({
-                userId: data.user.customerId,
-                ShareLink: ShareLink,
-                title: title,
-              }),
-              mode: "cors",
-            })
+            fetch(
+              "https://ex-sign-swift.vercel.app/api/document/uploadDocument",
+              {
+                method: "POST",
+                body: JSON.stringify({
+                  userId: data.user.customerId,
+                  ShareLink: ShareLink,
+                  title: title,
+                }),
+                mode: "cors",
+              }
+            )
               .then((response) => response.json())
               .then(async (data) => {
                 removeLoading();
@@ -1058,7 +1089,7 @@ const onEditorOpen = () => {
                   //draft->pending
                   const data1 = await axios.post(
                     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-                      "/api/file/upload/updateLetterStatus",
+                    "/api/file/upload/updateLetterStatus",
                     {
                       letterId: letter_id,
                       htmlData: element.innerHTML,

@@ -19,6 +19,8 @@ function truncateString(str, num) {
 
 
 export const fetchTable = async () => {
+  document.getElementById("loading").style = "display:block";
+
   const apiLink =
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
     `/api/file/getLetters?page=${currentPage - 1}&size=${pageSize}&name=&template=&status=PENDING,SIGNED`;
@@ -51,7 +53,7 @@ export const fetchTable = async () => {
 
         data.data.map((item, index) => {
           index = index + startItemIndex;
-          console.log('popooppoopopopopopopopoppopop', index, startItemIndex);
+          console.log('popooppoopopopopopopopoppopop', item);
 
           parentElement.innerHTML += docCard(
             index,
@@ -60,7 +62,7 @@ export const fetchTable = async () => {
             item.template_name,
             item.status,
             item.created_at,
-            item.created_by,
+            item.created_by_name,
             item.rname,
             item.filepath
           );
@@ -68,6 +70,7 @@ export const fetchTable = async () => {
           console.log("path is", item.filepath);
         });
         data.data.forEach((item) => {
+
           const pdfButton = parentElement.querySelector(`#pdf${item.id}`);
           const downloadButton = parentElement.querySelector(`#url${item.id}`);
           if (pdfButton) {
@@ -93,7 +96,11 @@ export const fetchTable = async () => {
 
       }
     });
+  document.getElementById("loading").style = "display:none";
+  return true;
+
 };
+
 
 const docCard = (
   indx,
@@ -470,7 +477,7 @@ export async function addTable() {
       <th scope="col" class="w-28">
         <div class="flex items-center font-normal">
           Generated On
-          <a href="#" >
+          <a href="#" class="sort" name="true">
             <svg id="sorticon" class="px-2 h-4 w-6">
               <use
                 xlink:href="/assets/icons/icon.svg#sorticon"

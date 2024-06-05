@@ -326,6 +326,8 @@ export const fetchTable = async (tableType) => {
   return true;
 };
 
+// Sorting 
+
 function getdate(dateString) {
   const parts = dateString.split("/");
   const day = parseInt(parts[0], 10);

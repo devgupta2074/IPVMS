@@ -1023,6 +1023,8 @@ function addSearchbar() {
   const cross_mark = document.getElementById("x");
   sbar.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
+      sbar.value = sbar.value.trim();
+
       const tableType = {
         name: "",
         title: `${sbar.value}`,
@@ -1032,9 +1034,12 @@ function addSearchbar() {
       console.log(tableType, "ddev");
       // resetVariables();
       fetchTable(tableType);
-      // sbar.value = "";
-      cross_mark.classList.remove("hidden");
-      // addPagination(currentPage);
+      if (sbar.value != '') {
+        cross_mark.classList.remove("hidden");
+      } else {
+        cross_mark.classList.add("hidden");
+
+      }
     }
   });
 

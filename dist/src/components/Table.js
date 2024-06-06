@@ -432,6 +432,7 @@ function addSortFeature() {
 // View Modal
 function addEditorOpenCloseFeature() {
   window.openEditor = async function (modalId) {
+    showLoading();
     const res = await GetAllCategory();
     document.getElementById("onlyforblank").classList.remove("hidden");
 
@@ -453,10 +454,6 @@ function addEditorOpenCloseFeature() {
 
       category = res?.data;
       let categoryElement = `  <option selected>Select a category</option>`;
-      // let categoryElement = `
-      //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
-      //     <option  class="flex justify-center items-center" selected>Choose Category</option>
-      //   `;
 
       category?.map((item) => {
         categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
@@ -524,9 +521,9 @@ function addEditorOpenCloseFeature() {
         localStorage.setItem("htmljson", JSON.stringify(htmljson));
         console.log("ddddddddddddddddddddddddd");
       });
-    // const container = document.getElementsByClassName("docx-wrapper")[0];
-    // container.id = "docx-wrapper";
+
     imageLoaded();
+    removeLoading();
   };
   window.closeEditor = function () {
     console.log("fniefniefnir");

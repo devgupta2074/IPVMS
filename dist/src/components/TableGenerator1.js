@@ -14,7 +14,6 @@ var recipientEmail;
 var recipientName;
 var letter_id;
 
-
 let maxPages = 10;
 let pageSize = 5;
 let currentPage = 1;
@@ -40,7 +39,10 @@ export const fetchTable = async () => {
   document.getElementById("loading").style = "display:block";
 
   const apiLink =
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetters?status=DRAFT&page=${currentPage - 1}&size=${pageSize}`;
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    `/api/file/getLetters?status=DRAFT&page=${
+      currentPage - 1
+    }&size=${pageSize}`;
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -195,7 +197,6 @@ const docCard = (
   //   .toLocaleDateString('en-GB')
 };
 
-
 function addSortFeature() {
   const sortButtons = document.querySelectorAll(".sort");
   sortButtons.forEach((e, index) => {
@@ -302,7 +303,6 @@ function addModalOpenCloseFeature() {
   };
 }
 
-
 // Pagination
 
 function addPagination(item) {
@@ -311,19 +311,19 @@ function addPagination(item) {
   paginationElement.innerHTML = "";
   console.log("............................................", arr);
   addPaginationElement(arr);
-  const dot = document.getElementById(
+  const dot = (document.getElementById(
     item + "pagination"
-  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`);
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }
 
 const handleNextPage = async () => {
-  console.log('ssssssssss', currentPage, maxPages);
+  console.log("ssssssssss", currentPage, maxPages);
 
   if (currentPage < totalPageCount) {
     currentPage++;
-    console.log('ssssssssss', currentPage, maxPages, totalPageCount);
+    console.log("ssssssssss", currentPage, maxPages, totalPageCount);
 
     handlePagination(currentPage);
   }
@@ -413,7 +413,6 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
   }
 };
 
-
 const addDocPageStatus = () => {
   const startItemIndex = (currentPage - 1) * pageSize + 1;
   const endItemIndex = Math.min(currentPage * pageSize, totalItems);
@@ -457,7 +456,6 @@ function handlePaginationOnClick() {
     handlePagination(Id);
   };
 }
-
 
 export const resetVariables = () => {
   maxPages = 10;
@@ -581,8 +579,7 @@ export const sortTable = (col) => {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
-  sort_th.forEach(e => {
-
+  sort_th.forEach((e) => {
     e.innerHTML = `
   <svg id="sorticon" class="px-2 h-4 w-6">
   <use
@@ -600,7 +597,6 @@ export const sortTable = (col) => {
 </svg>
     
   `;
-
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -953,7 +949,7 @@ const onEditorOpen = () => {
     console.log("rrrrecepirnt id is", recipientId);
     formData.append("userId", recipientId);
     formData.append("templateId", templateId);
-    formData.append("email", "tapasviarora2002@gmail.com");
+    formData.append("email", recipientEmail);
     formData.append("html_data", element.innerHTML);
     formData.append("letter_id", letter_id);
     console.log(ipvmsuserId, "actorrrrrrrrrrr");
@@ -1117,7 +1113,7 @@ const onEditorOpen = () => {
                   //draft->pending
                   const data1 = await axios.post(
                     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-                    "/api/file/upload/updateLetterStatus",
+                      "/api/file/upload/updateLetterStatus",
                     {
                       letterId: letter_id,
                       htmlData: element.innerHTML,

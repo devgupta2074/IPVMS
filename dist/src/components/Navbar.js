@@ -280,7 +280,7 @@ export async function InsertNavbar() {
     invitemodal.id = "removemodal1111";
     invitemodal.innerHTML = `<div
     id="modalinvite"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
+    class="modal  fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
   >
     <div
       class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
@@ -340,7 +340,7 @@ export async function InsertNavbar() {
         
         <p id="success-message" class="text-green-400 text-md hidden">invitation send success </p>
         <p id="emailerror" class="text-red-400 text-md hidden">Email already exist </p>
-      </div>
+   
       
      
       </form>
@@ -349,13 +349,13 @@ export async function InsertNavbar() {
 
     // })
     modal = document.getElementById("modalinvite");
-    document.addEventListener("click", function (event) {
-      console.log("event", event.target);
+    // document.addEventListener("click", function (event) {
+    //   console.log("event", event.target);
 
-      if (event.target.classList.contains("backdrop")) {
-        modal.style.display = "none";
-      }
-    });
+    //   if (event.target.classList.contains("backdrop")) {
+    //     modal.style.display = "none";
+    //   }
+    // });
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
 
@@ -370,6 +370,7 @@ export async function InsertNavbar() {
     }
     document.getElementById("inviteForm").addEventListener("submit", (e) => {
       e.preventDefault();
+      console.log("filled");
       handleInvite();
     });
     async function handleInvite() {
@@ -411,11 +412,11 @@ export async function InsertNavbar() {
       modal.style.display = "none";
     });
   }
-  // window.addEventListener("click", function (event) {
-  //   if (event.target == modal) {
-  //     modal.style.display = "none";
-  //   }
-  // });
+  window.addEventListener("click", function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  });
 }
 
 // <div class="tooltip">

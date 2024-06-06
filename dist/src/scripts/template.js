@@ -553,7 +553,7 @@ const handleGeneratePdf = async () => {
   formData.append("file", pdfBlob, fileName);
   formData.append("userId", recipientId);
   formData.append("templateId", templateId);
-  formData.append("email", "tapasviarora2002@gmail.com");
+  formData.append("email", recipientEmail);
   formData.append("html_data", element.innerHTML.toString());
   formData.append("letter_id", letterId);
   formData.append("ipvms_userId", ipvmsuserId);

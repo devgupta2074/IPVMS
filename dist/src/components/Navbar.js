@@ -364,8 +364,8 @@ export async function InsertNavbar() {
     closeButton = document.getElementById("closeButton1111");
     if (closeButton) {
       closeButton.addEventListener("click", function () {
-        var modal = document.getElementById("modalinvite");
-        modal.classList.add("hidden");
+        const modal = document.getElementById("modalinvite");
+        modal.remove();
       });
     }
     document.getElementById("inviteForm").addEventListener("submit", (e) => {
@@ -408,12 +408,6 @@ export async function InsertNavbar() {
   });
   //function to close the modal when clicking outside of it
 
-  if (closeButton) {
-    closeButton.addEventListener("click", function () {
-      const invmodal = document.getElementById("modalinvite");
-      invmodal.remove();
-    });
-  }
   window.addEventListener("click", function (event) {
     const modal = document.getElementById("modalinvite");
     if (event.target == modal) {

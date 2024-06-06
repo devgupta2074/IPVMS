@@ -651,10 +651,11 @@ const handleSignSwiftCall = async () => {
     pagebreak: { mode: "avoid-all", after: "section" },
   };
   let letterId;
-  const pdfBlob = await html2pdf().from(element).output("blob");
+  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
   const formData = new FormData();
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
+
   const fileUpload = await axios.post(
     API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/upload/letterpdf",
     formData,
@@ -728,6 +729,7 @@ const handleSignSwiftCall = async () => {
                     name: recipientName,
                     fileName: fileName,
                     swift_id: docId,
+                    shareLink: ShareLink,
                   }
                 );
                 console.log("data is data1", data1);

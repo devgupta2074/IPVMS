@@ -3370,7 +3370,7 @@ const handleSignSwiftCall = async () => {
     pagebreak: { mode: "avoid-all", after: "section" },
   };
   let letterId;
-  const pdfBlob = await html2pdf().from(element).output("blob");
+  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
   const formData = new FormData();
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);

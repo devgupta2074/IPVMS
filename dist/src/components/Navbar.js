@@ -39,7 +39,7 @@ export async function InsertNavbar() {
 <use xlink:href="/assets/icons/icon.svg#dashboard"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-[7999] flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
     <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
       <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -57,7 +57,7 @@ export async function InsertNavbar() {
 <use xlink:href="/assets/icons/icon.svg#shield"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-[7999] flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/doc-svg:visible peer-hover/doc-svg:opacity-100 transition-opacity duration-300">
 
     <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
       <use xlink:href="./assets/icons/icon.svg#triangle"></use>
@@ -75,7 +75,7 @@ export async function InsertNavbar() {
 <use xlink:href="/assets/icons/icon.svg#policy"></use>
 </svg>
 </span>
-<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
+<div class=" my-[2px] z-[7999] flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/letter-svg:visible peer-hover/letter-svg:opacity-100 transition-opacity duration-300 ">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -92,7 +92,7 @@ export async function InsertNavbar() {
   </svg>
   </span>
 
-<div class=" my-[2px] z-20 flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
+<div class=" my-[2px] z-[7999] flex flex-row gap-0 items-center justify-center opacity-0  invisible peer-hover/invite-svg:visible peer-hover/invite-svg:opacity-100 transition-opacity duration-300">
   <svg class="  order-1 w-[9px] h-[13px] ml-3 -mr-1 ">
     <use xlink:href="./assets/icons/icon.svg#triangle"></use>
   </svg>
@@ -122,10 +122,9 @@ export async function InsertNavbar() {
 </button> 
 
   <figure class=" ">
-   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${
-     localStorage.getItem("firstname").charAt(0).toUpperCase() +
-     localStorage.getItem("lastname").charAt(0).toUpperCase()
-   }</div>
+   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${localStorage.getItem("firstname").charAt(0).toUpperCase() +
+    localStorage.getItem("lastname").charAt(0).toUpperCase()
+    }</div>
   </figure>
 <div class="relative">
   <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

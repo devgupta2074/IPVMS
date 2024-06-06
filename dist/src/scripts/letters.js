@@ -621,6 +621,61 @@ async function getTemplateInfo(templateId) {
 </div>`;
   }
 }
+async function getUserLetterDisplay(userId) {
+  const response = await fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getSendletter/${userId}`,
+    {
+      method: "GET",
+    }
+  )
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      const result = data.letter;
+      document.getElementById("olduserletters").innerHTML = "";
+      result.map((item) => {
+        document.getElementById("olduserletters").innerHTML += `
+        <div>
+              <div
+                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
+              >
+                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
+                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
+                </svg>
+    
+                <svg class="w-[260px] h-[150px] cursor-pointer">
+                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
+                </svg>
+              </div>
+              <div class="w-[20rem] bg-white rounded-b-lg p-1  font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-between items-center">
+              <div class="text-sm overflow-hidden text-ellipsis text-nowrap w-1/2 text-start">${item.title}</div>
+              <div class="text-sm overflow-hidden text-ellipsis text-nowrap w-1/2  text-end">${item.created_at}</div>
+            </div>
+            </div>
+        `;
+      });
+      ///change to updated at latter on
+
+      // result2->letter data
+    });
+}
+
+let userdata;
+if (localStorage.getItem("token") === null) {
+  redirect(VIEWS_CONSTANTS.LOGIN);
+} else {
+  const token = localStorage.getItem("token");
+  await UserInfoApiRequest(token).then((data) => {
+    // Handle the response from the backend
+    console.log(data, "d");
+    document.getElementById("loading").style = "display:none";
+    if (data.statusCode == 401) {
+      redirect(VIEWS_CONSTANTS.LOGIN);
+    } else {
+      userdata = data;
+    }
+  });
+}
 async function getUserInfoToDisplay(userId) {
   console.log(userId);
   const response = await fetch(
@@ -744,8 +799,8 @@ async function getUserInfoToDisplay(userId) {
           </div>
         </div>
       </div>`;
-          document.getElementById("selectedtemplate").innerHTML =
-            templatedetails;
+          // document.getElementById("selectedtemplate").innerHTML =
+          //   templatedetails;
         } else {
           additionaldetails.innerHTML = ` <div
           id="userdetails"
@@ -816,66 +871,14 @@ async function getUserInfoToDisplay(userId) {
       }
 
       console.log("lololololollololol");
+      getUserLetterDisplay(userId);
       // document.getElementById("loading").style = "display:none";
     })
     .catch((error) => {
       console.error("Error:", error);
     });
 }
-async function getUserLetterDisplay(userId) {
-  const response = await fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getSendletter/${userId}`,
-    {
-      method: "GET",
-    }
-  )
-    .then((response) => response.json())
-    .then(async (data) => {
-      console.log(data);
-      const result = data.letter;
-      result.map((item) => {
-        document.getElementById("olduserletters").innerHTML += `
-        <div>
-              <div
-                class="bg-link-water-100 pr-4 pl-4 pt-4 pb-0 rounded-t-lg flex items-center relative"
-              >
-                <svg class="absolute top-0 right-0 w-4 h-8 mt-4">
-                  <use xlink:href="./assets/icons/icon.svg#threedots"></use>
-                </svg>
-    
-                <svg class="w-[260px] h-[150px] cursor-pointer">
-                  <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
-                </svg>
-              </div>
-              <div class="bg-white rounded-b-lg p-1 w-[20rem] font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-between items-center">
-              <div class="text-sm truncate">${item.title}</div>
-              <div class="text-sm truncate">${item.created_at}</div>
-            </div>
-            </div>
-        `;
-      });
-      ///change to updated at latter on
 
-      // result2->letter data
-    });
-}
-
-let userdata;
-if (localStorage.getItem("token") === null) {
-  redirect(VIEWS_CONSTANTS.LOGIN);
-} else {
-  const token = localStorage.getItem("token");
-  await UserInfoApiRequest(token).then((data) => {
-    // Handle the response from the backend
-    console.log(data, "d");
-    document.getElementById("loading").style = "display:none";
-    if (data.statusCode == 401) {
-      redirect(VIEWS_CONSTANTS.LOGIN);
-    } else {
-      userdata = data;
-    }
-  });
-}
 InsertNavbar();
 const sendletters = document.getElementById("sendletters");
 const recentsendletters = document.getElementById("recentsentletters");
@@ -989,7 +992,7 @@ async function displayArea() {
       <!-- Dropdown menu -->
       <div
         id="dropdownSearchx"
-        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%]"
+        class="z-10 absolute top-16  hidden items-start bg-white rounded-lg w-[49%] shadow-md"
       >
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
@@ -1067,7 +1070,7 @@ async function displayArea() {
       </div>
       <!-- Dropdown menu -->
       <div
-        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg"
+        class="z-10 absolute top-16 overflow-y-auto max-h-48 hidden items-start w-1/2 bg-white divide-y divide-gray-100 rounded-lg shadow-md"
         id="dropdownUser"
       >
         <ul
@@ -1296,9 +1299,7 @@ async function displayArea() {
       </svg>`;
           event.target.appendChild(checkSymbol);
           const useri = getUserInfoToDisplay(userId);
-          if (useri) {
-            getUserLetterDisplay(userId);
-          }
+
           if (userId && templateId) {
             document.getElementById("generateLetter").className =
               "text-white text-base bg-blue-700 hover:bg-blue-800 focus:ring-4 p-1 w-1/6 h-12  rounded-md";

@@ -647,9 +647,9 @@ async function getUserLetterDisplay(userId) {
                   <use xlink:href="./assets/icons/icon.svg#templateimage"></use>
                 </svg>
               </div>
-              <div class="bg-white rounded-b-lg p-1 w-[20rem] font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-between items-center">
-              <div class="text-sm truncate">${item.title}</div>
-              <div class="text-sm truncate">${item.created_at}</div>
+              <div class="w-[20rem] bg-white rounded-b-lg p-1  font-roboto font-medium text-mineshaft-900 leading-4 flex flex-row justify-between items-center">
+              <div class="text-sm overflow-hidden text-ellipsis text-nowrap w-1/2 text-start">${item.title}</div>
+              <div class="text-sm overflow-hidden text-ellipsis text-nowrap w-1/2  text-end">${item.created_at}</div>
             </div>
             </div>
         `;

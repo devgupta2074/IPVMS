@@ -526,7 +526,7 @@ const saveAsDraft = async () => {
 
 const handleGeneratePdf = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.querySelector(".container");
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -537,6 +537,7 @@ const handleGeneratePdf = async () => {
     html2canvas: {
       scale: 2,
       letterRendering: true,
+      useCORS: true,
     },
     jsPDF: {
       unit: "in",
@@ -547,7 +548,6 @@ const handleGeneratePdf = async () => {
   };
   const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
   const formData = new FormData();
-  let letterId;
   console.log(email);
   const fileName = "pdfsend" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
@@ -555,7 +555,6 @@ const handleGeneratePdf = async () => {
   formData.append("templateId", templateId);
   formData.append("email", recipientEmail);
   formData.append("html_data", element.innerHTML.toString());
-  formData.append("letter_id", letterId);
   formData.append("ipvms_userId", ipvmsuserId);
   formData.append("recipient_name", recipientName);
   formData.append("recipient_email", recipientEmail);

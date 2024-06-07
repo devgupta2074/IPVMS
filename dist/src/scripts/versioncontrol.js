@@ -2341,7 +2341,7 @@ function checkDivSize() {
             "style",
             "padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;"
           );
-          newpage.id = "new_page_" + Math.random() * 1000;
+          newpage.id = "new_page_" + Math.floor(Math.random() * 1000);
           const newheader = document.createElement("header");
           newheader.setAttribute(
             "style",

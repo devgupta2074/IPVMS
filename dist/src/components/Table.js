@@ -295,6 +295,20 @@ export const fetchTable = async (tableType) => {
       } else {
         console.log("jhishi", data.data);
         totalItems = data.data[0]?.total_count;
+
+        // if (totalItems == 0) {
+        //   const parentElement = document.getElementById("tbody");
+        //   parentElement.innerHTML = `
+        //   <tr><td class=" flex justify-center ">  <svg class="px-2 h-4 w-6">
+        //   <use
+        //     xlink:href="/assets/icons/icon.svg#emptytable"
+        //   ></use>
+        // </svg>
+
+        // </td></tr>
+
+        //   `;
+        // } else {
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
         document.getElementById("main-body").innerHTML = "";
@@ -318,6 +332,7 @@ export const fetchTable = async (tableType) => {
           console.log(currentPage);
           addPagination(currentPage);
           // addSearchbar();
+
         }
       }
     });

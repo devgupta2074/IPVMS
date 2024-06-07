@@ -583,7 +583,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        // window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 3000);
     }
   } catch (error) {

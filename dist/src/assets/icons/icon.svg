@@ -271,7 +271,7 @@
             </clipPath>
         </defs>
     </symbol>
-    <symbol id="emptytable" width="108" height="68" viewBox="0 0 108 68" fill="none"
+    <symbol id="emptytable" width="0" height="68" viewBox="0 0 108 68" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path d="M89.8724 19.8491H0.00170898V0.631348H89.8724V19.8491Z" fill="white"/>
         <path d="M11.6469 15.1221C14.3419 15.1221 16.5266 12.9365 16.5266 10.2403C16.5266 7.54409 14.3419 5.3584 11.6469 5.3584C8.95197 5.3584 6.76727 7.54409 6.76727 10.2403C6.76727 12.9365 8.95197 15.1221 11.6469 15.1221Z" fill="#718BD3"/>

@@ -297,6 +297,29 @@ export const fetchTable = async (tableType) => {
         totalItems = data.data[0]?.total_count;
         const parentElement = document.getElementById("tbody");
         parentElement.innerHTML = "";
+        if (totalItems == 0) {
+          parentElement.innerHTML = `
+              <tr class="h-44  flex items-center"><td class="flex flex-col gap-3 justify-center items-center w-full">
+<div class="">
+
+  <svg  class="w-28 h-20 ">
+    <use
+      xlink:href="/assets/icons/icon.svg#emptytable"
+    ></use>
+  </svg>
+
+  
+  </div>
+  
+  <p class=" text-center">
+    It seems there are no recent policy updates to display at the moment.<br> Stay tuned for any new updates on policy changes.
+  </p>
+
+    </td></tr>
+`;
+
+
+        }
         document.getElementById("main-body").innerHTML = "";
         const startItemIndex = (currentPage - 1) * pageSize + 1;
         data.data.map((item, index) => {

@@ -673,9 +673,22 @@
           margin-bottom: 0;
         }
 
-        /* section:not(:first-of-type) {
-          page-break-before: always;
-        } */
+        section:not(:first-of-type) {
+          page-break-inside: avoid;
+          page-break-after: avoid;
+          page-break-before: avoid;
+        }
+        section {
+          page-break-after: always;
+        }
+
+        /* Optionally, you can avoid breaking the last section */
+        section:last-child {
+          page-break-after: auto;
+        }
+        table {
+          page-break-inside: avoid;
+        }
         article {
           page-break-inside: avoid;
           page-break-after: avoid;

@@ -526,6 +526,43 @@ const saveAsDraft = async () => {
 
 const handleGeneratePdf = async () => {
   showLoading();
+
+  const blobToBase64 = (blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
+  };
+
+  async function convertImagesToBase64(divId) {
+    // Find the div element
+    var div = document.getElementById(divId);
+
+    // Find all images within the div
+    var images = div.getElementsByTagName("img");
+
+    // Iterate over each image
+    if (images.length > 0) {
+      for (var i = 0; i < images.length; i++) {
+        var img = images[i];
+
+        // Create a blob URL for the image
+        var blob = await fetch(img.src).then((response) => response.blob());
+
+        // Convert blob to base64
+        var base64 = await blobToBase64(blob);
+
+        img.src = base64;
+      }
+    }
+  }
+
+  await convertImagesToBase64("container");
+
+  console.log(document.getElementById("container"), "ddeev");
   var element = document.getElementById("container");
   var opt = {
     margin: 0,
@@ -546,6 +583,7 @@ const handleGeneratePdf = async () => {
     pagebreak: { mode: "avoid-all", after: "section" },
   };
   const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
+  console.log(element, "ddeev");
   const formData = new FormData();
   let letterId;
   console.log(email);
@@ -583,7 +621,7 @@ const handleGeneratePdf = async () => {
     }).showToast();
     if (response.status == 200) {
       setTimeout(() => {
-        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+        // window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 3000);
     }
   } catch (error) {
@@ -630,7 +668,42 @@ const removeLoading = () => {
 };
 var shouldBeSigned = false;
 const handleSignSwiftCall = async () => {
+  const blobToBase64 = (blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
+  };
+
+  async function convertImagesToBase64(divId) {
+    // Find the div element
+    var div = document.getElementById(divId);
+
+    // Find all images within the div
+    var images = div.getElementsByTagName("img");
+
+    // Iterate over each image
+    if (images.length > 0) {
+      for (var i = 0; i < images.length; i++) {
+        var img = images[i];
+
+        // Create a blob URL for the image
+        var blob = await fetch(img.src).then((response) => response.blob());
+
+        // Convert blob to base64
+        var base64 = await blobToBase64(blob);
+
+        img.src = base64;
+      }
+    }
+  }
   showLoading();
+  await convertImagesToBase64("container").then(() => {});
+
+  console.log(document.getElementById("container"), "ddeev");
   var element = document.getElementById("container");
   var opt = {
     margin: 0,

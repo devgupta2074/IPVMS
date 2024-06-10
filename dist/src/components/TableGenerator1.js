@@ -964,7 +964,7 @@ const onEditorOpen = () => {
         quality: 0.98,
       },
       html2canvas: {
-        scale: 2,
+        scale: 1,
         letterRendering: true,
       },
       jsPDF: {
@@ -986,8 +986,12 @@ const onEditorOpen = () => {
     formData.append("email", recipientEmail);
     formData.append("html_data", element.innerHTML);
     formData.append("letter_id", letter_id);
+
+    let ipvmsuserId = localStorage.getItem("userId");
     console.log(ipvmsuserId, "actorrrrrrrrrrr");
+    console.log("user id of ipvms is", ipvmsuserId);
     formData.append("ipvms_userId", ipvmsuserId);
+    formData.append("recipientEmail", recipientEmail);
     console.log("letter id is", letter_id);
     try {
       const response = await axios.post(
@@ -999,6 +1003,10 @@ const onEditorOpen = () => {
           },
         }
       );
+      if (response) {
+        removeLoading();
+        console.log("loading removed");
+      }
       Toastify({
         text: "Letter send succesfully",
         duration: 3000,
@@ -1015,6 +1023,7 @@ const onEditorOpen = () => {
         setTimeout(() => {
           window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
         }, 1000);
+        removeLoading();
       }
     } catch (error) {
       Toastify({
@@ -1029,6 +1038,8 @@ const onEditorOpen = () => {
           background: "white",
         },
       }).showToast();
+      console.log("remove loading");
+      removeLoading();
       setTimeout(() => {
         window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 2000);

@@ -413,7 +413,7 @@ function findWordDifference(text1, text2, style) {
         changedgreen = "";
       }
       if (changedred !== "") {
-        difference += `<span style="background-color: #aaffaa ${style}">${changedred}</span>`;
+        difference += `<span style="background-color: #aaffaa !important; ${style}">${changedred}</span>`;
         changedred = "";
       }
       difference += words1[i] || "";
@@ -428,7 +428,7 @@ function findWordDifference(text1, text2, style) {
     changedgreen = "";
   }
   if (changedred !== "") {
-    difference += `<span style="background-color: #aaffaa; ${style}">${changedred}</span>`;
+    difference += `<span style="background-color: #aaffaa !important; ${style}">${changedred}</span>`;
     changedred = "";
   }
   console.log(difference, "hello archit");
@@ -1106,21 +1106,53 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
             false &&
           tag.textContent !== ""
         ) {
-          const removedelement = document.createElement("s");
-
+          const removedelement = document.createElement(
+            v1[v2.removedTags[tagid]].tagName
+          );
+          console.log(
+            v1[v2.removedTags[tagid]].textContent,
+            "text text text",
+            v2.removedTags[tagid],
+            v1
+          );
           removedelement.textContent = v1[v2.removedTags[tagid]].textContent;
           removedelement.style =
-            v1[v2.removedTags[tagid]].style + "background-color: #ffaaaa;";
-
+            v1[v2.removedTags[tagid]].style +
+            "background-color: #ffaaaa; !important";
+          removedelement.classList.add("removed-element");
           tag.parentElement.insertBefore(removedelement, tag);
-          console.log(tag.id, "removed");
+          console.log(tag.id, "removed", removedelement);
           console.log(tag.parentElement, "remove remove remove");
           console.log(v2.removedTags[tagid].textContent, "text text text");
           if (tag.parentElement.tagName.toLowerCase() !== "article") {
             // tag.parentElement.classList.add("redhighlight");
           }
         }
+        console.log(tag, tag.children, tag.childElementCount);
         if (tag != null) {
+          if (tag.childElementCount > 0 && tag.childElementCount < 20) {
+            v2.removedTags.forEach((removedTagId) => {
+              console.log(removedTagId); // Log each removedTagId for debugging
+
+              // Iterate over the children of the tag element
+              for (let i = 0; i < tag.children.length; i++) {
+                console.log(tag.children[i]);
+                const child = tag.children[i];
+
+                // Compare the ID of the child element with the current removedTagId
+                if (child.id === removedTagId) {
+                  // Ensure tag.parentElement exists before inserting
+                  if (tag.parentElement) {
+                    tag.parentElement.insertBefore(child, tag);
+                    break; // Exit the loop once the matching child is found and moved
+                  } else {
+                    console.error("Parent element of tag is null");
+                  }
+                }
+              }
+            });
+          }
+          console.log(tag.children, "tag.children", tag);
           tag.remove();
         }
       } else {
@@ -1184,64 +1216,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   localStorage.setItem("container-content-1-json", null);
 
-  let document_version = [];
-  // const response = await fetch(
-  //   "http://ipvms-api.exitest.com/api/versioncontrol/getDocumentVersionsById?docId=4",
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     // Handle the response from the backend
-  //     console.log(data);
-  //     document_version = data.data;
-  //     const buttonContainer = document.getElementById("buttonContainer");
-  //     if (document_version != undefined) {
-  //       document_version.forEach((item) => {
-  //         console.log(item);
-  //         // Create a button element
-  //         // const button = document.createElement("button");
-
-  //         // // Set button text to array item
-  //         // button.innerText = "revert " + item.id;
-  //         // button.className =
-  //         //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // // Add click event listener to the button
-  //         // button.addEventListener("click", () => {
-  //         //   const changes = item.delta;
-  //         //   const divElement = document.getElementById("docx-wrapper");
-  //         //   applyChangesFromV2toV1(divElement, htmljson, changes);
-  //         //   // Replace 'yourDivElementId' with the actual ID of your div element
-  //         //   hideTextNodes(divElement);
-  //         // });
-
-  //         const button2 = document.createElement("button");
-
-  //         // Set button text to array item
-  //         button2.innerText = item.id;
-  //         button2.className =
-  //           "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // Add click event listener to the button
-  //         button2.addEventListener("click", () => {
-  //           const changes = item.delta;
-  //           const divElement = document.getElementById("docx-wrapper");
-  //           const firstv = document_version[0].delta;
-  //           applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
-  //           removeemptyimage();
-  //         });
-
-  //         // Append the button to the container
-  //         // buttonContainer.appendChild(button);
-  //         // buttonContainer.appendChild(button2);
-  //       });
-  //     }
-  //   });
   let htmljson;
   localStorage.setItem("container-content-1-json", null);
   localStorage.setItem("version", 1);
@@ -1384,205 +1358,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     return jsonOutput;
   }
   let contentdocument;
-  // async function renderDocx(file) {
-  //   try {
-  //     const currentDocument = file;
-  //     console.log("ffs");
-  //     if (!currentDocument) {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
 
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       console.log(docxOptions);
-  //       var docData = await convertDocxToBlob();
-  //       console.log(document.getElementById("container-content-1"));
-  //       console.log(docData);
-  //       console.log(docx);
-  //       await docx.renderAsync(
-  //         docData,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     } else {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
-
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       var docData = await convertDocxToBlob();
-  //       await docx.renderAsync(
-  //         currentDocument,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     }
-
-  //     var tbodyElements = document.querySelectorAll("tbody");
-  //     // console.log("tbody elements: " + tbodyElements.length);
-  //     const blobToBase64 = (blob) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(blob);
-  //       return new Promise((resolve) => {
-  //         reader.onloadend = () => {
-  //           resolve(reader.result);
-  //         };
-  //       });
-  //     };
-
-  //     async function convertImagesToBase64(divId) {
-  //       // Find the div element
-  //       var div = document.getElementById(divId);
-
-  //       // Find all images within the div
-  //       var images = div.getElementsByTagName("img");
-
-  //       // Iterate over each image
-  //       if (images.length > 0) {
-  //         for (var i = 0; i < images.length; i++) {
-  //           var img = images[i];
-
-  //           // Create a blob URL for the image
-  //           var blob = await fetch(img.src).then((response) => response.blob());
-
-  //           // Convert blob to base64
-  //           var base64 = await blobToBase64(blob);
-
-  //           img.src = base64;
-  //         }
-  //       }
-  //     }
-
-  //     convertImagesToBase64("container-content-1");
-  //     var tags = document.querySelectorAll(".docx-wrapper *");
-  //     // console.log(tags);
-  //     var idCounter = 1;
-  //     tags.forEach(function (tag) {
-  //       if (!tag.id) {
-  //         tag.id = "id_" + idCounter;
-  //         idCounter++;
-  //       }
-  //     });
-  //     // var tbodyElements = document.getElementsByTagName("tbody");
-  //     // // console.log("tbody elements: " + tbodyElements.length);
-
-  //     // // Loop through each tbody element
-  //     // for (var i = 0; i < tbodyElements.length; i++) {
-  //     //   // Generate a unique ID for each tbody element
-  //     //   var id = "tbody_" + i;
-
-  //     //   // Set the id attribute for the tbody element
-  //     //   tbodyElements[i].setAttribute("id", id);
-  //     // }
-  //     const sections = document.getElementsByClassName("docx");
-  //     console.log(sections);
-  //     for (var i = 0; i < sections.length; i++) {
-  //       console.log("section height chages");
-  //       sections[i].setAttribute(
-  //         "style",
-  //         "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-  //       );
-  //     }
-  //     const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
-  //     const headers = containerdocx.getElementsByTagName("header");
-  //     console.log(headers);
-  //     // for (var i = 0; i < headers.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   headers[i].setAttribute(
-  //     //     "style",
-  //     //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-  //     //   );
-  //     // }
-  //     const articles = containerdocx.getElementsByTagName("article");
-  //     console.log(articles);
-  //     // for (var i = 0; i < articles.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   articles[i].setAttribute("style", "margin-top: 48px; ");
-  //     // }
-
-  //     var containerContent = document.getElementById("container-content-1");
-
-  //     // Get the div element with the class "dev" inside container-content-1
-  //     var devDiv = containerContent.lastChild;
-  //     contentdocument = devDiv.innerHTML;
-
-  //     console.log(devDiv, "ggg");
-
-  //     const response = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/uploadFile",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //         body: JSON.stringify({
-  //           htmlText: contentdocument,
-  //           docId: "4",
-  //           htmljson: extractHtmlToJson(
-  //             document.getElementsByClassName("docx-wrapper")[0]
-  //           ),
-  //         }),
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         console.log(data);
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-
-  //     const response2 = await fetch(
-  //       "http://ipvms-api.exitest.com/api/file/getFile/4",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         // consolRAe.log(data.data.data);
-  //         document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-  //           data.data.data;
-  //         htmljson = data.data.htmljson;
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-  //     const container = document.getElementsByClassName("docx-wrapper")[0];
-  //     container.id = "docx-wrapper";
-  //     imageLoaded();
-  //     console.log("");
-  //   } catch (error) {
-  //     console.error("Error rendering DOCX:", error);
-  //   }
-  // }
-  console.log("render_docx");
-  // renderDocx();
-  //  document.getElementById("loading").style = "display:none";
-
-  console.log("render_docx");
-  // fileInput.addEventListener("change", (ev) => {
-  //   renderDocx(fileInput.files[0]);
-  //   // testDocuments.selectedIndex = 0;
-  // });
   const buttondd = document.getElementById("json");
 
   buttondd.addEventListener("click", createversion);
 
-  // Function to apply changes from v1 to v2
-
-  // Function to apply changes from v2 to v1
-
-  // Example usage:
-  // Assuming you have divElement, v1, and v2 from previous steps
-  // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
     if (document.getElementById(localStorage.getItem("versionid"))) {
@@ -1961,7 +1741,8 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getversions/datewise?docId=${id}`,
+    "https://ipvms-tapasvis-projects.vercel.app" +
+      `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -2163,7 +1944,18 @@ export function assignIDsToElements() {
 }
 export function handleChanges() {
   console.log("tapas");
+  const docxWrappers = document.querySelectorAll(".docx-wrapper");
+
+  // Iterate over each element and change the background color
+  docxWrappers.forEach((wrapper) => {
+    wrapper.style.backgroundColor = "#ffffff"; // Change to your desired color
+  });
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
+  if (editableDiv === undefined) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+  }
   const elementsWithIds = editableDiv.querySelectorAll("[id]");
   const idSet = new Set();
 
@@ -2221,21 +2013,21 @@ document
         checkDivSizeBack();
       }
 
-      // document.addEventListener("keydown", function (event) {
-      //   console.log("keydown", event.key);
-      //   // Check if the pressed key is the backspace key
-      //   if (event.key === "Backspace" || event.keyCode === 8) {
-      //     console.log(
-      //       "inside this backspace,",
-      //       document.getElementsByClassName("docx")
-      //     );
-      //     if (document.getElementsByClassName("docx").length === 0) {
-      //       document.getElementById(
-      //         "container-content-1"
-      //       ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
-      //     }
-      //   }
-      // });
+      document.addEventListener("keydown", function (event) {
+        console.log("keydown", event.key);
+        // Check if the pressed key is the backspace key
+        if (event.key === "Backspace" || event.keyCode === 8) {
+          console.log(
+            "inside this backspace,",
+            document.getElementsByClassName("docx")
+          );
+          if (document.getElementsByClassName("docx").length === 0) {
+            document.getElementById(
+              "container-content-1"
+            ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+          }
+        }
+      });
     }
   });
 export function setIdToNull(node) {
@@ -2614,8 +2406,11 @@ export function removeEmptyPages() {
       section.parentNode.removeChild(section);
     }
   });
-
-  // Iterate through each article
+  if (document.getElementsByClassName("docx").length === 0) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+  }
 }
 
 function removeemptyimage() {

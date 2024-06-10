@@ -2,7 +2,8 @@ import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 import { makeRequest } from "./apiRequest.js";
 
 const apiUrl =
-  API_CONSTANTS.BACKEND_BASE_URL_PROD + ROUTES_CONSTANTS.GET_ALL_TEMPLATES;
+  "https://ipvms-tapasvis-projects.vercel.app" +
+  ROUTES_CONSTANTS.GET_ALL_TEMPLATES;
 export async function GetAllTemplates() {
   const requestOptions = {
     method: API_CONSTANTS.GET,

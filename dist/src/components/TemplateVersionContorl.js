@@ -1715,7 +1715,7 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    "https://ipvms-tapasvis-projects.vercel.app" +
       `/letters/getversions/datewise?docId=${id}`,
     {
       method: "GET",

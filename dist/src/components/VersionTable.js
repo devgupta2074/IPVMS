@@ -99,14 +99,52 @@ export const fetchVersionsDateWise = async (id) => {
     }
   )
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
       let runonetimeonly = true;
       console.log("data datewise", data);
       if (data.length == 0 && runonetimeonly && id !== 236) {
         console.log("first verion not  there");
         runonetimeonly = false;
 
-        createversion();
+        await createversion().then((createVersionData) => {
+          console.log(createVersionData, "dev");
+          const response = fetch(
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              "/api/versioncontrol/createDocumentVersion",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                version_number: createVersionData.version_number,
+                doc_id: createVersionData.doc_id,
+                delta: createVersionData.delta,
+                created_by: createVersionData.created_by,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the response from the backend
+              Toastify({
+                text: "Policy version created successfully",
+                duration: 3000,
+                newWindow: true,
+                className: "text-black",
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "white",
+                },
+              }).showToast();
+              console.log(data);
+              localStorage.setItem("version", createVersionData.version_number);
+              fetchVersionsDateWise(createVersionData.doc_id);
+            });
+        });
+
         // fetchVersionsDateWise(id);
       }
 

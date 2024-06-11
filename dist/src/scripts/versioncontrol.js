@@ -49,14 +49,14 @@ if (document.getElementById("uploadButton")) {
     });
 }
 
-function saveCaretPosition() {
+export function saveCaretPosition() {
   const sel = window.getSelection();
   if (sel.rangeCount > 0) {
     savedRange = sel.getRangeAt(0);
   }
 }
 
-function insertImageAtCaret(img) {
+export function insertImageAtCaret(img) {
   if (savedRange) {
     const range = savedRange.cloneRange();
     range.deleteContents();
@@ -80,7 +80,7 @@ function insertImageAtCaret(img) {
   }
 }
 
-function extractParentText(parentId) {
+export function extractParentText(parentId) {
   console.log("Extracting parent", parentId);
   const parentElement = document.getElementById(parentId);
   // console.log(parentId);
@@ -105,7 +105,7 @@ function extractParentText(parentId) {
 
   return textContent;
 }
-export function createversion() {
+export async function createversion() {
   console.log("ffff create version");
 
   const modalid = localStorage.getItem("modalId");
@@ -249,25 +249,10 @@ export function createversion() {
           color: tag.getAttribute("color") || "",
           size: tag.getAttribute("size") || "",
           face: tag.getAttribute("face") || "",
-          // childArray: childNodesMap,
-          // parentchildNodes: tag.parentNode.childNodes,
+
           childnodeposition: childnodeposition,
         };
         changes.newTags.push(newTag);
-        // console.log(jsonResult[parenttag.id], "parent");
-        // if (jsonResult[parenttag.id] !== undefined) {
-        //   // changes.changedTags.push({
-        //   //   id: parenttag.id,
-        //   //   textContent: newTag.textContent,
-        //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
-        //   //   style: jsonResult[parenttag.id].style,
-        //   //   src: jsonResult[parenttag.id].isImgTag
-        //   //     ? jsonResult[parenttag.id].isImgTag
-        //   //     : "",
-        //   //   isParentToNewTag: true,
-        //   // });
-        //   // }
-        // }
       } else {
         // Check for changes in text style or image source
         if (
@@ -315,68 +300,24 @@ export function createversion() {
     //     }
     //   }
     // }
-    console.log(changes, "changes");
+    console.log(changes, "changes x");
 
-    localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
-
-    const response = fetch(
-      API_CONSTANTS.BACKEND_BASE_URL_PROD +
-        "/api/versioncontrol/createDocumentVersion",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          version_number: version,
-          doc_id: modalid,
-          delta: changes,
-          created_by: userdata.id,
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from the backend
-        Toastify({
-          text: "Policy version created successfully",
-          duration: 3000,
-          newWindow: true,
-          className: "text-black",
-          gravity: "top", // `top` or `bottom`
-          position: "right", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "white",
-          },
-        }).showToast();
-        console.log(data);
-        localStorage.setItem("version", version);
-        fetchVersionsDateWise(modalid);
-
-        ////  document.getElementById("loading").style = "display:none";
-        // window.location.reload();
-      });
-
-    return changes;
+    return {
+      version_number: version,
+      doc_id: modalid,
+      created_by: userdata.id,
+      delta: changes,
+    };
   }
 
   const divElement = document.getElementById("docx-wrapper-1");
   let version = parseInt(localStorage.getItem("version"));
   console.log("divElement: " + divElement);
-  const changes = detectChanges(divElement);
-
-  console.log("version: " + version);
-  if (version == NaN) {
-    version = 1;
-  }
-  version = version + 0.1;
-  console.log(changes, version, 1);
-
-  console.log(changes);
-  fetchVersionsDateWise(modalid);
+  const changes = await detectChanges(divElement);
+  console.log(changes, "second changes");
+  return changes;
 }
-function isIdInJson(id, json, tagName) {
+export function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
     if (tagName == "tbody") {
       return true;
@@ -390,7 +331,7 @@ function isIdInJson(id, json, tagName) {
   }
   return false;
 }
-function findWordDifference(text1, text2, style) {
+export function findWordDifference(text1, text2, style) {
   const words1 = text1.split(/\s+/);
   const words2 = text2.split(/\s+/);
   const maxLength = Math.max(words1.length, words2.length);
@@ -434,44 +375,7 @@ function findWordDifference(text1, text2, style) {
   console.log(difference, "hello archit");
   return difference; // Trim extra spaces
 }
-
-// Test the function
-
 async function applyChangesFromV2toV1(id, callback) {
-  // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
-
-  // if (allredhighlightedtags) {
-  //   console.log(allredhighlightedtags, "bluehighlight");
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("bluehighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-
-  // for (const image in v2.imageTags) {
-  //   const tag = document.getElementById(v2.imageTags[image].id);
-  //   // tag.src = v2.imageTags[image].src;
-  //   tag.style = v2.imageTags[image].style;
-  //   tag.id = v2.imageTags[image].id;
-  //   tag.width = v2.imageTags[image].width;
-  //   tag.height = v2.imageTags[image].height;
-  //   tag.x = v2.imageTags[image].x;
-  //   tag.y = v2.imageTags[image].y;
-  // }
-  // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${id}`,
@@ -740,17 +644,6 @@ export function applyChangesFromV1toV2withouthighlight(
           // tag.innerHTML = difference;
           tag.style = style;
         }
-
-        // tag.style = tag.style + "border : 1px  red solid;";
-
-        // //
-        //           tag.textContent = v2.changedTags[tagId].textContent;
-        // if (tag.textContent !== "") {
-        //   tag.style =
-        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
-        // } else {
-        //   tag.style = v2.changedTags[tagId].style;
-        // }
 
         tag.className = tag.className;
         console.log(tag);
@@ -1069,17 +962,6 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           tag.style = style;
         }
 
-        // tag.style = tag.style + "border : 1px  red solid;";
-
-        // //
-        //           tag.textContent = v2.changedTags[tagId].textContent;
-        // if (tag.textContent !== "") {
-        //   tag.style =
-        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
-        // } else {
-        //   tag.style = v2.changedTags[tagId].style;
-        // }
-
         tag.className = tag.className;
         console.log(tag);
       }
@@ -1357,11 +1239,49 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     return jsonOutput;
   }
-  let contentdocument;
 
   const buttondd = document.getElementById("json");
 
-  buttondd.addEventListener("click", createversion);
+  buttondd.addEventListener("click", function insertNewVersion() {
+    createversion().then((createVersionData) => {
+      console.log(createVersionData, "dev");
+      const response = fetch(
+        API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          "/api/versioncontrol/createDocumentVersion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            version_number: createVersionData.version_number,
+            doc_id: createVersionData.doc_id,
+            delta: createVersionData.delta,
+            created_by: createVersionData.created_by,
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend
+          Toastify({
+            text: "Policy version created successfully",
+            duration: 3000,
+            newWindow: true,
+            className: "text-black",
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "white",
+            },
+          }).showToast();
+          console.log(data);
+          localStorage.setItem("version", createVersionData.version_number);
+          fetchVersionsDateWise(createVersionData.doc_id);
+        });
+    });
+  });
 
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
@@ -1379,14 +1299,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     removeemptyimage();
   });
-  // const v1tov2 = document.getElementById("v1tov2");
-  // // v1tov2.addEventListener("click", function () {
-  // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-  // //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
-  // //   applyChangesFromV1toV2(divElement, htmljson.htmljson, changes);
-  // // });
-
-  // Applying changes from v2 to v1
 });
 
 import { letterColorMapping } from "../utils/letterstyle.js";
@@ -1591,22 +1503,7 @@ async function ChangeVersion(modalid, id) {
                 childnodeposition: childnodeposition,
               };
               changes.newTags.push(newTag);
-              // console.log(jsonResult[parenttag.id], "parent");
-              // if (jsonResult[parenttag.id] !== undefined) {
-              //   // changes.changedTags.push({
-              //   //   id: parenttag.id,
-              //   //   textContent: newTag.textContent,
-              //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
-              //   //   style: jsonResult[parenttag.id].style,
-              //   //   src: jsonResult[parenttag.id].isImgTag
-              //   //     ? jsonResult[parenttag.id].isImgTag
-              //   //     : "",
-              //   //   isParentToNewTag: true,
-              //   // });
-              //   // }
-              // }
             } else {
-              // Check for changes in text style or image source
               if (
                 tag.children.length === 0 &&
                 tag.tagName.toLowerCase() !== "style"
@@ -1646,15 +1543,7 @@ async function ChangeVersion(modalid, id) {
               }
             }
           });
-          // for (var tagId in jsonResult) {
-          //   console.log(tagId);
-          //   if (jsonResult.hasOwnProperty(tagId)) {
-          //     console.log(tagId, "fff");
-          //     if (!divElement.querySelector(`#${tagId}`)) {
-          //       changes.removedTags.push(tagId);
-          //     }
-          //   }
-          // }
+
           console.log(changes, "changes");
 
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
@@ -1728,7 +1617,7 @@ async function ChangeVersion(modalid, id) {
       });
     });
 }
-function openDash(id) {
+export function openDash(id) {
   console.log(id, "sss");
   const dash = document.getElementById(id);
   if (dash.classList.contains("hidden")) {
@@ -1906,40 +1795,8 @@ export function assignIDsToElements() {
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changesx}`;
-    // console.log("tag", element.tagName);
+
     changesx++;
-    // parentelement = document.getElementById(element.parentElement.id).innerHTML;
-    // parentelementlength = document.getElementById(element.parentElement.id)
-    //   .innerHTML.length;
-    // console.log("parentelement", parentelement);
-    // console.log(`<${element.tagName.toLowerCase()}>`, "btag");
-    // var indexOfBoldTag = parentelement.indexOf(
-    //   `<${element.tagName.toLowerCase()}`
-    // );
-    // console.log(element.innerHTML);
-
-    // const position = {
-    //   elementcc: element,
-    //   isNewElement: true,
-    //   insertedText: null,
-    //   nearestElement: element.id,
-    //   element: element.outerHTML,
-    //   parentelement: element.parentElement.id,
-    //   parentelementlength: parentelementlength,
-    //   startOffset: indexOfBoldTag,
-    //   tagname: element.tagName.toLowerCase(),
-    //   datalength: element.innerHTML.length,
-    //   data: element.innerHTML,
-    // };
-
-    // textData.push(position);
-
-    // console.log("New Element Added", position);
-
-    // // Store textData in JSON format
-    // const jsonData = JSON.stringify(textData);
-    // localStorage.setItem("jsonchanges", jsonData);
-    // console.log("JSON Data:", jsonData);
   });
 }
 export function handleChanges() {
@@ -2093,7 +1950,7 @@ function addarticlewhileloop(articleHeight, article, i) {
     }
   }
 }
-function checkDivSize() {
+export function checkDivSize() {
   console.log("Checking container size");
   const editableDiv = document
     .getElementById("docx-wrapper-1")
@@ -2334,23 +2191,9 @@ export function imageLoaded() {
   });
 
   console.log(dynamicImages);
-  // for (var i = 0; i < dynamicImages.length; i++) {
-  //   if (
-  //     dynamicImages[i].parentElement.parentElement.classList.contains(
-  //       "image-container"
-  //     )
-  //   ) {
-  //     const x = dynamicImages[i];
-  //     const y = dynamicImages[i].parentElement;
-  //     const z = dynamicImages[i].parentElement.parentElement.parentElement;
-  //     dynamicImages[i].parentElement.parentElement.parentElement.remove();
-  //     y.appendChild(x);
-  //     z.appendChild(y);
-  //   }
-  // }
 }
 
-function checkDivSizeBack() {
+export function checkDivSizeBack() {
   console.log("Checking container size back");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
@@ -2363,24 +2206,12 @@ function checkDivSizeBack() {
     console.log(containerHeight, contentHeight, "first");
 
     console.log(pages[i].id, "dev yes");
-    // if (i + 1 < pages.length) {
-    //   let article = document.getElementsByTagName("article")[i];
-    //   let articleHeight = article.scrollHeight;
-    //   addarticlewhileloop(articleHeight, article, i);
-    //   article.clientHeight = 842;
-    //   article.scrollHeight = 842;
-    // } else {
+
     let article = document.getElementsByTagName("article")[i];
     let articleHeight = article.scrollHeight;
     addarticlewhileloop(articleHeight, article, i);
-    // article.clientHeight = 842;
-    // article.scrollHeight = 842;
-
-    // editableDiv.appendChild(newpage);
   }
-  // const articles = document.querySelectorAll("article");
-  // console.log(articles.length, "articcle length");
-  // if (articles.length > 1) {
+
   if (pages.length > 1) {
     removeEmptyPages();
   }
@@ -2413,7 +2244,7 @@ export function removeEmptyPages() {
   }
 }
 
-function removeemptyimage() {
+export function removeemptyimage() {
   const images = document.querySelectorAll(".image-container");
   images.forEach((image) => {
     if (image.childNodes.length === 0) {

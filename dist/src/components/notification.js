@@ -19,7 +19,9 @@ const notificationhtml = `
         <div id="nmessage" class="py-4 px-6 space-y-4"></div>
       </div>
       <div class="bg-gray-50 px-4 py-3 sm:px-6 flex items-center justify-between">
-        <p class="text-sm leading-5 text-gray-500">Thats it for now :)</p>
+         <button 
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded" 
+          onclick="markAllAsRead()">Mark All as Read</button>
       </div>
     </div>
   </div>
@@ -60,8 +62,9 @@ window.openNotificationModal = () => {
       500,
   };
   // Set the position of the modal just below the bell icon
-  notificationModal.style.top = `${bellIconPosition.top + bellIcon.offsetHeight + 5
-    }px`;
+  notificationModal.style.top = `${
+    bellIconPosition.top + bellIcon.offsetHeight + 5
+  }px`;
   notificationModal.style.left = `${bellIconPosition.left}px`;
   notificationModal.classList.remove("hidden");
 };
@@ -74,7 +77,7 @@ export const insertNotification = async () => {
   const userId = localStorage.getItem("userId");
   const result = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-    `/api/notification/getNotification/${userId}?role=1`
+      `/api/notification/getNotification/${userId}?role=1`
   );
   const data = await result.json();
   const message = data?.notification;
@@ -84,9 +87,13 @@ export const insertNotification = async () => {
   notificationContainer.innerHTML = "";
 
   // Insert each notification message into the modal
-  message.forEach((item) => {
-    notificationContainer.innerHTML += messageHtml(item);
-  });
+  if (message && message.length > 0) {
+    message.forEach((item) => {
+      notificationContainer.innerHTML += messageHtml(item);
+    });
+  } else {
+    notificationContainer.innerHTML = "<p>No notifications for now.</p>";
+  }
 };
 window.notificationHandler = () => {
   openNotificationModal();
@@ -100,3 +107,47 @@ window.addEventListener("click", function (event) {
     closeNotificationModal();
   }
 });
+
+window.markAllAsRead = async () => {
+  const userId = localStorage.getItem("userId");
+  const response = await fetch(
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+      `/api/notification/markAllAsRead?userId=${userId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (response.ok) {
+    // If the API call is successful, refresh the notifications
+    insertNotification();
+    Toastify({
+      text: "marked read successfully",
+      duration: 1000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    }).showToast();
+  } else {
+    Toastify({
+      text: "some error occured ",
+      duration: 1000,
+      newWindow: true,
+      className: "text-black",
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "white",
+      },
+    });
+  }
+};

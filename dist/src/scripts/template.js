@@ -546,7 +546,7 @@ const handleGeneratePdf = async () => {
     },
     pagebreak: { mode: "avoid-all", after: "section" },
   };
-  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
+  const pdfBlob = await html2pdf().from(element).output("blob");
   console.log(element, "ddeev");
   const formData = new FormData();
   console.log(email);
@@ -582,9 +582,9 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     if (response.status == 200) {
-      setTimeout(() => {
-        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
-      }, 3000);
+      // setTimeout(() => {
+      //   window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+      // }, 3000);
     }
   } catch (error) {
     Toastify({
@@ -599,9 +599,9 @@ const handleGeneratePdf = async () => {
         background: "white",
       },
     }).showToast();
-    setTimeout(() => {
-      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
-    }, 2000);
+    // setTimeout(() => {
+    //   window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+    // }, 2000);
   } finally {
     removeLoading();
   }

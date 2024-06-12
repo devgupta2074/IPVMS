@@ -5,7 +5,7 @@ import { SetDocumentToApprove } from "../api/setDocumenttoApprove.js";
 import { removeLoading, showLoading } from "../scripts/loading.js";
 import { extractHtmlToJson } from "../scripts/uploadpolicy1.js";
 
-import { imageLoaded } from "../scripts/versioncontrol.js";
+import { handleChanges, imageLoaded } from "../scripts/versioncontrol.js";
 import { API_CONSTANTS, style } from "../utils/constants.js";
 import {
   makepolicyactive,
@@ -259,7 +259,8 @@ export const fetchTable = async (tableType) => {
   } else {
     apiLink =
       API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/file/document?page=${currentPage - 1
+      `/api/file/document?page=${
+        currentPage - 1
       }&size=${pageSize}&title=${title}&category=${category}`;
   }
 
@@ -317,8 +318,6 @@ export const fetchTable = async (tableType) => {
 
     </td></tr>
 `;
-
-
         }
         document.getElementById("main-body").innerHTML = "";
         const startItemIndex = (currentPage - 1) * pageSize + 1;
@@ -349,7 +348,7 @@ export const fetchTable = async (tableType) => {
   return true;
 };
 
-// Sorting 
+// Sorting
 
 function getdate(dateString) {
   const parts = dateString.split("/");
@@ -368,8 +367,7 @@ function sortTable(col) {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
-  sort_th.forEach(e => {
-
+  sort_th.forEach((e) => {
     e.innerHTML = `
   <svg id="sorticon" class="px-2 h-4 w-6">
   <use
@@ -377,7 +375,6 @@ function sortTable(col) {
   ></use>
 </svg>`;
   });
-
 
   if (order) {
     sort_th[col].setAttribute("name", `${!order}`);
@@ -388,7 +385,6 @@ function sortTable(col) {
 </svg>
     
   `;
-
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -543,6 +539,7 @@ function addEditorOpenCloseFeature() {
         htmljson = data.data.htmljson;
         localStorage.setItem("htmljson", JSON.stringify(htmljson));
         console.log("ddddddddddddddddddddddddd");
+        handleChanges();
       });
 
     imageLoaded();
@@ -732,8 +729,9 @@ function addEditorOpenCloseFeature() {
         console.log(adminlist, "Admin list");
         adminlist.map((item) => {
           console.log(item.email, "email");
-          document.getElementById("adminlist").innerHTML += `<option value=${item.id
-            }>${item.first_name + " " + item.last_name}</option>`;
+          document.getElementById("adminlist").innerHTML += `<option value=${
+            item.id
+          }>${item.first_name + " " + item.last_name}</option>`;
         });
       });
     document
@@ -873,7 +871,7 @@ function addPagination(item) {
   const paginationElement = document.getElementById("pagination-controller");
   const arr = paginate(totalItems, currentPage, pageSize, siblingCount);
   paginationElement.innerHTML = "";
-  console.log('.....................................', arr);
+  console.log(".....................................", arr);
   addPaginationElement(arr);
   document.getElementById(
     item + "pagination"
@@ -1056,11 +1054,10 @@ function addSearchbar() {
       console.log(tableType, "ddev");
       // resetVariables();
       fetchTable(tableType);
-      if (sbar.value != '') {
+      if (sbar.value != "") {
         cross_mark.classList.remove("hidden");
       } else {
         cross_mark.classList.add("hidden");
-
       }
     }
   });

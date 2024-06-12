@@ -1,37 +1,34 @@
 import { UserInfoApiRequest } from "../api/dashboard.js";
-import {
-  GetAllTemplates,
-  GetAllTemplatesByStatus,
-} from "../api/getAllTemplates.js";
+import { GetAllTemplates } from "../api/getAllTemplates.js";
 import { GetAllUsers } from "../api/getAllUsers.js";
-import { addTable, sortTable, getdate } from "../components/TableGenerator.js";
+import { addTable } from "../components/TableGenerator.js";
 import { addTable1 } from "../components/TableGenerator1.js";
 import { InsertNavbar } from "../components/Navbar.js";
 import {
   API_CONSTANTS,
-  LOGIN_CONSTANTS,
-  ROUTES_CONSTANTS,
   style,
-  TOAST_COLORS,
-  TOAST_ERRORS,
-  TOAST_ICONS,
   URL_CONSTANTS,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
 import { debounce } from "../utils/debouncing.js";
-import { docsstyle } from "../utils/docxstyle.js";
-import { redirect, showNextPolicy } from "../utils/utils.js";
+import { redirect } from "../utils/utils.js";
 import { GetAllCategory } from "../api/getAllCategories.js";
 import { DELETETEMPLATE } from "../api/deleteTemplate.js";
+// import {
+//   applyChangesFromV1toV2,
+//   applyChangesFromV1toV2withouthighlight,
+// } from "../components/TemplateVersionContorl.js";
+import { letterColorMapping } from "../utils/letterstyle.js";
+import { GetTemplateById } from "../api/getTemplateById.js";
 import {
   applyChangesFromV1toV2,
   applyChangesFromV1toV2withouthighlight,
   createversion,
   imageLoaded,
   openDash,
-} from "../components/TemplateVersionContorl.js";
-import { letterColorMapping } from "../utils/letterstyle.js";
-import { GetTemplateById } from "../api/getTemplateById.js";
+  removeemptyimage,
+} from "./versioncontrol.js";
+import { applyChangesFromV2toV1 } from "../components/TemplateVersionContorl.js";
 
 // global variables
 
@@ -111,7 +108,7 @@ export const fetchVersionsDateWise = async (id) => {
   const docid = id;
   console.log(id, docid);
   const response = fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    "https://ipvms-tapasvis-projects.vercel.app" +
       `/letters/getversions/datewise?docId=${id}`,
     {
       method: "GET",
@@ -121,14 +118,53 @@ export const fetchVersionsDateWise = async (id) => {
     }
   )
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
       let runonetimeonly = true;
       console.log("data datewise", data);
       if (data.length == 0 && runonetimeonly && id !== 236) {
         console.log("first verion not  there");
         runonetimeonly = false;
 
-        createversion();
+        await createversion().then((createVersionData) => {
+          const response = fetch(
+            API_CONSTANTS.BACKEND_BASE_URL_PROD +
+              "/api/versioncontrol/createTemplateVersion",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                version_number: createVersionData.version_number,
+                doc_id: createVersionData.doc_id,
+                delta: createVersionData.delta,
+                created_by: createVersionData.created_by,
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle the response from the backend
+              Toastify({
+                text: "Template version created successfully",
+                duration: 3000,
+                newWindow: true,
+                className: "text-black",
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                  background: "white",
+                },
+              }).showToast();
+              console.log(data);
+              localStorage.setItem("version", createVersionData.version_number);
+              fetchVersionsDateWise(createVersionData.doc_id);
+
+              ////  document.getElementById("loading").style = "display:none";
+              // window.location.reload();
+            });
+        });
         // fetchVersionsDateWise(id);
       }
 
@@ -1793,6 +1829,7 @@ async function displayArea() {
     window.deletetemplate = async function (id) {
       // console.log("id: " + id);
       const response = await DELETETEMPLATE(id);
+
       if (response) {
         Toastify({
           text: "Template deleted success",
@@ -1806,12 +1843,12 @@ async function displayArea() {
             background: "white",
           },
         }).showToast();
-        setTimeout(() => {
+        document.startViewTransition(() => {
           document.getElementById("insert-default").innerHTML = "";
           document.getElementById("insert-custom").innerHTML = "";
           document.getElementById("insert-draft").innerHTML = "";
           getAllTemplates();
-        }, 2000);
+        });
       } else {
         Toastify({
           text: "some error occured",
@@ -1825,12 +1862,13 @@ async function displayArea() {
             background: "white",
           },
         }).showToast();
-        setTimeout(() => {
+
+        document.startViewTransition(() => {
           document.getElementById("insert-default").innerHTML = "";
           document.getElementById("insert-custom").innerHTML = "";
           document.getElementById("insert-draft").innerHTML = "";
           getAllTemplates();
-        }, 2000);
+        });
       }
     };
 
@@ -1870,29 +1908,11 @@ async function displayArea() {
           document.getElementById("json-letter").classList.add("hidden");
           document.getElementById("container-content-1").contentEditable = true;
           modalId = 37;
-
-          // category = res?.data;
-          // let categoryElement = `  <option selected>Select a category</option>`;
-          // // let categoryElement = `
-          // //   <select id="category" class="w-56 flex justify-center p-2  placeholder:text-right items-center  h-10 border border-[#5D5D5D33]  text-xs rounded placeholder:text-sm placeholder:text-[#5D5D5D4D] placeholder:opacity-30  placeholder:font-normal">
-          // //     <option  class="flex justify-center items-center" selected>Choose Category</option>
-          // //   `;
-
-          // category?.map((item) => {
-          //   categoryElement += `<option value=${item.id} id=${item.id}>${item.category}</option>`;
-          // });
-          // document.getElementById("category").innerHTML = categoryElement;
-          // categoryElement += `
-          // <p  id="caterror" class=" hidden text-red-500 text-xs font-light pt-1">Select a Category first</p>
-          // `;
         }
         localStorage.setItem("modalId", modalId);
         console.log("fniefniefnir");
         let htmljson;
 
-        // document.getElementById("policy-detail").classList.add("hidden");
-        // document.getElementById("policy-table").classList.add("hidden");
-        // document.getElementById("pagination-area").classList.add("hidden");
         document.getElementById("extralarge-modal").classList.remove("hidden");
         document.getElementById("area").classList.add("hidden");
 
@@ -1954,18 +1974,7 @@ async function displayArea() {
         .getElementById("approve")
         .addEventListener("click", async function () {
           const doc_id = localStorage.getItem("modalId");
-          // const response = await fetch(
-          //   API_CONSTANTS.BACKEND_BASE_URL_PROD +
-          //     `/api/approvePolicyApproval?id=${id}`,
-          //   {
-          //     method: "GET",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //     },
-          //   }
-          // )
-          //   .then((response) => response.json())
-          //   .then(async (data) => {
+
           const documentdata = await GetTemplateById(doc_id);
           console.log(documentdata, "xdocumentdata");
           document.getElementById("docx-wrapper-1").innerHTML =
@@ -2034,23 +2043,39 @@ async function displayArea() {
               window.location.href =
                 URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
             });
-
-          // document.getElementById("toast-heading").innerText =
-          //   "Policy Approved and Published";
-          // window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
-          // document.getElementById("toast-text").innerText =
-          //   "You have approved and published the policy. You can now view the policy on the policy table";
-          // document.getElementById("toast-default").classList.remove("hidden");
-          // document.getElementById("extralarge-modal").classList.add("hidden");
-          // document.getElementById("dashboardarea").classList.remove("hidden");
-          // document.getElementById("dashboardlist").classList.remove("hidden");
-          // document.getElementById("dashboardtable").classList.remove("hidden");
-          // setTimeout(async () => {
-          //   await getPolicyApprovals();
-          //   document.getElementById("toast-default").classList.add("hidden");
-          // }, 2000);
         });
+      const v2tov1 = document.getElementById("v2tov1");
+      v2tov1.addEventListener("click", function () {
+        console.log("v2tov1 revert back");
+        if (document.getElementById(localStorage.getItem("versionid"))) {
+          document
+            .getElementById(localStorage.getItem("versionid"))
+            .classList.remove("bg-zircon-100");
+        }
 
+        document.getElementById("container-content-1").contentEditable = true;
+        const modalid = localStorage.getItem("modalId");
+        applyChangesFromV2toV1(modalid, function () {
+          document
+            .querySelectorAll(".image-container.container")
+            .forEach(function (child) {
+              const parent = child.parentElement;
+              if (
+                parent &&
+                parent.classList.contains("image-container") &&
+                parent.classList.contains("container")
+              ) {
+                while (child.firstChild) {
+                  parent.insertBefore(child.firstChild, child);
+                }
+                parent.removeChild(child);
+              }
+            });
+          imageLoaded();
+          console.log("revert back");
+        });
+        removeemptyimage();
+      });
       if (document.getElementById("create-template")) {
         document
           .getElementById("create-template")

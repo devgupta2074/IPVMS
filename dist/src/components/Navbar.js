@@ -123,9 +123,10 @@ export async function InsertNavbar() {
 </button> 
 
   <figure class=" ">
-   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${localStorage.getItem("firstname").charAt(0).toUpperCase() +
-    localStorage.getItem("lastname").charAt(0).toUpperCase()
-    }</div>
+   <div class="bg-gray-100 rounded-full w-10 h-10 flex text-black items-center justify-center ">${
+     localStorage.getItem("firstname").charAt(0).toUpperCase() +
+     localStorage.getItem("lastname").charAt(0).toUpperCase()
+   }</div>
   </figure>
 <div class="relative">
   <button id="modalname" class="text-white font-medium font-roboto rounded-lg text-base text-center inline-flex items-center" type="button" data-dropdown-toggle="dropdown">  <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -276,10 +277,9 @@ export async function InsertNavbar() {
   inviteButton1111.addEventListener("click", function () {
     console.log("invite member clicked");
     const invitemodal = document.createElement("div");
-    invitemodal.id = "removemodal1111";
     invitemodal.innerHTML = `<div
     id="modalinvite"
-    class="modal hidden fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
+    class="modal  fixed inset-0 z-50 overflow-y-auto bg-gray-500 bg-opacity-40 flex justify-center items-center backdrop"
   >
     <div
       class="modal-content p-8 bg-white rounded-lg shadow-xl w-full max-w-xl"
@@ -339,7 +339,7 @@ export async function InsertNavbar() {
         
         <p id="success-message" class="text-green-400 text-md hidden">invitation send success </p>
         <p id="emailerror" class="text-red-400 text-md hidden">Email already exist </p>
-      </div>
+   
       
      
       </form>
@@ -348,27 +348,29 @@ export async function InsertNavbar() {
 
     // })
     modal = document.getElementById("modalinvite");
-    document.addEventListener("click", function (event) {
-      console.log("event", event.target);
+    // document.addEventListener("click", function (event) {
+    //   console.log("event", event.target);
 
-      if (event.target.classList.contains("backdrop")) {
-        modal.style.display = "none";
-      }
-    });
+    //   if (event.target.classList.contains("backdrop")) {
+    //     modal.classList.remove("hidden");
+    //   }
+    // });
     document.getElementsByTagName("main")[0].appendChild(invitemodal);
     console.log("clicked");
 
-    if (modal) {
-      modal.style.display = "flex";
-    }
+    // if (modal) {
+    //   modal.style.display = "flex";
+    // }
     closeButton = document.getElementById("closeButton1111");
     if (closeButton) {
       closeButton.addEventListener("click", function () {
-        modal.style.display = "none";
+        const modal = document.getElementById("modalinvite");
+        modal.remove();
       });
     }
     document.getElementById("inviteForm").addEventListener("submit", (e) => {
       e.preventDefault();
+      console.log("filled");
       handleInvite();
     });
     async function handleInvite() {
@@ -382,20 +384,23 @@ export async function InsertNavbar() {
       //   document.getElementById("emailerror").classList.remove("hidden");
       // }
       if (result.status === 409) {
+        document.getElementById("success-message").classList.add("hidden");
         document.getElementById("emailerror").classList.remove("hidden");
         removeLoading();
         setTimeout(() => {
-          modal.style.display = "none";
-          document.getElementById("emailerror").classList.add("hidden");
+          const invmodal = document.getElementById("modalinvite");
+          invmodal.remove();
         }, 1400);
+
         //toa
       }
       if (result.status != 409) {
+        document.getElementById("emailerror").classList.add("hidden");
         document.getElementById("success-message").classList.remove("hidden");
         removeLoading();
         setTimeout(() => {
-          modal.style.display = "none";
-          document.getElementById("success-message").classList.add("hidden");
+          const invmodal = document.getElementById("modalinvite");
+          invmodal.remove();
         }, 1000);
         //toast ->
       }
@@ -403,18 +408,13 @@ export async function InsertNavbar() {
   });
   //function to close the modal when clicking outside of it
 
-  if (closeButton) {
-    closeButton.addEventListener("click", function () {
-      const removemodal1111 = document.getElementById("removemodal1111");
-      removemodal1111.remove();
-      modal.style.display = "none";
-    });
-  }
-  // window.addEventListener("click", function (event) {
-  //   if (event.target == modal) {
-  //     modal.style.display = "none";
-  //   }
-  // });
+  window.addEventListener("click", function (event) {
+    const modal = document.getElementById("modalinvite");
+    if (event.target == modal) {
+      const invmodal = document.getElementById("modalinvite");
+      invmodal.remove();
+    }
+  });
 }
 
 // <div class="tooltip">

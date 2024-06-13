@@ -3,9 +3,7 @@ import {
   API_CONSTANTS,
   LOGIN_CONSTANTS,
   ROUTES_CONSTANTS,
-  TOAST_COLORS,
   TOAST_ERRORS,
-  TOAST_ICONS,
   VIEWS_CONSTANTS,
 } from "../utils/constants.js";
 import { redirect, showNextPolicy } from "../utils/utils.js";

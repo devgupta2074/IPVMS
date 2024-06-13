@@ -1,3 +1,4 @@
+import { createNewCategory } from "../api/createNewCategory.js";
 import { removeLoading, showLoading } from "../scripts/loading.js";
 import { API_CONSTANTS } from "../utils/constants.js";
 import { fetchTable, resetVariables } from "./Table.js";
@@ -364,21 +365,10 @@ function addCategorySubmit() {
 
     console.log(categoryName);
 
-    const response = await fetch(
-      "http://ipvms-api.exitest.com/api/categories/createNewCategory",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          category: categoryName,
-        }),
-      }
-    );
+    const response = await createNewCategory(categoryName);
 
     console.log(response);
-    if (response.ok === true) {
+    if (response.success === true) {
       document.getElementById("status").innerHTML = `
       <p id="success" class=" text-green-300" >Category created successfully.</p>
       `;

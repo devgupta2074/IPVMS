@@ -526,7 +526,7 @@ const saveAsDraft = async () => {
 
 const handleGeneratePdf = async () => {
   showLoading();
-  var element = document.getElementById("container");
+  var element = document.querySelector(".container");
   var opt = {
     margin: 0,
     filename: "Contrato.pdf",
@@ -537,6 +537,7 @@ const handleGeneratePdf = async () => {
     html2canvas: {
       scale: 2,
       letterRendering: true,
+      useCORS: true,
     },
     jsPDF: {
       unit: "in",
@@ -545,17 +546,16 @@ const handleGeneratePdf = async () => {
     },
     pagebreak: { mode: "avoid-all", after: "section" },
   };
-  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
+  const pdfBlob = await html2pdf().from(element).output("blob");
+  console.log(element, "ddeev");
   const formData = new FormData();
-  let letterId;
   console.log(email);
   const fileName = "pdfsend" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
   formData.append("userId", recipientId);
   formData.append("templateId", templateId);
-  formData.append("email", "tapasviarora2002@gmail.com");
+  formData.append("email", recipientEmail);
   formData.append("html_data", element.innerHTML.toString());
-  formData.append("letter_id", letterId);
   formData.append("ipvms_userId", ipvmsuserId);
   formData.append("recipient_name", recipientName);
   formData.append("recipient_email", recipientEmail);
@@ -582,9 +582,9 @@ const handleGeneratePdf = async () => {
       },
     }).showToast();
     if (response.status == 200) {
-      setTimeout(() => {
-        window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
-      }, 3000);
+      // setTimeout(() => {
+      //   window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+      // }, 3000);
     }
   } catch (error) {
     Toastify({
@@ -599,9 +599,9 @@ const handleGeneratePdf = async () => {
         background: "white",
       },
     }).showToast();
-    setTimeout(() => {
-      window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
-    }, 2000);
+    // setTimeout(() => {
+    //   window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
+    // }, 2000);
   } finally {
     removeLoading();
   }
@@ -630,7 +630,42 @@ const removeLoading = () => {
 };
 var shouldBeSigned = false;
 const handleSignSwiftCall = async () => {
+  const blobToBase64 = (blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
+  };
+
+  async function convertImagesToBase64(divId) {
+    // Find the div element
+    var div = document.getElementById(divId);
+
+    // Find all images within the div
+    var images = div.getElementsByTagName("img");
+
+    // Iterate over each image
+    if (images.length > 0) {
+      for (var i = 0; i < images.length; i++) {
+        var img = images[i];
+
+        // Create a blob URL for the image
+        var blob = await fetch(img.src).then((response) => response.blob());
+
+        // Convert blob to base64
+        var base64 = await blobToBase64(blob);
+
+        img.src = base64;
+      }
+    }
+  }
   showLoading();
+  await convertImagesToBase64("container").then(() => {});
+
+  console.log(document.getElementById("container"), "ddeev");
   var element = document.getElementById("container");
   var opt = {
     margin: 0,
@@ -651,10 +686,11 @@ const handleSignSwiftCall = async () => {
     pagebreak: { mode: "avoid-all", after: "section" },
   };
   let letterId;
-  const pdfBlob = await html2pdf().from(element).output("blob");
+  const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
   const formData = new FormData();
   const fileName = "pdfFile" + Date.now() + ".pdf";
   formData.append("file", pdfBlob, fileName);
+
   const fileUpload = await axios.post(
     API_CONSTANTS.BACKEND_BASE_URL_PROD + "/api/file/upload/letterpdf",
     formData,
@@ -728,6 +764,7 @@ const handleSignSwiftCall = async () => {
                     name: recipientName,
                     fileName: fileName,
                     swift_id: docId,
+                    shareLink: ShareLink,
                   }
                 );
                 console.log("data is data1", data1);

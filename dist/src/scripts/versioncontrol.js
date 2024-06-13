@@ -49,14 +49,14 @@ if (document.getElementById("uploadButton")) {
     });
 }
 
-function saveCaretPosition() {
+export function saveCaretPosition() {
   const sel = window.getSelection();
   if (sel.rangeCount > 0) {
     savedRange = sel.getRangeAt(0);
   }
 }
 
-function insertImageAtCaret(img) {
+export function insertImageAtCaret(img) {
   if (savedRange) {
     const range = savedRange.cloneRange();
     range.deleteContents();
@@ -80,7 +80,7 @@ function insertImageAtCaret(img) {
   }
 }
 
-function extractParentText(parentId) {
+export function extractParentText(parentId) {
   console.log("Extracting parent", parentId);
   const parentElement = document.getElementById(parentId);
   // console.log(parentId);
@@ -105,7 +105,7 @@ function extractParentText(parentId) {
 
   return textContent;
 }
-export function createversion() {
+export async function createversion() {
   console.log("ffff create version");
 
   const modalid = localStorage.getItem("modalId");
@@ -249,25 +249,10 @@ export function createversion() {
           color: tag.getAttribute("color") || "",
           size: tag.getAttribute("size") || "",
           face: tag.getAttribute("face") || "",
-          // childArray: childNodesMap,
-          // parentchildNodes: tag.parentNode.childNodes,
+
           childnodeposition: childnodeposition,
         };
         changes.newTags.push(newTag);
-        // console.log(jsonResult[parenttag.id], "parent");
-        // if (jsonResult[parenttag.id] !== undefined) {
-        //   // changes.changedTags.push({
-        //   //   id: parenttag.id,
-        //   //   textContent: newTag.textContent,
-        //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
-        //   //   style: jsonResult[parenttag.id].style,
-        //   //   src: jsonResult[parenttag.id].isImgTag
-        //   //     ? jsonResult[parenttag.id].isImgTag
-        //   //     : "",
-        //   //   isParentToNewTag: true,
-        //   // });
-        //   // }
-        // }
       } else {
         // Check for changes in text style or image source
         if (
@@ -315,68 +300,24 @@ export function createversion() {
     //     }
     //   }
     // }
-    console.log(changes, "changes");
+    console.log(changes, "changes x");
 
-    localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
-
-    const response = fetch(
-      API_CONSTANTS.BACKEND_BASE_URL_PROD +
-        "/api/versioncontrol/createDocumentVersion",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          version_number: version,
-          doc_id: modalid,
-          delta: changes,
-          created_by: userdata.id,
-        }),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response from the backend
-        Toastify({
-          text: "Policy version created successfully",
-          duration: 3000,
-          newWindow: true,
-          className: "text-black",
-          gravity: "top", // `top` or `bottom`
-          position: "right", // `left`, `center` or `right`
-          stopOnFocus: true, // Prevents dismissing of toast on hover
-          style: {
-            background: "white",
-          },
-        }).showToast();
-        console.log(data);
-        localStorage.setItem("version", version);
-        fetchVersionsDateWise(modalid);
-
-        ////  document.getElementById("loading").style = "display:none";
-        // window.location.reload();
-      });
-
-    return changes;
+    return {
+      version_number: version,
+      doc_id: modalid,
+      created_by: userdata.id,
+      delta: changes,
+    };
   }
 
   const divElement = document.getElementById("docx-wrapper-1");
   let version = parseInt(localStorage.getItem("version"));
   console.log("divElement: " + divElement);
-  const changes = detectChanges(divElement);
-
-  console.log("version: " + version);
-  if (version == NaN) {
-    version = 1;
-  }
-  version = version + 0.1;
-  console.log(changes, version, 1);
-
-  console.log(changes);
-  fetchVersionsDateWise(modalid);
+  const changes = await detectChanges(divElement);
+  console.log(changes, "second changes");
+  return changes;
 }
-function isIdInJson(id, json, tagName) {
+export function isIdInJson(id, json, tagName) {
   for (let i = 0; i < json.length; i++) {
     if (tagName == "tbody") {
       return true;
@@ -390,7 +331,7 @@ function isIdInJson(id, json, tagName) {
   }
   return false;
 }
-function findWordDifference(text1, text2, style) {
+export function findWordDifference(text1, text2, style) {
   const words1 = text1.split(/\s+/);
   const words2 = text2.split(/\s+/);
   const maxLength = Math.max(words1.length, words2.length);
@@ -413,7 +354,7 @@ function findWordDifference(text1, text2, style) {
         changedgreen = "";
       }
       if (changedred !== "") {
-        difference += `<span style="background-color: #aaffaa ${style}">${changedred}</span>`;
+        difference += `<span style="background-color: #aaffaa !important; ${style}">${changedred}</span>`;
         changedred = "";
       }
       difference += words1[i] || "";
@@ -428,50 +369,13 @@ function findWordDifference(text1, text2, style) {
     changedgreen = "";
   }
   if (changedred !== "") {
-    difference += `<span style="background-color: #aaffaa; ${style}">${changedred}</span>`;
+    difference += `<span style="background-color: #aaffaa !important; ${style}">${changedred}</span>`;
     changedred = "";
   }
   console.log(difference, "hello archit");
   return difference; // Trim extra spaces
 }
-
-// Test the function
-
 async function applyChangesFromV2toV1(id, callback) {
-  // let allredhighlightedtags = document.getElementsByClassName("redhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("bluehighlight");
-
-  // if (allredhighlightedtags) {
-  //   console.log(allredhighlightedtags, "bluehighlight");
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("bluehighlight");
-  //   }
-  // }
-  // allredhighlightedtags = document.getElementsByClassName("greenhighlight");
-  // console.log(allredhighlightedtags, "allredhighlighted");
-  // if (allredhighlightedtags) {
-  //   for (let i = 0; i < allredhighlightedtags.length; i++) {
-  //     allredhighlightedtags[i].classList.remove("redhighlight");
-  //   }
-  // }
-
-  // for (const image in v2.imageTags) {
-  //   const tag = document.getElementById(v2.imageTags[image].id);
-  //   // tag.src = v2.imageTags[image].src;
-  //   tag.style = v2.imageTags[image].style;
-  //   tag.id = v2.imageTags[image].id;
-  //   tag.width = v2.imageTags[image].width;
-  //   tag.height = v2.imageTags[image].height;
-  //   tag.x = v2.imageTags[image].x;
-  //   tag.y = v2.imageTags[image].y;
-  // }
-  // imageLoaded();
   console.log(id, "");
   const response2 = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getFile/${id}`,
@@ -740,17 +644,6 @@ export function applyChangesFromV1toV2withouthighlight(
           // tag.innerHTML = difference;
           tag.style = style;
         }
-
-        // tag.style = tag.style + "border : 1px  red solid;";
-
-        // //
-        //           tag.textContent = v2.changedTags[tagId].textContent;
-        // if (tag.textContent !== "") {
-        //   tag.style =
-        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
-        // } else {
-        //   tag.style = v2.changedTags[tagId].style;
-        // }
 
         tag.className = tag.className;
         console.log(tag);
@@ -1069,17 +962,6 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
           tag.style = style;
         }
 
-        // tag.style = tag.style + "border : 1px  red solid;";
-
-        // //
-        //           tag.textContent = v2.changedTags[tagId].textContent;
-        // if (tag.textContent !== "") {
-        //   tag.style =
-        //     v2.changedTags[tagId].style + "border : 1px  red solid;";
-        // } else {
-        //   tag.style = v2.changedTags[tagId].style;
-        // }
-
         tag.className = tag.className;
         console.log(tag);
       }
@@ -1106,21 +988,53 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
             false &&
           tag.textContent !== ""
         ) {
-          const removedelement = document.createElement("s");
-
+          const removedelement = document.createElement(
+            v1[v2.removedTags[tagid]].tagName
+          );
+          console.log(
+            v1[v2.removedTags[tagid]].textContent,
+            "text text text",
+            v2.removedTags[tagid],
+            v1
+          );
           removedelement.textContent = v1[v2.removedTags[tagid]].textContent;
           removedelement.style =
-            v1[v2.removedTags[tagid]].style + "background-color: #ffaaaa;";
-
+            v1[v2.removedTags[tagid]].style +
+            "background-color: #ffaaaa; !important";
+          removedelement.classList.add("removed-element");
           tag.parentElement.insertBefore(removedelement, tag);
-          console.log(tag.id, "removed");
+          console.log(tag.id, "removed", removedelement);
           console.log(tag.parentElement, "remove remove remove");
           console.log(v2.removedTags[tagid].textContent, "text text text");
           if (tag.parentElement.tagName.toLowerCase() !== "article") {
             // tag.parentElement.classList.add("redhighlight");
           }
         }
+        console.log(tag, tag.children, tag.childElementCount);
         if (tag != null) {
+          if (tag.childElementCount > 0 && tag.childElementCount < 20) {
+            v2.removedTags.forEach((removedTagId) => {
+              console.log(removedTagId); // Log each removedTagId for debugging
+
+              // Iterate over the children of the tag element
+              for (let i = 0; i < tag.children.length; i++) {
+                console.log(tag.children[i]);
+                const child = tag.children[i];
+
+                // Compare the ID of the child element with the current removedTagId
+                if (child.id === removedTagId) {
+                  // Ensure tag.parentElement exists before inserting
+                  if (tag.parentElement) {
+                    tag.parentElement.insertBefore(child, tag);
+                    break; // Exit the loop once the matching child is found and moved
+                  } else {
+                    console.error("Parent element of tag is null");
+                  }
+                }
+              }
+            });
+          }
+          console.log(tag.children, "tag.children", tag);
           tag.remove();
         }
       } else {
@@ -1184,64 +1098,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   localStorage.setItem("container-content-1-json", null);
 
-  let document_version = [];
-  // const response = await fetch(
-  //   "http://localhost:5001/api/versioncontrol/getDocumentVersionsById?docId=4",
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }
-  // )
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     // Handle the response from the backend
-  //     console.log(data);
-  //     document_version = data.data;
-  //     const buttonContainer = document.getElementById("buttonContainer");
-  //     if (document_version != undefined) {
-  //       document_version.forEach((item) => {
-  //         console.log(item);
-  //         // Create a button element
-  //         // const button = document.createElement("button");
-
-  //         // // Set button text to array item
-  //         // button.innerText = "revert " + item.id;
-  //         // button.className =
-  //         //   "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // // Add click event listener to the button
-  //         // button.addEventListener("click", () => {
-  //         //   const changes = item.delta;
-  //         //   const divElement = document.getElementById("docx-wrapper");
-  //         //   applyChangesFromV2toV1(divElement, htmljson, changes);
-  //         //   // Replace 'yourDivElementId' with the actual ID of your div element
-  //         //   hideTextNodes(divElement);
-  //         // });
-
-  //         const button2 = document.createElement("button");
-
-  //         // Set button text to array item
-  //         button2.innerText = item.id;
-  //         button2.className =
-  //           "text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm   px-10 py-3 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900";
-
-  //         // Add click event listener to the button
-  //         button2.addEventListener("click", () => {
-  //           const changes = item.delta;
-  //           const divElement = document.getElementById("docx-wrapper");
-  //           const firstv = document_version[0].delta;
-  //           applyChangesFromV1toV2(divElement, htmljson, changes, firstv);
-  //           removeemptyimage();
-  //         });
-
-  //         // Append the button to the container
-  //         // buttonContainer.appendChild(button);
-  //         // buttonContainer.appendChild(button2);
-  //       });
-  //     }
-  //   });
   let htmljson;
   localStorage.setItem("container-content-1-json", null);
   localStorage.setItem("version", 1);
@@ -1383,206 +1239,50 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     return jsonOutput;
   }
-  let contentdocument;
-  // async function renderDocx(file) {
-  //   try {
-  //     const currentDocument = file;
-  //     console.log("ffs");
-  //     if (!currentDocument) {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
 
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       console.log(docxOptions);
-  //       var docData = await convertDocxToBlob();
-  //       console.log(document.getElementById("container-content-1"));
-  //       console.log(docData);
-  //       console.log(docx);
-  //       await docx.renderAsync(
-  //         docData,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     } else {
-  //       const docxOptions = Object.assign(docx.defaultOptions, {
-  //         debug: true,
-  //         experimental: true,
-
-  //         ignoreLastRenderedPageBreak: false,
-  //       });
-  //       var docData = await convertDocxToBlob();
-  //       await docx.renderAsync(
-  //         currentDocument,
-  //         document.getElementById("container-content-1"),
-  //         null,
-  //         docxOptions
-  //       );
-  //     }
-
-  //     var tbodyElements = document.querySelectorAll("tbody");
-  //     // console.log("tbody elements: " + tbodyElements.length);
-  //     const blobToBase64 = (blob) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(blob);
-  //       return new Promise((resolve) => {
-  //         reader.onloadend = () => {
-  //           resolve(reader.result);
-  //         };
-  //       });
-  //     };
-
-  //     async function convertImagesToBase64(divId) {
-  //       // Find the div element
-  //       var div = document.getElementById(divId);
-
-  //       // Find all images within the div
-  //       var images = div.getElementsByTagName("img");
-
-  //       // Iterate over each image
-  //       if (images.length > 0) {
-  //         for (var i = 0; i < images.length; i++) {
-  //           var img = images[i];
-
-  //           // Create a blob URL for the image
-  //           var blob = await fetch(img.src).then((response) => response.blob());
-
-  //           // Convert blob to base64
-  //           var base64 = await blobToBase64(blob);
-
-  //           img.src = base64;
-  //         }
-  //       }
-  //     }
-
-  //     convertImagesToBase64("container-content-1");
-  //     var tags = document.querySelectorAll(".docx-wrapper *");
-  //     // console.log(tags);
-  //     var idCounter = 1;
-  //     tags.forEach(function (tag) {
-  //       if (!tag.id) {
-  //         tag.id = "id_" + idCounter;
-  //         idCounter++;
-  //       }
-  //     });
-  //     // var tbodyElements = document.getElementsByTagName("tbody");
-  //     // // console.log("tbody elements: " + tbodyElements.length);
-
-  //     // // Loop through each tbody element
-  //     // for (var i = 0; i < tbodyElements.length; i++) {
-  //     //   // Generate a unique ID for each tbody element
-  //     //   var id = "tbody_" + i;
-
-  //     //   // Set the id attribute for the tbody element
-  //     //   tbodyElements[i].setAttribute("id", id);
-  //     // }
-  //     const sections = document.getElementsByClassName("docx");
-  //     console.log(sections);
-  //     for (var i = 0; i < sections.length; i++) {
-  //       console.log("section height chages");
-  //       sections[i].setAttribute(
-  //         "style",
-  //         "padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;"
-  //       );
-  //     }
-  //     const containerdocx = document.getElementsByClassName("docx-wrapper")[0];
-  //     const headers = containerdocx.getElementsByTagName("header");
-  //     console.log(headers);
-  //     // for (var i = 0; i < headers.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   headers[i].setAttribute(
-  //     //     "style",
-  //     //     "margin-top: 19.3333px; height: 48px; margin-bottom:10px"
-  //     //   );
-  //     // }
-  //     const articles = containerdocx.getElementsByTagName("article");
-  //     console.log(articles);
-  //     // for (var i = 0; i < articles.length; i++) {
-  //     //   console.log("section height chages");
-  //     //   articles[i].setAttribute("style", "margin-top: 48px; ");
-  //     // }
-
-  //     var containerContent = document.getElementById("container-content-1");
-
-  //     // Get the div element with the class "dev" inside container-content-1
-  //     var devDiv = containerContent.lastChild;
-  //     contentdocument = devDiv.innerHTML;
-
-  //     console.log(devDiv, "ggg");
-
-  //     const response = await fetch(
-  //       "http://localhost:5001/api/file/uploadFile",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //         body: JSON.stringify({
-  //           htmlText: contentdocument,
-  //           docId: "4",
-  //           htmljson: extractHtmlToJson(
-  //             document.getElementsByClassName("docx-wrapper")[0]
-  //           ),
-  //         }),
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         console.log(data);
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-
-  //     const response2 = await fetch(
-  //       "http://localhost:5001/api/file/getFile/4",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           // Authorization: "Bearer " + token,
-  //         },
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         // Handle the response from the backend
-  //         // consolRAe.log(data.data.data);
-  //         document.getElementsByClassName("docx-wrapper")[0].innerHTML =
-  //           data.data.data;
-  //         htmljson = data.data.htmljson;
-  //         console.log("ddddddddddddddddddddddddd");
-  //       });
-  //     const container = document.getElementsByClassName("docx-wrapper")[0];
-  //     container.id = "docx-wrapper";
-  //     imageLoaded();
-  //     console.log("");
-  //   } catch (error) {
-  //     console.error("Error rendering DOCX:", error);
-  //   }
-  // }
-  console.log("render_docx");
-  // renderDocx();
-  //  document.getElementById("loading").style = "display:none";
-
-  console.log("render_docx");
-  // fileInput.addEventListener("change", (ev) => {
-  //   renderDocx(fileInput.files[0]);
-  //   // testDocuments.selectedIndex = 0;
-  // });
   const buttondd = document.getElementById("json");
 
-  buttondd.addEventListener("click", createversion);
+  buttondd.addEventListener("click", function insertNewVersion() {
+    createversion().then((createVersionData) => {
+      console.log(createVersionData, "dev");
+      const response = fetch(
+        API_CONSTANTS.BACKEND_BASE_URL_PROD +
+          "/api/versioncontrol/createDocumentVersion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            version_number: createVersionData.version_number,
+            doc_id: createVersionData.doc_id,
+            delta: createVersionData.delta,
+            created_by: createVersionData.created_by,
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Handle the response from the backend
+          Toastify({
+            text: "Policy version created successfully",
+            duration: 3000,
+            newWindow: true,
+            className: "text-black",
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "white",
+            },
+          }).showToast();
+          console.log(data);
+          localStorage.setItem("version", createVersionData.version_number);
+          fetchVersionsDateWise(createVersionData.doc_id);
+        });
+    });
+  });
 
-  // Function to apply changes from v1 to v2
-
-  // Function to apply changes from v2 to v1
-
-  // Example usage:
-  // Assuming you have divElement, v1, and v2 from previous steps
-  // Applying changes from v1 to v2
   const v2tov1 = document.getElementById("v2tov1");
   v2tov1.addEventListener("click", function () {
     if (document.getElementById(localStorage.getItem("versionid"))) {
@@ -1599,14 +1299,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     removeemptyimage();
   });
-  // const v1tov2 = document.getElementById("v1tov2");
-  // // v1tov2.addEventListener("click", function () {
-  // //   const changes = JSON.parse(localStorage.getItem("jsondetectedchanges"));
-  // //   const divElement = document.getElementsByClassName("docx-wrapper")[0];
-  // //   applyChangesFromV1toV2(divElement, htmljson.htmljson, changes);
-  // // });
-
-  // Applying changes from v2 to v1
 });
 
 import { letterColorMapping } from "../utils/letterstyle.js";
@@ -1811,22 +1503,7 @@ async function ChangeVersion(modalid, id) {
                 childnodeposition: childnodeposition,
               };
               changes.newTags.push(newTag);
-              // console.log(jsonResult[parenttag.id], "parent");
-              // if (jsonResult[parenttag.id] !== undefined) {
-              //   // changes.changedTags.push({
-              //   //   id: parenttag.id,
-              //   //   textContent: newTag.textContent,
-              //   //   textcontentfromjson: jsonResult[parenttag.id].textcontentcombined,
-              //   //   style: jsonResult[parenttag.id].style,
-              //   //   src: jsonResult[parenttag.id].isImgTag
-              //   //     ? jsonResult[parenttag.id].isImgTag
-              //   //     : "",
-              //   //   isParentToNewTag: true,
-              //   // });
-              //   // }
-              // }
             } else {
-              // Check for changes in text style or image source
               if (
                 tag.children.length === 0 &&
                 tag.tagName.toLowerCase() !== "style"
@@ -1866,15 +1543,7 @@ async function ChangeVersion(modalid, id) {
               }
             }
           });
-          // for (var tagId in jsonResult) {
-          //   console.log(tagId);
-          //   if (jsonResult.hasOwnProperty(tagId)) {
-          //     console.log(tagId, "fff");
-          //     if (!divElement.querySelector(`#${tagId}`)) {
-          //       changes.removedTags.push(tagId);
-          //     }
-          //   }
-          // }
+
           console.log(changes, "changes");
 
           localStorage.setItem("jsondetectedchanges", JSON.stringify(changes));
@@ -1948,7 +1617,7 @@ async function ChangeVersion(modalid, id) {
       });
     });
 }
-function openDash(id) {
+export function openDash(id) {
   console.log(id, "sss");
   const dash = document.getElementById(id);
   if (dash.classList.contains("hidden")) {
@@ -1961,7 +1630,8 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/getversions/datewise?docId=${id}`,
+    "https://ipvms-tapasvis-projects.vercel.app" +
+      `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -2125,45 +1795,24 @@ export function assignIDsToElements() {
   const elementsWithoutID = container.querySelectorAll("*:not([id])");
   elementsWithoutID.forEach((element, index) => {
     element.id = `generatedID_${version}_changes_${changesx}`;
-    // console.log("tag", element.tagName);
+
     changesx++;
-    // parentelement = document.getElementById(element.parentElement.id).innerHTML;
-    // parentelementlength = document.getElementById(element.parentElement.id)
-    //   .innerHTML.length;
-    // console.log("parentelement", parentelement);
-    // console.log(`<${element.tagName.toLowerCase()}>`, "btag");
-    // var indexOfBoldTag = parentelement.indexOf(
-    //   `<${element.tagName.toLowerCase()}`
-    // );
-    // console.log(element.innerHTML);
-
-    // const position = {
-    //   elementcc: element,
-    //   isNewElement: true,
-    //   insertedText: null,
-    //   nearestElement: element.id,
-    //   element: element.outerHTML,
-    //   parentelement: element.parentElement.id,
-    //   parentelementlength: parentelementlength,
-    //   startOffset: indexOfBoldTag,
-    //   tagname: element.tagName.toLowerCase(),
-    //   datalength: element.innerHTML.length,
-    //   data: element.innerHTML,
-    // };
-
-    // textData.push(position);
-
-    // console.log("New Element Added", position);
-
-    // // Store textData in JSON format
-    // const jsonData = JSON.stringify(textData);
-    // localStorage.setItem("jsonchanges", jsonData);
-    // console.log("JSON Data:", jsonData);
   });
 }
 export function handleChanges() {
   console.log("tapas");
+  const docxWrappers = document.querySelectorAll(".docx-wrapper");
+
+  // Iterate over each element and change the background color
+  docxWrappers.forEach((wrapper) => {
+    wrapper.style.backgroundColor = "#ffffff"; // Change to your desired color
+  });
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
+  if (editableDiv === undefined) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+  }
   const elementsWithIds = editableDiv.querySelectorAll("[id]");
   const idSet = new Set();
 
@@ -2221,21 +1870,21 @@ document
         checkDivSizeBack();
       }
 
-      // document.addEventListener("keydown", function (event) {
-      //   console.log("keydown", event.key);
-      //   // Check if the pressed key is the backspace key
-      //   if (event.key === "Backspace" || event.keyCode === 8) {
-      //     console.log(
-      //       "inside this backspace,",
-      //       document.getElementsByClassName("docx")
-      //     );
-      //     if (document.getElementsByClassName("docx").length === 0) {
-      //       document.getElementById(
-      //         "container-content-1"
-      //       ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
-      //     }
-      //   }
-      // });
+      document.addEventListener("keydown", function (event) {
+        console.log("keydown", event.key);
+        // Check if the pressed key is the backspace key
+        if (event.key === "Backspace" || event.keyCode === 8) {
+          console.log(
+            "inside this backspace,",
+            document.getElementsByClassName("docx")
+          );
+          if (document.getElementsByClassName("docx").length === 0) {
+            document.getElementById(
+              "container-content-1"
+            ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+          }
+        }
+      });
     }
   });
 export function setIdToNull(node) {
@@ -2301,7 +1950,7 @@ function addarticlewhileloop(articleHeight, article, i) {
     }
   }
 }
-function checkDivSize() {
+export function checkDivSize() {
   console.log("Checking container size");
   const editableDiv = document
     .getElementById("docx-wrapper-1")
@@ -2341,7 +1990,7 @@ function checkDivSize() {
             "style",
             "padding: 20.15pt 59.15pt 72pt 72pt; width: 612pt; height: 792pt;"
           );
-          newpage.id = "new_page_" + Math.random() * 1000;
+          newpage.id = "new_page_" + Math.floor(Math.random() * 1000);
           const newheader = document.createElement("header");
           newheader.setAttribute(
             "style",
@@ -2542,23 +2191,9 @@ export function imageLoaded() {
   });
 
   console.log(dynamicImages);
-  // for (var i = 0; i < dynamicImages.length; i++) {
-  //   if (
-  //     dynamicImages[i].parentElement.parentElement.classList.contains(
-  //       "image-container"
-  //     )
-  //   ) {
-  //     const x = dynamicImages[i];
-  //     const y = dynamicImages[i].parentElement;
-  //     const z = dynamicImages[i].parentElement.parentElement.parentElement;
-  //     dynamicImages[i].parentElement.parentElement.parentElement.remove();
-  //     y.appendChild(x);
-  //     z.appendChild(y);
-  //   }
-  // }
 }
 
-function checkDivSizeBack() {
+export function checkDivSizeBack() {
   console.log("Checking container size back");
   const editableDiv = document.getElementsByClassName("docx-wrapper")[0];
   var pages = document.getElementsByClassName("docx");
@@ -2571,24 +2206,12 @@ function checkDivSizeBack() {
     console.log(containerHeight, contentHeight, "first");
 
     console.log(pages[i].id, "dev yes");
-    // if (i + 1 < pages.length) {
-    //   let article = document.getElementsByTagName("article")[i];
-    //   let articleHeight = article.scrollHeight;
-    //   addarticlewhileloop(articleHeight, article, i);
-    //   article.clientHeight = 842;
-    //   article.scrollHeight = 842;
-    // } else {
+
     let article = document.getElementsByTagName("article")[i];
     let articleHeight = article.scrollHeight;
     addarticlewhileloop(articleHeight, article, i);
-    // article.clientHeight = 842;
-    // article.scrollHeight = 842;
-
-    // editableDiv.appendChild(newpage);
   }
-  // const articles = document.querySelectorAll("article");
-  // console.log(articles.length, "articcle length");
-  // if (articles.length > 1) {
+
   if (pages.length > 1) {
     removeEmptyPages();
   }
@@ -2614,11 +2237,14 @@ export function removeEmptyPages() {
       section.parentNode.removeChild(section);
     }
   });
-
-  // Iterate through each article
+  if (document.getElementsByClassName("docx").length === 0) {
+    document.getElementById(
+      "container-content-1"
+    ).innerHTML = `<div id="docx-wrapper-1" class="docx-wrapper"><section class="docx" style="padding: 20.15pt 59.15pt 72pt 72pt; width: 595pt; height: 842pt;" id="id_1"><article id="id_2"></article></section></div>`;
+  }
 }
 
-function removeemptyimage() {
+export function removeemptyimage() {
   const images = document.querySelectorAll(".image-container");
   images.forEach((image) => {
     if (image.childNodes.length === 0) {

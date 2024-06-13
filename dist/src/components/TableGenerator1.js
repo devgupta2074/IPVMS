@@ -14,7 +14,6 @@ var recipientEmail;
 var recipientName;
 var letter_id;
 
-
 let maxPages = 10;
 let pageSize = 5;
 let currentPage = 1;
@@ -40,7 +39,10 @@ export const fetchTable = async () => {
   document.getElementById("loading").style = "display:block";
 
   const apiLink =
-    API_CONSTANTS.BACKEND_BASE_URL_PROD + `/api/file/getLetters?status=DRAFT&page=${currentPage - 1}&size=${pageSize}`;
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    `/api/file/getLetters?status=DRAFT&page=${
+      currentPage - 1
+    }&size=${pageSize}`;
 
   const response = await fetch(apiLink, {
     method: "GET",
@@ -195,7 +197,6 @@ const docCard = (
   //   .toLocaleDateString('en-GB')
 };
 
-
 function addSortFeature() {
   const sortButtons = document.querySelectorAll(".sort");
   sortButtons.forEach((e, index) => {
@@ -302,7 +303,6 @@ function addModalOpenCloseFeature() {
   };
 }
 
-
 // Pagination
 
 function addPagination(item) {
@@ -311,19 +311,19 @@ function addPagination(item) {
   paginationElement.innerHTML = "";
   console.log("............................................", arr);
   addPaginationElement(arr);
-  const dot = document.getElementById(
+  const dot = (document.getElementById(
     item + "pagination"
-  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`;
+  ).className = `bg-white text-dodger-blue-500 rounded-md border-[1px] border-dodger-blue-500 relative z-10 inline-flex items-center  font-bold px-3  text-sm  focus:z-20 h-8`);
   addPrevAndNextfeature();
   handlePaginationOnClick();
 }
 
 const handleNextPage = async () => {
-  console.log('ssssssssss', currentPage, maxPages);
+  console.log("ssssssssss", currentPage, maxPages);
 
   if (currentPage < totalPageCount) {
     currentPage++;
-    console.log('ssssssssss', currentPage, maxPages, totalPageCount);
+    console.log("ssssssssss", currentPage, maxPages, totalPageCount);
 
     handlePagination(currentPage);
   }
@@ -413,7 +413,6 @@ const paginate = (totalItems, currentPage, pageSize, siblingCount) => {
   }
 };
 
-
 const addDocPageStatus = () => {
   const startItemIndex = (currentPage - 1) * pageSize + 1;
   const endItemIndex = Math.min(currentPage * pageSize, totalItems);
@@ -457,7 +456,6 @@ function handlePaginationOnClick() {
     handlePagination(Id);
   };
 }
-
 
 export const resetVariables = () => {
   maxPages = 10;
@@ -581,8 +579,7 @@ export const sortTable = (col) => {
   const sort_th = document.querySelectorAll(".sort");
   const order = sort_th[col].getAttribute("name") === "true" ? true : false;
   // console.log(order, col);
-  sort_th.forEach(e => {
-
+  sort_th.forEach((e) => {
     e.innerHTML = `
   <svg id="sorticon" class="px-2 h-4 w-6">
   <use
@@ -600,7 +597,6 @@ export const sortTable = (col) => {
 </svg>
     
   `;
-
 
     if (col === 2 || col === 4) {
       rows.sort((rowA, rowB) => {
@@ -925,6 +921,40 @@ const onEditorOpen = () => {
   };
   const handleGeneratePdf = async () => {
     showLoading();
+    const blobToBase64 = (blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      return new Promise((resolve) => {
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+      });
+    };
+
+    async function convertImagesToBase64(divId) {
+      // Find the div element
+      var div = document.getElementById(divId);
+
+      // Find all images within the div
+      var images = div.getElementsByTagName("img");
+
+      // Iterate over each image
+      if (images.length > 0) {
+        for (var i = 0; i < images.length; i++) {
+          var img = images[i];
+
+          // Create a blob URL for the image
+          var blob = await fetch(img.src).then((response) => response.blob());
+
+          // Convert blob to base64
+          var base64 = await blobToBase64(blob);
+
+          img.src = base64;
+        }
+      }
+    }
+
+    await convertImagesToBase64("docx-wrapper-1");
     var element = document.getElementById("docx-wrapper-1");
     var opt = {
       margin: 0,
@@ -934,7 +964,7 @@ const onEditorOpen = () => {
         quality: 0.98,
       },
       html2canvas: {
-        scale: 2,
+        scale: 1,
         letterRendering: true,
       },
       jsPDF: {
@@ -944,7 +974,7 @@ const onEditorOpen = () => {
       },
       pagebreak: { mode: "avoid-all", after: "section" },
     };
-    const pdfBlob = await html2pdf().from(element).output("blob");
+    const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
     const formData = new FormData();
 
     // console.log(email);
@@ -953,11 +983,15 @@ const onEditorOpen = () => {
     console.log("rrrrecepirnt id is", recipientId);
     formData.append("userId", recipientId);
     formData.append("templateId", templateId);
-    formData.append("email", "tapasviarora2002@gmail.com");
+    formData.append("email", recipientEmail);
     formData.append("html_data", element.innerHTML);
     formData.append("letter_id", letter_id);
+
+    let ipvmsuserId = localStorage.getItem("userId");
     console.log(ipvmsuserId, "actorrrrrrrrrrr");
+    console.log("user id of ipvms is", ipvmsuserId);
     formData.append("ipvms_userId", ipvmsuserId);
+    formData.append("recipientEmail", recipientEmail);
     console.log("letter id is", letter_id);
     try {
       const response = await axios.post(
@@ -969,6 +1003,10 @@ const onEditorOpen = () => {
           },
         }
       );
+      if (response) {
+        removeLoading();
+        console.log("loading removed");
+      }
       Toastify({
         text: "Letter send succesfully",
         duration: 3000,
@@ -985,6 +1023,7 @@ const onEditorOpen = () => {
         setTimeout(() => {
           window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
         }, 1000);
+        removeLoading();
       }
     } catch (error) {
       Toastify({
@@ -999,6 +1038,8 @@ const onEditorOpen = () => {
           background: "white",
         },
       }).showToast();
+      console.log("remove loading");
+      removeLoading();
       setTimeout(() => {
         window.location.href = URL_CONSTANTS.FRONTEND_BASE_URL + "/letters";
       }, 2000);
@@ -1031,6 +1072,40 @@ const onEditorOpen = () => {
   var shouldBeSigned = false;
   const handleSignSwiftCall = async () => {
     showLoading();
+    const blobToBase64 = (blob) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      return new Promise((resolve) => {
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+      });
+    };
+
+    async function convertImagesToBase64(divId) {
+      // Find the div element
+      var div = document.getElementById(divId);
+
+      // Find all images within the div
+      var images = div.getElementsByTagName("img");
+
+      // Iterate over each image
+      if (images.length > 0) {
+        for (var i = 0; i < images.length; i++) {
+          var img = images[i];
+
+          // Create a blob URL for the image
+          var blob = await fetch(img.src).then((response) => response.blob());
+
+          // Convert blob to base64
+          var base64 = await blobToBase64(blob);
+
+          img.src = base64;
+        }
+      }
+    }
+
+    await convertImagesToBase64("docx-wrapper-1");
     var element = document.getElementById("docx-wrapper-1");
     var opt = {
       margin: 0,
@@ -1051,7 +1126,7 @@ const onEditorOpen = () => {
       pagebreak: { mode: "avoid-all", after: "section" },
     };
     let letterId;
-    const pdfBlob = await html2pdf().from(element).output("blob");
+    const pdfBlob = await html2pdf().set(opt).from(element).output("blob");
     const formData = new FormData();
     const fileName = "pdfFile" + Date.now() + ".pdf";
     formData.append("file", pdfBlob, fileName);
@@ -1117,7 +1192,7 @@ const onEditorOpen = () => {
                   //draft->pending
                   const data1 = await axios.post(
                     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-                    "/api/file/upload/updateLetterStatus",
+                      "/api/file/upload/updateLetterStatus",
                     {
                       letterId: letter_id,
                       htmlData: element.innerHTML,

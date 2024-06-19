@@ -303,7 +303,6 @@ export async function createversion() {
     console.log(changes, "changes x");
 
     return {
-      version_number: version,
       doc_id: modalid,
       created_by: userdata.id,
       delta: changes,
@@ -668,7 +667,7 @@ export function applyChangesFromV1toV2withouthighlight(
       if (tag) {
         if (
           isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-            false &&
+          false &&
           tag.textContent !== ""
         ) {
           const removedelement = document.createElement("p");
@@ -985,7 +984,7 @@ export function applyChangesFromV1toV2(divElement, v1, v2, firstv) {
       if (tag) {
         if (
           isIdInJson(v2.removedTags[tagid].id, firstv.removedTags, "a") ==
-            false &&
+          false &&
           tag.textContent !== ""
         ) {
           const removedelement = document.createElement(
@@ -1100,7 +1099,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   let htmljson;
   localStorage.setItem("container-content-1-json", null);
-  localStorage.setItem("version", 1);
+  // localStorage.setItem("version", 1);
   localStorage.setItem("jsondetectedchanges", null);
   localStorage.setItem("jsonchanges", null);
   // localStorage.setItem("imageStyleOnload", null);
@@ -1247,14 +1246,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.log(createVersionData, "dev");
       const response = fetch(
         API_CONSTANTS.BACKEND_BASE_URL_PROD +
-          "/api/versioncontrol/createDocumentVersion",
+        "/api/versioncontrol/createDocumentVersion",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            version_number: createVersionData.version_number,
             doc_id: createVersionData.doc_id,
             delta: createVersionData.delta,
             created_by: createVersionData.created_by,
@@ -1277,7 +1275,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             },
           }).showToast();
           console.log(data);
-          localStorage.setItem("version", createVersionData.version_number);
+          // localStorage.setItem("version", createVersionData.version_number);
           fetchVersionsDateWise(createVersionData.doc_id);
         });
     });
@@ -1343,7 +1341,7 @@ async function ChangeVersion(modalid, id) {
     });
   const firstv = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/versioncontrol/getVersions?docId=${modalid}`,
+    `/api/versioncontrol/getVersions?docId=${modalid}`,
     {
       method: "GET",
       headers: {
@@ -1461,12 +1459,12 @@ async function ChangeVersion(modalid, id) {
                 textbefore =
                   childnodeposition - 1 >= 0
                     ? tag.parentElement.childNodes[childnodeposition - 1]
-                        .nodeValue
+                      .nodeValue
                     : null;
                 textafter =
                   childnodeposition + 1 < tag.parentElement.childNodes.length
                     ? tag.parentElement.childNodes[childnodeposition + 1]
-                        .nodeValue
+                      .nodeValue
                     : null;
               }
               console.log(tag.children, "hello hello");
@@ -1550,14 +1548,13 @@ async function ChangeVersion(modalid, id) {
 
           const response = fetch(
             API_CONSTANTS.BACKEND_BASE_URL_PROD +
-              "/api/versioncontrol/createDocumentVersion",
+            "/api/versioncontrol/createDocumentVersion",
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                version_number: version,
                 doc_id: modalid,
                 delta: changes,
                 created_by: userdata.id,
@@ -1580,7 +1577,7 @@ async function ChangeVersion(modalid, id) {
         const changes = detectChanges(divElement);
         const firstversion = await fetch(
           API_CONSTANTS.BACKEND_BASE_URL_PROD +
-            `/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
+          `/api/versioncontrol/getDocumentVersionsById?docId=${modalid}`,
           {
             method: "GET",
             headers: {
@@ -1589,7 +1586,7 @@ async function ChangeVersion(modalid, id) {
           }
         )
           .then((response) => response.json())
-          .then((data) => {});
+          .then((data) => { });
       } else {
       }
       console.log(data.data[0], "firtv");
@@ -1630,8 +1627,8 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    "https://ipvms-tapasvis-projects.vercel.app" +
-      `/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    `/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -1657,15 +1654,14 @@ const fetchVersionsDateWise = async (id) => {
         // Step 1: Split the string into an array of arrays
         const result = arrayOfArrays.map((subArray) => {
           const id = parseInt(subArray[0]);
-          const version_number = parseFloat(subArray[1]);
-          const doc_id = parseInt(subArray[2]); // Access JSON value
+          // const version_number = parseFloat(subArray[1]);
+          const doc_id = parseInt(subArray[1]); // Access JSON value
 
           return {
             id,
-            version_number,
             doc_id,
-            time: subArray[3].split(" ")[1].split(":").slice(0, 2).join(":"),
-            created_by: subArray[4],
+            time: subArray[2].split(" ")[1].split(":").slice(0, 2).join(":"),
+            created_by: subArray[3],
           };
         });
         console.log("data datewise", result);
@@ -1739,18 +1735,15 @@ const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${
-            version.id
-          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
+          <li id=${version.id
+            }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
-              version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${
-              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0).toUpperCase()}
              </p>

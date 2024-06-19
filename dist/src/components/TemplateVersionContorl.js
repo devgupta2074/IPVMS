@@ -92,14 +92,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     await createversion().then((createVersionData) => {
       const response = fetch(
         API_CONSTANTS.BACKEND_BASE_URL_PROD +
-          "/api/versioncontrol/createTemplateVersion",
+        "/api/versioncontrol/createTemplateVersion",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            version_number: createVersionData.version_number,
             doc_id: createVersionData.doc_id,
             delta: createVersionData.delta,
             created_by: createVersionData.created_by,
@@ -122,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             },
           }).showToast();
           console.log(data);
-          localStorage.setItem("version", createVersionData.version_number);
+          // localStorage.setItem("version", createVersionData.version_number);
           fetchVersionsDateWise(createVersionData.doc_id);
 
           ////  document.getElementById("loading").style = "display:none";
@@ -168,7 +167,7 @@ async function ChangeVersion(docid, id) {
     });
   const firstv = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
+    `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -207,8 +206,8 @@ const fetchVersionsDateWise = async (id) => {
   const y = [];
   console.log(id, "sss");
   const response = fetch(
-    "https://ipvms-tapasvis-projects.vercel.app" +
-      `/letters/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    `/letters/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -234,15 +233,14 @@ const fetchVersionsDateWise = async (id) => {
         // Step 1: Split the string into an array of arrays
         const result = arrayOfArrays.map((subArray) => {
           const id = parseInt(subArray[0]);
-          const version_number = parseFloat(subArray[1]);
-          const doc_id = parseInt(subArray[2]); // Access JSON value
+          // const version_number = parseFloat(subArray[1]);
+          const doc_id = parseInt(subArray[1]); // Access JSON value
 
           return {
             id,
-            version_number,
             doc_id,
-            time: subArray[3].split(" ")[1].split(":").slice(0, 2).join(":"),
-            created_by: subArray[4],
+            time: subArray[2].split(" ")[1].split(":").slice(0, 2).join(":"),
+            created_by: subArray[3],
           };
         });
         console.log("data datewise", result);
@@ -316,18 +314,15 @@ const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${
-            version.id
-          }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
+          <li id=${version.id
+            }  class="m-2 cursor-pointer hover:bg-gallery-100 p-4 version-id-button">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
-              version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${
-              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0).toUpperCase()}
              </p>

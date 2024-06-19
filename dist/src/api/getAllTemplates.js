@@ -2,7 +2,7 @@ import { API_CONSTANTS, ROUTES_CONSTANTS } from "../utils/constants.js";
 import { makeRequest } from "./apiRequest.js";
 
 const apiUrl =
-  "https://ipvms-tapasvis-projects.vercel.app" +
+  API_CONSTANTS.BACKEND_BASE_URL_PROD +
   ROUTES_CONSTANTS.GET_ALL_TEMPLATES;
 export async function GetAllTemplates() {
   const requestOptions = {
@@ -46,8 +46,8 @@ export async function GetAllTemplatesByStatus(status) {
   try {
     const response = await makeRequest(
       API_CONSTANTS.BACKEND_BASE_URL_PROD +
-        "/api/file/getTemplateByStatus/" +
-        status,
+      "/api/file/getTemplateByStatus/" +
+      status,
       requestOptions
     );
     console.log(response, "makerequest");

@@ -69,7 +69,7 @@ async function ChangeVersion(docid, id) {
     });
   const firstv = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
+    `/api/versioncontrol/getVersionsTemplate?docId=${docid}`,
     {
       method: "GET",
       headers: {
@@ -108,8 +108,8 @@ export const fetchVersionsDateWise = async (id) => {
   const docid = id;
   console.log(id, docid);
   const response = fetch(
-    "https://ipvms-tapasvis-projects.vercel.app" +
-      `/letters/getversions/datewise?docId=${id}`,
+    API_CONSTANTS.BACKEND_BASE_URL_PROD +
+    `/letters/getversions/datewise?docId=${id}`,
     {
       method: "GET",
       headers: {
@@ -128,14 +128,13 @@ export const fetchVersionsDateWise = async (id) => {
         await createversion().then((createVersionData) => {
           const response = fetch(
             API_CONSTANTS.BACKEND_BASE_URL_PROD +
-              "/api/versioncontrol/createTemplateVersion",
+            "/api/versioncontrol/createTemplateVersion",
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                version_number: createVersionData.version_number,
                 doc_id: createVersionData.doc_id,
                 delta: createVersionData.delta,
                 created_by: createVersionData.created_by,
@@ -179,15 +178,14 @@ export const fetchVersionsDateWise = async (id) => {
         // Step 1: Split the string into an array of arrays
         const result = arrayOfArrays.map((subArray) => {
           const id = parseInt(subArray[0]);
-          const version_number = parseFloat(subArray[1]);
-          const doc_id = parseInt(subArray[2]); // Access JSON value
+          // const version_number = parseFloat(subArray[1]);
+          const doc_id = parseInt(subArray[1]); // Access JSON value
 
           return {
             id,
-            version_number,
             doc_id,
-            time: subArray[3].split(" ")[1].split(":").slice(0, 2).join(":"),
-            created_by: subArray[4],
+            time: subArray[2].split(" ")[1].split(":").slice(0, 2).join(":"),
+            created_by: subArray[3],
           };
         });
         console.log("data datewise", result);
@@ -260,18 +258,15 @@ export const fetchVersionsDateWise = async (id) => {
         item.version.map((version) => {
           console.log(version, "ffffk");
           dayversions.innerHTML += `
-          <li id=${
-            version.id
-          }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
+          <li id=${version.id
+            }  class="m-2 hover:bg-gallery-100 p-4 version-id-button cursor-pointer">
          
             
-            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${
-              version.time
+            <time class="mb-1 text-base font-normal leading-none text-gray-400 ">${version.time
             }</time>
            <div class="flex flex-row items-center  gap-1 w-full ">
             <p class=" text-base font-normal text-gray-500   ">
-            <p class="bg-[${
-              letterColorMapping[version.created_by.charAt(0).toLowerCase()]
+            <p class="bg-[${letterColorMapping[version.created_by.charAt(0).toLowerCase()]
             }] rounded-full w-5 h-5 flex items-center justify-center">
              ${version.created_by.charAt(0).toUpperCase()}
              </p>
@@ -741,14 +736,12 @@ async function getUserInfoToDisplay(userId) {
           <div
             class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
           >
-           ${
-             result.first_name.charAt(0).toUpperCase() +
-             result.last_name.charAt(0).toUpperCase()
-           }
+           ${result.first_name.charAt(0).toUpperCase() +
+            result.last_name.charAt(0).toUpperCase()
+            }
           </div>
           <div class="font-roboto font-normal text-base leading-6">
-            <div class="text-mineshaft-900">${
-              result.first_name + " " + result.last_name
+            <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
             }</div>
             <div class="text-mineshaft-600">${result.designation}</div>
           </div>
@@ -758,8 +751,7 @@ async function getUserInfoToDisplay(userId) {
         >
           <div class="flex flex-col gap-1">
             <p class="text-mineshaft-900 leading-5">Employee ID</p>
-            <p class="text-mineshaft-600 leading-6 text-base">${
-              result.employee_code
+            <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
             }</p>
           </div>
           <div class="flex flex-col gap-1">
@@ -846,15 +838,13 @@ async function getUserInfoToDisplay(userId) {
             <div
               class="rounded-full bg-gallery-100 flex items-center justify-center font-roboto p-5 leading-7 font-semibold text-2xl"
             >
-             ${
-               result.first_name.charAt(0).toUpperCase() +
-               result.last_name.charAt(0).toUpperCase()
-             }
+             ${result.first_name.charAt(0).toUpperCase() +
+            result.last_name.charAt(0).toUpperCase()
+            }
             </div>
             <div class="font-roboto font-normal text-base leading-6">
-              <div class="text-mineshaft-900">${
-                result.first_name + " " + result.last_name
-              }</div>
+              <div class="text-mineshaft-900">${result.first_name + " " + result.last_name
+            }</div>
               <div class="text-mineshaft-600">${result.designation}</div>
             </div>
           </div>
@@ -863,9 +853,8 @@ async function getUserInfoToDisplay(userId) {
           >
             <div class="flex flex-col gap-1">
               <p class="text-mineshaft-900 leading-5">Employee ID</p>
-              <p class="text-mineshaft-600 leading-6 text-base">${
-                result.employee_code
-              }</p>
+              <p class="text-mineshaft-600 leading-6 text-base">${result.employee_code
+            }</p>
             </div>
             <div class="flex flex-col gap-1">
               <p class="text-mineshaft-900 leading-5">Work email</p>
@@ -1385,7 +1374,7 @@ async function displayArea() {
 
       window.location.href = `${URL_CONSTANTS.FRONTEND_BASE_URL}/template?templateId=${templateId}&userId=${userId}`;
     };
-    document.addEventListener("DOMContentLoaded", async () => {});
+    document.addEventListener("DOMContentLoaded", async () => { });
 
     const selectuserbutton = document.getElementById("dropdownSearchButton");
 
@@ -1918,7 +1907,7 @@ async function displayArea() {
 
         const response2 = await fetch(
           API_CONSTANTS.BACKEND_BASE_URL_PROD +
-            `/api/file/getTemplateById/${modalId}`,
+          `/api/file/getTemplateById/${modalId}`,
           {
             method: "GET",
             headers: {
@@ -1986,7 +1975,7 @@ async function displayArea() {
 
           const firstv = await fetch(
             API_CONSTANTS.BACKEND_BASE_URL_PROD +
-              `/api/versioncontrol/getVersionsTemplate?docId=${doc_id}`,
+            `/api/versioncontrol/getVersionsTemplate?docId=${doc_id}`,
             {
               method: "GET",
               headers: {
@@ -2252,8 +2241,7 @@ async function displayArea() {
               console.log(item.email, "email");
               document.getElementById(
                 "adminlist"
-              ).innerHTML += `<option value=${item.id}>${
-                item.first_name + " " + item.last_name
+              ).innerHTML += `<option value=${item.id}>${item.first_name + " " + item.last_name
               }</option>`;
             });
           });
@@ -2733,13 +2721,13 @@ async function displayArea() {
                   </svg>  
               </div>`
             : file.status === "SUCCESS"
-            ? `<div class="flex gap-2">
+              ? `<div class="flex gap-2">
               <p class="text-black text-xs font-light">Success</p>
               <svg aria-hidden="true" class="w-3 h-3 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
               <span class="sr-only">Success</span>
               </div>
               `
-            : `
+              : `
               <div role="status">
                   <svg aria-hidden="true" class="w-3 h-3 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -2880,9 +2868,8 @@ async function displayArea() {
                       <div class="flex   flex-row" id="${item.name}status">
                         <p class="font-normal text-xs text-[#5D5D5D80] flex gap-2">
                           ${Math.round(item.size / 1024)}KB
-                          <span class="hover:cursor-pointer" id="${
-                            item.name
-                          }removebtn"
+                          <span class="hover:cursor-pointer" id="${item.name
+          }removebtn"
                           
                           >
                             <svg
@@ -3320,7 +3307,7 @@ addModalOpenCloseFeature();
 const fetchAndRenderDoc = async (modalId) => {
   const response = await fetch(
     API_CONSTANTS.BACKEND_BASE_URL_PROD +
-      `/api/file/getTemplateById/${modalId}`,
+    `/api/file/getTemplateById/${modalId}`,
     {
       method: "GET",
       headers: {
